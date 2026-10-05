@@ -20,7 +20,7 @@ import {
   deriveWalkingSummary,
   KM_PER_TILE,
 } from "../../sim/agents/bandMobility";
-import { getCommittedExpeditionWorkers } from "../../sim/agents/expedition";
+import { getCommittedExpeditionPeople, getCommittedExpeditionWorkers } from "../../sim/agents/expedition";
 import type { Band, ExpeditionRecord } from "../../sim/agents/types";
 import type { WorldState } from "../../sim/world/types";
 import { Chip, SectionHeading } from "./parts";
@@ -57,7 +57,11 @@ export function Mobility({
   const committed = useMemo(() => deriveCommittedMobilityPools(band), [band]);
   const available = useMemo(() => deriveAvailableMobilityPools(band), [band]);
   const columnPace = useMemo(() => deriveTravelPace(band, "whole_band_residential_move"), [band]);
-  const adultsAway = getCommittedExpeditionWorkers(band);
+  // CORRECTION-34D — "away with parties" is a claim about BODIES, so it reads the physical
+  // headcount. `getCommittedExpeditionWorkers` is productive labour and would undercount a party
+  // carrying a member who has stopped working; it is shown separately as the committed pools.
+  const peopleAway = getCommittedExpeditionPeople(band);
+  const labourCommitted = getCommittedExpeditionWorkers(band);
   const fatigue = band.pressureState?.fatiguePressure ?? 0;
   const nutritionStress = band.demography.foodPerPersonStress ?? 0;
   const conditioning = band.mobility?.conditioning ?? 0.2;
@@ -104,7 +108,7 @@ export function Mobility({
         <span className="practice-feedback-kicker">Walkers (aggregate mobility roles — no sex claim exists or is shown)</span>
         <p className="condition-note">
           {pools.high} strong walkers · {pools.typical} ordinary · {pools.limited} limited — of {band.demography.workingAdults} working adults;{" "}
-          {adultsAway} away with parties (available now: {available.high}/{available.typical}/{available.limited}; committed: {committed.high + committed.typical + committed.limited}).
+          {peopleAway} away with parties ({labourCommitted} of them working; available now: {available.high}/{available.typical}/{available.limited}; committed: {committed.high + committed.typical + committed.limited}).
         </p>
       </article>
 
@@ -122,7 +126,10 @@ export function Mobility({
             <article key={expedition.id} className="practice-feedback-overview">
               <span className="practice-feedback-kicker">Away party — {expedition.taskKind.replace(/_/g, " ")}</span>
               <p className="condition-note">
-                {expedition.partyWorkers} adults
+                {expedition.partyWorkers + (expedition.nonWorkingPartyPeople ?? 0)} people
+                {(expedition.nonWorkingPartyPeople ?? 0) > 0
+                  ? ` (${expedition.partyWorkers} working, ${expedition.nonWorkingPartyPeople ?? 0} not)`
+                  : ""}
                 {expedition.partyComposition === undefined
                   ? ""
                   : ` (${expedition.partyComposition.high} strong / ${expedition.partyComposition.typical} ordinary / ${expedition.partyComposition.limited} limited)`}{" "}
@@ -170,7 +177,7 @@ export function Mobility({
             {outcomes.map((outcome) => (
               <li key={outcome.id}>
                 {outcome.taskKind.replace(/_/g, " ")} to {String(outcome.targetTileId)} ({outcome.distanceTiles} tiles, {outcome.totalDays}d,{" "}
-                {outcome.partyWorkers} adults): <strong>{outcome.outcomeReason.replace(/_/g, " ")}</strong>
+                {outcome.partyPeople ?? outcome.partyWorkers} adults): <strong>{outcome.outcomeReason.replace(/_/g, " ")}</strong>
                 {outcome.deliveredHarvestUnits > 0 ? ` — brought home ${outcome.deliveredHarvestUnits} units` : ""}
                 {outcome.usedTaskCamp ? <Chip>task camp</Chip> : null}
                 {(outcome.observations ?? []).length > 0 ? ` · returned knowledge: ${(outcome.observations ?? []).map((o) => o.kind.replace(/_/g, " ")).join(", ")}` : ""}

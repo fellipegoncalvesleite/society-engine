@@ -152,7 +152,7 @@ try {
         routeBfsDistance8: near === undefined ? null : timeUnit(() => trips.buildExpeditionRouteTiles(run.world, band0.position, near.tile.id, Math.min(36, 8 + 8)), 100),
         routeBfsDistance16: mid === undefined ? null : timeUnit(() => trips.buildExpeditionRouteTiles(run.world, band0.position, mid.tile.id, Math.min(36, 16 + 8)), 60),
         routeBfsDistance30: far === undefined ? null : timeUnit(() => trips.buildExpeditionRouteTiles(run.world, band0.position, far.tile.id, 36), 30),
-        targetResolutionVerify: near === undefined ? null : timeUnit(() => trips.resolveExpeditionTargetWork(run.world, band0, makeMemory(near.tile.id, tick), near.tile.id, 8, near.route, 6, "food_resource_check", { verifyOnly: true }), 100),
+        targetResolutionVerify: near === undefined ? null : timeUnit(() => trips.resolveExpeditionTargetWork(run.world, band0, makeMemory(near.tile.id, tick), near.tile.id, 8, near.route, 6, "food_resource_check", { verifyOnly: true, partyWorkers: 2 }), 100),
       },
       fingerprint: bandFingerprint(run.world),
     };

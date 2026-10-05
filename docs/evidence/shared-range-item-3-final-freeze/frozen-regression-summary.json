@@ -1,0 +1,167 @@
+{
+  "audit": "ROADMAP-ITEM-3-FROZEN-REGRESSION-SUMMARY",
+  "method": "every accepted Item 3 regression rerun on the freeze branch with EVERY output flag enumerated from its own argument parser and redirected outside the repository. No default output path was trusted and no frozen evidence file was written.",
+  "comparedAgainst": "the CORRECTION-34F run of the same scripts with identical arguments (df349eb), which is what attributes any difference to this audit-only checkpoint rather than to inherited history",
+  "suites": [
+    {
+      "name": "AUDIT-27 crowding controlled fixtures",
+      "script": "crowdingControlledFixturesAudit.mjs",
+      "outputFlagsRedirected": "--out --timeline-out",
+      "fixtures": 11,
+      "failing": 0,
+      "verdict": "PASS"
+    },
+    {
+      "name": "CORRECTION-28 memory separation",
+      "script": "crowdingMemorySeparationFixturesAudit.mjs",
+      "outputFlagsRedirected": "--out --parity-out",
+      "fixtures": 12,
+      "failing": 0,
+      "verdict": "PASS"
+    },
+    {
+      "name": "CORRECTION-29 encounter provenance",
+      "script": "encounterProvenanceFixturesAudit.mjs",
+      "outputFlagsRedirected": "--out --chain-out",
+      "fixtures": 12,
+      "failing": 0,
+      "verdict": "PASS"
+    },
+    {
+      "name": "CORRECTION-30 range-friction provenance",
+      "script": "rangeFrictionProvenanceFixturesAudit.mjs",
+      "outputFlagsRedirected": "--out --cascade-out",
+      "fixtures": 15,
+      "failing": 0,
+      "verdict": "PASS"
+    },
+    {
+      "name": "CORRECTION-31 release lifecycle",
+      "script": "rangeReleaseLifecycleFixturesAudit.mjs",
+      "outputFlagsRedirected": "--out --timelines",
+      "fixtures": 22,
+      "failing": 0,
+      "verdict": "PASS"
+    },
+    {
+      "name": "CORRECTION-32 crowding decision authority",
+      "script": "crowdingDecisionAuthorityFixturesAudit.mjs",
+      "outputFlagsRedirected": "--out",
+      "fixtures": 21,
+      "failing": 0,
+      "verdict": "PASS"
+    },
+    {
+      "name": "CORRECTION-32A zero controls",
+      "script": "crowdingZeroControlsAudit.mjs",
+      "outputFlagsRedirected": "--out",
+      "fixtures": 6,
+      "failing": 0,
+      "verdict": "PASS"
+    },
+    {
+      "name": "CORRECTION-32A social access lifecycle",
+      "script": "socialAccessLifecycleAudit.mjs",
+      "outputFlagsRedirected": "--out",
+      "fixtures": 7,
+      "failing": 0,
+      "verdict": "PASS"
+    },
+    {
+      "name": "CORRECTION-33 social access unrelated risk",
+      "script": "socialAccessUnrelatedRiskFixturesAudit.mjs",
+      "outputFlagsRedirected": "--out --out-threshold --out-terminal --out-preserve --out-water --out-score",
+      "fixtures": 20,
+      "failing": 0,
+      "verdict": "PASS"
+    },
+    {
+      "name": "CORRECTION-34 physical presence fixtures (20y)",
+      "script": "physicalPresenceFixturesAudit.mjs",
+      "outputFlagsRedirected": "--out --out-person --out-timelines --out-expedition --out-sameday --out-social",
+      "fixtures": 10,
+      "failing": 0,
+      "verdict": "PASS"
+    },
+    {
+      "name": "CORRECTION-34A evidence closure",
+      "script": "presenceEvidenceClosureAudit.mjs",
+      "outputFlagsRedirected": "--out --out-performance --out-resource",
+      "fixtures": 12,
+      "failing": 0,
+      "verdict": "PASS"
+    },
+    {
+      "name": "CORRECTION-34A person conservation + catchment",
+      "script": "personConservationCatchmentFixturesAudit.mjs",
+      "outputFlagsRedirected": "--out --out-catchment",
+      "fixtures": 9,
+      "failing": 0,
+      "verdict": "PASS"
+    },
+    {
+      "name": "CORRECTION-34B R1-R12 partial reconciliation",
+      "script": "partialReconciliationFixturesAudit.mjs",
+      "outputFlagsRedirected": "--out",
+      "fixtures": 12,
+      "failing": 0,
+      "verdict": "PASS"
+    },
+    {
+      "name": "CORRECTION-34C L1-L12 away-body ownership",
+      "script": "awayBodyOwnershipFixturesAudit.mjs",
+      "outputFlagsRedirected": "--out",
+      "fixtures": 12,
+      "failing": 0,
+      "verdict": "PASS"
+    },
+    {
+      "name": "CORRECTION-34D H1-H14 headcount vs labour",
+      "script": "headcountLaborFixturesAudit.mjs",
+      "outputFlagsRedirected": "--out",
+      "fixtures": 14,
+      "failing": 0,
+      "verdict": "PASS"
+    },
+    {
+      "name": "CORRECTION-34E T1-T14 target-work labour",
+      "script": "targetWorkFixturesAudit.mjs",
+      "outputFlagsRedirected": "--out --out-matrix --out-chain",
+      "fixtures": 14,
+      "failing": 0,
+      "verdict": "PASS"
+    },
+    {
+      "name": "CORRECTION-34F Z0-Z12 zero-labour contract",
+      "script": "zeroLaborContractFixturesAudit.mjs",
+      "outputFlagsRedirected": "--out --out-natural-20 --out-natural-50",
+      "fixtures": 13,
+      "failing": 0,
+      "verdict": "PASS"
+    }
+  ],
+  "totalFixtures": 222,
+  "totalFailing": 0,
+  "comparableOutputsIdenticalToCorrection34F": 21,
+  "comparableOutputsDiffering": 0,
+  "supportingAudits": {
+    "typecheckApp": "PASS",
+    "typecheckNode": "PASS",
+    "build": "PASS",
+    "graph": "221/764, 0 duplicate, 0 dangling",
+    "importBoundary": "85 internal back-edges, UNCHANGED",
+    "seasonOrderInvariance": "PASS",
+    "stepModeInvariance": "PASS on both maps, fullCanonicalStateMatch true, firstDivergence null",
+    "stepModeFourWay": "ALL_FOUR_STEP_MODES_IDENTICAL",
+    "catchmentInvariants": "PASS",
+    "livingEcologyFoodPipeline": "PASS",
+    "mobilityAuthority": "PASS",
+    "socialCausality": "RUN, output redirected",
+    "expeditionLifecycle": "PASS (daily arm canonical)",
+    "numericResourceChain": "RECONCILED",
+    "targetWorkSameDayPreservation": "digest unchanged"
+  },
+  "knownVacuousCarriedForward": {
+    "CORRECTION-34 P8_P18_terminal_records_occupy_nothing": "VACUOUS — no terminal records observed in the natural window. Inherited and unchanged; recorded rather than silently counted as a pass."
+  }
+}

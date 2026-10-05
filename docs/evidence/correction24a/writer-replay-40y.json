@@ -1,0 +1,3083 @@
+{
+  "instrument": "SINGLE-RECORD RETURN-WRITER REPLAY",
+  "note": "One write event suppressed at the canonical writer; everything downstream derived naturally. No store manually stripped. Control arm must reproduce the baseline day for day.",
+  "years": 40,
+  "seeds": [
+    "s1",
+    "s2",
+    "s3",
+    "s4",
+    "s5"
+  ],
+  "followDays": 720,
+  "bins": null,
+  "scenarios": [
+    "map1",
+    "map2",
+    "site_A_coast",
+    "site_B_dry_plains",
+    "site_C_dry_plains",
+    "site_D_aquatic",
+    "site_E_hills",
+    "site_F_hills",
+    "ordinary",
+    "isolated_marginal",
+    "hostile"
+  ],
+  "totals": {
+    "events": 110,
+    "sound": 110,
+    "unsound": 0,
+    "byClass": {
+      "WRITE_SUPPRESSED_NO_READER": 52,
+      "ACTUAL_READER_READ_BUT_INERT": 53,
+      "READER_VERDICT_CHANGED": 0,
+      "READER_RANKING_CHANGED": 0,
+      "SELECTED_ACTION_CHANGED": 0,
+      "PHYSICAL_ACTION_CHANGED": 0,
+      "RECEIPT_OR_SUPPORT_CHANGED": 5,
+      "DEMOGRAPHY_CHANGED": 0,
+      "CONTROL_REPLAY_UNSOUND": 0
+    }
+  },
+  "perScenario": {
+    "map1": {
+      "events": 10,
+      "sound": 10,
+      "unsound": 0,
+      "byClass": {
+        "WRITE_SUPPRESSED_NO_READER": 5,
+        "ACTUAL_READER_READ_BUT_INERT": 5,
+        "READER_VERDICT_CHANGED": 0,
+        "READER_RANKING_CHANGED": 0,
+        "SELECTED_ACTION_CHANGED": 0,
+        "PHYSICAL_ACTION_CHANGED": 0,
+        "RECEIPT_OR_SUPPORT_CHANGED": 0,
+        "DEMOGRAPHY_CHANGED": 0,
+        "CONTROL_REPLAY_UNSOUND": 0
+      }
+    },
+    "map2": {
+      "events": 10,
+      "sound": 10,
+      "unsound": 0,
+      "byClass": {
+        "WRITE_SUPPRESSED_NO_READER": 5,
+        "ACTUAL_READER_READ_BUT_INERT": 5,
+        "READER_VERDICT_CHANGED": 0,
+        "READER_RANKING_CHANGED": 0,
+        "SELECTED_ACTION_CHANGED": 0,
+        "PHYSICAL_ACTION_CHANGED": 0,
+        "RECEIPT_OR_SUPPORT_CHANGED": 0,
+        "DEMOGRAPHY_CHANGED": 0,
+        "CONTROL_REPLAY_UNSOUND": 0
+      }
+    },
+    "site_A_coast": {
+      "events": 10,
+      "sound": 10,
+      "unsound": 0,
+      "byClass": {
+        "WRITE_SUPPRESSED_NO_READER": 5,
+        "ACTUAL_READER_READ_BUT_INERT": 5,
+        "READER_VERDICT_CHANGED": 0,
+        "READER_RANKING_CHANGED": 0,
+        "SELECTED_ACTION_CHANGED": 0,
+        "PHYSICAL_ACTION_CHANGED": 0,
+        "RECEIPT_OR_SUPPORT_CHANGED": 0,
+        "DEMOGRAPHY_CHANGED": 0,
+        "CONTROL_REPLAY_UNSOUND": 0
+      }
+    },
+    "site_B_dry_plains": {
+      "events": 10,
+      "sound": 10,
+      "unsound": 0,
+      "byClass": {
+        "WRITE_SUPPRESSED_NO_READER": 5,
+        "ACTUAL_READER_READ_BUT_INERT": 5,
+        "READER_VERDICT_CHANGED": 0,
+        "READER_RANKING_CHANGED": 0,
+        "SELECTED_ACTION_CHANGED": 0,
+        "PHYSICAL_ACTION_CHANGED": 0,
+        "RECEIPT_OR_SUPPORT_CHANGED": 0,
+        "DEMOGRAPHY_CHANGED": 0,
+        "CONTROL_REPLAY_UNSOUND": 0
+      }
+    },
+    "site_C_dry_plains": {
+      "events": 10,
+      "sound": 10,
+      "unsound": 0,
+      "byClass": {
+        "WRITE_SUPPRESSED_NO_READER": 5,
+        "ACTUAL_READER_READ_BUT_INERT": 5,
+        "READER_VERDICT_CHANGED": 0,
+        "READER_RANKING_CHANGED": 0,
+        "SELECTED_ACTION_CHANGED": 0,
+        "PHYSICAL_ACTION_CHANGED": 0,
+        "RECEIPT_OR_SUPPORT_CHANGED": 0,
+        "DEMOGRAPHY_CHANGED": 0,
+        "CONTROL_REPLAY_UNSOUND": 0
+      }
+    },
+    "site_D_aquatic": {
+      "events": 10,
+      "sound": 10,
+      "unsound": 0,
+      "byClass": {
+        "WRITE_SUPPRESSED_NO_READER": 5,
+        "ACTUAL_READER_READ_BUT_INERT": 3,
+        "READER_VERDICT_CHANGED": 0,
+        "READER_RANKING_CHANGED": 0,
+        "SELECTED_ACTION_CHANGED": 0,
+        "PHYSICAL_ACTION_CHANGED": 0,
+        "RECEIPT_OR_SUPPORT_CHANGED": 2,
+        "DEMOGRAPHY_CHANGED": 0,
+        "CONTROL_REPLAY_UNSOUND": 0
+      }
+    },
+    "site_E_hills": {
+      "events": 10,
+      "sound": 10,
+      "unsound": 0,
+      "byClass": {
+        "WRITE_SUPPRESSED_NO_READER": 2,
+        "ACTUAL_READER_READ_BUT_INERT": 5,
+        "READER_VERDICT_CHANGED": 0,
+        "READER_RANKING_CHANGED": 0,
+        "SELECTED_ACTION_CHANGED": 0,
+        "PHYSICAL_ACTION_CHANGED": 0,
+        "RECEIPT_OR_SUPPORT_CHANGED": 3,
+        "DEMOGRAPHY_CHANGED": 0,
+        "CONTROL_REPLAY_UNSOUND": 0
+      }
+    },
+    "site_F_hills": {
+      "events": 10,
+      "sound": 10,
+      "unsound": 0,
+      "byClass": {
+        "WRITE_SUPPRESSED_NO_READER": 5,
+        "ACTUAL_READER_READ_BUT_INERT": 5,
+        "READER_VERDICT_CHANGED": 0,
+        "READER_RANKING_CHANGED": 0,
+        "SELECTED_ACTION_CHANGED": 0,
+        "PHYSICAL_ACTION_CHANGED": 0,
+        "RECEIPT_OR_SUPPORT_CHANGED": 0,
+        "DEMOGRAPHY_CHANGED": 0,
+        "CONTROL_REPLAY_UNSOUND": 0
+      }
+    },
+    "ordinary": {
+      "events": 10,
+      "sound": 10,
+      "unsound": 0,
+      "byClass": {
+        "WRITE_SUPPRESSED_NO_READER": 5,
+        "ACTUAL_READER_READ_BUT_INERT": 5,
+        "READER_VERDICT_CHANGED": 0,
+        "READER_RANKING_CHANGED": 0,
+        "SELECTED_ACTION_CHANGED": 0,
+        "PHYSICAL_ACTION_CHANGED": 0,
+        "RECEIPT_OR_SUPPORT_CHANGED": 0,
+        "DEMOGRAPHY_CHANGED": 0,
+        "CONTROL_REPLAY_UNSOUND": 0
+      }
+    },
+    "isolated_marginal": {
+      "events": 10,
+      "sound": 10,
+      "unsound": 0,
+      "byClass": {
+        "WRITE_SUPPRESSED_NO_READER": 5,
+        "ACTUAL_READER_READ_BUT_INERT": 5,
+        "READER_VERDICT_CHANGED": 0,
+        "READER_RANKING_CHANGED": 0,
+        "SELECTED_ACTION_CHANGED": 0,
+        "PHYSICAL_ACTION_CHANGED": 0,
+        "RECEIPT_OR_SUPPORT_CHANGED": 0,
+        "DEMOGRAPHY_CHANGED": 0,
+        "CONTROL_REPLAY_UNSOUND": 0
+      }
+    },
+    "hostile": {
+      "events": 10,
+      "sound": 10,
+      "unsound": 0,
+      "byClass": {
+        "WRITE_SUPPRESSED_NO_READER": 5,
+        "ACTUAL_READER_READ_BUT_INERT": 5,
+        "READER_VERDICT_CHANGED": 0,
+        "READER_RANKING_CHANGED": 0,
+        "SELECTED_ACTION_CHANGED": 0,
+        "PHYSICAL_ACTION_CHANGED": 0,
+        "RECEIPT_OR_SUPPORT_CHANGED": 0,
+        "DEMOGRAPHY_CHANGED": 0,
+        "CONTROL_REPLAY_UNSOUND": 0
+      }
+    }
+  },
+  "rows": [
+    {
+      "scenario": "map1",
+      "seed": "s1",
+      "recordEventId": "band:dry-margin-foragers|tile:100:40|105",
+      "tileId": "tile:100:40",
+      "expeditionId": "expedition:band:dry-margin-foragers:96:frontier_exploration:742566b",
+      "returnDay": 105,
+      "newOrRefreshed": "new",
+      "followedToDay": 825,
+      "controlSound": true,
+      "firstDivergenceDay": 105,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        155,
+        155
+      ],
+      "receipts": [
+        0.3084,
+        0.3084
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "ACTUAL_READER_READ_BUT_INERT"
+    },
+    {
+      "scenario": "map1",
+      "seed": "s1",
+      "recordEventId": "band:dry-margin-foragers|tile:110:40|105",
+      "tileId": "tile:110:40",
+      "expeditionId": "expedition:band:dry-margin-foragers:96:frontier_exploration:742566b",
+      "returnDay": 105,
+      "newOrRefreshed": "refreshed",
+      "followedToDay": 825,
+      "controlSound": true,
+      "firstDivergenceDay": null,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        155,
+        155
+      ],
+      "receipts": [
+        0.3084,
+        0.3084
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "WRITE_SUPPRESSED_NO_READER"
+    },
+    {
+      "scenario": "map1",
+      "seed": "s2",
+      "recordEventId": "band:dry-margin-foragers|tile:100:40|106",
+      "tileId": "tile:100:40",
+      "expeditionId": "expedition:band:dry-margin-foragers:96:frontier_exploration:742566b",
+      "returnDay": 106,
+      "newOrRefreshed": "new",
+      "followedToDay": 826,
+      "controlSound": true,
+      "firstDivergenceDay": 106,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        155,
+        155
+      ],
+      "receipts": [
+        0.309,
+        0.309
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "ACTUAL_READER_READ_BUT_INERT"
+    },
+    {
+      "scenario": "map1",
+      "seed": "s2",
+      "recordEventId": "band:dry-margin-foragers|tile:110:40|106",
+      "tileId": "tile:110:40",
+      "expeditionId": "expedition:band:dry-margin-foragers:96:frontier_exploration:742566b",
+      "returnDay": 106,
+      "newOrRefreshed": "refreshed",
+      "followedToDay": 826,
+      "controlSound": true,
+      "firstDivergenceDay": null,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        155,
+        155
+      ],
+      "receipts": [
+        0.309,
+        0.309
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "WRITE_SUPPRESSED_NO_READER"
+    },
+    {
+      "scenario": "map1",
+      "seed": "s3",
+      "recordEventId": "band:dry-margin-foragers|tile:100:40|106",
+      "tileId": "tile:100:40",
+      "expeditionId": "expedition:band:dry-margin-foragers:96:frontier_exploration:742566b",
+      "returnDay": 106,
+      "newOrRefreshed": "new",
+      "followedToDay": 826,
+      "controlSound": true,
+      "firstDivergenceDay": 106,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        155,
+        155
+      ],
+      "receipts": [
+        0.5371,
+        0.5371
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "ACTUAL_READER_READ_BUT_INERT"
+    },
+    {
+      "scenario": "map1",
+      "seed": "s3",
+      "recordEventId": "band:dry-margin-foragers|tile:110:40|106",
+      "tileId": "tile:110:40",
+      "expeditionId": "expedition:band:dry-margin-foragers:96:frontier_exploration:742566b",
+      "returnDay": 106,
+      "newOrRefreshed": "refreshed",
+      "followedToDay": 826,
+      "controlSound": true,
+      "firstDivergenceDay": null,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        155,
+        155
+      ],
+      "receipts": [
+        0.5371,
+        0.5371
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "WRITE_SUPPRESSED_NO_READER"
+    },
+    {
+      "scenario": "map1",
+      "seed": "s4",
+      "recordEventId": "band:dry-margin-foragers|tile:100:40|105",
+      "tileId": "tile:100:40",
+      "expeditionId": "expedition:band:dry-margin-foragers:96:frontier_exploration:742566b",
+      "returnDay": 105,
+      "newOrRefreshed": "new",
+      "followedToDay": 825,
+      "controlSound": true,
+      "firstDivergenceDay": 105,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        155,
+        155
+      ],
+      "receipts": [
+        0.7321,
+        0.7321
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "ACTUAL_READER_READ_BUT_INERT"
+    },
+    {
+      "scenario": "map1",
+      "seed": "s4",
+      "recordEventId": "band:dry-margin-foragers|tile:110:40|105",
+      "tileId": "tile:110:40",
+      "expeditionId": "expedition:band:dry-margin-foragers:96:frontier_exploration:742566b",
+      "returnDay": 105,
+      "newOrRefreshed": "refreshed",
+      "followedToDay": 825,
+      "controlSound": true,
+      "firstDivergenceDay": null,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        155,
+        155
+      ],
+      "receipts": [
+        0.7321,
+        0.7321
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "WRITE_SUPPRESSED_NO_READER"
+    },
+    {
+      "scenario": "map1",
+      "seed": "s5",
+      "recordEventId": "band:dry-margin-foragers|tile:100:40|105",
+      "tileId": "tile:100:40",
+      "expeditionId": "expedition:band:dry-margin-foragers:96:frontier_exploration:742566b",
+      "returnDay": 105,
+      "newOrRefreshed": "new",
+      "followedToDay": 825,
+      "controlSound": true,
+      "firstDivergenceDay": 105,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        155,
+        155
+      ],
+      "receipts": [
+        0.4808,
+        0.4808
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "ACTUAL_READER_READ_BUT_INERT"
+    },
+    {
+      "scenario": "map1",
+      "seed": "s5",
+      "recordEventId": "band:dry-margin-foragers|tile:110:40|105",
+      "tileId": "tile:110:40",
+      "expeditionId": "expedition:band:dry-margin-foragers:96:frontier_exploration:742566b",
+      "returnDay": 105,
+      "newOrRefreshed": "refreshed",
+      "followedToDay": 825,
+      "controlSound": true,
+      "firstDivergenceDay": null,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        155,
+        155
+      ],
+      "receipts": [
+        0.4808,
+        0.4808
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "WRITE_SUPPRESSED_NO_READER"
+    },
+    {
+      "scenario": "map2",
+      "seed": "s1",
+      "recordEventId": "band:varied-plains-creek|tile:100:42|98",
+      "tileId": "tile:100:42",
+      "expeditionId": "expedition:band:varied-plains-creek:96:frontier_exploration:6d4ee07c",
+      "returnDay": 98,
+      "newOrRefreshed": "new",
+      "followedToDay": 818,
+      "controlSound": true,
+      "firstDivergenceDay": 98,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        238,
+        238
+      ],
+      "receipts": [
+        1.2419,
+        1.2419
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "ACTUAL_READER_READ_BUT_INERT"
+    },
+    {
+      "scenario": "map2",
+      "seed": "s1",
+      "recordEventId": "band:varied-plains-creek|tile:100:44|98",
+      "tileId": "tile:100:44",
+      "expeditionId": "expedition:band:varied-plains-creek:96:frontier_exploration:6d4ee07c",
+      "returnDay": 98,
+      "newOrRefreshed": "refreshed",
+      "followedToDay": 818,
+      "controlSound": true,
+      "firstDivergenceDay": null,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        238,
+        238
+      ],
+      "receipts": [
+        1.2419,
+        1.2419
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "WRITE_SUPPRESSED_NO_READER"
+    },
+    {
+      "scenario": "map2",
+      "seed": "s2",
+      "recordEventId": "band:varied-plains-creek|tile:100:42|98",
+      "tileId": "tile:100:42",
+      "expeditionId": "expedition:band:varied-plains-creek:96:frontier_exploration:6d4ee07c",
+      "returnDay": 98,
+      "newOrRefreshed": "new",
+      "followedToDay": 818,
+      "controlSound": true,
+      "firstDivergenceDay": 98,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        238,
+        238
+      ],
+      "receipts": [
+        1.2527,
+        1.2527
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "ACTUAL_READER_READ_BUT_INERT"
+    },
+    {
+      "scenario": "map2",
+      "seed": "s2",
+      "recordEventId": "band:varied-plains-creek|tile:100:44|98",
+      "tileId": "tile:100:44",
+      "expeditionId": "expedition:band:varied-plains-creek:96:frontier_exploration:6d4ee07c",
+      "returnDay": 98,
+      "newOrRefreshed": "refreshed",
+      "followedToDay": 818,
+      "controlSound": true,
+      "firstDivergenceDay": null,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        238,
+        238
+      ],
+      "receipts": [
+        1.2527,
+        1.2527
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "WRITE_SUPPRESSED_NO_READER"
+    },
+    {
+      "scenario": "map2",
+      "seed": "s3",
+      "recordEventId": "band:varied-plains-creek|tile:100:42|98",
+      "tileId": "tile:100:42",
+      "expeditionId": "expedition:band:varied-plains-creek:96:frontier_exploration:6d4ee07c",
+      "returnDay": 98,
+      "newOrRefreshed": "new",
+      "followedToDay": 818,
+      "controlSound": true,
+      "firstDivergenceDay": 98,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        238,
+        238
+      ],
+      "receipts": [
+        1.1965,
+        1.1965
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "ACTUAL_READER_READ_BUT_INERT"
+    },
+    {
+      "scenario": "map2",
+      "seed": "s3",
+      "recordEventId": "band:varied-plains-creek|tile:100:44|98",
+      "tileId": "tile:100:44",
+      "expeditionId": "expedition:band:varied-plains-creek:96:frontier_exploration:6d4ee07c",
+      "returnDay": 98,
+      "newOrRefreshed": "refreshed",
+      "followedToDay": 818,
+      "controlSound": true,
+      "firstDivergenceDay": null,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        238,
+        238
+      ],
+      "receipts": [
+        1.1965,
+        1.1965
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "WRITE_SUPPRESSED_NO_READER"
+    },
+    {
+      "scenario": "map2",
+      "seed": "s4",
+      "recordEventId": "band:varied-plains-creek|tile:100:42|98",
+      "tileId": "tile:100:42",
+      "expeditionId": "expedition:band:varied-plains-creek:96:frontier_exploration:6d4ee07c",
+      "returnDay": 98,
+      "newOrRefreshed": "new",
+      "followedToDay": 818,
+      "controlSound": true,
+      "firstDivergenceDay": 98,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        238,
+        238
+      ],
+      "receipts": [
+        0.5212,
+        0.5212
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "ACTUAL_READER_READ_BUT_INERT"
+    },
+    {
+      "scenario": "map2",
+      "seed": "s4",
+      "recordEventId": "band:varied-plains-creek|tile:100:44|98",
+      "tileId": "tile:100:44",
+      "expeditionId": "expedition:band:varied-plains-creek:96:frontier_exploration:6d4ee07c",
+      "returnDay": 98,
+      "newOrRefreshed": "refreshed",
+      "followedToDay": 818,
+      "controlSound": true,
+      "firstDivergenceDay": null,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        238,
+        238
+      ],
+      "receipts": [
+        0.5212,
+        0.5212
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "WRITE_SUPPRESSED_NO_READER"
+    },
+    {
+      "scenario": "map2",
+      "seed": "s5",
+      "recordEventId": "band:varied-plains-creek|tile:100:42|98",
+      "tileId": "tile:100:42",
+      "expeditionId": "expedition:band:varied-plains-creek:96:frontier_exploration:6d4ee07c",
+      "returnDay": 98,
+      "newOrRefreshed": "new",
+      "followedToDay": 818,
+      "controlSound": true,
+      "firstDivergenceDay": 98,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        238,
+        238
+      ],
+      "receipts": [
+        1.0389,
+        1.0389
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "ACTUAL_READER_READ_BUT_INERT"
+    },
+    {
+      "scenario": "map2",
+      "seed": "s5",
+      "recordEventId": "band:varied-plains-creek|tile:100:44|98",
+      "tileId": "tile:100:44",
+      "expeditionId": "expedition:band:varied-plains-creek:96:frontier_exploration:6d4ee07c",
+      "returnDay": 98,
+      "newOrRefreshed": "refreshed",
+      "followedToDay": 818,
+      "controlSound": true,
+      "firstDivergenceDay": null,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        238,
+        238
+      ],
+      "receipts": [
+        1.0389,
+        1.0389
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "WRITE_SUPPRESSED_NO_READER"
+    },
+    {
+      "scenario": "site_A_coast",
+      "seed": "s1",
+      "recordEventId": "band:custom:0|tile:205:63|100",
+      "tileId": "tile:205:63",
+      "expeditionId": "expedition:band:custom:0:96:frontier_exploration:1781dbf4",
+      "returnDay": 100,
+      "newOrRefreshed": "new",
+      "followedToDay": 820,
+      "controlSound": true,
+      "firstDivergenceDay": 100,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        34,
+        34
+      ],
+      "receipts": [
+        0.066,
+        0.066
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "ACTUAL_READER_READ_BUT_INERT"
+    },
+    {
+      "scenario": "site_A_coast",
+      "seed": "s1",
+      "recordEventId": "band:custom:0|tile:205:70|100",
+      "tileId": "tile:205:70",
+      "expeditionId": "expedition:band:custom:0:96:frontier_exploration:1781dbf4",
+      "returnDay": 100,
+      "newOrRefreshed": "refreshed",
+      "followedToDay": 820,
+      "controlSound": true,
+      "firstDivergenceDay": null,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        34,
+        34
+      ],
+      "receipts": [
+        0.066,
+        0.066
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "WRITE_SUPPRESSED_NO_READER"
+    },
+    {
+      "scenario": "site_A_coast",
+      "seed": "s2",
+      "recordEventId": "band:custom:0|tile:205:63|100",
+      "tileId": "tile:205:63",
+      "expeditionId": "expedition:band:custom:0:96:frontier_exploration:1781dbf4",
+      "returnDay": 100,
+      "newOrRefreshed": "new",
+      "followedToDay": 820,
+      "controlSound": true,
+      "firstDivergenceDay": 100,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        34,
+        34
+      ],
+      "receipts": [
+        0.0554,
+        0.0554
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "ACTUAL_READER_READ_BUT_INERT"
+    },
+    {
+      "scenario": "site_A_coast",
+      "seed": "s2",
+      "recordEventId": "band:custom:0|tile:205:70|100",
+      "tileId": "tile:205:70",
+      "expeditionId": "expedition:band:custom:0:96:frontier_exploration:1781dbf4",
+      "returnDay": 100,
+      "newOrRefreshed": "refreshed",
+      "followedToDay": 820,
+      "controlSound": true,
+      "firstDivergenceDay": null,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        34,
+        34
+      ],
+      "receipts": [
+        0.0554,
+        0.0554
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "WRITE_SUPPRESSED_NO_READER"
+    },
+    {
+      "scenario": "site_A_coast",
+      "seed": "s3",
+      "recordEventId": "band:custom:0|tile:205:63|100",
+      "tileId": "tile:205:63",
+      "expeditionId": "expedition:band:custom:0:96:frontier_exploration:1781dbf4",
+      "returnDay": 100,
+      "newOrRefreshed": "new",
+      "followedToDay": 820,
+      "controlSound": true,
+      "firstDivergenceDay": 100,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        34,
+        34
+      ],
+      "receipts": [
+        0.0554,
+        0.0554
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "ACTUAL_READER_READ_BUT_INERT"
+    },
+    {
+      "scenario": "site_A_coast",
+      "seed": "s3",
+      "recordEventId": "band:custom:0|tile:205:70|100",
+      "tileId": "tile:205:70",
+      "expeditionId": "expedition:band:custom:0:96:frontier_exploration:1781dbf4",
+      "returnDay": 100,
+      "newOrRefreshed": "refreshed",
+      "followedToDay": 820,
+      "controlSound": true,
+      "firstDivergenceDay": null,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        34,
+        34
+      ],
+      "receipts": [
+        0.0554,
+        0.0554
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "WRITE_SUPPRESSED_NO_READER"
+    },
+    {
+      "scenario": "site_A_coast",
+      "seed": "s4",
+      "recordEventId": "band:custom:0|tile:205:63|100",
+      "tileId": "tile:205:63",
+      "expeditionId": "expedition:band:custom:0:96:frontier_exploration:1781dbf4",
+      "returnDay": 100,
+      "newOrRefreshed": "new",
+      "followedToDay": 820,
+      "controlSound": true,
+      "firstDivergenceDay": 100,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        34,
+        34
+      ],
+      "receipts": [
+        0.0554,
+        0.0554
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "ACTUAL_READER_READ_BUT_INERT"
+    },
+    {
+      "scenario": "site_A_coast",
+      "seed": "s4",
+      "recordEventId": "band:custom:0|tile:205:70|100",
+      "tileId": "tile:205:70",
+      "expeditionId": "expedition:band:custom:0:96:frontier_exploration:1781dbf4",
+      "returnDay": 100,
+      "newOrRefreshed": "refreshed",
+      "followedToDay": 820,
+      "controlSound": true,
+      "firstDivergenceDay": null,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        34,
+        34
+      ],
+      "receipts": [
+        0.0554,
+        0.0554
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "WRITE_SUPPRESSED_NO_READER"
+    },
+    {
+      "scenario": "site_A_coast",
+      "seed": "s5",
+      "recordEventId": "band:custom:0|tile:205:63|100",
+      "tileId": "tile:205:63",
+      "expeditionId": "expedition:band:custom:0:96:frontier_exploration:1781dbf4",
+      "returnDay": 100,
+      "newOrRefreshed": "new",
+      "followedToDay": 820,
+      "controlSound": true,
+      "firstDivergenceDay": 100,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        34,
+        34
+      ],
+      "receipts": [
+        0.066,
+        0.066
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "ACTUAL_READER_READ_BUT_INERT"
+    },
+    {
+      "scenario": "site_A_coast",
+      "seed": "s5",
+      "recordEventId": "band:custom:0|tile:205:70|100",
+      "tileId": "tile:205:70",
+      "expeditionId": "expedition:band:custom:0:96:frontier_exploration:1781dbf4",
+      "returnDay": 100,
+      "newOrRefreshed": "refreshed",
+      "followedToDay": 820,
+      "controlSound": true,
+      "firstDivergenceDay": null,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        34,
+        34
+      ],
+      "receipts": [
+        0.066,
+        0.066
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "WRITE_SUPPRESSED_NO_READER"
+    },
+    {
+      "scenario": "site_B_dry_plains",
+      "seed": "s1",
+      "recordEventId": "band:custom:0|tile:16:34|100",
+      "tileId": "tile:16:34",
+      "expeditionId": "expedition:band:custom:0:96:frontier_exploration:bf2043c5",
+      "returnDay": 100,
+      "newOrRefreshed": "new",
+      "followedToDay": 820,
+      "controlSound": true,
+      "firstDivergenceDay": 100,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        34,
+        34
+      ],
+      "receipts": [
+        0.1114,
+        0.1114
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "ACTUAL_READER_READ_BUT_INERT"
+    },
+    {
+      "scenario": "site_B_dry_plains",
+      "seed": "s1",
+      "recordEventId": "band:custom:0|tile:13:34|100",
+      "tileId": "tile:13:34",
+      "expeditionId": "expedition:band:custom:0:96:frontier_exploration:bf2043c5",
+      "returnDay": 100,
+      "newOrRefreshed": "refreshed",
+      "followedToDay": 820,
+      "controlSound": true,
+      "firstDivergenceDay": null,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        34,
+        34
+      ],
+      "receipts": [
+        0.1114,
+        0.1114
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "WRITE_SUPPRESSED_NO_READER"
+    },
+    {
+      "scenario": "site_B_dry_plains",
+      "seed": "s2",
+      "recordEventId": "band:custom:0|tile:16:34|100",
+      "tileId": "tile:16:34",
+      "expeditionId": "expedition:band:custom:0:96:frontier_exploration:bf2043c5",
+      "returnDay": 100,
+      "newOrRefreshed": "new",
+      "followedToDay": 820,
+      "controlSound": true,
+      "firstDivergenceDay": 100,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        34,
+        34
+      ],
+      "receipts": [
+        0.1114,
+        0.1114
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "ACTUAL_READER_READ_BUT_INERT"
+    },
+    {
+      "scenario": "site_B_dry_plains",
+      "seed": "s2",
+      "recordEventId": "band:custom:0|tile:13:34|100",
+      "tileId": "tile:13:34",
+      "expeditionId": "expedition:band:custom:0:96:frontier_exploration:bf2043c5",
+      "returnDay": 100,
+      "newOrRefreshed": "refreshed",
+      "followedToDay": 820,
+      "controlSound": true,
+      "firstDivergenceDay": null,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        34,
+        34
+      ],
+      "receipts": [
+        0.1114,
+        0.1114
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "WRITE_SUPPRESSED_NO_READER"
+    },
+    {
+      "scenario": "site_B_dry_plains",
+      "seed": "s3",
+      "recordEventId": "band:custom:0|tile:16:34|100",
+      "tileId": "tile:16:34",
+      "expeditionId": "expedition:band:custom:0:96:frontier_exploration:bf2043c5",
+      "returnDay": 100,
+      "newOrRefreshed": "new",
+      "followedToDay": 820,
+      "controlSound": true,
+      "firstDivergenceDay": 100,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        34,
+        34
+      ],
+      "receipts": [
+        0.1114,
+        0.1114
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "ACTUAL_READER_READ_BUT_INERT"
+    },
+    {
+      "scenario": "site_B_dry_plains",
+      "seed": "s3",
+      "recordEventId": "band:custom:0|tile:13:34|100",
+      "tileId": "tile:13:34",
+      "expeditionId": "expedition:band:custom:0:96:frontier_exploration:bf2043c5",
+      "returnDay": 100,
+      "newOrRefreshed": "refreshed",
+      "followedToDay": 820,
+      "controlSound": true,
+      "firstDivergenceDay": null,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        34,
+        34
+      ],
+      "receipts": [
+        0.1114,
+        0.1114
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "WRITE_SUPPRESSED_NO_READER"
+    },
+    {
+      "scenario": "site_B_dry_plains",
+      "seed": "s4",
+      "recordEventId": "band:custom:0|tile:16:34|100",
+      "tileId": "tile:16:34",
+      "expeditionId": "expedition:band:custom:0:96:frontier_exploration:bf2043c5",
+      "returnDay": 100,
+      "newOrRefreshed": "new",
+      "followedToDay": 820,
+      "controlSound": true,
+      "firstDivergenceDay": 100,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        34,
+        34
+      ],
+      "receipts": [
+        0.1114,
+        0.1114
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "ACTUAL_READER_READ_BUT_INERT"
+    },
+    {
+      "scenario": "site_B_dry_plains",
+      "seed": "s4",
+      "recordEventId": "band:custom:0|tile:13:34|100",
+      "tileId": "tile:13:34",
+      "expeditionId": "expedition:band:custom:0:96:frontier_exploration:bf2043c5",
+      "returnDay": 100,
+      "newOrRefreshed": "refreshed",
+      "followedToDay": 820,
+      "controlSound": true,
+      "firstDivergenceDay": null,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        34,
+        34
+      ],
+      "receipts": [
+        0.1114,
+        0.1114
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "WRITE_SUPPRESSED_NO_READER"
+    },
+    {
+      "scenario": "site_B_dry_plains",
+      "seed": "s5",
+      "recordEventId": "band:custom:0|tile:16:34|100",
+      "tileId": "tile:16:34",
+      "expeditionId": "expedition:band:custom:0:96:frontier_exploration:bf2043c5",
+      "returnDay": 100,
+      "newOrRefreshed": "new",
+      "followedToDay": 820,
+      "controlSound": true,
+      "firstDivergenceDay": 100,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        34,
+        34
+      ],
+      "receipts": [
+        0.1114,
+        0.1114
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "ACTUAL_READER_READ_BUT_INERT"
+    },
+    {
+      "scenario": "site_B_dry_plains",
+      "seed": "s5",
+      "recordEventId": "band:custom:0|tile:13:34|100",
+      "tileId": "tile:13:34",
+      "expeditionId": "expedition:band:custom:0:96:frontier_exploration:bf2043c5",
+      "returnDay": 100,
+      "newOrRefreshed": "refreshed",
+      "followedToDay": 820,
+      "controlSound": true,
+      "firstDivergenceDay": null,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        34,
+        34
+      ],
+      "receipts": [
+        0.1114,
+        0.1114
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "WRITE_SUPPRESSED_NO_READER"
+    },
+    {
+      "scenario": "site_C_dry_plains",
+      "seed": "s1",
+      "recordEventId": "band:custom:0|tile:95:23|100",
+      "tileId": "tile:95:23",
+      "expeditionId": "expedition:band:custom:0:96:frontier_exploration:f2fea3f3",
+      "returnDay": 100,
+      "newOrRefreshed": "new",
+      "followedToDay": 820,
+      "controlSound": true,
+      "firstDivergenceDay": 100,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        34,
+        34
+      ],
+      "receipts": [
+        0.0521,
+        0.0521
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "ACTUAL_READER_READ_BUT_INERT"
+    },
+    {
+      "scenario": "site_C_dry_plains",
+      "seed": "s1",
+      "recordEventId": "band:custom:0|tile:100:23|100",
+      "tileId": "tile:100:23",
+      "expeditionId": "expedition:band:custom:0:96:frontier_exploration:f2fea3f3",
+      "returnDay": 100,
+      "newOrRefreshed": "refreshed",
+      "followedToDay": 820,
+      "controlSound": true,
+      "firstDivergenceDay": null,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        34,
+        34
+      ],
+      "receipts": [
+        0.0521,
+        0.0521
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "WRITE_SUPPRESSED_NO_READER"
+    },
+    {
+      "scenario": "site_C_dry_plains",
+      "seed": "s2",
+      "recordEventId": "band:custom:0|tile:95:23|100",
+      "tileId": "tile:95:23",
+      "expeditionId": "expedition:band:custom:0:96:frontier_exploration:f2fea3f3",
+      "returnDay": 100,
+      "newOrRefreshed": "new",
+      "followedToDay": 820,
+      "controlSound": true,
+      "firstDivergenceDay": 100,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        34,
+        34
+      ],
+      "receipts": [
+        0.0521,
+        0.0521
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "ACTUAL_READER_READ_BUT_INERT"
+    },
+    {
+      "scenario": "site_C_dry_plains",
+      "seed": "s2",
+      "recordEventId": "band:custom:0|tile:100:23|100",
+      "tileId": "tile:100:23",
+      "expeditionId": "expedition:band:custom:0:96:frontier_exploration:f2fea3f3",
+      "returnDay": 100,
+      "newOrRefreshed": "refreshed",
+      "followedToDay": 820,
+      "controlSound": true,
+      "firstDivergenceDay": null,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        34,
+        34
+      ],
+      "receipts": [
+        0.0521,
+        0.0521
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "WRITE_SUPPRESSED_NO_READER"
+    },
+    {
+      "scenario": "site_C_dry_plains",
+      "seed": "s3",
+      "recordEventId": "band:custom:0|tile:95:23|100",
+      "tileId": "tile:95:23",
+      "expeditionId": "expedition:band:custom:0:96:frontier_exploration:f2fea3f3",
+      "returnDay": 100,
+      "newOrRefreshed": "new",
+      "followedToDay": 820,
+      "controlSound": true,
+      "firstDivergenceDay": 100,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        34,
+        34
+      ],
+      "receipts": [
+        0.0204,
+        0.0204
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "ACTUAL_READER_READ_BUT_INERT"
+    },
+    {
+      "scenario": "site_C_dry_plains",
+      "seed": "s3",
+      "recordEventId": "band:custom:0|tile:100:23|100",
+      "tileId": "tile:100:23",
+      "expeditionId": "expedition:band:custom:0:96:frontier_exploration:f2fea3f3",
+      "returnDay": 100,
+      "newOrRefreshed": "refreshed",
+      "followedToDay": 820,
+      "controlSound": true,
+      "firstDivergenceDay": null,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        34,
+        34
+      ],
+      "receipts": [
+        0.0204,
+        0.0204
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "WRITE_SUPPRESSED_NO_READER"
+    },
+    {
+      "scenario": "site_C_dry_plains",
+      "seed": "s4",
+      "recordEventId": "band:custom:0|tile:95:23|100",
+      "tileId": "tile:95:23",
+      "expeditionId": "expedition:band:custom:0:96:frontier_exploration:f2fea3f3",
+      "returnDay": 100,
+      "newOrRefreshed": "new",
+      "followedToDay": 820,
+      "controlSound": true,
+      "firstDivergenceDay": 100,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        34,
+        34
+      ],
+      "receipts": [
+        0.0521,
+        0.0521
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "ACTUAL_READER_READ_BUT_INERT"
+    },
+    {
+      "scenario": "site_C_dry_plains",
+      "seed": "s4",
+      "recordEventId": "band:custom:0|tile:100:23|100",
+      "tileId": "tile:100:23",
+      "expeditionId": "expedition:band:custom:0:96:frontier_exploration:f2fea3f3",
+      "returnDay": 100,
+      "newOrRefreshed": "refreshed",
+      "followedToDay": 820,
+      "controlSound": true,
+      "firstDivergenceDay": null,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        34,
+        34
+      ],
+      "receipts": [
+        0.0521,
+        0.0521
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "WRITE_SUPPRESSED_NO_READER"
+    },
+    {
+      "scenario": "site_C_dry_plains",
+      "seed": "s5",
+      "recordEventId": "band:custom:0|tile:95:23|100",
+      "tileId": "tile:95:23",
+      "expeditionId": "expedition:band:custom:0:96:frontier_exploration:f2fea3f3",
+      "returnDay": 100,
+      "newOrRefreshed": "new",
+      "followedToDay": 820,
+      "controlSound": true,
+      "firstDivergenceDay": 100,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        34,
+        34
+      ],
+      "receipts": [
+        0.0521,
+        0.0521
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "ACTUAL_READER_READ_BUT_INERT"
+    },
+    {
+      "scenario": "site_C_dry_plains",
+      "seed": "s5",
+      "recordEventId": "band:custom:0|tile:100:23|100",
+      "tileId": "tile:100:23",
+      "expeditionId": "expedition:band:custom:0:96:frontier_exploration:f2fea3f3",
+      "returnDay": 100,
+      "newOrRefreshed": "refreshed",
+      "followedToDay": 820,
+      "controlSound": true,
+      "firstDivergenceDay": null,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        34,
+        34
+      ],
+      "receipts": [
+        0.0521,
+        0.0521
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "WRITE_SUPPRESSED_NO_READER"
+    },
+    {
+      "scenario": "site_D_aquatic",
+      "seed": "s1",
+      "recordEventId": "band:custom:0|tile:122:117|100",
+      "tileId": "tile:122:117",
+      "expeditionId": "expedition:band:custom:0:96:frontier_exploration:34d813df",
+      "returnDay": 100,
+      "newOrRefreshed": "new",
+      "followedToDay": 820,
+      "controlSound": true,
+      "firstDivergenceDay": 100,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        34,
+        34
+      ],
+      "receipts": [
+        0.0084,
+        0.0084
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "ACTUAL_READER_READ_BUT_INERT"
+    },
+    {
+      "scenario": "site_D_aquatic",
+      "seed": "s1",
+      "recordEventId": "band:custom:0|tile:120:116|100",
+      "tileId": "tile:120:116",
+      "expeditionId": "expedition:band:custom:0:96:frontier_exploration:34d813df",
+      "returnDay": 100,
+      "newOrRefreshed": "refreshed",
+      "followedToDay": 820,
+      "controlSound": true,
+      "firstDivergenceDay": null,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        34,
+        34
+      ],
+      "receipts": [
+        0.0084,
+        0.0084
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "WRITE_SUPPRESSED_NO_READER"
+    },
+    {
+      "scenario": "site_D_aquatic",
+      "seed": "s2",
+      "recordEventId": "band:custom:0|tile:122:117|100",
+      "tileId": "tile:122:117",
+      "expeditionId": "expedition:band:custom:0:96:frontier_exploration:34d813df",
+      "returnDay": 100,
+      "newOrRefreshed": "new",
+      "followedToDay": 820,
+      "controlSound": true,
+      "firstDivergenceDay": 100,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        34,
+        34
+      ],
+      "receipts": [
+        0.2313,
+        0.0084
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "RECEIPT_OR_SUPPORT_CHANGED"
+    },
+    {
+      "scenario": "site_D_aquatic",
+      "seed": "s2",
+      "recordEventId": "band:custom:0|tile:120:116|100",
+      "tileId": "tile:120:116",
+      "expeditionId": "expedition:band:custom:0:96:frontier_exploration:34d813df",
+      "returnDay": 100,
+      "newOrRefreshed": "refreshed",
+      "followedToDay": 820,
+      "controlSound": true,
+      "firstDivergenceDay": null,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        34,
+        34
+      ],
+      "receipts": [
+        0.2313,
+        0.2313
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "WRITE_SUPPRESSED_NO_READER"
+    },
+    {
+      "scenario": "site_D_aquatic",
+      "seed": "s3",
+      "recordEventId": "band:custom:0|tile:122:117|100",
+      "tileId": "tile:122:117",
+      "expeditionId": "expedition:band:custom:0:96:frontier_exploration:34d813df",
+      "returnDay": 100,
+      "newOrRefreshed": "new",
+      "followedToDay": 820,
+      "controlSound": true,
+      "firstDivergenceDay": 100,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        34,
+        34
+      ],
+      "receipts": [
+        0.0084,
+        0.0084
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "ACTUAL_READER_READ_BUT_INERT"
+    },
+    {
+      "scenario": "site_D_aquatic",
+      "seed": "s3",
+      "recordEventId": "band:custom:0|tile:120:116|100",
+      "tileId": "tile:120:116",
+      "expeditionId": "expedition:band:custom:0:96:frontier_exploration:34d813df",
+      "returnDay": 100,
+      "newOrRefreshed": "refreshed",
+      "followedToDay": 820,
+      "controlSound": true,
+      "firstDivergenceDay": null,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        34,
+        34
+      ],
+      "receipts": [
+        0.0084,
+        0.0084
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "WRITE_SUPPRESSED_NO_READER"
+    },
+    {
+      "scenario": "site_D_aquatic",
+      "seed": "s4",
+      "recordEventId": "band:custom:0|tile:122:117|100",
+      "tileId": "tile:122:117",
+      "expeditionId": "expedition:band:custom:0:96:frontier_exploration:34d813df",
+      "returnDay": 100,
+      "newOrRefreshed": "new",
+      "followedToDay": 820,
+      "controlSound": true,
+      "firstDivergenceDay": 100,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        34,
+        34
+      ],
+      "receipts": [
+        0.2312,
+        0.0084
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "RECEIPT_OR_SUPPORT_CHANGED"
+    },
+    {
+      "scenario": "site_D_aquatic",
+      "seed": "s4",
+      "recordEventId": "band:custom:0|tile:120:116|100",
+      "tileId": "tile:120:116",
+      "expeditionId": "expedition:band:custom:0:96:frontier_exploration:34d813df",
+      "returnDay": 100,
+      "newOrRefreshed": "refreshed",
+      "followedToDay": 820,
+      "controlSound": true,
+      "firstDivergenceDay": null,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        34,
+        34
+      ],
+      "receipts": [
+        0.2312,
+        0.2312
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "WRITE_SUPPRESSED_NO_READER"
+    },
+    {
+      "scenario": "site_D_aquatic",
+      "seed": "s5",
+      "recordEventId": "band:custom:0|tile:122:117|100",
+      "tileId": "tile:122:117",
+      "expeditionId": "expedition:band:custom:0:96:frontier_exploration:34d813df",
+      "returnDay": 100,
+      "newOrRefreshed": "new",
+      "followedToDay": 820,
+      "controlSound": true,
+      "firstDivergenceDay": 100,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        34,
+        34
+      ],
+      "receipts": [
+        0.0084,
+        0.0084
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "ACTUAL_READER_READ_BUT_INERT"
+    },
+    {
+      "scenario": "site_D_aquatic",
+      "seed": "s5",
+      "recordEventId": "band:custom:0|tile:120:116|100",
+      "tileId": "tile:120:116",
+      "expeditionId": "expedition:band:custom:0:96:frontier_exploration:34d813df",
+      "returnDay": 100,
+      "newOrRefreshed": "refreshed",
+      "followedToDay": 820,
+      "controlSound": true,
+      "firstDivergenceDay": null,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        34,
+        34
+      ],
+      "receipts": [
+        0.0084,
+        0.0084
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "WRITE_SUPPRESSED_NO_READER"
+    },
+    {
+      "scenario": "site_E_hills",
+      "seed": "s1",
+      "recordEventId": "band:custom:0|tile:124:44|104",
+      "tileId": "tile:124:44",
+      "expeditionId": "expedition:band:custom:0:96:frontier_exploration:1b466dbc",
+      "returnDay": 104,
+      "newOrRefreshed": "new",
+      "followedToDay": 824,
+      "controlSound": true,
+      "firstDivergenceDay": 104,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        34,
+        34
+      ],
+      "receipts": [
+        0.0272,
+        0.0272
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "ACTUAL_READER_READ_BUT_INERT"
+    },
+    {
+      "scenario": "site_E_hills",
+      "seed": "s1",
+      "recordEventId": "band:custom:0|tile:137:41|104",
+      "tileId": "tile:137:41",
+      "expeditionId": "expedition:band:custom:0:96:frontier_exploration:1b466dbc",
+      "returnDay": 104,
+      "newOrRefreshed": "refreshed",
+      "followedToDay": 824,
+      "controlSound": true,
+      "firstDivergenceDay": 630,
+      "firstDecisionDivergenceDay": 630,
+      "population": [
+        34,
+        34
+      ],
+      "receipts": [
+        0.0272,
+        0.0277
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "RECEIPT_OR_SUPPORT_CHANGED"
+    },
+    {
+      "scenario": "site_E_hills",
+      "seed": "s2",
+      "recordEventId": "band:custom:0|tile:123:41|106",
+      "tileId": "tile:123:41",
+      "expeditionId": "expedition:band:custom:0:96:frontier_exploration:eae1fa91",
+      "returnDay": 106,
+      "newOrRefreshed": "new",
+      "followedToDay": 826,
+      "controlSound": true,
+      "firstDivergenceDay": 106,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        34,
+        34
+      ],
+      "receipts": [
+        0.0277,
+        0.0277
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "ACTUAL_READER_READ_BUT_INERT"
+    },
+    {
+      "scenario": "site_E_hills",
+      "seed": "s2",
+      "recordEventId": "band:custom:0|tile:137:41|106",
+      "tileId": "tile:137:41",
+      "expeditionId": "expedition:band:custom:0:96:frontier_exploration:eae1fa91",
+      "returnDay": 106,
+      "newOrRefreshed": "refreshed",
+      "followedToDay": 826,
+      "controlSound": true,
+      "firstDivergenceDay": null,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        34,
+        34
+      ],
+      "receipts": [
+        0.0277,
+        0.0277
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "WRITE_SUPPRESSED_NO_READER"
+    },
+    {
+      "scenario": "site_E_hills",
+      "seed": "s3",
+      "recordEventId": "band:custom:0|tile:124:44|104",
+      "tileId": "tile:124:44",
+      "expeditionId": "expedition:band:custom:0:96:frontier_exploration:1b466dbc",
+      "returnDay": 104,
+      "newOrRefreshed": "new",
+      "followedToDay": 824,
+      "controlSound": true,
+      "firstDivergenceDay": 104,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        34,
+        34
+      ],
+      "receipts": [
+        0.0272,
+        0.0272
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "ACTUAL_READER_READ_BUT_INERT"
+    },
+    {
+      "scenario": "site_E_hills",
+      "seed": "s3",
+      "recordEventId": "band:custom:0|tile:137:41|104",
+      "tileId": "tile:137:41",
+      "expeditionId": "expedition:band:custom:0:96:frontier_exploration:1b466dbc",
+      "returnDay": 104,
+      "newOrRefreshed": "refreshed",
+      "followedToDay": 824,
+      "controlSound": true,
+      "firstDivergenceDay": 630,
+      "firstDecisionDivergenceDay": 630,
+      "population": [
+        34,
+        34
+      ],
+      "receipts": [
+        0.0272,
+        0.0277
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "RECEIPT_OR_SUPPORT_CHANGED"
+    },
+    {
+      "scenario": "site_E_hills",
+      "seed": "s4",
+      "recordEventId": "band:custom:0|tile:124:44|104",
+      "tileId": "tile:124:44",
+      "expeditionId": "expedition:band:custom:0:96:frontier_exploration:1b466dbc",
+      "returnDay": 104,
+      "newOrRefreshed": "new",
+      "followedToDay": 824,
+      "controlSound": true,
+      "firstDivergenceDay": 104,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        34,
+        34
+      ],
+      "receipts": [
+        0.0272,
+        0.0272
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "ACTUAL_READER_READ_BUT_INERT"
+    },
+    {
+      "scenario": "site_E_hills",
+      "seed": "s4",
+      "recordEventId": "band:custom:0|tile:137:41|104",
+      "tileId": "tile:137:41",
+      "expeditionId": "expedition:band:custom:0:96:frontier_exploration:1b466dbc",
+      "returnDay": 104,
+      "newOrRefreshed": "refreshed",
+      "followedToDay": 824,
+      "controlSound": true,
+      "firstDivergenceDay": 630,
+      "firstDecisionDivergenceDay": 630,
+      "population": [
+        34,
+        34
+      ],
+      "receipts": [
+        0.0272,
+        0.0277
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "RECEIPT_OR_SUPPORT_CHANGED"
+    },
+    {
+      "scenario": "site_E_hills",
+      "seed": "s5",
+      "recordEventId": "band:custom:0|tile:124:44|104",
+      "tileId": "tile:124:44",
+      "expeditionId": "expedition:band:custom:0:96:frontier_exploration:1b466dbc",
+      "returnDay": 104,
+      "newOrRefreshed": "new",
+      "followedToDay": 824,
+      "controlSound": true,
+      "firstDivergenceDay": 104,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        34,
+        34
+      ],
+      "receipts": [
+        0.0272,
+        0.0272
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "ACTUAL_READER_READ_BUT_INERT"
+    },
+    {
+      "scenario": "site_E_hills",
+      "seed": "s5",
+      "recordEventId": "band:custom:0|tile:137:41|104",
+      "tileId": "tile:137:41",
+      "expeditionId": "expedition:band:custom:0:96:frontier_exploration:1b466dbc",
+      "returnDay": 104,
+      "newOrRefreshed": "refreshed",
+      "followedToDay": 824,
+      "controlSound": true,
+      "firstDivergenceDay": null,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        34,
+        34
+      ],
+      "receipts": [
+        0.0272,
+        0.0272
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "WRITE_SUPPRESSED_NO_READER"
+    },
+    {
+      "scenario": "site_F_hills",
+      "seed": "s1",
+      "recordEventId": "band:custom:0|tile:45:32|109",
+      "tileId": "tile:45:32",
+      "expeditionId": "expedition:band:custom:0:102:frontier_exploration:19385a5f",
+      "returnDay": 109,
+      "newOrRefreshed": "new",
+      "followedToDay": 829,
+      "controlSound": true,
+      "firstDivergenceDay": 109,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        34,
+        34
+      ],
+      "receipts": [
+        0.0173,
+        0.0173
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "ACTUAL_READER_READ_BUT_INERT"
+    },
+    {
+      "scenario": "site_F_hills",
+      "seed": "s1",
+      "recordEventId": "band:custom:0|tile:45:28|109",
+      "tileId": "tile:45:28",
+      "expeditionId": "expedition:band:custom:0:102:frontier_exploration:19385a5f",
+      "returnDay": 109,
+      "newOrRefreshed": "refreshed",
+      "followedToDay": 829,
+      "controlSound": true,
+      "firstDivergenceDay": null,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        34,
+        34
+      ],
+      "receipts": [
+        0.0173,
+        0.0173
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "WRITE_SUPPRESSED_NO_READER"
+    },
+    {
+      "scenario": "site_F_hills",
+      "seed": "s2",
+      "recordEventId": "band:custom:0|tile:45:32|109",
+      "tileId": "tile:45:32",
+      "expeditionId": "expedition:band:custom:0:102:frontier_exploration:19385a5f",
+      "returnDay": 109,
+      "newOrRefreshed": "new",
+      "followedToDay": 829,
+      "controlSound": true,
+      "firstDivergenceDay": 109,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        34,
+        34
+      ],
+      "receipts": [
+        0.0173,
+        0.0173
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "ACTUAL_READER_READ_BUT_INERT"
+    },
+    {
+      "scenario": "site_F_hills",
+      "seed": "s2",
+      "recordEventId": "band:custom:0|tile:45:28|109",
+      "tileId": "tile:45:28",
+      "expeditionId": "expedition:band:custom:0:102:frontier_exploration:19385a5f",
+      "returnDay": 109,
+      "newOrRefreshed": "refreshed",
+      "followedToDay": 829,
+      "controlSound": true,
+      "firstDivergenceDay": null,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        34,
+        34
+      ],
+      "receipts": [
+        0.0173,
+        0.0173
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "WRITE_SUPPRESSED_NO_READER"
+    },
+    {
+      "scenario": "site_F_hills",
+      "seed": "s3",
+      "recordEventId": "band:custom:0|tile:45:32|109",
+      "tileId": "tile:45:32",
+      "expeditionId": "expedition:band:custom:0:102:frontier_exploration:19385a5f",
+      "returnDay": 109,
+      "newOrRefreshed": "new",
+      "followedToDay": 829,
+      "controlSound": true,
+      "firstDivergenceDay": 109,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        34,
+        34
+      ],
+      "receipts": [
+        0.0173,
+        0.0173
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "ACTUAL_READER_READ_BUT_INERT"
+    },
+    {
+      "scenario": "site_F_hills",
+      "seed": "s3",
+      "recordEventId": "band:custom:0|tile:45:28|109",
+      "tileId": "tile:45:28",
+      "expeditionId": "expedition:band:custom:0:102:frontier_exploration:19385a5f",
+      "returnDay": 109,
+      "newOrRefreshed": "refreshed",
+      "followedToDay": 829,
+      "controlSound": true,
+      "firstDivergenceDay": null,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        34,
+        34
+      ],
+      "receipts": [
+        0.0173,
+        0.0173
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "WRITE_SUPPRESSED_NO_READER"
+    },
+    {
+      "scenario": "site_F_hills",
+      "seed": "s4",
+      "recordEventId": "band:custom:0|tile:45:32|109",
+      "tileId": "tile:45:32",
+      "expeditionId": "expedition:band:custom:0:102:frontier_exploration:19385a5f",
+      "returnDay": 109,
+      "newOrRefreshed": "new",
+      "followedToDay": 829,
+      "controlSound": true,
+      "firstDivergenceDay": 109,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        34,
+        34
+      ],
+      "receipts": [
+        0.0291,
+        0.0291
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "ACTUAL_READER_READ_BUT_INERT"
+    },
+    {
+      "scenario": "site_F_hills",
+      "seed": "s4",
+      "recordEventId": "band:custom:0|tile:45:28|109",
+      "tileId": "tile:45:28",
+      "expeditionId": "expedition:band:custom:0:102:frontier_exploration:19385a5f",
+      "returnDay": 109,
+      "newOrRefreshed": "refreshed",
+      "followedToDay": 829,
+      "controlSound": true,
+      "firstDivergenceDay": null,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        34,
+        34
+      ],
+      "receipts": [
+        0.0291,
+        0.0291
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "WRITE_SUPPRESSED_NO_READER"
+    },
+    {
+      "scenario": "site_F_hills",
+      "seed": "s5",
+      "recordEventId": "band:custom:0|tile:45:32|109",
+      "tileId": "tile:45:32",
+      "expeditionId": "expedition:band:custom:0:102:frontier_exploration:19385a5f",
+      "returnDay": 109,
+      "newOrRefreshed": "new",
+      "followedToDay": 829,
+      "controlSound": true,
+      "firstDivergenceDay": 109,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        34,
+        34
+      ],
+      "receipts": [
+        0.0173,
+        0.0173
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "ACTUAL_READER_READ_BUT_INERT"
+    },
+    {
+      "scenario": "site_F_hills",
+      "seed": "s5",
+      "recordEventId": "band:custom:0|tile:45:28|109",
+      "tileId": "tile:45:28",
+      "expeditionId": "expedition:band:custom:0:102:frontier_exploration:19385a5f",
+      "returnDay": 109,
+      "newOrRefreshed": "refreshed",
+      "followedToDay": 829,
+      "controlSound": true,
+      "firstDivergenceDay": null,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        34,
+        34
+      ],
+      "receipts": [
+        0.0173,
+        0.0173
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "WRITE_SUPPRESSED_NO_READER"
+    },
+    {
+      "scenario": "ordinary",
+      "seed": "s1",
+      "recordEventId": "band:custom:0|tile:64:109|1273",
+      "tileId": "tile:64:109",
+      "expeditionId": "expedition:band:custom:0:1260:frontier_exploration:4b184c64",
+      "returnDay": 1273,
+      "newOrRefreshed": "new",
+      "followedToDay": 1993,
+      "controlSound": true,
+      "firstDivergenceDay": 1273,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        33,
+        33
+      ],
+      "receipts": [
+        0.0253,
+        0.0253
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "ACTUAL_READER_READ_BUT_INERT"
+    },
+    {
+      "scenario": "ordinary",
+      "seed": "s1",
+      "recordEventId": "band:custom:0|tile:61:108|98",
+      "tileId": "tile:61:108",
+      "expeditionId": "expedition:band:custom:0:96:frontier_exploration:8ec3a050",
+      "returnDay": 98,
+      "newOrRefreshed": "refreshed",
+      "followedToDay": 818,
+      "controlSound": true,
+      "firstDivergenceDay": null,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        34,
+        34
+      ],
+      "receipts": [
+        0.0265,
+        0.0265
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "WRITE_SUPPRESSED_NO_READER"
+    },
+    {
+      "scenario": "ordinary",
+      "seed": "s2",
+      "recordEventId": "band:custom:0|tile:64:109|1273",
+      "tileId": "tile:64:109",
+      "expeditionId": "expedition:band:custom:0:1260:frontier_exploration:4b184c64",
+      "returnDay": 1273,
+      "newOrRefreshed": "new",
+      "followedToDay": 1993,
+      "controlSound": true,
+      "firstDivergenceDay": 1273,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        33,
+        33
+      ],
+      "receipts": [
+        0.0253,
+        0.0253
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "ACTUAL_READER_READ_BUT_INERT"
+    },
+    {
+      "scenario": "ordinary",
+      "seed": "s2",
+      "recordEventId": "band:custom:0|tile:61:108|98",
+      "tileId": "tile:61:108",
+      "expeditionId": "expedition:band:custom:0:96:frontier_exploration:8ec3a050",
+      "returnDay": 98,
+      "newOrRefreshed": "refreshed",
+      "followedToDay": 818,
+      "controlSound": true,
+      "firstDivergenceDay": null,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        34,
+        34
+      ],
+      "receipts": [
+        0.0265,
+        0.0265
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "WRITE_SUPPRESSED_NO_READER"
+    },
+    {
+      "scenario": "ordinary",
+      "seed": "s3",
+      "recordEventId": "band:custom:0|tile:64:109|1273",
+      "tileId": "tile:64:109",
+      "expeditionId": "expedition:band:custom:0:1260:frontier_exploration:4b184c64",
+      "returnDay": 1273,
+      "newOrRefreshed": "new",
+      "followedToDay": 1993,
+      "controlSound": true,
+      "firstDivergenceDay": 1273,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        33,
+        33
+      ],
+      "receipts": [
+        0.0462,
+        0.0462
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "ACTUAL_READER_READ_BUT_INERT"
+    },
+    {
+      "scenario": "ordinary",
+      "seed": "s3",
+      "recordEventId": "band:custom:0|tile:61:108|98",
+      "tileId": "tile:61:108",
+      "expeditionId": "expedition:band:custom:0:96:frontier_exploration:8ec3a050",
+      "returnDay": 98,
+      "newOrRefreshed": "refreshed",
+      "followedToDay": 818,
+      "controlSound": true,
+      "firstDivergenceDay": null,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        34,
+        34
+      ],
+      "receipts": [
+        0.01,
+        0.01
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "WRITE_SUPPRESSED_NO_READER"
+    },
+    {
+      "scenario": "ordinary",
+      "seed": "s4",
+      "recordEventId": "band:custom:0|tile:64:109|1273",
+      "tileId": "tile:64:109",
+      "expeditionId": "expedition:band:custom:0:1260:frontier_exploration:4b184c64",
+      "returnDay": 1273,
+      "newOrRefreshed": "new",
+      "followedToDay": 1993,
+      "controlSound": true,
+      "firstDivergenceDay": 1273,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        33,
+        33
+      ],
+      "receipts": [
+        0.0253,
+        0.0253
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "ACTUAL_READER_READ_BUT_INERT"
+    },
+    {
+      "scenario": "ordinary",
+      "seed": "s4",
+      "recordEventId": "band:custom:0|tile:61:108|98",
+      "tileId": "tile:61:108",
+      "expeditionId": "expedition:band:custom:0:96:frontier_exploration:8ec3a050",
+      "returnDay": 98,
+      "newOrRefreshed": "refreshed",
+      "followedToDay": 818,
+      "controlSound": true,
+      "firstDivergenceDay": null,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        34,
+        34
+      ],
+      "receipts": [
+        0.0265,
+        0.0265
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "WRITE_SUPPRESSED_NO_READER"
+    },
+    {
+      "scenario": "ordinary",
+      "seed": "s5",
+      "recordEventId": "band:custom:0|tile:64:109|1273",
+      "tileId": "tile:64:109",
+      "expeditionId": "expedition:band:custom:0:1260:frontier_exploration:4b184c64",
+      "returnDay": 1273,
+      "newOrRefreshed": "new",
+      "followedToDay": 1993,
+      "controlSound": true,
+      "firstDivergenceDay": 1273,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        33,
+        33
+      ],
+      "receipts": [
+        0.0462,
+        0.0462
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "ACTUAL_READER_READ_BUT_INERT"
+    },
+    {
+      "scenario": "ordinary",
+      "seed": "s5",
+      "recordEventId": "band:custom:0|tile:61:108|98",
+      "tileId": "tile:61:108",
+      "expeditionId": "expedition:band:custom:0:96:frontier_exploration:8ec3a050",
+      "returnDay": 98,
+      "newOrRefreshed": "refreshed",
+      "followedToDay": 818,
+      "controlSound": true,
+      "firstDivergenceDay": null,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        34,
+        34
+      ],
+      "receipts": [
+        0.01,
+        0.01
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "WRITE_SUPPRESSED_NO_READER"
+    },
+    {
+      "scenario": "isolated_marginal",
+      "seed": "s1",
+      "recordEventId": "band:custom:0|tile:28:0|104",
+      "tileId": "tile:28:0",
+      "expeditionId": "expedition:band:custom:0:96:frontier_exploration:26360b1c",
+      "returnDay": 104,
+      "newOrRefreshed": "new",
+      "followedToDay": 824,
+      "controlSound": true,
+      "firstDivergenceDay": 104,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        34,
+        34
+      ],
+      "receipts": [
+        0.0301,
+        0.0301
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "ACTUAL_READER_READ_BUT_INERT"
+    },
+    {
+      "scenario": "isolated_marginal",
+      "seed": "s1",
+      "recordEventId": "band:custom:0|tile:41:0|104",
+      "tileId": "tile:41:0",
+      "expeditionId": "expedition:band:custom:0:96:frontier_exploration:26360b1c",
+      "returnDay": 104,
+      "newOrRefreshed": "refreshed",
+      "followedToDay": 824,
+      "controlSound": true,
+      "firstDivergenceDay": null,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        34,
+        34
+      ],
+      "receipts": [
+        0.0301,
+        0.0301
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "WRITE_SUPPRESSED_NO_READER"
+    },
+    {
+      "scenario": "isolated_marginal",
+      "seed": "s2",
+      "recordEventId": "band:custom:0|tile:28:0|104",
+      "tileId": "tile:28:0",
+      "expeditionId": "expedition:band:custom:0:96:frontier_exploration:26360b1c",
+      "returnDay": 104,
+      "newOrRefreshed": "new",
+      "followedToDay": 824,
+      "controlSound": true,
+      "firstDivergenceDay": 104,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        34,
+        34
+      ],
+      "receipts": [
+        0.0108,
+        0.0108
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "ACTUAL_READER_READ_BUT_INERT"
+    },
+    {
+      "scenario": "isolated_marginal",
+      "seed": "s2",
+      "recordEventId": "band:custom:0|tile:41:0|104",
+      "tileId": "tile:41:0",
+      "expeditionId": "expedition:band:custom:0:96:frontier_exploration:26360b1c",
+      "returnDay": 104,
+      "newOrRefreshed": "refreshed",
+      "followedToDay": 824,
+      "controlSound": true,
+      "firstDivergenceDay": null,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        34,
+        34
+      ],
+      "receipts": [
+        0.0108,
+        0.0108
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "WRITE_SUPPRESSED_NO_READER"
+    },
+    {
+      "scenario": "isolated_marginal",
+      "seed": "s3",
+      "recordEventId": "band:custom:0|tile:28:0|104",
+      "tileId": "tile:28:0",
+      "expeditionId": "expedition:band:custom:0:96:frontier_exploration:26360b1c",
+      "returnDay": 104,
+      "newOrRefreshed": "new",
+      "followedToDay": 824,
+      "controlSound": true,
+      "firstDivergenceDay": 104,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        34,
+        34
+      ],
+      "receipts": [
+        0.0301,
+        0.0301
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "ACTUAL_READER_READ_BUT_INERT"
+    },
+    {
+      "scenario": "isolated_marginal",
+      "seed": "s3",
+      "recordEventId": "band:custom:0|tile:41:0|104",
+      "tileId": "tile:41:0",
+      "expeditionId": "expedition:band:custom:0:96:frontier_exploration:26360b1c",
+      "returnDay": 104,
+      "newOrRefreshed": "refreshed",
+      "followedToDay": 824,
+      "controlSound": true,
+      "firstDivergenceDay": null,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        34,
+        34
+      ],
+      "receipts": [
+        0.0301,
+        0.0301
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "WRITE_SUPPRESSED_NO_READER"
+    },
+    {
+      "scenario": "isolated_marginal",
+      "seed": "s4",
+      "recordEventId": "band:custom:0|tile:28:0|104",
+      "tileId": "tile:28:0",
+      "expeditionId": "expedition:band:custom:0:96:frontier_exploration:26360b1c",
+      "returnDay": 104,
+      "newOrRefreshed": "new",
+      "followedToDay": 824,
+      "controlSound": true,
+      "firstDivergenceDay": 104,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        34,
+        34
+      ],
+      "receipts": [
+        0.0301,
+        0.0301
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "ACTUAL_READER_READ_BUT_INERT"
+    },
+    {
+      "scenario": "isolated_marginal",
+      "seed": "s4",
+      "recordEventId": "band:custom:0|tile:41:0|104",
+      "tileId": "tile:41:0",
+      "expeditionId": "expedition:band:custom:0:96:frontier_exploration:26360b1c",
+      "returnDay": 104,
+      "newOrRefreshed": "refreshed",
+      "followedToDay": 824,
+      "controlSound": true,
+      "firstDivergenceDay": null,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        34,
+        34
+      ],
+      "receipts": [
+        0.0301,
+        0.0301
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "WRITE_SUPPRESSED_NO_READER"
+    },
+    {
+      "scenario": "isolated_marginal",
+      "seed": "s5",
+      "recordEventId": "band:custom:0|tile:28:0|104",
+      "tileId": "tile:28:0",
+      "expeditionId": "expedition:band:custom:0:96:frontier_exploration:26360b1c",
+      "returnDay": 104,
+      "newOrRefreshed": "new",
+      "followedToDay": 824,
+      "controlSound": true,
+      "firstDivergenceDay": 104,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        34,
+        34
+      ],
+      "receipts": [
+        0.0301,
+        0.0301
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "ACTUAL_READER_READ_BUT_INERT"
+    },
+    {
+      "scenario": "isolated_marginal",
+      "seed": "s5",
+      "recordEventId": "band:custom:0|tile:41:0|104",
+      "tileId": "tile:41:0",
+      "expeditionId": "expedition:band:custom:0:96:frontier_exploration:26360b1c",
+      "returnDay": 104,
+      "newOrRefreshed": "refreshed",
+      "followedToDay": 824,
+      "controlSound": true,
+      "firstDivergenceDay": null,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        34,
+        34
+      ],
+      "receipts": [
+        0.0301,
+        0.0301
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "WRITE_SUPPRESSED_NO_READER"
+    },
+    {
+      "scenario": "hostile",
+      "seed": "s1",
+      "recordEventId": "band:custom:0|tile:132:12|102",
+      "tileId": "tile:132:12",
+      "expeditionId": "expedition:band:custom:0:96:frontier_exploration:bdf7cd57",
+      "returnDay": 102,
+      "newOrRefreshed": "new",
+      "followedToDay": 822,
+      "controlSound": true,
+      "firstDivergenceDay": 102,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        34,
+        34
+      ],
+      "receipts": [
+        0.0038,
+        0.0038
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "ACTUAL_READER_READ_BUT_INERT"
+    },
+    {
+      "scenario": "hostile",
+      "seed": "s1",
+      "recordEventId": "band:custom:0|tile:148:12|102",
+      "tileId": "tile:148:12",
+      "expeditionId": "expedition:band:custom:0:96:frontier_exploration:bdf7cd57",
+      "returnDay": 102,
+      "newOrRefreshed": "refreshed",
+      "followedToDay": 822,
+      "controlSound": true,
+      "firstDivergenceDay": null,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        34,
+        34
+      ],
+      "receipts": [
+        0.0038,
+        0.0038
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "WRITE_SUPPRESSED_NO_READER"
+    },
+    {
+      "scenario": "hostile",
+      "seed": "s2",
+      "recordEventId": "band:custom:0|tile:132:12|102",
+      "tileId": "tile:132:12",
+      "expeditionId": "expedition:band:custom:0:96:frontier_exploration:bdf7cd57",
+      "returnDay": 102,
+      "newOrRefreshed": "new",
+      "followedToDay": 822,
+      "controlSound": true,
+      "firstDivergenceDay": 102,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        34,
+        34
+      ],
+      "receipts": [
+        0.0038,
+        0.0038
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "ACTUAL_READER_READ_BUT_INERT"
+    },
+    {
+      "scenario": "hostile",
+      "seed": "s2",
+      "recordEventId": "band:custom:0|tile:148:12|102",
+      "tileId": "tile:148:12",
+      "expeditionId": "expedition:band:custom:0:96:frontier_exploration:bdf7cd57",
+      "returnDay": 102,
+      "newOrRefreshed": "refreshed",
+      "followedToDay": 822,
+      "controlSound": true,
+      "firstDivergenceDay": null,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        34,
+        34
+      ],
+      "receipts": [
+        0.0038,
+        0.0038
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "WRITE_SUPPRESSED_NO_READER"
+    },
+    {
+      "scenario": "hostile",
+      "seed": "s3",
+      "recordEventId": "band:custom:0|tile:132:12|102",
+      "tileId": "tile:132:12",
+      "expeditionId": "expedition:band:custom:0:96:frontier_exploration:bdf7cd57",
+      "returnDay": 102,
+      "newOrRefreshed": "new",
+      "followedToDay": 822,
+      "controlSound": true,
+      "firstDivergenceDay": 102,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        34,
+        34
+      ],
+      "receipts": [
+        0.0038,
+        0.0038
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "ACTUAL_READER_READ_BUT_INERT"
+    },
+    {
+      "scenario": "hostile",
+      "seed": "s3",
+      "recordEventId": "band:custom:0|tile:148:12|102",
+      "tileId": "tile:148:12",
+      "expeditionId": "expedition:band:custom:0:96:frontier_exploration:bdf7cd57",
+      "returnDay": 102,
+      "newOrRefreshed": "refreshed",
+      "followedToDay": 822,
+      "controlSound": true,
+      "firstDivergenceDay": null,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        34,
+        34
+      ],
+      "receipts": [
+        0.0038,
+        0.0038
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "WRITE_SUPPRESSED_NO_READER"
+    },
+    {
+      "scenario": "hostile",
+      "seed": "s4",
+      "recordEventId": "band:custom:0|tile:132:12|102",
+      "tileId": "tile:132:12",
+      "expeditionId": "expedition:band:custom:0:96:frontier_exploration:bdf7cd57",
+      "returnDay": 102,
+      "newOrRefreshed": "new",
+      "followedToDay": 822,
+      "controlSound": true,
+      "firstDivergenceDay": 102,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        34,
+        34
+      ],
+      "receipts": [
+        0.0038,
+        0.0038
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "ACTUAL_READER_READ_BUT_INERT"
+    },
+    {
+      "scenario": "hostile",
+      "seed": "s4",
+      "recordEventId": "band:custom:0|tile:148:12|102",
+      "tileId": "tile:148:12",
+      "expeditionId": "expedition:band:custom:0:96:frontier_exploration:bdf7cd57",
+      "returnDay": 102,
+      "newOrRefreshed": "refreshed",
+      "followedToDay": 822,
+      "controlSound": true,
+      "firstDivergenceDay": null,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        34,
+        34
+      ],
+      "receipts": [
+        0.0038,
+        0.0038
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "WRITE_SUPPRESSED_NO_READER"
+    },
+    {
+      "scenario": "hostile",
+      "seed": "s5",
+      "recordEventId": "band:custom:0|tile:132:12|102",
+      "tileId": "tile:132:12",
+      "expeditionId": "expedition:band:custom:0:96:frontier_exploration:bdf7cd57",
+      "returnDay": 102,
+      "newOrRefreshed": "new",
+      "followedToDay": 822,
+      "controlSound": true,
+      "firstDivergenceDay": 102,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        34,
+        34
+      ],
+      "receipts": [
+        0.0038,
+        0.0038
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "ACTUAL_READER_READ_BUT_INERT"
+    },
+    {
+      "scenario": "hostile",
+      "seed": "s5",
+      "recordEventId": "band:custom:0|tile:148:12|102",
+      "tileId": "tile:148:12",
+      "expeditionId": "expedition:band:custom:0:96:frontier_exploration:bdf7cd57",
+      "returnDay": 102,
+      "newOrRefreshed": "refreshed",
+      "followedToDay": 822,
+      "controlSound": true,
+      "firstDivergenceDay": null,
+      "firstDecisionDivergenceDay": null,
+      "population": [
+        34,
+        34
+      ],
+      "receipts": [
+        0.0038,
+        0.0038
+      ],
+      "fissions": [
+        0,
+        0
+      ],
+      "classification": "WRITE_SUPPRESSED_NO_READER"
+    }
+  ]
+}

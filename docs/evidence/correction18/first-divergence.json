@@ -1,0 +1,1877 @@
+{
+  "audit": "frontierFirstDivergence",
+  "checkpoint": "CORRECTION-18 §6",
+  "warmupYears": 0,
+  "dailyDaysSampled": 5400,
+  "tickEncoding": "day index since the daily sampling window opened (after the seasonal warm-up)",
+  "seeds": [
+    "c18:a",
+    "c18:b",
+    "c18:c"
+  ],
+  "maps": [
+    "map1",
+    "map2"
+  ],
+  "method": "Enabled and disabled arms stepped in lockstep on the same seed; the first tick each field and each category diverges is recorded. The final population difference is never used as an input.",
+  "categories": [
+    "exploration_lifecycle",
+    "residential_knowledge",
+    "resource_knowledge",
+    "movement_decision",
+    "activity_selection",
+    "pressure",
+    "support",
+    "demography",
+    "fission",
+    "viability",
+    "read_model_only"
+  ],
+  "runs": [
+    {
+      "map": "map1",
+      "seed": "c18:a",
+      "firstDivergenceOverall": {
+        "field": "frontierExpeditionCount",
+        "category": "exploration_lifecycle",
+        "writer": "expedition.ts maybeLaunchFrontierExploration",
+        "tick": 96,
+        "day": 96,
+        "bandId": "band:dry-margin-foragers",
+        "enabledValue": 1,
+        "disabledValue": 0
+      },
+      "firstByCategory": [
+        {
+          "category": "exploration_lifecycle",
+          "tick": 96,
+          "day": 96,
+          "field": "frontierExpeditionCount",
+          "bandId": "band:dry-margin-foragers",
+          "writer": "expedition.ts maybeLaunchFrontierExploration"
+        },
+        {
+          "category": "activity_selection",
+          "tick": 97,
+          "day": 97,
+          "field": "walkedKmTotal",
+          "bandId": "band:dry-margin-foragers",
+          "writer": "bandMobility.ts recordWalkingDay"
+        },
+        {
+          "category": "residential_knowledge",
+          "tick": 106,
+          "day": 106,
+          "field": "observedTileCount",
+          "bandId": "band:dry-margin-foragers",
+          "writer": "tileObservation.ts observeTileAndNearby"
+        },
+        {
+          "category": "resource_knowledge",
+          "tick": 180,
+          "day": 180,
+          "field": "patchMemoryCount",
+          "bandId": "band:dry-margin-foragers",
+          "writer": "resourceKnowledge.ts"
+        },
+        {
+          "category": "support",
+          "tick": 192,
+          "day": 192,
+          "field": "receiptUsableSupport",
+          "bandId": "band:dry-margin-foragers",
+          "writer": "seasonalFoodReceipts.ts"
+        },
+        {
+          "category": "fission",
+          "tick": 360,
+          "day": 360,
+          "field": "daughterColonizationPressure",
+          "bandId": "band:delta-coastal-foragers",
+          "writer": "carryingCapacity.ts deriveDaughterColonization"
+        },
+        {
+          "category": "pressure",
+          "tick": 450,
+          "day": 450,
+          "field": "foodStress",
+          "bandId": "band:dry-margin-foragers",
+          "writer": "pressure.ts / seasonalSurvival.ts"
+        },
+        {
+          "category": "movement_decision",
+          "tick": 630,
+          "day": 630,
+          "field": "position",
+          "bandId": "band:delta-coastal-foragers",
+          "writer": "bandDecision.ts / campMovement.ts"
+        },
+        {
+          "category": "demography",
+          "tick": 720,
+          "day": 720,
+          "field": "netDemographicRate",
+          "bandId": "band:delta-coastal-foragers",
+          "writer": "demography.ts"
+        },
+        {
+          "category": "viability",
+          "tick": 720,
+          "day": 720,
+          "field": "viabilityStatus",
+          "bandId": "band:delta-coastal-foragers",
+          "writer": "viability.ts"
+        }
+      ],
+      "firstByField": [
+        {
+          "field": "frontierExpeditionCount",
+          "category": "exploration_lifecycle",
+          "writer": "expedition.ts maybeLaunchFrontierExploration",
+          "tick": 96,
+          "day": 96,
+          "bandId": "band:dry-margin-foragers",
+          "enabledValue": 1,
+          "disabledValue": 0
+        },
+        {
+          "field": "anyExpeditionCount",
+          "category": "exploration_lifecycle",
+          "writer": "expedition.ts applyExpeditionDay",
+          "tick": 96,
+          "day": 96,
+          "bandId": "band:dry-margin-foragers",
+          "enabledValue": 1,
+          "disabledValue": 0
+        },
+        {
+          "field": "lastFrontierExplorationTick",
+          "category": "exploration_lifecycle",
+          "writer": "expedition.ts maybeLaunchFrontierExploration",
+          "tick": 96,
+          "day": 96,
+          "bandId": "band:dry-margin-foragers",
+          "enabledValue": 1,
+          "disabledValue": -1
+        },
+        {
+          "field": "committedExpeditionWorkers",
+          "category": "exploration_lifecycle",
+          "writer": "expedition.ts getCommittedExpeditionWorkers",
+          "tick": 96,
+          "day": 96,
+          "bandId": "band:dry-margin-foragers",
+          "enabledValue": 2,
+          "disabledValue": 0
+        },
+        {
+          "field": "walkedKmTotal",
+          "category": "activity_selection",
+          "writer": "bandMobility.ts recordWalkingDay",
+          "tick": 97,
+          "day": 97,
+          "bandId": "band:dry-margin-foragers",
+          "enabledValue": 6,
+          "disabledValue": 0
+        },
+        {
+          "field": "expeditionOutcomeCount",
+          "category": "exploration_lifecycle",
+          "writer": "expedition.ts applyExpeditionDay",
+          "tick": 106,
+          "day": 106,
+          "bandId": "band:dry-margin-foragers",
+          "enabledValue": 1,
+          "disabledValue": 0
+        },
+        {
+          "field": "observedTileCount",
+          "category": "residential_knowledge",
+          "writer": "tileObservation.ts observeTileAndNearby",
+          "tick": 106,
+          "day": 106,
+          "bandId": "band:dry-margin-foragers",
+          "enabledValue": 29,
+          "disabledValue": 13
+        },
+        {
+          "field": "observedTileMaxDistance",
+          "category": "residential_knowledge",
+          "writer": "tileObservation.ts observeTileAndNearby",
+          "tick": 106,
+          "day": 106,
+          "bandId": "band:dry-margin-foragers",
+          "enabledValue": 18,
+          "disabledValue": 2
+        },
+        {
+          "field": "patchMemoryCount",
+          "category": "resource_knowledge",
+          "writer": "resourceKnowledge.ts",
+          "tick": 180,
+          "day": 180,
+          "bandId": "band:dry-margin-foragers",
+          "enabledValue": 24,
+          "disabledValue": 23
+        },
+        {
+          "field": "patchMemoryMaxDistance",
+          "category": "resource_knowledge",
+          "writer": "resourceKnowledge.ts",
+          "tick": 180,
+          "day": 180,
+          "bandId": "band:dry-margin-foragers",
+          "enabledValue": 4,
+          "disabledValue": 2
+        },
+        {
+          "field": "receiptUsableSupport",
+          "category": "support",
+          "writer": "seasonalFoodReceipts.ts",
+          "tick": 192,
+          "day": 192,
+          "bandId": "band:dry-margin-foragers",
+          "enabledValue": 0.0327,
+          "disabledValue": 0.0169
+        },
+        {
+          "field": "receiptCount",
+          "category": "support",
+          "writer": "seasonalFoodReceipts.ts",
+          "tick": 192,
+          "day": 192,
+          "bandId": "band:dry-margin-foragers",
+          "enabledValue": 2,
+          "disabledValue": 1
+        },
+        {
+          "field": "daughterColonizationPressure",
+          "category": "fission",
+          "writer": "carryingCapacity.ts deriveDaughterColonization",
+          "tick": 360,
+          "day": 360,
+          "bandId": "band:delta-coastal-foragers",
+          "enabledValue": 0.54,
+          "disabledValue": 0.41
+        },
+        {
+          "field": "foodStress",
+          "category": "pressure",
+          "writer": "pressure.ts / seasonalSurvival.ts",
+          "tick": 450,
+          "day": 450,
+          "bandId": "band:dry-margin-foragers",
+          "enabledValue": 0.7,
+          "disabledValue": 0.73
+        },
+        {
+          "field": "rangeSaturation",
+          "category": "pressure",
+          "writer": "carryingCapacity.ts",
+          "tick": 450,
+          "day": 450,
+          "bandId": "band:dry-margin-foragers",
+          "enabledValue": 0.37,
+          "disabledValue": 0.38
+        },
+        {
+          "field": "rawSupportRatio",
+          "category": "support",
+          "writer": "carryingCapacity.ts deriveCarryingCapacity",
+          "tick": 450,
+          "day": 450,
+          "bandId": "band:dry-margin-foragers",
+          "enabledValue": 0.32,
+          "disabledValue": 0.25
+        },
+        {
+          "field": "position",
+          "category": "movement_decision",
+          "writer": "bandDecision.ts / campMovement.ts",
+          "tick": 630,
+          "day": 630,
+          "bandId": "band:delta-coastal-foragers",
+          "enabledValue": "tile:126:60",
+          "disabledValue": "tile:126:59"
+        },
+        {
+          "field": "opportunityCandidateTile",
+          "category": "fission",
+          "writer": "carryingCapacity.ts deriveKnownUnusedHabitat",
+          "tick": 630,
+          "day": 630,
+          "bandId": "band:delta-coastal-foragers",
+          "enabledValue": "tile:125:60",
+          "disabledValue": "tile:126:60"
+        },
+        {
+          "field": "netDemographicRate",
+          "category": "demography",
+          "writer": "demography.ts",
+          "tick": 720,
+          "day": 720,
+          "bandId": "band:delta-coastal-foragers",
+          "enabledValue": 0.003,
+          "disabledValue": 0.0022
+        },
+        {
+          "field": "viabilityStatus",
+          "category": "viability",
+          "writer": "viability.ts",
+          "tick": 720,
+          "day": 720,
+          "bandId": "band:delta-coastal-foragers",
+          "enabledValue": "viable",
+          "disabledValue": "fragile"
+        }
+      ],
+      "bandSetDivergedTick": null,
+      "firstResidentialKnowledgeTick": 106,
+      "firstPhysicalOrBehaviouralTick": 97,
+      "attribution": "EXPEDITION_LABOR — physical/behavioural divergence precedes any residential knowledge divergence"
+    },
+    {
+      "map": "map1",
+      "seed": "c18:b",
+      "firstDivergenceOverall": {
+        "field": "frontierExpeditionCount",
+        "category": "exploration_lifecycle",
+        "writer": "expedition.ts maybeLaunchFrontierExploration",
+        "tick": 96,
+        "day": 96,
+        "bandId": "band:dry-margin-foragers",
+        "enabledValue": 1,
+        "disabledValue": 0
+      },
+      "firstByCategory": [
+        {
+          "category": "exploration_lifecycle",
+          "tick": 96,
+          "day": 96,
+          "field": "frontierExpeditionCount",
+          "bandId": "band:dry-margin-foragers",
+          "writer": "expedition.ts maybeLaunchFrontierExploration"
+        },
+        {
+          "category": "activity_selection",
+          "tick": 97,
+          "day": 97,
+          "field": "walkedKmTotal",
+          "bandId": "band:dry-margin-foragers",
+          "writer": "bandMobility.ts recordWalkingDay"
+        },
+        {
+          "category": "residential_knowledge",
+          "tick": 106,
+          "day": 106,
+          "field": "observedTileCount",
+          "bandId": "band:dry-margin-foragers",
+          "writer": "tileObservation.ts observeTileAndNearby"
+        },
+        {
+          "category": "resource_knowledge",
+          "tick": 180,
+          "day": 180,
+          "field": "patchMemoryCount",
+          "bandId": "band:dry-margin-foragers",
+          "writer": "resourceKnowledge.ts"
+        },
+        {
+          "category": "support",
+          "tick": 192,
+          "day": 192,
+          "field": "receiptUsableSupport",
+          "bandId": "band:dry-margin-foragers",
+          "writer": "seasonalFoodReceipts.ts"
+        },
+        {
+          "category": "fission",
+          "tick": 360,
+          "day": 360,
+          "field": "daughterColonizationPressure",
+          "bandId": "band:delta-coastal-foragers",
+          "writer": "carryingCapacity.ts deriveDaughterColonization"
+        },
+        {
+          "category": "pressure",
+          "tick": 450,
+          "day": 450,
+          "field": "foodStress",
+          "bandId": "band:dry-margin-foragers",
+          "writer": "pressure.ts / seasonalSurvival.ts"
+        },
+        {
+          "category": "movement_decision",
+          "tick": 630,
+          "day": 630,
+          "field": "position",
+          "bandId": "band:delta-coastal-foragers",
+          "writer": "bandDecision.ts / campMovement.ts"
+        },
+        {
+          "category": "demography",
+          "tick": 720,
+          "day": 720,
+          "field": "netDemographicRate",
+          "bandId": "band:delta-coastal-foragers",
+          "writer": "demography.ts"
+        },
+        {
+          "category": "viability",
+          "tick": 720,
+          "day": 720,
+          "field": "viabilityStatus",
+          "bandId": "band:delta-coastal-foragers",
+          "writer": "viability.ts"
+        }
+      ],
+      "firstByField": [
+        {
+          "field": "frontierExpeditionCount",
+          "category": "exploration_lifecycle",
+          "writer": "expedition.ts maybeLaunchFrontierExploration",
+          "tick": 96,
+          "day": 96,
+          "bandId": "band:dry-margin-foragers",
+          "enabledValue": 1,
+          "disabledValue": 0
+        },
+        {
+          "field": "anyExpeditionCount",
+          "category": "exploration_lifecycle",
+          "writer": "expedition.ts applyExpeditionDay",
+          "tick": 96,
+          "day": 96,
+          "bandId": "band:dry-margin-foragers",
+          "enabledValue": 1,
+          "disabledValue": 0
+        },
+        {
+          "field": "lastFrontierExplorationTick",
+          "category": "exploration_lifecycle",
+          "writer": "expedition.ts maybeLaunchFrontierExploration",
+          "tick": 96,
+          "day": 96,
+          "bandId": "band:dry-margin-foragers",
+          "enabledValue": 1,
+          "disabledValue": -1
+        },
+        {
+          "field": "committedExpeditionWorkers",
+          "category": "exploration_lifecycle",
+          "writer": "expedition.ts getCommittedExpeditionWorkers",
+          "tick": 96,
+          "day": 96,
+          "bandId": "band:dry-margin-foragers",
+          "enabledValue": 2,
+          "disabledValue": 0
+        },
+        {
+          "field": "walkedKmTotal",
+          "category": "activity_selection",
+          "writer": "bandMobility.ts recordWalkingDay",
+          "tick": 97,
+          "day": 97,
+          "bandId": "band:dry-margin-foragers",
+          "enabledValue": 6,
+          "disabledValue": 0
+        },
+        {
+          "field": "expeditionOutcomeCount",
+          "category": "exploration_lifecycle",
+          "writer": "expedition.ts applyExpeditionDay",
+          "tick": 106,
+          "day": 106,
+          "bandId": "band:dry-margin-foragers",
+          "enabledValue": 1,
+          "disabledValue": 0
+        },
+        {
+          "field": "observedTileCount",
+          "category": "residential_knowledge",
+          "writer": "tileObservation.ts observeTileAndNearby",
+          "tick": 106,
+          "day": 106,
+          "bandId": "band:dry-margin-foragers",
+          "enabledValue": 29,
+          "disabledValue": 13
+        },
+        {
+          "field": "observedTileMaxDistance",
+          "category": "residential_knowledge",
+          "writer": "tileObservation.ts observeTileAndNearby",
+          "tick": 106,
+          "day": 106,
+          "bandId": "band:dry-margin-foragers",
+          "enabledValue": 18,
+          "disabledValue": 2
+        },
+        {
+          "field": "patchMemoryCount",
+          "category": "resource_knowledge",
+          "writer": "resourceKnowledge.ts",
+          "tick": 180,
+          "day": 180,
+          "bandId": "band:dry-margin-foragers",
+          "enabledValue": 24,
+          "disabledValue": 23
+        },
+        {
+          "field": "patchMemoryMaxDistance",
+          "category": "resource_knowledge",
+          "writer": "resourceKnowledge.ts",
+          "tick": 180,
+          "day": 180,
+          "bandId": "band:dry-margin-foragers",
+          "enabledValue": 4,
+          "disabledValue": 2
+        },
+        {
+          "field": "receiptUsableSupport",
+          "category": "support",
+          "writer": "seasonalFoodReceipts.ts",
+          "tick": 192,
+          "day": 192,
+          "bandId": "band:dry-margin-foragers",
+          "enabledValue": 0.0327,
+          "disabledValue": 0.0169
+        },
+        {
+          "field": "receiptCount",
+          "category": "support",
+          "writer": "seasonalFoodReceipts.ts",
+          "tick": 192,
+          "day": 192,
+          "bandId": "band:dry-margin-foragers",
+          "enabledValue": 2,
+          "disabledValue": 1
+        },
+        {
+          "field": "daughterColonizationPressure",
+          "category": "fission",
+          "writer": "carryingCapacity.ts deriveDaughterColonization",
+          "tick": 360,
+          "day": 360,
+          "bandId": "band:delta-coastal-foragers",
+          "enabledValue": 0.56,
+          "disabledValue": 0.43
+        },
+        {
+          "field": "foodStress",
+          "category": "pressure",
+          "writer": "pressure.ts / seasonalSurvival.ts",
+          "tick": 450,
+          "day": 450,
+          "bandId": "band:dry-margin-foragers",
+          "enabledValue": 0.7,
+          "disabledValue": 0.73
+        },
+        {
+          "field": "rangeSaturation",
+          "category": "pressure",
+          "writer": "carryingCapacity.ts",
+          "tick": 450,
+          "day": 450,
+          "bandId": "band:dry-margin-foragers",
+          "enabledValue": 0.37,
+          "disabledValue": 0.38
+        },
+        {
+          "field": "rawSupportRatio",
+          "category": "support",
+          "writer": "carryingCapacity.ts deriveCarryingCapacity",
+          "tick": 450,
+          "day": 450,
+          "bandId": "band:dry-margin-foragers",
+          "enabledValue": 0.32,
+          "disabledValue": 0.25
+        },
+        {
+          "field": "position",
+          "category": "movement_decision",
+          "writer": "bandDecision.ts / campMovement.ts",
+          "tick": 630,
+          "day": 630,
+          "bandId": "band:delta-coastal-foragers",
+          "enabledValue": "tile:126:60",
+          "disabledValue": "tile:126:59"
+        },
+        {
+          "field": "opportunityCandidateTile",
+          "category": "fission",
+          "writer": "carryingCapacity.ts deriveKnownUnusedHabitat",
+          "tick": 630,
+          "day": 630,
+          "bandId": "band:delta-coastal-foragers",
+          "enabledValue": "tile:125:60",
+          "disabledValue": "tile:126:60"
+        },
+        {
+          "field": "netDemographicRate",
+          "category": "demography",
+          "writer": "demography.ts",
+          "tick": 720,
+          "day": 720,
+          "bandId": "band:delta-coastal-foragers",
+          "enabledValue": 0.0028,
+          "disabledValue": 0.0026
+        },
+        {
+          "field": "viabilityStatus",
+          "category": "viability",
+          "writer": "viability.ts",
+          "tick": 720,
+          "day": 720,
+          "bandId": "band:delta-coastal-foragers",
+          "enabledValue": "viable",
+          "disabledValue": "fragile"
+        }
+      ],
+      "bandSetDivergedTick": null,
+      "firstResidentialKnowledgeTick": 106,
+      "firstPhysicalOrBehaviouralTick": 97,
+      "attribution": "EXPEDITION_LABOR — physical/behavioural divergence precedes any residential knowledge divergence"
+    },
+    {
+      "map": "map1",
+      "seed": "c18:c",
+      "firstDivergenceOverall": {
+        "field": "frontierExpeditionCount",
+        "category": "exploration_lifecycle",
+        "writer": "expedition.ts maybeLaunchFrontierExploration",
+        "tick": 96,
+        "day": 96,
+        "bandId": "band:dry-margin-foragers",
+        "enabledValue": 1,
+        "disabledValue": 0
+      },
+      "firstByCategory": [
+        {
+          "category": "exploration_lifecycle",
+          "tick": 96,
+          "day": 96,
+          "field": "frontierExpeditionCount",
+          "bandId": "band:dry-margin-foragers",
+          "writer": "expedition.ts maybeLaunchFrontierExploration"
+        },
+        {
+          "category": "activity_selection",
+          "tick": 97,
+          "day": 97,
+          "field": "walkedKmTotal",
+          "bandId": "band:dry-margin-foragers",
+          "writer": "bandMobility.ts recordWalkingDay"
+        },
+        {
+          "category": "residential_knowledge",
+          "tick": 106,
+          "day": 106,
+          "field": "observedTileCount",
+          "bandId": "band:dry-margin-foragers",
+          "writer": "tileObservation.ts observeTileAndNearby"
+        },
+        {
+          "category": "resource_knowledge",
+          "tick": 180,
+          "day": 180,
+          "field": "patchMemoryCount",
+          "bandId": "band:dry-margin-foragers",
+          "writer": "resourceKnowledge.ts"
+        },
+        {
+          "category": "support",
+          "tick": 192,
+          "day": 192,
+          "field": "receiptUsableSupport",
+          "bandId": "band:dry-margin-foragers",
+          "writer": "seasonalFoodReceipts.ts"
+        },
+        {
+          "category": "fission",
+          "tick": 360,
+          "day": 360,
+          "field": "daughterColonizationPressure",
+          "bandId": "band:delta-coastal-foragers",
+          "writer": "carryingCapacity.ts deriveDaughterColonization"
+        },
+        {
+          "category": "pressure",
+          "tick": 450,
+          "day": 450,
+          "field": "foodStress",
+          "bandId": "band:dry-margin-foragers",
+          "writer": "pressure.ts / seasonalSurvival.ts"
+        },
+        {
+          "category": "movement_decision",
+          "tick": 630,
+          "day": 630,
+          "field": "position",
+          "bandId": "band:delta-coastal-foragers",
+          "writer": "bandDecision.ts / campMovement.ts"
+        },
+        {
+          "category": "demography",
+          "tick": 720,
+          "day": 720,
+          "field": "netDemographicRate",
+          "bandId": "band:delta-coastal-foragers",
+          "writer": "demography.ts"
+        },
+        {
+          "category": "viability",
+          "tick": 720,
+          "day": 720,
+          "field": "viabilityStatus",
+          "bandId": "band:delta-coastal-foragers",
+          "writer": "viability.ts"
+        }
+      ],
+      "firstByField": [
+        {
+          "field": "frontierExpeditionCount",
+          "category": "exploration_lifecycle",
+          "writer": "expedition.ts maybeLaunchFrontierExploration",
+          "tick": 96,
+          "day": 96,
+          "bandId": "band:dry-margin-foragers",
+          "enabledValue": 1,
+          "disabledValue": 0
+        },
+        {
+          "field": "anyExpeditionCount",
+          "category": "exploration_lifecycle",
+          "writer": "expedition.ts applyExpeditionDay",
+          "tick": 96,
+          "day": 96,
+          "bandId": "band:dry-margin-foragers",
+          "enabledValue": 1,
+          "disabledValue": 0
+        },
+        {
+          "field": "lastFrontierExplorationTick",
+          "category": "exploration_lifecycle",
+          "writer": "expedition.ts maybeLaunchFrontierExploration",
+          "tick": 96,
+          "day": 96,
+          "bandId": "band:dry-margin-foragers",
+          "enabledValue": 1,
+          "disabledValue": -1
+        },
+        {
+          "field": "committedExpeditionWorkers",
+          "category": "exploration_lifecycle",
+          "writer": "expedition.ts getCommittedExpeditionWorkers",
+          "tick": 96,
+          "day": 96,
+          "bandId": "band:dry-margin-foragers",
+          "enabledValue": 2,
+          "disabledValue": 0
+        },
+        {
+          "field": "walkedKmTotal",
+          "category": "activity_selection",
+          "writer": "bandMobility.ts recordWalkingDay",
+          "tick": 97,
+          "day": 97,
+          "bandId": "band:dry-margin-foragers",
+          "enabledValue": 6,
+          "disabledValue": 0
+        },
+        {
+          "field": "expeditionOutcomeCount",
+          "category": "exploration_lifecycle",
+          "writer": "expedition.ts applyExpeditionDay",
+          "tick": 106,
+          "day": 106,
+          "bandId": "band:dry-margin-foragers",
+          "enabledValue": 1,
+          "disabledValue": 0
+        },
+        {
+          "field": "observedTileCount",
+          "category": "residential_knowledge",
+          "writer": "tileObservation.ts observeTileAndNearby",
+          "tick": 106,
+          "day": 106,
+          "bandId": "band:dry-margin-foragers",
+          "enabledValue": 29,
+          "disabledValue": 13
+        },
+        {
+          "field": "observedTileMaxDistance",
+          "category": "residential_knowledge",
+          "writer": "tileObservation.ts observeTileAndNearby",
+          "tick": 106,
+          "day": 106,
+          "bandId": "band:dry-margin-foragers",
+          "enabledValue": 18,
+          "disabledValue": 2
+        },
+        {
+          "field": "patchMemoryCount",
+          "category": "resource_knowledge",
+          "writer": "resourceKnowledge.ts",
+          "tick": 180,
+          "day": 180,
+          "bandId": "band:dry-margin-foragers",
+          "enabledValue": 24,
+          "disabledValue": 23
+        },
+        {
+          "field": "patchMemoryMaxDistance",
+          "category": "resource_knowledge",
+          "writer": "resourceKnowledge.ts",
+          "tick": 180,
+          "day": 180,
+          "bandId": "band:dry-margin-foragers",
+          "enabledValue": 4,
+          "disabledValue": 2
+        },
+        {
+          "field": "receiptUsableSupport",
+          "category": "support",
+          "writer": "seasonalFoodReceipts.ts",
+          "tick": 192,
+          "day": 192,
+          "bandId": "band:dry-margin-foragers",
+          "enabledValue": 0.0327,
+          "disabledValue": 0.0169
+        },
+        {
+          "field": "receiptCount",
+          "category": "support",
+          "writer": "seasonalFoodReceipts.ts",
+          "tick": 192,
+          "day": 192,
+          "bandId": "band:dry-margin-foragers",
+          "enabledValue": 2,
+          "disabledValue": 1
+        },
+        {
+          "field": "daughterColonizationPressure",
+          "category": "fission",
+          "writer": "carryingCapacity.ts deriveDaughterColonization",
+          "tick": 360,
+          "day": 360,
+          "bandId": "band:delta-coastal-foragers",
+          "enabledValue": 0.56,
+          "disabledValue": 0.43
+        },
+        {
+          "field": "foodStress",
+          "category": "pressure",
+          "writer": "pressure.ts / seasonalSurvival.ts",
+          "tick": 450,
+          "day": 450,
+          "bandId": "band:dry-margin-foragers",
+          "enabledValue": 0.7,
+          "disabledValue": 0.73
+        },
+        {
+          "field": "rangeSaturation",
+          "category": "pressure",
+          "writer": "carryingCapacity.ts",
+          "tick": 450,
+          "day": 450,
+          "bandId": "band:dry-margin-foragers",
+          "enabledValue": 0.37,
+          "disabledValue": 0.38
+        },
+        {
+          "field": "rawSupportRatio",
+          "category": "support",
+          "writer": "carryingCapacity.ts deriveCarryingCapacity",
+          "tick": 450,
+          "day": 450,
+          "bandId": "band:dry-margin-foragers",
+          "enabledValue": 0.32,
+          "disabledValue": 0.25
+        },
+        {
+          "field": "position",
+          "category": "movement_decision",
+          "writer": "bandDecision.ts / campMovement.ts",
+          "tick": 630,
+          "day": 630,
+          "bandId": "band:delta-coastal-foragers",
+          "enabledValue": "tile:126:60",
+          "disabledValue": "tile:126:59"
+        },
+        {
+          "field": "opportunityCandidateTile",
+          "category": "fission",
+          "writer": "carryingCapacity.ts deriveKnownUnusedHabitat",
+          "tick": 630,
+          "day": 630,
+          "bandId": "band:delta-coastal-foragers",
+          "enabledValue": "tile:125:60",
+          "disabledValue": "tile:126:60"
+        },
+        {
+          "field": "netDemographicRate",
+          "category": "demography",
+          "writer": "demography.ts",
+          "tick": 720,
+          "day": 720,
+          "bandId": "band:delta-coastal-foragers",
+          "enabledValue": 0.0028,
+          "disabledValue": 0.0023
+        },
+        {
+          "field": "viabilityStatus",
+          "category": "viability",
+          "writer": "viability.ts",
+          "tick": 720,
+          "day": 720,
+          "bandId": "band:delta-coastal-foragers",
+          "enabledValue": "viable",
+          "disabledValue": "fragile"
+        }
+      ],
+      "bandSetDivergedTick": null,
+      "firstResidentialKnowledgeTick": 106,
+      "firstPhysicalOrBehaviouralTick": 97,
+      "attribution": "EXPEDITION_LABOR — physical/behavioural divergence precedes any residential knowledge divergence"
+    },
+    {
+      "map": "map2",
+      "seed": "c18:a",
+      "firstDivergenceOverall": {
+        "field": "frontierExpeditionCount",
+        "category": "exploration_lifecycle",
+        "writer": "expedition.ts maybeLaunchFrontierExploration",
+        "tick": 96,
+        "day": 96,
+        "bandId": "band:varied-dry-corridor-mid",
+        "enabledValue": 1,
+        "disabledValue": 0
+      },
+      "firstByCategory": [
+        {
+          "category": "exploration_lifecycle",
+          "tick": 96,
+          "day": 96,
+          "field": "frontierExpeditionCount",
+          "bandId": "band:varied-dry-corridor-mid",
+          "writer": "expedition.ts maybeLaunchFrontierExploration"
+        },
+        {
+          "category": "activity_selection",
+          "tick": 97,
+          "day": 97,
+          "field": "walkedKmTotal",
+          "bandId": "band:varied-dry-corridor-mid",
+          "writer": "bandMobility.ts recordWalkingDay"
+        },
+        {
+          "category": "residential_knowledge",
+          "tick": 98,
+          "day": 98,
+          "field": "observedTileCount",
+          "bandId": "band:varied-plains-creek",
+          "writer": "tileObservation.ts observeTileAndNearby"
+        },
+        {
+          "category": "resource_knowledge",
+          "tick": 180,
+          "day": 180,
+          "field": "patchMemoryCount",
+          "bandId": "band:varied-dry-corridor-upper",
+          "writer": "resourceKnowledge.ts"
+        },
+        {
+          "category": "fission",
+          "tick": 180,
+          "day": 180,
+          "field": "daughterColonizationPressure",
+          "bandId": "band:varied-plains-creek",
+          "writer": "carryingCapacity.ts deriveDaughterColonization"
+        },
+        {
+          "category": "support",
+          "tick": 192,
+          "day": 192,
+          "field": "receiptUsableSupport",
+          "bandId": "band:varied-lake-east",
+          "writer": "seasonalFoodReceipts.ts"
+        },
+        {
+          "category": "pressure",
+          "tick": 270,
+          "day": 270,
+          "field": "foodStress",
+          "bandId": "band:varied-dry-corridor-upper",
+          "writer": "pressure.ts / seasonalSurvival.ts"
+        },
+        {
+          "category": "viability",
+          "tick": 270,
+          "day": 270,
+          "field": "viabilityStatus",
+          "bandId": "band:varied-dry-corridor-upper",
+          "writer": "viability.ts"
+        },
+        {
+          "category": "demography",
+          "tick": 360,
+          "day": 360,
+          "field": "netDemographicRate",
+          "bandId": "band:varied-dry-corridor-upper",
+          "writer": "demography.ts"
+        },
+        {
+          "category": "movement_decision",
+          "tick": 360,
+          "day": 360,
+          "field": "position",
+          "bandId": "band:varied-plains-creek",
+          "writer": "bandDecision.ts / campMovement.ts"
+        }
+      ],
+      "firstByField": [
+        {
+          "field": "frontierExpeditionCount",
+          "category": "exploration_lifecycle",
+          "writer": "expedition.ts maybeLaunchFrontierExploration",
+          "tick": 96,
+          "day": 96,
+          "bandId": "band:varied-dry-corridor-mid",
+          "enabledValue": 1,
+          "disabledValue": 0
+        },
+        {
+          "field": "anyExpeditionCount",
+          "category": "exploration_lifecycle",
+          "writer": "expedition.ts applyExpeditionDay",
+          "tick": 96,
+          "day": 96,
+          "bandId": "band:varied-dry-corridor-mid",
+          "enabledValue": 1,
+          "disabledValue": 0
+        },
+        {
+          "field": "lastFrontierExplorationTick",
+          "category": "exploration_lifecycle",
+          "writer": "expedition.ts maybeLaunchFrontierExploration",
+          "tick": 96,
+          "day": 96,
+          "bandId": "band:varied-dry-corridor-mid",
+          "enabledValue": 1,
+          "disabledValue": -1
+        },
+        {
+          "field": "committedExpeditionWorkers",
+          "category": "exploration_lifecycle",
+          "writer": "expedition.ts getCommittedExpeditionWorkers",
+          "tick": 96,
+          "day": 96,
+          "bandId": "band:varied-dry-corridor-mid",
+          "enabledValue": 2,
+          "disabledValue": 0
+        },
+        {
+          "field": "walkedKmTotal",
+          "category": "activity_selection",
+          "writer": "bandMobility.ts recordWalkingDay",
+          "tick": 97,
+          "day": 97,
+          "bandId": "band:varied-dry-corridor-mid",
+          "enabledValue": 3,
+          "disabledValue": 0
+        },
+        {
+          "field": "expeditionOutcomeCount",
+          "category": "exploration_lifecycle",
+          "writer": "expedition.ts applyExpeditionDay",
+          "tick": 98,
+          "day": 98,
+          "bandId": "band:varied-dry-corridor-mid",
+          "enabledValue": 1,
+          "disabledValue": 0
+        },
+        {
+          "field": "observedTileCount",
+          "category": "residential_knowledge",
+          "writer": "tileObservation.ts observeTileAndNearby",
+          "tick": 98,
+          "day": 98,
+          "bandId": "band:varied-plains-creek",
+          "enabledValue": 15,
+          "disabledValue": 13
+        },
+        {
+          "field": "observedTileMaxDistance",
+          "category": "residential_knowledge",
+          "writer": "tileObservation.ts observeTileAndNearby",
+          "tick": 98,
+          "day": 98,
+          "bandId": "band:varied-plains-creek",
+          "enabledValue": 4,
+          "disabledValue": 2
+        },
+        {
+          "field": "patchMemoryCount",
+          "category": "resource_knowledge",
+          "writer": "resourceKnowledge.ts",
+          "tick": 180,
+          "day": 180,
+          "bandId": "band:varied-dry-corridor-upper",
+          "enabledValue": 33,
+          "disabledValue": 28
+        },
+        {
+          "field": "patchMemoryMaxDistance",
+          "category": "resource_knowledge",
+          "writer": "resourceKnowledge.ts",
+          "tick": 180,
+          "day": 180,
+          "bandId": "band:varied-dry-corridor-upper",
+          "enabledValue": 5,
+          "disabledValue": 3
+        },
+        {
+          "field": "daughterColonizationPressure",
+          "category": "fission",
+          "writer": "carryingCapacity.ts deriveDaughterColonization",
+          "tick": 180,
+          "day": 180,
+          "bandId": "band:varied-plains-creek",
+          "enabledValue": 0.25,
+          "disabledValue": 0.23
+        },
+        {
+          "field": "receiptUsableSupport",
+          "category": "support",
+          "writer": "seasonalFoodReceipts.ts",
+          "tick": 192,
+          "day": 192,
+          "bandId": "band:varied-lake-east",
+          "enabledValue": 0.2941,
+          "disabledValue": 0.0077
+        },
+        {
+          "field": "receiptCount",
+          "category": "support",
+          "writer": "seasonalFoodReceipts.ts",
+          "tick": 192,
+          "day": 192,
+          "bandId": "band:varied-lake-east",
+          "enabledValue": 17,
+          "disabledValue": 1
+        },
+        {
+          "field": "foodStress",
+          "category": "pressure",
+          "writer": "pressure.ts / seasonalSurvival.ts",
+          "tick": 270,
+          "day": 270,
+          "bandId": "band:varied-dry-corridor-upper",
+          "enabledValue": 0.29,
+          "disabledValue": 0.46
+        },
+        {
+          "field": "rangeSaturation",
+          "category": "pressure",
+          "writer": "carryingCapacity.ts",
+          "tick": 270,
+          "day": 270,
+          "bandId": "band:varied-dry-corridor-upper",
+          "enabledValue": 0.31,
+          "disabledValue": 0.34
+        },
+        {
+          "field": "rawSupportRatio",
+          "category": "support",
+          "writer": "carryingCapacity.ts deriveCarryingCapacity",
+          "tick": 270,
+          "day": 270,
+          "bandId": "band:varied-dry-corridor-upper",
+          "enabledValue": 0.83,
+          "disabledValue": 0.51
+        },
+        {
+          "field": "viabilityStatus",
+          "category": "viability",
+          "writer": "viability.ts",
+          "tick": 270,
+          "day": 270,
+          "bandId": "band:varied-dry-corridor-upper",
+          "enabledValue": "viable",
+          "disabledValue": "fragile"
+        },
+        {
+          "field": "netDemographicRate",
+          "category": "demography",
+          "writer": "demography.ts",
+          "tick": 360,
+          "day": 360,
+          "bandId": "band:varied-dry-corridor-upper",
+          "enabledValue": -0.0015,
+          "disabledValue": -0.0019
+        },
+        {
+          "field": "position",
+          "category": "movement_decision",
+          "writer": "bandDecision.ts / campMovement.ts",
+          "tick": 360,
+          "day": 360,
+          "bandId": "band:varied-plains-creek",
+          "enabledValue": "tile:100:42",
+          "disabledValue": "tile:100:46"
+        },
+        {
+          "field": "travelCorridorCount",
+          "category": "movement_decision",
+          "writer": "bandDecision.ts",
+          "tick": 360,
+          "day": 360,
+          "bandId": "band:varied-plains-creek",
+          "enabledValue": 1,
+          "disabledValue": 0
+        },
+        {
+          "field": "opportunityCandidateTile",
+          "category": "fission",
+          "writer": "carryingCapacity.ts deriveKnownUnusedHabitat",
+          "tick": 360,
+          "day": 360,
+          "bandId": "band:varied-plains-creek",
+          "enabledValue": "tile:101:43",
+          "disabledValue": "tile:100:45"
+        }
+      ],
+      "bandSetDivergedTick": null,
+      "firstResidentialKnowledgeTick": 98,
+      "firstPhysicalOrBehaviouralTick": 97,
+      "attribution": "EXPEDITION_LABOR — physical/behavioural divergence precedes any residential knowledge divergence"
+    },
+    {
+      "map": "map2",
+      "seed": "c18:b",
+      "firstDivergenceOverall": {
+        "field": "frontierExpeditionCount",
+        "category": "exploration_lifecycle",
+        "writer": "expedition.ts maybeLaunchFrontierExploration",
+        "tick": 96,
+        "day": 96,
+        "bandId": "band:varied-dry-corridor-mid",
+        "enabledValue": 1,
+        "disabledValue": 0
+      },
+      "firstByCategory": [
+        {
+          "category": "exploration_lifecycle",
+          "tick": 96,
+          "day": 96,
+          "field": "frontierExpeditionCount",
+          "bandId": "band:varied-dry-corridor-mid",
+          "writer": "expedition.ts maybeLaunchFrontierExploration"
+        },
+        {
+          "category": "activity_selection",
+          "tick": 97,
+          "day": 97,
+          "field": "walkedKmTotal",
+          "bandId": "band:varied-dry-corridor-mid",
+          "writer": "bandMobility.ts recordWalkingDay"
+        },
+        {
+          "category": "residential_knowledge",
+          "tick": 98,
+          "day": 98,
+          "field": "observedTileCount",
+          "bandId": "band:varied-plains-creek",
+          "writer": "tileObservation.ts observeTileAndNearby"
+        },
+        {
+          "category": "resource_knowledge",
+          "tick": 180,
+          "day": 180,
+          "field": "patchMemoryCount",
+          "bandId": "band:varied-dry-corridor-upper",
+          "writer": "resourceKnowledge.ts"
+        },
+        {
+          "category": "movement_decision",
+          "tick": 180,
+          "day": 180,
+          "field": "position",
+          "bandId": "band:varied-dry-corridor-upper",
+          "writer": "bandDecision.ts / campMovement.ts"
+        },
+        {
+          "category": "pressure",
+          "tick": 180,
+          "day": 180,
+          "field": "rangeSaturation",
+          "bandId": "band:varied-dry-corridor-upper",
+          "writer": "carryingCapacity.ts"
+        },
+        {
+          "category": "fission",
+          "tick": 180,
+          "day": 180,
+          "field": "opportunityCandidateTile",
+          "bandId": "band:varied-dry-corridor-upper",
+          "writer": "carryingCapacity.ts deriveKnownUnusedHabitat"
+        },
+        {
+          "category": "support",
+          "tick": 186,
+          "day": 186,
+          "field": "receiptUsableSupport",
+          "bandId": "band:varied-dry-corridor-upper",
+          "writer": "seasonalFoodReceipts.ts"
+        },
+        {
+          "category": "viability",
+          "tick": 270,
+          "day": 270,
+          "field": "viabilityStatus",
+          "bandId": "band:varied-dry-corridor-upper",
+          "writer": "viability.ts"
+        },
+        {
+          "category": "demography",
+          "tick": 360,
+          "day": 360,
+          "field": "netDemographicRate",
+          "bandId": "band:varied-dry-corridor-upper",
+          "writer": "demography.ts"
+        }
+      ],
+      "firstByField": [
+        {
+          "field": "frontierExpeditionCount",
+          "category": "exploration_lifecycle",
+          "writer": "expedition.ts maybeLaunchFrontierExploration",
+          "tick": 96,
+          "day": 96,
+          "bandId": "band:varied-dry-corridor-mid",
+          "enabledValue": 1,
+          "disabledValue": 0
+        },
+        {
+          "field": "anyExpeditionCount",
+          "category": "exploration_lifecycle",
+          "writer": "expedition.ts applyExpeditionDay",
+          "tick": 96,
+          "day": 96,
+          "bandId": "band:varied-dry-corridor-mid",
+          "enabledValue": 1,
+          "disabledValue": 0
+        },
+        {
+          "field": "lastFrontierExplorationTick",
+          "category": "exploration_lifecycle",
+          "writer": "expedition.ts maybeLaunchFrontierExploration",
+          "tick": 96,
+          "day": 96,
+          "bandId": "band:varied-dry-corridor-mid",
+          "enabledValue": 1,
+          "disabledValue": -1
+        },
+        {
+          "field": "committedExpeditionWorkers",
+          "category": "exploration_lifecycle",
+          "writer": "expedition.ts getCommittedExpeditionWorkers",
+          "tick": 96,
+          "day": 96,
+          "bandId": "band:varied-dry-corridor-mid",
+          "enabledValue": 2,
+          "disabledValue": 0
+        },
+        {
+          "field": "walkedKmTotal",
+          "category": "activity_selection",
+          "writer": "bandMobility.ts recordWalkingDay",
+          "tick": 97,
+          "day": 97,
+          "bandId": "band:varied-dry-corridor-mid",
+          "enabledValue": 3,
+          "disabledValue": 0
+        },
+        {
+          "field": "expeditionOutcomeCount",
+          "category": "exploration_lifecycle",
+          "writer": "expedition.ts applyExpeditionDay",
+          "tick": 98,
+          "day": 98,
+          "bandId": "band:varied-dry-corridor-mid",
+          "enabledValue": 1,
+          "disabledValue": 0
+        },
+        {
+          "field": "observedTileCount",
+          "category": "residential_knowledge",
+          "writer": "tileObservation.ts observeTileAndNearby",
+          "tick": 98,
+          "day": 98,
+          "bandId": "band:varied-plains-creek",
+          "enabledValue": 15,
+          "disabledValue": 13
+        },
+        {
+          "field": "observedTileMaxDistance",
+          "category": "residential_knowledge",
+          "writer": "tileObservation.ts observeTileAndNearby",
+          "tick": 98,
+          "day": 98,
+          "bandId": "band:varied-plains-creek",
+          "enabledValue": 4,
+          "disabledValue": 2
+        },
+        {
+          "field": "patchMemoryCount",
+          "category": "resource_knowledge",
+          "writer": "resourceKnowledge.ts",
+          "tick": 180,
+          "day": 180,
+          "bandId": "band:varied-dry-corridor-upper",
+          "enabledValue": 33,
+          "disabledValue": 25
+        },
+        {
+          "field": "patchMemoryMaxDistance",
+          "category": "resource_knowledge",
+          "writer": "resourceKnowledge.ts",
+          "tick": 180,
+          "day": 180,
+          "bandId": "band:varied-dry-corridor-upper",
+          "enabledValue": 5,
+          "disabledValue": 3
+        },
+        {
+          "field": "position",
+          "category": "movement_decision",
+          "writer": "bandDecision.ts / campMovement.ts",
+          "tick": 180,
+          "day": 180,
+          "bandId": "band:varied-dry-corridor-upper",
+          "enabledValue": "tile:57:105",
+          "disabledValue": "tile:56:105"
+        },
+        {
+          "field": "travelCorridorCount",
+          "category": "movement_decision",
+          "writer": "bandDecision.ts",
+          "tick": 180,
+          "day": 180,
+          "bandId": "band:varied-dry-corridor-upper",
+          "enabledValue": 1,
+          "disabledValue": 0
+        },
+        {
+          "field": "rangeSaturation",
+          "category": "pressure",
+          "writer": "carryingCapacity.ts",
+          "tick": 180,
+          "day": 180,
+          "bandId": "band:varied-dry-corridor-upper",
+          "enabledValue": 0.35,
+          "disabledValue": 0.36
+        },
+        {
+          "field": "opportunityCandidateTile",
+          "category": "fission",
+          "writer": "carryingCapacity.ts deriveKnownUnusedHabitat",
+          "tick": 180,
+          "day": 180,
+          "bandId": "band:varied-dry-corridor-upper",
+          "enabledValue": "tile:58:106",
+          "disabledValue": "tile:56:107"
+        },
+        {
+          "field": "daughterColonizationPressure",
+          "category": "fission",
+          "writer": "carryingCapacity.ts deriveDaughterColonization",
+          "tick": 180,
+          "day": 180,
+          "bandId": "band:varied-plains-creek",
+          "enabledValue": 0.25,
+          "disabledValue": 0.23
+        },
+        {
+          "field": "receiptUsableSupport",
+          "category": "support",
+          "writer": "seasonalFoodReceipts.ts",
+          "tick": 186,
+          "day": 186,
+          "bandId": "band:varied-dry-corridor-upper",
+          "enabledValue": 0.02,
+          "disabledValue": 0.264
+        },
+        {
+          "field": "receiptCount",
+          "category": "support",
+          "writer": "seasonalFoodReceipts.ts",
+          "tick": 186,
+          "day": 186,
+          "bandId": "band:varied-dry-corridor-upper",
+          "enabledValue": 1,
+          "disabledValue": 14
+        },
+        {
+          "field": "foodStress",
+          "category": "pressure",
+          "writer": "pressure.ts / seasonalSurvival.ts",
+          "tick": 270,
+          "day": 270,
+          "bandId": "band:varied-dry-corridor-upper",
+          "enabledValue": 0.29,
+          "disabledValue": 0.59
+        },
+        {
+          "field": "rawSupportRatio",
+          "category": "support",
+          "writer": "carryingCapacity.ts deriveCarryingCapacity",
+          "tick": 270,
+          "day": 270,
+          "bandId": "band:varied-dry-corridor-upper",
+          "enabledValue": 0.83,
+          "disabledValue": 0.27
+        },
+        {
+          "field": "viabilityStatus",
+          "category": "viability",
+          "writer": "viability.ts",
+          "tick": 270,
+          "day": 270,
+          "bandId": "band:varied-dry-corridor-upper",
+          "enabledValue": "viable",
+          "disabledValue": "fragile"
+        },
+        {
+          "field": "netDemographicRate",
+          "category": "demography",
+          "writer": "demography.ts",
+          "tick": 360,
+          "day": 360,
+          "bandId": "band:varied-dry-corridor-upper",
+          "enabledValue": -0.0015,
+          "disabledValue": -0.0023
+        }
+      ],
+      "bandSetDivergedTick": null,
+      "firstResidentialKnowledgeTick": 98,
+      "firstPhysicalOrBehaviouralTick": 97,
+      "attribution": "EXPEDITION_LABOR — physical/behavioural divergence precedes any residential knowledge divergence"
+    },
+    {
+      "map": "map2",
+      "seed": "c18:c",
+      "firstDivergenceOverall": {
+        "field": "frontierExpeditionCount",
+        "category": "exploration_lifecycle",
+        "writer": "expedition.ts maybeLaunchFrontierExploration",
+        "tick": 96,
+        "day": 96,
+        "bandId": "band:varied-dry-corridor-mid",
+        "enabledValue": 1,
+        "disabledValue": 0
+      },
+      "firstByCategory": [
+        {
+          "category": "exploration_lifecycle",
+          "tick": 96,
+          "day": 96,
+          "field": "frontierExpeditionCount",
+          "bandId": "band:varied-dry-corridor-mid",
+          "writer": "expedition.ts maybeLaunchFrontierExploration"
+        },
+        {
+          "category": "activity_selection",
+          "tick": 97,
+          "day": 97,
+          "field": "walkedKmTotal",
+          "bandId": "band:varied-dry-corridor-mid",
+          "writer": "bandMobility.ts recordWalkingDay"
+        },
+        {
+          "category": "residential_knowledge",
+          "tick": 98,
+          "day": 98,
+          "field": "observedTileCount",
+          "bandId": "band:varied-plains-creek",
+          "writer": "tileObservation.ts observeTileAndNearby"
+        },
+        {
+          "category": "resource_knowledge",
+          "tick": 180,
+          "day": 180,
+          "field": "patchMemoryCount",
+          "bandId": "band:varied-dry-corridor-upper",
+          "writer": "resourceKnowledge.ts"
+        },
+        {
+          "category": "fission",
+          "tick": 180,
+          "day": 180,
+          "field": "daughterColonizationPressure",
+          "bandId": "band:varied-plains-creek",
+          "writer": "carryingCapacity.ts deriveDaughterColonization"
+        },
+        {
+          "category": "support",
+          "tick": 189,
+          "day": 189,
+          "field": "receiptUsableSupport",
+          "bandId": "band:varied-dry-corridor-upper",
+          "writer": "seasonalFoodReceipts.ts"
+        },
+        {
+          "category": "movement_decision",
+          "tick": 270,
+          "day": 270,
+          "field": "position",
+          "bandId": "band:varied-dry-corridor-upper",
+          "writer": "bandDecision.ts / campMovement.ts"
+        },
+        {
+          "category": "pressure",
+          "tick": 270,
+          "day": 270,
+          "field": "foodStress",
+          "bandId": "band:varied-dry-corridor-upper",
+          "writer": "pressure.ts / seasonalSurvival.ts"
+        },
+        {
+          "category": "viability",
+          "tick": 270,
+          "day": 270,
+          "field": "viabilityStatus",
+          "bandId": "band:varied-dry-corridor-upper",
+          "writer": "viability.ts"
+        },
+        {
+          "category": "demography",
+          "tick": 360,
+          "day": 360,
+          "field": "netDemographicRate",
+          "bandId": "band:varied-dry-corridor-upper",
+          "writer": "demography.ts"
+        }
+      ],
+      "firstByField": [
+        {
+          "field": "frontierExpeditionCount",
+          "category": "exploration_lifecycle",
+          "writer": "expedition.ts maybeLaunchFrontierExploration",
+          "tick": 96,
+          "day": 96,
+          "bandId": "band:varied-dry-corridor-mid",
+          "enabledValue": 1,
+          "disabledValue": 0
+        },
+        {
+          "field": "anyExpeditionCount",
+          "category": "exploration_lifecycle",
+          "writer": "expedition.ts applyExpeditionDay",
+          "tick": 96,
+          "day": 96,
+          "bandId": "band:varied-dry-corridor-mid",
+          "enabledValue": 1,
+          "disabledValue": 0
+        },
+        {
+          "field": "lastFrontierExplorationTick",
+          "category": "exploration_lifecycle",
+          "writer": "expedition.ts maybeLaunchFrontierExploration",
+          "tick": 96,
+          "day": 96,
+          "bandId": "band:varied-dry-corridor-mid",
+          "enabledValue": 1,
+          "disabledValue": -1
+        },
+        {
+          "field": "committedExpeditionWorkers",
+          "category": "exploration_lifecycle",
+          "writer": "expedition.ts getCommittedExpeditionWorkers",
+          "tick": 96,
+          "day": 96,
+          "bandId": "band:varied-dry-corridor-mid",
+          "enabledValue": 2,
+          "disabledValue": 0
+        },
+        {
+          "field": "walkedKmTotal",
+          "category": "activity_selection",
+          "writer": "bandMobility.ts recordWalkingDay",
+          "tick": 97,
+          "day": 97,
+          "bandId": "band:varied-dry-corridor-mid",
+          "enabledValue": 3,
+          "disabledValue": 0
+        },
+        {
+          "field": "expeditionOutcomeCount",
+          "category": "exploration_lifecycle",
+          "writer": "expedition.ts applyExpeditionDay",
+          "tick": 98,
+          "day": 98,
+          "bandId": "band:varied-dry-corridor-mid",
+          "enabledValue": 1,
+          "disabledValue": 0
+        },
+        {
+          "field": "observedTileCount",
+          "category": "residential_knowledge",
+          "writer": "tileObservation.ts observeTileAndNearby",
+          "tick": 98,
+          "day": 98,
+          "bandId": "band:varied-plains-creek",
+          "enabledValue": 15,
+          "disabledValue": 13
+        },
+        {
+          "field": "observedTileMaxDistance",
+          "category": "residential_knowledge",
+          "writer": "tileObservation.ts observeTileAndNearby",
+          "tick": 98,
+          "day": 98,
+          "bandId": "band:varied-plains-creek",
+          "enabledValue": 4,
+          "disabledValue": 2
+        },
+        {
+          "field": "patchMemoryCount",
+          "category": "resource_knowledge",
+          "writer": "resourceKnowledge.ts",
+          "tick": 180,
+          "day": 180,
+          "bandId": "band:varied-dry-corridor-upper",
+          "enabledValue": 30,
+          "disabledValue": 25
+        },
+        {
+          "field": "patchMemoryMaxDistance",
+          "category": "resource_knowledge",
+          "writer": "resourceKnowledge.ts",
+          "tick": 180,
+          "day": 180,
+          "bandId": "band:varied-dry-corridor-upper",
+          "enabledValue": 6,
+          "disabledValue": 3
+        },
+        {
+          "field": "daughterColonizationPressure",
+          "category": "fission",
+          "writer": "carryingCapacity.ts deriveDaughterColonization",
+          "tick": 180,
+          "day": 180,
+          "bandId": "band:varied-plains-creek",
+          "enabledValue": 0.25,
+          "disabledValue": 0.23
+        },
+        {
+          "field": "receiptUsableSupport",
+          "category": "support",
+          "writer": "seasonalFoodReceipts.ts",
+          "tick": 189,
+          "day": 189,
+          "bandId": "band:varied-dry-corridor-upper",
+          "enabledValue": 0.264,
+          "disabledValue": 0.0122
+        },
+        {
+          "field": "receiptCount",
+          "category": "support",
+          "writer": "seasonalFoodReceipts.ts",
+          "tick": 189,
+          "day": 189,
+          "bandId": "band:varied-dry-corridor-upper",
+          "enabledValue": 14,
+          "disabledValue": 1
+        },
+        {
+          "field": "position",
+          "category": "movement_decision",
+          "writer": "bandDecision.ts / campMovement.ts",
+          "tick": 270,
+          "day": 270,
+          "bandId": "band:varied-dry-corridor-upper",
+          "enabledValue": "tile:57:105",
+          "disabledValue": "tile:56:105"
+        },
+        {
+          "field": "travelCorridorCount",
+          "category": "movement_decision",
+          "writer": "bandDecision.ts",
+          "tick": 270,
+          "day": 270,
+          "bandId": "band:varied-dry-corridor-upper",
+          "enabledValue": 1,
+          "disabledValue": 0
+        },
+        {
+          "field": "foodStress",
+          "category": "pressure",
+          "writer": "pressure.ts / seasonalSurvival.ts",
+          "tick": 270,
+          "day": 270,
+          "bandId": "band:varied-dry-corridor-upper",
+          "enabledValue": 0.41,
+          "disabledValue": 0.59
+        },
+        {
+          "field": "rangeSaturation",
+          "category": "pressure",
+          "writer": "carryingCapacity.ts",
+          "tick": 270,
+          "day": 270,
+          "bandId": "band:varied-dry-corridor-upper",
+          "enabledValue": 0.33,
+          "disabledValue": 0.4
+        },
+        {
+          "field": "rawSupportRatio",
+          "category": "support",
+          "writer": "carryingCapacity.ts deriveCarryingCapacity",
+          "tick": 270,
+          "day": 270,
+          "bandId": "band:varied-dry-corridor-upper",
+          "enabledValue": 0.6,
+          "disabledValue": 0.27
+        },
+        {
+          "field": "opportunityCandidateTile",
+          "category": "fission",
+          "writer": "carryingCapacity.ts deriveKnownUnusedHabitat",
+          "tick": 270,
+          "day": 270,
+          "bandId": "band:varied-dry-corridor-upper",
+          "enabledValue": "tile:58:106",
+          "disabledValue": "tile:56:107"
+        },
+        {
+          "field": "viabilityStatus",
+          "category": "viability",
+          "writer": "viability.ts",
+          "tick": 270,
+          "day": 270,
+          "bandId": "band:varied-dry-corridor-upper",
+          "enabledValue": "viable",
+          "disabledValue": "fragile"
+        },
+        {
+          "field": "netDemographicRate",
+          "category": "demography",
+          "writer": "demography.ts",
+          "tick": 360,
+          "day": 360,
+          "bandId": "band:varied-dry-corridor-upper",
+          "enabledValue": -0.0029,
+          "disabledValue": -0.0023
+        }
+      ],
+      "bandSetDivergedTick": null,
+      "firstResidentialKnowledgeTick": 98,
+      "firstPhysicalOrBehaviouralTick": 97,
+      "attribution": "EXPEDITION_LABOR — physical/behavioural divergence precedes any residential knowledge divergence"
+    }
+  ],
+  "attributionTally": {
+    "EXPEDITION_LABOR": 6
+  }
+}

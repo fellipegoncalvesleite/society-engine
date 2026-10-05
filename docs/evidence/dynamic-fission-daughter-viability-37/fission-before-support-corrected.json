@@ -1,0 +1,88 @@
+{
+  "audit": "ITEM-4-FISSION-BEFORE-SUPPORT-CORRECTION",
+  "tree": "ab2986432e6d34df633b76ce46c67099afb4145c",
+  "seeds": [
+    "audit27:natural:s1",
+    "audit27:natural:map2:s1"
+  ],
+  "years": 200,
+  "fissionsObserved": 2,
+  "creationTimeValueReadFromProduction": {
+    "site": "src/sim/agents/demography.ts:1024",
+    "value": "seasonalSupport: undefined",
+    "note": "the daughter is constructed with NO seasonal support. The written audit's 'reset' was correct ABOUT CREATION TIME."
+  },
+  "firstLaterWriter": {
+    "site": "src/sim/agents/socialContext.ts:283",
+    "expression": "seasonalSupport: seasonalSupport ?? band.seasonalSupport",
+    "reachedFrom": "src/sim/tick/advance.ts:284 — the FINAL updateBandContextStates pass, which runs AFTER updateBandsDemographyAndFission at advance.ts:237, inside the SAME simulated day",
+    "effect": "a fresh seasonal support is DERIVED for the daughter from its own position and state before the day ends"
+  },
+  "verdict": {
+    "whichPartyWasWrong": "THE PROBE'S LABEL",
+    "explanation": "cause (a) AND cause (c) together. The probe sampled at the END of the fission day, by which time the final context pass had already derived a fresh seasonal support for the daughter; and it then labelled any non-undefined value 'INHERITED', which conflates a DERIVED read-model with a CARRIED-OVER one. Production is correct and the written audit's 'reset' is correct about creation time — it was merely silent about the same-day re-derivation.",
+    "productionDefect": false,
+    "writtenAuditClaimStatus": "CORRECT BUT INCOMPLETE — 'reset' described creation time and did not mention that the field is re-derived within the same day",
+    "probeLabelStatus": "WRONG — 'INHERITED' was never true of this field"
+  },
+  "whatActuallyMatters": {
+    "question": "was any PHYSICAL food or receipt carried across?",
+    "answer": "NO",
+    "physicalReceiptStoreInherited": false,
+    "supportObjectCarriesPhysicalReceipts": false,
+    "supportObjectIsTheParentsObject": false,
+    "supportObjectDeepEqualsParentBefore": false,
+    "note": "`seasonalFoodReceipts` is the physical receipt accumulator and is reset in every observed fission. `seasonalSupport` is a DERIVED read-model over it; a daughter with no receipts derives a support state describing exactly that. No material was created or duplicated."
+  },
+  "consequenceForTheImplementation": {
+    "materialConservation": "the before-package's material claim STANDS: nothing physical is inherited at fission. The support correction changes the LABEL, not the ledger.",
+    "carriedForwardRequirement": "any Item 4 material ledger must distinguish a PHYSICAL store (seasonalFoodReceipts) from a DERIVED read-model (seasonalSupport), and must sample at a NAMED sub-step rather than at end-of-day — the same sampling-cadence lesson CORRECTION-34A recorded for presence."
+  },
+  "nonVacuity": {
+    "predicate": "at least one real fission was observed and its support state actually inspected",
+    "fissionsObserved": 2,
+    "met": true
+  },
+  "findings": [
+    {
+      "seed": "audit27:natural:s1",
+      "day": 43920,
+      "daughter": "band:varied-estuary:daughter:1:t488",
+      "parent": "band:varied-estuary",
+      "originalProbeExpression": "b.seasonalSupport === undefined ? 'reset' : 'INHERITED'",
+      "originalProbeVerdict": "INHERITED",
+      "daughterSeasonalSupportPresentAtEndOfFissionDay": true,
+      "daughterSeasonalSupportIsTheParentsObject": false,
+      "daughterSeasonalSupportDeepEqualsParentBefore": false,
+      "daughterSeasonalSupportCarriesPhysicalReceipts": false,
+      "daughterSeasonalFoodReceipts": "reset",
+      "daughterExpeditions": 0,
+      "daughterRecentTrips": 0,
+      "daughterRawSupportRatio": 0,
+      "parentRawSupportRatioBefore": 1.12,
+      "parentRawSupportRatioAfter": 0.26,
+      "daughterChronicDeficitStreak": 1,
+      "parentChronicDeficitStreakBefore": 0
+    },
+    {
+      "seed": "audit27:natural:map2:s1",
+      "day": 39240,
+      "daughter": "band:varied-estuary:daughter:1:t436",
+      "parent": "band:varied-estuary",
+      "originalProbeExpression": "b.seasonalSupport === undefined ? 'reset' : 'INHERITED'",
+      "originalProbeVerdict": "INHERITED",
+      "daughterSeasonalSupportPresentAtEndOfFissionDay": true,
+      "daughterSeasonalSupportIsTheParentsObject": false,
+      "daughterSeasonalSupportDeepEqualsParentBefore": false,
+      "daughterSeasonalSupportCarriesPhysicalReceipts": false,
+      "daughterSeasonalFoodReceipts": "reset",
+      "daughterExpeditions": 0,
+      "daughterRecentTrips": 0,
+      "daughterRawSupportRatio": 0,
+      "parentRawSupportRatioBefore": 0.93,
+      "parentRawSupportRatioAfter": 0.48,
+      "daughterChronicDeficitStreak": 1,
+      "parentChronicDeficitStreakBefore": 0
+    }
+  ]
+}

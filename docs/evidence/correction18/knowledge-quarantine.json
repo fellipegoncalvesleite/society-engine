@@ -1,0 +1,407 @@
+{
+  "audit": "frontierKnowledgeQuarantine",
+  "checkpoint": "CORRECTION-18 §7",
+  "years": 300,
+  "seeds": [
+    "c18:a",
+    "c18:b",
+    "c18:c",
+    "c18:d",
+    "c18:e"
+  ],
+  "arms": [
+    "production",
+    "armA_physical_no_transfer",
+    "disabled"
+  ],
+  "armSemantics": {
+    "production": "frontier exploration on; knowledge transferred and read normally",
+    "armA_physical_no_transfer": "party departs, commits workers, eats provisions, walks every step; residential knowledge hand-off suppressed at the return seam",
+    "disabled": "no exploratory party is ever raised"
+  },
+  "decompositionIdentity": "(disabled - armA) = expedition labour cost;  (armA - production) = returned-knowledge cost",
+  "results": [
+    {
+      "map": "map1",
+      "seed": "c18:a",
+      "arm": "production",
+      "population": 215,
+      "bands": 7,
+      "trips": 39491,
+      "frontierExpeditions": 495,
+      "knownTilesMean": 126.29,
+      "frontierDerivedKnownTilesMean": 26.71
+    },
+    {
+      "map": "map1",
+      "seed": "c18:a",
+      "arm": "armA_physical_no_transfer",
+      "population": 209,
+      "bands": 7,
+      "trips": 44613,
+      "frontierExpeditions": 553,
+      "knownTilesMean": 95.71,
+      "frontierDerivedKnownTilesMean": 0
+    },
+    {
+      "map": "map1",
+      "seed": "c18:a",
+      "arm": "disabled",
+      "population": 264,
+      "bands": 10,
+      "trips": 50706,
+      "frontierExpeditions": 0,
+      "knownTilesMean": 78.9,
+      "frontierDerivedKnownTilesMean": 0
+    },
+    {
+      "map": "map1",
+      "seed": "c18:b",
+      "arm": "production",
+      "population": 178,
+      "bands": 7,
+      "trips": 43947,
+      "frontierExpeditions": 533,
+      "knownTilesMean": 148.57,
+      "frontierDerivedKnownTilesMean": 33.43
+    },
+    {
+      "map": "map1",
+      "seed": "c18:b",
+      "arm": "armA_physical_no_transfer",
+      "population": 272,
+      "bands": 11,
+      "trips": 51580,
+      "frontierExpeditions": 639,
+      "knownTilesMean": 82.91,
+      "frontierDerivedKnownTilesMean": 0
+    },
+    {
+      "map": "map1",
+      "seed": "c18:b",
+      "arm": "disabled",
+      "population": 230,
+      "bands": 9,
+      "trips": 48194,
+      "frontierExpeditions": 0,
+      "knownTilesMean": 81.78,
+      "frontierDerivedKnownTilesMean": 0
+    },
+    {
+      "map": "map1",
+      "seed": "c18:c",
+      "arm": "production",
+      "population": 174,
+      "bands": 7,
+      "trips": 37366,
+      "frontierExpeditions": 457,
+      "knownTilesMean": 110.14,
+      "frontierDerivedKnownTilesMean": 28.57
+    },
+    {
+      "map": "map1",
+      "seed": "c18:c",
+      "arm": "armA_physical_no_transfer",
+      "population": 213,
+      "bands": 7,
+      "trips": 43249,
+      "frontierExpeditions": 538,
+      "knownTilesMean": 87,
+      "frontierDerivedKnownTilesMean": 0
+    },
+    {
+      "map": "map1",
+      "seed": "c18:c",
+      "arm": "disabled",
+      "population": 265,
+      "bands": 9,
+      "trips": 49391,
+      "frontierExpeditions": 0,
+      "knownTilesMean": 84.22,
+      "frontierDerivedKnownTilesMean": 0
+    },
+    {
+      "map": "map1",
+      "seed": "c18:d",
+      "arm": "production",
+      "population": 192,
+      "bands": 7,
+      "trips": 43119,
+      "frontierExpeditions": 459,
+      "knownTilesMean": 145.57,
+      "frontierDerivedKnownTilesMean": 31.86
+    },
+    {
+      "map": "map1",
+      "seed": "c18:d",
+      "arm": "armA_physical_no_transfer",
+      "population": 209,
+      "bands": 7,
+      "trips": 44542,
+      "frontierExpeditions": 550,
+      "knownTilesMean": 96.57,
+      "frontierDerivedKnownTilesMean": 0
+    },
+    {
+      "map": "map1",
+      "seed": "c18:d",
+      "arm": "disabled",
+      "population": 273,
+      "bands": 10,
+      "trips": 50760,
+      "frontierExpeditions": 0,
+      "knownTilesMean": 77.3,
+      "frontierDerivedKnownTilesMean": 0
+    },
+    {
+      "map": "map1",
+      "seed": "c18:e",
+      "arm": "production",
+      "population": 195,
+      "bands": 8,
+      "trips": 41467,
+      "frontierExpeditions": 517,
+      "knownTilesMean": 126,
+      "frontierDerivedKnownTilesMean": 29.75
+    },
+    {
+      "map": "map1",
+      "seed": "c18:e",
+      "arm": "armA_physical_no_transfer",
+      "population": 288,
+      "bands": 11,
+      "trips": 55768,
+      "frontierExpeditions": 694,
+      "knownTilesMean": 84.82,
+      "frontierDerivedKnownTilesMean": 0
+    },
+    {
+      "map": "map1",
+      "seed": "c18:e",
+      "arm": "disabled",
+      "population": 223,
+      "bands": 9,
+      "trips": 46680,
+      "frontierExpeditions": 0,
+      "knownTilesMean": 82,
+      "frontierDerivedKnownTilesMean": 0
+    },
+    {
+      "map": "map2",
+      "seed": "c18:a",
+      "arm": "production",
+      "population": 213,
+      "bands": 11,
+      "trips": 61488,
+      "frontierExpeditions": 718,
+      "knownTilesMean": 110.82,
+      "frontierDerivedKnownTilesMean": 24.27
+    },
+    {
+      "map": "map2",
+      "seed": "c18:a",
+      "arm": "armA_physical_no_transfer",
+      "population": 219,
+      "bands": 11,
+      "trips": 60672,
+      "frontierExpeditions": 712,
+      "knownTilesMean": 79.45,
+      "frontierDerivedKnownTilesMean": 0
+    },
+    {
+      "map": "map2",
+      "seed": "c18:a",
+      "arm": "disabled",
+      "population": 229,
+      "bands": 11,
+      "trips": 63090,
+      "frontierExpeditions": 0,
+      "knownTilesMean": 76.82,
+      "frontierDerivedKnownTilesMean": 0
+    },
+    {
+      "map": "map2",
+      "seed": "c18:b",
+      "arm": "production",
+      "population": 197,
+      "bands": 12,
+      "trips": 63529,
+      "frontierExpeditions": 763,
+      "knownTilesMean": 115.67,
+      "frontierDerivedKnownTilesMean": 18.08
+    },
+    {
+      "map": "map2",
+      "seed": "c18:b",
+      "arm": "armA_physical_no_transfer",
+      "population": 232,
+      "bands": 11,
+      "trips": 63456,
+      "frontierExpeditions": 777,
+      "knownTilesMean": 69.82,
+      "frontierDerivedKnownTilesMean": 0
+    },
+    {
+      "map": "map2",
+      "seed": "c18:b",
+      "arm": "disabled",
+      "population": 206,
+      "bands": 11,
+      "trips": 61344,
+      "frontierExpeditions": 0,
+      "knownTilesMean": 83.55,
+      "frontierDerivedKnownTilesMean": 0
+    },
+    {
+      "map": "map2",
+      "seed": "c18:c",
+      "arm": "production",
+      "population": 180,
+      "bands": 10,
+      "trips": 61764,
+      "frontierExpeditions": 754,
+      "knownTilesMean": 116.4,
+      "frontierDerivedKnownTilesMean": 20.6
+    },
+    {
+      "map": "map2",
+      "seed": "c18:c",
+      "arm": "armA_physical_no_transfer",
+      "population": 197,
+      "bands": 10,
+      "trips": 59802,
+      "frontierExpeditions": 730,
+      "knownTilesMean": 72.6,
+      "frontierDerivedKnownTilesMean": 0
+    },
+    {
+      "map": "map2",
+      "seed": "c18:c",
+      "arm": "disabled",
+      "population": 224,
+      "bands": 11,
+      "trips": 61358,
+      "frontierExpeditions": 0,
+      "knownTilesMean": 78.18,
+      "frontierDerivedKnownTilesMean": 0
+    },
+    {
+      "map": "map2",
+      "seed": "c18:d",
+      "arm": "production",
+      "population": 164,
+      "bands": 11,
+      "trips": 56868,
+      "frontierExpeditions": 670,
+      "knownTilesMean": 102.45,
+      "frontierDerivedKnownTilesMean": 21.18
+    },
+    {
+      "map": "map2",
+      "seed": "c18:d",
+      "arm": "armA_physical_no_transfer",
+      "population": 215,
+      "bands": 11,
+      "trips": 62458,
+      "frontierExpeditions": 777,
+      "knownTilesMean": 78.91,
+      "frontierDerivedKnownTilesMean": 0
+    },
+    {
+      "map": "map2",
+      "seed": "c18:d",
+      "arm": "disabled",
+      "population": 235,
+      "bands": 11,
+      "trips": 63067,
+      "frontierExpeditions": 0,
+      "knownTilesMean": 76.91,
+      "frontierDerivedKnownTilesMean": 0
+    },
+    {
+      "map": "map2",
+      "seed": "c18:e",
+      "arm": "production",
+      "population": 205,
+      "bands": 10,
+      "trips": 58159,
+      "frontierExpeditions": 723,
+      "knownTilesMean": 97,
+      "frontierDerivedKnownTilesMean": 18.3
+    },
+    {
+      "map": "map2",
+      "seed": "c18:e",
+      "arm": "armA_physical_no_transfer",
+      "population": 233,
+      "bands": 11,
+      "trips": 63816,
+      "frontierExpeditions": 770,
+      "knownTilesMean": 82.27,
+      "frontierDerivedKnownTilesMean": 0
+    },
+    {
+      "map": "map2",
+      "seed": "c18:e",
+      "arm": "disabled",
+      "population": 236,
+      "bands": 11,
+      "trips": 62832,
+      "frontierExpeditions": 0,
+      "knownTilesMean": 71.18,
+      "frontierDerivedKnownTilesMean": 0
+    }
+  ],
+  "perMap": {
+    "map1": {
+      "populationMean": {
+        "production": 190.8,
+        "armA_physical_no_transfer": 238.2,
+        "disabled": 251
+      },
+      "tripsMean": {
+        "production": 41078,
+        "armA_physical_no_transfer": 47950.4,
+        "disabled": 49146.2
+      },
+      "frontierDerivedKnownTilesMean": {
+        "production": 30.06,
+        "armA_physical_no_transfer": 0,
+        "disabled": 0
+      },
+      "decomposition": {
+        "totalRegression": 60.2,
+        "attributableToExpeditionLabour": 12.8,
+        "attributableToReturnedKnowledge": 47.4,
+        "labourSharePct": 21.26,
+        "knowledgeSharePct": 78.74
+      },
+      "verdict": "RETURNED_KNOWLEDGE_DOMINANT"
+    },
+    "map2": {
+      "populationMean": {
+        "production": 191.8,
+        "armA_physical_no_transfer": 219.2,
+        "disabled": 226
+      },
+      "tripsMean": {
+        "production": 60361.6,
+        "armA_physical_no_transfer": 62040.8,
+        "disabled": 62338.2
+      },
+      "frontierDerivedKnownTilesMean": {
+        "production": 20.49,
+        "armA_physical_no_transfer": 0,
+        "disabled": 0
+      },
+      "decomposition": {
+        "totalRegression": 34.2,
+        "attributableToExpeditionLabour": 6.8,
+        "attributableToReturnedKnowledge": 27.4,
+        "labourSharePct": 19.88,
+        "knowledgeSharePct": 80.12
+      },
+      "verdict": "RETURNED_KNOWLEDGE_DOMINANT"
+    }
+  }
+}

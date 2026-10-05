@@ -1,0 +1,499 @@
+{
+  "label": "after-500y",
+  "years": 500,
+  "seeds": [
+    "s1",
+    "s2",
+    "s3",
+    "s4",
+    "s5"
+  ],
+  "totals": {
+    "water_access": 178,
+    "resource_presence": 0,
+    "resource_test_possible": 0,
+    "temporary_use": 1881,
+    "seasonal_persistence": 0
+  },
+  "summary": {
+    "map1": {
+      "seeds": 5,
+      "survival": 1,
+      "meanFinalPopulation": 250.4,
+      "meanSupport": 1.17,
+      "meanReceipts": 4468.39,
+      "meanBirths": 2155,
+      "meanDeaths": 2050.6,
+      "meanUniqueTiles": 1221.2,
+      "meanVerificationParties": 197.4,
+      "verificationByQuestion": {
+        "water_access": 90,
+        "resource_presence": 0,
+        "resource_test_possible": 0,
+        "temporary_use": 897,
+        "seasonal_persistence": 0
+      },
+      "meanExplorationParties": 1111.2,
+      "meanReconnaissanceParties": 40.4,
+      "meanGatheringParties": 955.2,
+      "meanTotalParties": 5553,
+      "meanSlotUtilisation": 0.0252,
+      "campsAttempted": 18344,
+      "campsPreventedByEvidence": 1040,
+      "launchCases": {
+        "case_b_negative_vetoes": 14681
+      },
+      "launchRefusals": {
+        "resource_presence|question_suspended_no_reader": 7604965,
+        "temporary_use|no_pending_operation_needing_camp": 6515080,
+        "seasonal_persistence|question_suspended_no_reader": 2843288,
+        "water_access|not_selected_or_imminent": 7153554,
+        "water_access|water_not_the_binding_blocker": 3642,
+        "water_access|already_settled_directly": 9216,
+        "temporary_use|already_settled_directly": 1449
+      }
+    },
+    "map2": {
+      "seeds": 5,
+      "survival": 1,
+      "meanFinalPopulation": 240.8,
+      "meanSupport": 1,
+      "meanReceipts": 4031.66,
+      "meanBirths": 2097,
+      "meanDeaths": 2063.6,
+      "meanUniqueTiles": 1553.6,
+      "meanVerificationParties": 214.4,
+      "verificationByQuestion": {
+        "water_access": 88,
+        "resource_presence": 0,
+        "resource_test_possible": 0,
+        "temporary_use": 984,
+        "seasonal_persistence": 0
+      },
+      "meanExplorationParties": 1284.4,
+      "meanReconnaissanceParties": 71.2,
+      "meanGatheringParties": 531.6,
+      "meanTotalParties": 3918,
+      "meanSlotUtilisation": 0.014,
+      "campsAttempted": 10984,
+      "campsPreventedByEvidence": 850,
+      "launchCases": {
+        "case_b_negative_vetoes": 27037,
+        "case_a_confirmation_unlocks": 1
+      },
+      "launchRefusals": {
+        "water_access|not_selected_or_imminent": 8908675,
+        "temporary_use|no_pending_operation_needing_camp": 10013404,
+        "seasonal_persistence|question_suspended_no_reader": 4717901,
+        "resource_presence|question_suspended_no_reader": 10931501,
+        "water_access|water_not_the_binding_blocker": 10897,
+        "water_access|already_settled_directly": 3614,
+        "water_access|non_water_requirement_fails": 317,
+        "temporary_use|already_settled_directly": 10427
+      }
+    }
+  },
+  "rows": [
+    {
+      "scenario": "map1",
+      "seed": "s1",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 284,
+      "peakPopulation": 310,
+      "meanSupport": 1.1515,
+      "receipts": 5084.09,
+      "births": 2488,
+      "deaths": 2359,
+      "residentialMoves": 0,
+      "uniqueTilesVisited": 1271,
+      "verificationParties": 199,
+      "verificationByQuestion": {
+        "temporary_use": 183,
+        "water_access": 16
+      },
+      "broadExplorationParties": 1238,
+      "reconnaissanceParties": 38,
+      "patchVerificationParties": 3477,
+      "gatheringParties": 956,
+      "totalParties": 5908,
+      "slotUtilisation": 0.0242,
+      "campsAttempted": 3731,
+      "campsPreventedByEvidence": 157,
+      "launchDependencies": 3957,
+      "launchCases": {
+        "case_b_negative_vetoes": 3957
+      },
+      "launchRefusals": {
+        "resource_presence|question_suspended_no_reader": 1673067,
+        "temporary_use|no_pending_operation_needing_camp": 1387592,
+        "seasonal_persistence|question_suspended_no_reader": 578879,
+        "water_access|not_selected_or_imminent": 1574030,
+        "water_access|water_not_the_binding_blocker": 639,
+        "water_access|already_settled_directly": 358,
+        "temporary_use|already_settled_directly": 1102
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s2",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 229,
+      "peakPopulation": 244,
+      "meanSupport": 1.1568,
+      "receipts": 4413.71,
+      "births": 2146,
+      "deaths": 2063,
+      "residentialMoves": 0,
+      "uniqueTilesVisited": 1215,
+      "verificationParties": 158,
+      "verificationByQuestion": {
+        "temporary_use": 141,
+        "water_access": 17
+      },
+      "broadExplorationParties": 1095,
+      "reconnaissanceParties": 80,
+      "patchVerificationParties": 3007,
+      "gatheringParties": 856,
+      "totalParties": 5196,
+      "slotUtilisation": 0.024,
+      "campsAttempted": 3789,
+      "campsPreventedByEvidence": 213,
+      "launchDependencies": 2864,
+      "launchCases": {
+        "case_b_negative_vetoes": 2864
+      },
+      "launchRefusals": {
+        "resource_presence|question_suspended_no_reader": 1459311,
+        "temporary_use|no_pending_operation_needing_camp": 1286225,
+        "seasonal_persistence|question_suspended_no_reader": 555225,
+        "water_access|not_selected_or_imminent": 1313122,
+        "water_access|water_not_the_binding_blocker": 254,
+        "water_access|already_settled_directly": 1361
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s3",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 204,
+      "peakPopulation": 225,
+      "meanSupport": 1.1729,
+      "receipts": 4039.02,
+      "births": 1917,
+      "deaths": 1850,
+      "residentialMoves": 0,
+      "uniqueTilesVisited": 1214,
+      "verificationParties": 221,
+      "verificationByQuestion": {
+        "temporary_use": 198,
+        "water_access": 23
+      },
+      "broadExplorationParties": 1045,
+      "reconnaissanceParties": 25,
+      "patchVerificationParties": 3221,
+      "gatheringParties": 1081,
+      "totalParties": 5593,
+      "slotUtilisation": 0.0257,
+      "campsAttempted": 3675,
+      "campsPreventedByEvidence": 324,
+      "launchDependencies": 3367,
+      "launchCases": {
+        "case_b_negative_vetoes": 3367
+      },
+      "launchRefusals": {
+        "resource_presence|question_suspended_no_reader": 1621674,
+        "temporary_use|no_pending_operation_needing_camp": 1370331,
+        "seasonal_persistence|question_suspended_no_reader": 573622,
+        "water_access|not_selected_or_imminent": 1517617,
+        "water_access|water_not_the_binding_blocker": 1143,
+        "water_access|already_settled_directly": 2662,
+        "temporary_use|already_settled_directly": 347
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s4",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 278,
+      "peakPopulation": 279,
+      "meanSupport": 1.2003,
+      "receipts": 4329.57,
+      "births": 2015,
+      "deaths": 1883,
+      "residentialMoves": 0,
+      "uniqueTilesVisited": 1246,
+      "verificationParties": 256,
+      "verificationByQuestion": {
+        "temporary_use": 237,
+        "water_access": 19
+      },
+      "broadExplorationParties": 1073,
+      "reconnaissanceParties": 29,
+      "patchVerificationParties": 3357,
+      "gatheringParties": 969,
+      "totalParties": 5684,
+      "slotUtilisation": 0.0272,
+      "campsAttempted": 3713,
+      "campsPreventedByEvidence": 250,
+      "launchDependencies": 1424,
+      "launchCases": {
+        "case_b_negative_vetoes": 1424
+      },
+      "launchRefusals": {
+        "resource_presence|question_suspended_no_reader": 1390868,
+        "temporary_use|no_pending_operation_needing_camp": 1145677,
+        "seasonal_persistence|question_suspended_no_reader": 531617,
+        "water_access|not_selected_or_imminent": 1342308,
+        "water_access|water_not_the_binding_blocker": 601,
+        "water_access|already_settled_directly": 4685
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s5",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 257,
+      "peakPopulation": 262,
+      "meanSupport": 1.1446,
+      "receipts": 4475.57,
+      "births": 2209,
+      "deaths": 2098,
+      "residentialMoves": 0,
+      "uniqueTilesVisited": 1160,
+      "verificationParties": 153,
+      "verificationByQuestion": {
+        "temporary_use": 138,
+        "water_access": 15
+      },
+      "broadExplorationParties": 1105,
+      "reconnaissanceParties": 30,
+      "patchVerificationParties": 3182,
+      "gatheringParties": 914,
+      "totalParties": 5384,
+      "slotUtilisation": 0.0249,
+      "campsAttempted": 3436,
+      "campsPreventedByEvidence": 96,
+      "launchDependencies": 3069,
+      "launchCases": {
+        "case_b_negative_vetoes": 3069
+      },
+      "launchRefusals": {
+        "resource_presence|question_suspended_no_reader": 1460045,
+        "temporary_use|no_pending_operation_needing_camp": 1325255,
+        "seasonal_persistence|question_suspended_no_reader": 603945,
+        "water_access|not_selected_or_imminent": 1406477,
+        "water_access|water_not_the_binding_blocker": 1005,
+        "water_access|already_settled_directly": 150
+      }
+    },
+    {
+      "scenario": "map2",
+      "seed": "s1",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 235,
+      "peakPopulation": 238,
+      "meanSupport": 1.0151,
+      "receipts": 3956.46,
+      "births": 2039,
+      "deaths": 2006,
+      "residentialMoves": 0,
+      "uniqueTilesVisited": 1578,
+      "verificationParties": 209,
+      "verificationByQuestion": {
+        "temporary_use": 193,
+        "water_access": 16
+      },
+      "broadExplorationParties": 1220,
+      "reconnaissanceParties": 175,
+      "patchVerificationParties": 1460,
+      "gatheringParties": 487,
+      "totalParties": 3551,
+      "slotUtilisation": 0.0125,
+      "campsAttempted": 1956,
+      "campsPreventedByEvidence": 114,
+      "launchDependencies": 6111,
+      "launchCases": {
+        "case_b_negative_vetoes": 6111
+      },
+      "launchRefusals": {
+        "water_access|not_selected_or_imminent": 1772185,
+        "temporary_use|no_pending_operation_needing_camp": 2008630,
+        "seasonal_persistence|question_suspended_no_reader": 1058536,
+        "resource_presence|question_suspended_no_reader": 2135234,
+        "water_access|water_not_the_binding_blocker": 1931,
+        "water_access|already_settled_directly": 300,
+        "water_access|non_water_requirement_fails": 30,
+        "temporary_use|already_settled_directly": 1027
+      }
+    },
+    {
+      "scenario": "map2",
+      "seed": "s2",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 227,
+      "peakPopulation": 238,
+      "meanSupport": 0.9728,
+      "receipts": 3858.88,
+      "births": 2051,
+      "deaths": 2035,
+      "residentialMoves": 0,
+      "uniqueTilesVisited": 1530,
+      "verificationParties": 179,
+      "verificationByQuestion": {
+        "temporary_use": 166,
+        "water_access": 13
+      },
+      "broadExplorationParties": 1294,
+      "reconnaissanceParties": 10,
+      "patchVerificationParties": 2113,
+      "gatheringParties": 541,
+      "totalParties": 4137,
+      "slotUtilisation": 0.0156,
+      "campsAttempted": 2406,
+      "campsPreventedByEvidence": 321,
+      "launchDependencies": 3576,
+      "launchCases": {
+        "case_b_negative_vetoes": 3576
+      },
+      "launchRefusals": {
+        "water_access|not_selected_or_imminent": 1848992,
+        "temporary_use|no_pending_operation_needing_camp": 1971272,
+        "seasonal_persistence|question_suspended_no_reader": 822293,
+        "resource_presence|question_suspended_no_reader": 2219265,
+        "water_access|water_not_the_binding_blocker": 2865,
+        "water_access|non_water_requirement_fails": 227,
+        "water_access|already_settled_directly": 709,
+        "temporary_use|already_settled_directly": 7682
+      }
+    },
+    {
+      "scenario": "map2",
+      "seed": "s3",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 250,
+      "peakPopulation": 254,
+      "meanSupport": 0.998,
+      "receipts": 4166.54,
+      "births": 2144,
+      "deaths": 2105,
+      "residentialMoves": 0,
+      "uniqueTilesVisited": 1695,
+      "verificationParties": 218,
+      "verificationByQuestion": {
+        "temporary_use": 197,
+        "water_access": 21
+      },
+      "broadExplorationParties": 1341,
+      "reconnaissanceParties": 64,
+      "patchVerificationParties": 1634,
+      "gatheringParties": 535,
+      "totalParties": 3792,
+      "slotUtilisation": 0.0134,
+      "campsAttempted": 2000,
+      "campsPreventedByEvidence": 183,
+      "launchDependencies": 5462,
+      "launchCases": {
+        "case_b_negative_vetoes": 5462
+      },
+      "launchRefusals": {
+        "water_access|not_selected_or_imminent": 1811796,
+        "temporary_use|no_pending_operation_needing_camp": 2051023,
+        "seasonal_persistence|question_suspended_no_reader": 1041066,
+        "resource_presence|question_suspended_no_reader": 2271585,
+        "water_access|water_not_the_binding_blocker": 1523,
+        "temporary_use|already_settled_directly": 1251,
+        "water_access|already_settled_directly": 385
+      }
+    },
+    {
+      "scenario": "map2",
+      "seed": "s4",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 249,
+      "peakPopulation": 249,
+      "meanSupport": 1.0305,
+      "receipts": 4178.28,
+      "births": 2128,
+      "deaths": 2081,
+      "residentialMoves": 0,
+      "uniqueTilesVisited": 1511,
+      "verificationParties": 233,
+      "verificationByQuestion": {
+        "temporary_use": 213,
+        "water_access": 20
+      },
+      "broadExplorationParties": 1269,
+      "reconnaissanceParties": 62,
+      "patchVerificationParties": 2270,
+      "gatheringParties": 580,
+      "totalParties": 4414,
+      "slotUtilisation": 0.0155,
+      "campsAttempted": 2612,
+      "campsPreventedByEvidence": 66,
+      "launchDependencies": 8249,
+      "launchCases": {
+        "case_b_negative_vetoes": 8249
+      },
+      "launchRefusals": {
+        "water_access|not_selected_or_imminent": 1731665,
+        "temporary_use|no_pending_operation_needing_camp": 1961140,
+        "seasonal_persistence|question_suspended_no_reader": 856371,
+        "resource_presence|question_suspended_no_reader": 2177804,
+        "water_access|water_not_the_binding_blocker": 2240,
+        "water_access|already_settled_directly": 1208,
+        "water_access|non_water_requirement_fails": 15,
+        "temporary_use|already_settled_directly": 467
+      }
+    },
+    {
+      "scenario": "map2",
+      "seed": "s5",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 243,
+      "peakPopulation": 244,
+      "meanSupport": 0.9873,
+      "receipts": 3998.14,
+      "births": 2123,
+      "deaths": 2091,
+      "residentialMoves": 0,
+      "uniqueTilesVisited": 1454,
+      "verificationParties": 233,
+      "verificationByQuestion": {
+        "temporary_use": 215,
+        "water_access": 18
+      },
+      "broadExplorationParties": 1298,
+      "reconnaissanceParties": 45,
+      "patchVerificationParties": 1605,
+      "gatheringParties": 515,
+      "totalParties": 3696,
+      "slotUtilisation": 0.0131,
+      "campsAttempted": 2010,
+      "campsPreventedByEvidence": 166,
+      "launchDependencies": 3640,
+      "launchCases": {
+        "case_b_negative_vetoes": 3639,
+        "case_a_confirmation_unlocks": 1
+      },
+      "launchRefusals": {
+        "water_access|not_selected_or_imminent": 1744037,
+        "temporary_use|no_pending_operation_needing_camp": 2021339,
+        "seasonal_persistence|question_suspended_no_reader": 939635,
+        "resource_presence|question_suspended_no_reader": 2127613,
+        "water_access|water_not_the_binding_blocker": 2338,
+        "water_access|non_water_requirement_fails": 45,
+        "water_access|already_settled_directly": 1012
+      }
+    }
+  ]
+}

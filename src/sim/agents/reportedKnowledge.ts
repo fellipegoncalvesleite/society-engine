@@ -3,6 +3,10 @@ import type { Action, NormalizedIntensity, ResourceScoutKind } from "../rules/ty
 import type { ResourceClassId } from "./resourceClasses";
 import { getTile } from "../world/generate";
 import type { Tile, WorldState } from "../world/types";
+// CORRECTION-31 — the single lifecycle predicate, imported rather than reimplemented so a
+// band cannot broadcast an episode it has already stopped acting on. accessNorms does not
+// import this module, so this adds no cycle.
+import { isSocialEvidenceActive } from "./accessNorms";
 import type { TickContextCache } from "./contextCache";
 import type {
   Band,
@@ -645,7 +649,20 @@ function deriveInternalReports(
     );
   }
 
-  for (const event of (band.recentRangeFrictionEvents ?? []).slice(0, 3)) {
+  // CORRECTION-31 — two filters, both required for the lifecycle to actually release.
+  //
+  // (1) A REPORT-DERIVED friction record must not be republished. `rangeFriction.ts:250`
+  //     already blocks a band seeding friction from its OWN reports, but nothing stopped a
+  //     band retelling a neighbour's rumour as if it were its own sighting: friction → report
+  //     → neighbour's friction → neighbour's report → back again, a belief with no origin
+  //     that outlives every piece of evidence behind it. A band passes on what it saw.
+  //
+  // (2) A RELEASED episode is not news. Once an episode has aged past behavioural influence
+  //     it stops being broadcast, so a released belief cannot re-enter circulation and come
+  //     home as somebody else's fresh warning.
+  for (const event of (band.recentRangeFrictionEvents ?? [])
+    .filter((entry) => entry.linkedReportId === undefined && isSocialEvidenceActive(world, band, entry))
+    .slice(0, 3)) {
     const topic: ReportedKnowledgeTopic =
       event.interpretation === "crowded_water_place"
         ? "crowded_water_warning"

@@ -14,6 +14,8 @@ import {
   updateBandContextStates,
 } from "../agents/socialContext";
 import { updateBandViabilityStates } from "../agents/viability";
+import { resolveProvisionalLifecycles } from "../agents/provisionalLifecycleResolver";
+import { isProvisionalSuccessor } from "../agents/bandLifecycle";
 import type { BandId, DayNumber, DecisionId } from "../core/types";
 import { SEASON_LENGTH_DAYS } from "../core/types";
 import {
@@ -198,6 +200,21 @@ function runSeasonalCompatibilityTick(
       continue;
     }
 
+    // ROADMAP ITEM 4 — ORDINARY SEASONAL DELIBERATION IS AN ESTABLISHED-BAND BEHAVIOUR.
+    //
+    // A provisional successor is a group that has walked out of a camp and has not yet established
+    // one. It has no residence to deliberate about, and letting it take an ordinary decision is how
+    // the admission audit measured a newborn group MOVING TILES with no travel authority and
+    // choosing residential actions on its second day. Its movement belongs to the travel authority,
+    // which does not exist yet — so until it does, it takes no decision at all.
+    //
+    // Gated on `isProvisionalSuccessor`, which is true in EVERY live provisional phase — travelling,
+    // establishing, failed_early, returning and unresolved after failed return — not only in transit.
+    // INERT for every band that exists today: nothing creates a provisional successor in ordinary play.
+    if (isProvisionalSuccessor(currentBand)) {
+      continue;
+    }
+
     const currentWorld = {
       ...worldBeforeDecisionsWithAcuteRisk,
       bands: bandsById,
@@ -240,13 +257,22 @@ function runSeasonalCompatibilityTick(
     diagnostics,
   );
   const worldAfterViability = updateBandViabilityStates(worldAfterDemography);
+  // ROADMAP ITEM 4 — a provisional successor is excluded from established-band viability above, so
+  // the one thing that pass used to notice about it — reaching zero people — is resolved here
+  // instead, through the fission lifecycle rather than through ordinary extinction. INERT while no
+  // provisional successor exists, which is every ordinary world today: the departure seam that
+  // creates one has no callers.
+  const worldAfterProvisional = resolveProvisionalLifecycles(
+    worldAfterViability,
+    Number(worldAfterViability.time.day ?? 0),
+  ).world;
   // DEEP-TIME-HISTORY-TECH-1 — spring-gated yearly durable-history observation.
   // Placed AFTER demography+viability so this year's fissions and deaths are
   // visible, BEFORE ecology advances. Observe-only: reads each band's own
   // bounded state, writes only band.deepHistory; non-spring ticks return the
   // same world reference (byte-identical fast path). Runs in --fast mode too
   // (it sits before the final context pass that fast skips).
-  const worldAfterDeepHistory = applyBandDeepHistoryContext(worldAfterViability);
+  const worldAfterDeepHistory = applyBandDeepHistoryContext(worldAfterProvisional);
   // M0.14 — persistent depletion advances ONCE per season from this tick's
   // (memoized) shared-catchment extraction index. Placed before the final
   // context pass so both the full pipeline and the benchmark's fast mode

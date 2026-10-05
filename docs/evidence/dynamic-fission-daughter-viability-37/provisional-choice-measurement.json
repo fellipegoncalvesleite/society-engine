@@ -1,0 +1,556 @@
+{
+  "generatedAt": "2026-08-11T22:54:00.855Z",
+  "seed": "audit27:natural:s1",
+  "warmDays": 2100,
+  "parentBandId": "band:varied-river-mid",
+  "successorId": "band:cm:outbound",
+  "departureTile": "tile:110:57",
+  "targetTile": "tile:108:56",
+  "targetDistance": 3,
+  "summary": {
+    "total": 11,
+    "passed": 11,
+    "failed": 0,
+    "vacuous": 0
+  },
+  "dailyTrace": [
+    {
+      "day": 1,
+      "phase": "travelling",
+      "position": "tile:109:57",
+      "distanceToDeparture": 1,
+      "storedHomewardAvailable": true,
+      "storedHomewardDay": 2101,
+      "independentlyRecomputed": true,
+      "storedAction": "away_from_departure",
+      "storedActionDay": 2101,
+      "trailLength": 1,
+      "blockedStepDays": 0
+    },
+    {
+      "day": 2,
+      "phase": "travelling",
+      "position": "tile:109:57",
+      "distanceToDeparture": 1,
+      "storedHomewardAvailable": true,
+      "storedHomewardDay": 2102,
+      "independentlyRecomputed": true,
+      "storedAction": "stayed",
+      "storedActionDay": 2102,
+      "trailLength": 1,
+      "blockedStepDays": 0
+    },
+    {
+      "day": 3,
+      "phase": "travelling",
+      "position": "tile:109:57",
+      "distanceToDeparture": 1,
+      "storedHomewardAvailable": true,
+      "storedHomewardDay": 2103,
+      "independentlyRecomputed": true,
+      "storedAction": "stayed",
+      "storedActionDay": 2103,
+      "trailLength": 1,
+      "blockedStepDays": 0
+    },
+    {
+      "day": 4,
+      "phase": "travelling",
+      "position": "tile:109:56",
+      "distanceToDeparture": 2,
+      "storedHomewardAvailable": true,
+      "storedHomewardDay": 2104,
+      "independentlyRecomputed": true,
+      "storedAction": "away_from_departure",
+      "storedActionDay": 2104,
+      "trailLength": 2,
+      "blockedStepDays": 0
+    },
+    {
+      "day": 5,
+      "phase": "travelling",
+      "position": "tile:109:56",
+      "distanceToDeparture": 2,
+      "storedHomewardAvailable": true,
+      "storedHomewardDay": 2105,
+      "independentlyRecomputed": true,
+      "storedAction": "stayed",
+      "storedActionDay": 2105,
+      "trailLength": 2,
+      "blockedStepDays": 0
+    },
+    {
+      "day": 6,
+      "phase": "travelling",
+      "position": "tile:108:56",
+      "distanceToDeparture": 3,
+      "storedHomewardAvailable": true,
+      "storedHomewardDay": 2106,
+      "independentlyRecomputed": true,
+      "storedAction": "away_from_departure",
+      "storedActionDay": 2106,
+      "trailLength": 3,
+      "blockedStepDays": 0
+    },
+    {
+      "day": 7,
+      "phase": "establishing",
+      "position": "tile:108:56",
+      "distanceToDeparture": 3,
+      "storedHomewardAvailable": true,
+      "storedHomewardDay": 2107,
+      "independentlyRecomputed": true,
+      "storedAction": "stayed",
+      "storedActionDay": 2107,
+      "trailLength": 3,
+      "blockedStepDays": 0
+    },
+    {
+      "day": 8,
+      "phase": "establishing",
+      "position": "tile:108:56",
+      "distanceToDeparture": 3,
+      "storedHomewardAvailable": true,
+      "storedHomewardDay": 2108,
+      "independentlyRecomputed": true,
+      "storedAction": "stayed",
+      "storedActionDay": 2108,
+      "trailLength": 3,
+      "blockedStepDays": 0
+    },
+    {
+      "day": 9,
+      "phase": "establishing",
+      "position": "tile:108:56",
+      "distanceToDeparture": 3,
+      "storedHomewardAvailable": true,
+      "storedHomewardDay": 2109,
+      "independentlyRecomputed": true,
+      "storedAction": "stayed",
+      "storedActionDay": 2109,
+      "trailLength": 3,
+      "blockedStepDays": 0
+    },
+    {
+      "day": 10,
+      "phase": "establishing",
+      "position": "tile:108:56",
+      "distanceToDeparture": 3,
+      "storedHomewardAvailable": true,
+      "storedHomewardDay": 2110,
+      "independentlyRecomputed": true,
+      "storedAction": "stayed",
+      "storedActionDay": 2110,
+      "trailLength": 3,
+      "blockedStepDays": 0
+    },
+    {
+      "day": 11,
+      "phase": "establishing",
+      "position": "tile:108:56",
+      "distanceToDeparture": 3,
+      "storedHomewardAvailable": true,
+      "storedHomewardDay": 2111,
+      "independentlyRecomputed": true,
+      "storedAction": "stayed",
+      "storedActionDay": 2111,
+      "trailLength": 3,
+      "blockedStepDays": 0
+    },
+    {
+      "day": 12,
+      "phase": "establishing",
+      "position": "tile:108:56",
+      "distanceToDeparture": 3,
+      "storedHomewardAvailable": true,
+      "storedHomewardDay": 2112,
+      "independentlyRecomputed": true,
+      "storedAction": "stayed",
+      "storedActionDay": 2112,
+      "trailLength": 3,
+      "blockedStepDays": 0
+    },
+    {
+      "day": 13,
+      "phase": "establishing",
+      "position": "tile:108:56",
+      "distanceToDeparture": 3,
+      "storedHomewardAvailable": true,
+      "storedHomewardDay": 2113,
+      "independentlyRecomputed": true,
+      "storedAction": "stayed",
+      "storedActionDay": 2113,
+      "trailLength": 3,
+      "blockedStepDays": 0
+    },
+    {
+      "day": 14,
+      "phase": "establishing",
+      "position": "tile:108:56",
+      "distanceToDeparture": 3,
+      "storedHomewardAvailable": true,
+      "storedHomewardDay": 2114,
+      "independentlyRecomputed": true,
+      "storedAction": "stayed",
+      "storedActionDay": 2114,
+      "trailLength": 3,
+      "blockedStepDays": 0
+    },
+    {
+      "day": 15,
+      "phase": "establishing",
+      "position": "tile:108:56",
+      "distanceToDeparture": 3,
+      "storedHomewardAvailable": true,
+      "storedHomewardDay": 2115,
+      "independentlyRecomputed": true,
+      "storedAction": "stayed",
+      "storedActionDay": 2115,
+      "trailLength": 3,
+      "blockedStepDays": 0
+    },
+    {
+      "day": 16,
+      "phase": "establishing",
+      "position": "tile:108:56",
+      "distanceToDeparture": 3,
+      "storedHomewardAvailable": true,
+      "storedHomewardDay": 2116,
+      "independentlyRecomputed": true,
+      "storedAction": "stayed",
+      "storedActionDay": 2116,
+      "trailLength": 3,
+      "blockedStepDays": 0
+    },
+    {
+      "day": 17,
+      "phase": "establishing",
+      "position": "tile:108:56",
+      "distanceToDeparture": 3,
+      "storedHomewardAvailable": true,
+      "storedHomewardDay": 2117,
+      "independentlyRecomputed": true,
+      "storedAction": "stayed",
+      "storedActionDay": 2117,
+      "trailLength": 3,
+      "blockedStepDays": 0
+    },
+    {
+      "day": 18,
+      "phase": "establishing",
+      "position": "tile:108:56",
+      "distanceToDeparture": 3,
+      "storedHomewardAvailable": true,
+      "storedHomewardDay": 2118,
+      "independentlyRecomputed": true,
+      "storedAction": "stayed",
+      "storedActionDay": 2118,
+      "trailLength": 3,
+      "blockedStepDays": 0
+    },
+    {
+      "day": 19,
+      "phase": "establishing",
+      "position": "tile:108:56",
+      "distanceToDeparture": 3,
+      "storedHomewardAvailable": true,
+      "storedHomewardDay": 2119,
+      "independentlyRecomputed": true,
+      "storedAction": "stayed",
+      "storedActionDay": 2119,
+      "trailLength": 3,
+      "blockedStepDays": 0
+    },
+    {
+      "day": 20,
+      "phase": "establishing",
+      "position": "tile:108:56",
+      "distanceToDeparture": 3,
+      "storedHomewardAvailable": true,
+      "storedHomewardDay": 2120,
+      "independentlyRecomputed": true,
+      "storedAction": "stayed",
+      "storedActionDay": 2120,
+      "trailLength": 3,
+      "blockedStepDays": 0
+    },
+    {
+      "day": 21,
+      "phase": "returning",
+      "position": "tile:108:56",
+      "distanceToDeparture": 3,
+      "storedHomewardAvailable": true,
+      "storedHomewardDay": 2121,
+      "independentlyRecomputed": true,
+      "storedAction": "stayed",
+      "storedActionDay": 2121,
+      "trailLength": 3,
+      "blockedStepDays": 0
+    },
+    {
+      "day": 22,
+      "phase": "returning",
+      "position": "tile:108:56",
+      "distanceToDeparture": 3,
+      "storedHomewardAvailable": null,
+      "storedHomewardDay": null,
+      "independentlyRecomputed": true,
+      "storedAction": "stayed",
+      "storedActionDay": 2122,
+      "trailLength": 3,
+      "blockedStepDays": 0
+    },
+    {
+      "day": 23,
+      "phase": "returning",
+      "position": "tile:109:56",
+      "distanceToDeparture": 2,
+      "storedHomewardAvailable": null,
+      "storedHomewardDay": null,
+      "independentlyRecomputed": true,
+      "storedAction": "toward_departure",
+      "storedActionDay": 2123,
+      "trailLength": 4,
+      "blockedStepDays": 0
+    },
+    {
+      "day": 24,
+      "phase": "returning",
+      "position": "tile:109:57",
+      "distanceToDeparture": 1,
+      "storedHomewardAvailable": null,
+      "storedHomewardDay": null,
+      "independentlyRecomputed": true,
+      "storedAction": "toward_departure",
+      "storedActionDay": 2124,
+      "trailLength": 5,
+      "blockedStepDays": 0
+    }
+  ],
+  "fixtures": [
+    {
+      "id": "H1_a_clear_homeward_step_is_reported_available",
+      "claim": "on days where the grid independently shows a passable neighbour strictly closer to the departure tile, the stored observation is true",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "daysWithAClearHomewardStep": 20,
+        "disagreements": 0,
+        "sample": [
+          {
+            "day": 1,
+            "phase": "travelling",
+            "position": "tile:109:57",
+            "distanceToDeparture": 1,
+            "storedHomewardAvailable": true,
+            "storedHomewardDay": 2101,
+            "independentlyRecomputed": true,
+            "storedAction": "away_from_departure",
+            "storedActionDay": 2101,
+            "trailLength": 1,
+            "blockedStepDays": 0
+          },
+          {
+            "day": 2,
+            "phase": "travelling",
+            "position": "tile:109:57",
+            "distanceToDeparture": 1,
+            "storedHomewardAvailable": true,
+            "storedHomewardDay": 2102,
+            "independentlyRecomputed": true,
+            "storedAction": "stayed",
+            "storedActionDay": 2102,
+            "trailLength": 1,
+            "blockedStepDays": 0
+          },
+          {
+            "day": 3,
+            "phase": "travelling",
+            "position": "tile:109:57",
+            "distanceToDeparture": 1,
+            "storedHomewardAvailable": true,
+            "storedHomewardDay": 2103,
+            "independentlyRecomputed": true,
+            "storedAction": "stayed",
+            "storedActionDay": 2103,
+            "trailLength": 1,
+            "blockedStepDays": 0
+          }
+        ]
+      }
+    },
+    {
+      "id": "H2_no_closer_neighbour_is_reported_unavailable",
+      "claim": "where no passable neighbour is strictly closer to the departure tile the stored observation is false — constructed by parking a live provisional group ON its departure tile, because the natural run never reaches that geometry",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "constructed": {
+          "standingOn": "tile:110:57",
+          "departureTile": "tile:110:57",
+          "distance": 0,
+          "stored": false,
+          "observedOnDay": 2101,
+          "passableNeighbours": 3,
+          "nearestNeighbourDistance": 1,
+          "closerNeighboursOnTheGrid": 0
+        },
+        "naturalDaysWithNoCloserNeighbour": 0,
+        "priorStoredValueBeforeParking": true,
+        "note": "the group is parked with a stale `true` in the field, so a false here is a fresh measurement and not an absent one"
+      }
+    },
+    {
+      "id": "H2b_a_present_observation_was_taken_today",
+      "claim": "whenever the homeward field carries a value its day stamp is TODAY, and on every settled day the question is not asked the field is cleared rather than left holding an older answer",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "daysWithAStaleStamp": 0,
+        "settledOffAttemptDays": 3,
+        "settledOffAttemptDaysStillCarryingAValue": 0,
+        "phaseTransitionDays": [
+          7,
+          21
+        ],
+        "transitionDayRows": [
+          {
+            "day": 7,
+            "phaseAtSampleTime": "establishing",
+            "stored": true,
+            "stampIsToday": true
+          },
+          {
+            "day": 21,
+            "phaseAtSampleTime": "returning",
+            "stored": true,
+            "stampIsToday": true
+          }
+        ],
+        "actionStampsAlwaysToday": true
+      }
+    },
+    {
+      "id": "H3_outbound_blockage_does_not_suppress_a_homeward_step",
+      "claim": "days on which the outbound direction was refused still report homeward availability from the grid, because the two directions are different physical questions",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "blockedDays": 0,
+        "distinctBlockedValues": [
+          0
+        ],
+        "agreementOnEveryOutboundOrArrivalTrialDay": true,
+        "note": "blockedStepDays counts refusals toward the CURRENT PHASE's target; the homeward observation is computed against departureTileId only, so the two are structurally independent"
+      }
+    },
+    {
+      "id": "H4_the_observation_is_computed_against_the_departure_tile_alone",
+      "claim": "the stored value equals a fresh independent recomputation on EVERY outbound-or-arrival-trial day, so it cannot be tracking the outbound target",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "outboundOrArrivalTrialDays": 20,
+        "disagreements": 0
+      }
+    },
+    {
+      "id": "H5_moving_the_parent_changes_nothing",
+      "claim": "the observation is about the DEPARTURE TILE, never the parent's current position — it makes no claim that the parent is reachable or still there",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "parentMovedFrom": "tile:110:57",
+        "parentMovedTo": "tile:110:56",
+        "withParentInPlace": {
+          "homeward": null,
+          "action": "toward_departure"
+        },
+        "withParentMoved": {
+          "homeward": null,
+          "action": "toward_departure"
+        }
+      }
+    },
+    {
+      "id": "H6_the_trail_does_not_affect_the_measurement",
+      "claim": "emptying the retained trail leaves both observations identical — the trail is a breadcrumb record, never return-route authority",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "trailLengthBefore": 5,
+        "withTrail": {
+          "homeward": null,
+          "action": "toward_departure"
+        },
+        "withoutTrail": {
+          "homeward": null,
+          "action": "toward_departure"
+        }
+      }
+    },
+    {
+      "id": "A1_action_relative_to_departure_tracks_real_positions",
+      "claim": "every recorded action matches the measured distance change between the two positions the group actually occupied",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "observedActions": [
+          "away_from_departure",
+          "stayed",
+          "toward_departure"
+        ],
+        "movedDays": 4,
+        "stayedDays": 19,
+        "awayFromDepartureDays": 2,
+        "note": "an outbound group walking to its named target produces away_from_departure days by geometry alone; that is why this is an observation and not a decision label"
+      }
+    },
+    {
+      "id": "A2_the_representation_is_bounded_and_holds_no_counters",
+      "claim": "exactly four scalars are stored — two current-state values and two day stamps — so no `>= N` gate can be built from them without adding new state",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "storedShape": {
+          "homewardStepFromHereWasAvailable": null,
+          "homewardStepObservedOnDay": null,
+          "lastActionRelativeToDeparture": "toward_departure",
+          "lastActionRelativeToDepartureDay": 2125
+        },
+        "anyArrayOrCounterAdded": []
+      }
+    },
+    {
+      "id": "P1_after_a_failed_return_there_is_no_target_at_all",
+      "claim": "a failed return enters a named event-bounded living condition with no destination and no relocation writer; elapsed time creates neither another establishment attempt nor another movement choice",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "targetsByPhase": {
+          "travelling": "record.targetTileId — written ONCE by fissionDepartureSeam, never rewritten anywhere in src/",
+          "returning": "record.departureTileId — written ONCE by fissionDepartureSeam, deliberately frozen",
+          "establishing": "NONE — destinationFor() returns undefined and there is no local relocation writer",
+          "unresolved_after_failed_return": "NONE — the failed return ended without manufacturing a new target or choice"
+        },
+        "failedReturnPhase": "unresolved_after_failed_return",
+        "relocationRule": "RETIRED — truthful tested-place memory does not exist yet",
+        "consequence": "the living group stays physically where the bounded return action ended until a real event resolves it",
+        "classification": "no target and no local relocation authority"
+      }
+    },
+    {
+      "id": "P2_a_first_attempt_outward_step_executes_the_departure_target",
+      "claim": "an outbound group's away_from_departure days are produced by walking toward the target NAMED AT DEPARTURE; no production event selects the independent action against the homeward one",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "awayFromDepartureDays": 2,
+        "targetChosenBy": "fissionDepartureSeam, from the parent's attempt, at departure",
+        "targetRechosenDuringAttempt": false,
+        "anyProductionEventComparingHomewardWithOnward": false,
+        "conclusion": "a departure commitment and a later continuation decision are NOT the same event; production contains only the first"
+      }
+    }
+  ]
+}

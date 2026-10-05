@@ -281,6 +281,93 @@ export interface WorldAuditOptions {
   // conservative path. The bias only scores band-known underused-habitat opportunities
   // with route/ford/edge/side-country evidence. Never reads truth richness.
   readonly daughterColonizationFissionBiasEnabled?: boolean;
+  // CORRECTION-17 §17 — control-arm switches for the frontier-exploration matrix. BOTH
+  // are undefined in every normal world, and both are read at exactly one place each in
+  // `expedition.ts`, so with them undefined the production path is byte-identical to a
+  // build without them (the §22 "audit hooks inert when disabled" requirement).
+  //
+  // false => the band never raises an exploratory party. This is the control arm that
+  // isolates whether the enabled arm's advantage comes from RETURNED KNOWLEDGE: nothing
+  // else about the world, the yields, the demography or the fission thresholds differs.
+  readonly frontierExplorationEnabled?: boolean;
+  // true => every exploratory party is declared lost at the moment it would otherwise
+  // begin its return. It walked, it observed, and none of it ever reaches the band. This
+  // is the §11 control proving that a lost party transfers no knowledge.
+  readonly frontierExplorationAlwaysLost?: boolean;
+  // CORRECTION-18 §7 ARM A — run frontier exploration PHYSICALLY but suppress the
+  // residential knowledge hand-off at return. The party departs, commits its workers, eats
+  // its provisions and walks every step; only the transfer is withheld. This isolates the
+  // DIRECT EXPEDITION COST from everything the returned knowledge subsequently causes.
+  // Undefined in every normal world; read at exactly one seam in `expedition.ts`.
+  readonly frontierKnowledgeTransferDisabled?: boolean;
+  // CORRECTION-20 §6 — FRONTIER READER ISOLATION. Frontier-derived knowledge is written
+  // and retained normally (so residential movement, resource selection, camps and seasonal
+  // rounds all still read it), but tiles whose `acquisition` is
+  // `returned_frontier_exploration` are withheld from the OPPORTUNITY and FISSION path
+  // only. Combined with `frontierKnowledgeTransferDisabled` (which withholds it from
+  // everything) this decomposes the knowledge effect:
+  //
+  //   production - hiddenFromFission = the fission-only contribution
+  //   production - transferDisabled  = the total knowledge contribution
+  //   hiddenFromFission - transferDisabled = the non-fission contribution
+  //
+  // §6 requires this because map 2 loses population while its final band count is
+  // unchanged, which a fission-only story cannot explain on its own.
+  // Undefined in every normal world; read at exactly two seams.
+  readonly frontierKnowledgeHiddenFromFission?: boolean;
+  // CORRECTION-22 §6 — audit-only. Switches ONE component of the CORRECTION-21
+  // shallow-traversal repair back off so a habitat-tier loss can be attributed to a
+  // specific field. Undefined in every normal world.
+  readonly shallowObservationRestore?:
+    | "richness"
+    | "water"
+    | "seasonal"
+    | "storage"
+    | "confidence"
+    | "all";
+  // CORRECTION-23 CONTINUATION §9/§12 — control-arm switches for the E0-E5 marginal matrix
+  // and the M0-M5 default-map matrix. All undefined in every normal world, each read at
+  // exactly one seam, so with them undefined the production path is byte-identical.
+  //
+  // E3 / M5 — the band never raises a frontier-verification party. Isolates whether the
+  // effect comes from LAUNCHING THE PHYSICAL PARTIES at all.
+  readonly frontierVerificationDisabled?: boolean;
+  // E4 — parties are raised, walk, work and come home; only the returned domain evidence
+  // is withheld at the hand-off seam. Isolates the value of the EVIDENCE from the cost and
+  // displacement of the journey.
+  readonly frontierVerificationKnowledgeDisabled?: boolean;
+  // E5 — parties run and return normally, but an affirmative on-site result is downgraded
+  // to `inconclusive`. Isolates the value of AFFIRMATIVE ANSWERS from the value of having
+  // asked at all.
+  readonly frontierVerificationConfirmationDisabled?: boolean;
+  // §8 — launch-policy decomposition. The production gate is
+  // `noUsefulRetrieval || need >= 0.45`; these arms run exactly one disjunct so the two
+  // launch causes can be counted separately instead of inferred.
+  readonly frontierVerificationLaunchArm?: "no_useful_retrieval_only" | "need_only";
+  // CORRECTION-23C §11 — arm C2. Water-access evidence is written and displayed normally but
+  // withheld from the feasibility reader, so the access effect can be isolated from the cost
+  // and displacement of the journey. Undefined in every normal world; read at one seam.
+  readonly waterAccessEvidenceHiddenFromDestination?: boolean;
+  // §12 K1-K5 — place-retention counterfactuals, read only by `memoryCompression`. They
+  // distinguish bad PRIORITISATION from raw CAPACITY pressure. §16 forbids selecting any of
+  // them as production in this pass.
+  //
+  //   protect_settled_verification  K1 — any record carrying a settled disposition is kept.
+  //   protect_actionable_verified   K2 — only currently promising/candidate verified places.
+  //   protect_active_route_verified K3 — only verified places on an active route or used
+  //                                      recently.
+  //   capacity_only                 K4 — priorities untouched; capacity raised.
+  //   no_inherited_mandatory        K5 — the inherited mandatory-retention set (local ring,
+  //                                      crossings, important water) stops consuming
+  //                                      capacity, so scored records compete for all of it.
+  readonly placeRetentionArm?:
+    | "protect_settled_verification"
+    | "protect_actionable_verified"
+    | "protect_active_route_verified"
+    | "capacity_only"
+    | "no_inherited_mandatory";
+  // K4 — exact known-tile capacity for the capacity arm. Undefined ⇒ the production 72.
+  readonly placeRetentionCapacity?: number;
 }
 
 export interface WorldState {

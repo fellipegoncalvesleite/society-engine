@@ -1,0 +1,350 @@
+{
+  "audit": "crowdingAttributionInstrumentAudit (manifest)",
+  "checkpoint": "CORRECTION-32A",
+  "purpose": "The explicit, version-specific partition of `ScoreBreakdown` into crowding-authorized and non-crowding fields, for BOTH arms. Traced in source, then VERIFIED by measurement: the instrument fails loudly (SC5) if any field moves between the full and zero-crowding candidate without being declared here.",
+  "breakdownFieldCount": 66,
+  "declaredCrowdingFields": 22,
+  "verifiedBy": "SC5_no_undeclared_crowding_field, in candidate-pairing-integrity{,-before}.json",
+  "fields": [
+    {
+      "field": "nearbyBandPressure",
+      "arms": [
+        "before",
+        "after"
+      ],
+      "containsCrowding": true,
+      "kind": "direct",
+      "sourcePath": "NearbyBandPressure.weightedCrowding (crowding.ts:getNearbyBandPressure)",
+      "scoredBefore": "scoreDecision -0.24",
+      "scoredAfter": "not scored — evidence only",
+      "replacementMethod": "9.1 substitute 0 in the candidate's own breakdown; 9.2 substitute production's zero-crowding value",
+      "measurableExactly": true,
+      "measurableExactlyNote": "exact as an isolated named path and as part of the partition"
+    },
+    {
+      "field": "crowdingPenalty",
+      "arms": [
+        "before",
+        "after"
+      ],
+      "containsCrowding": true,
+      "kind": "direct",
+      "sourcePath": "getCrowdingPenalty(tile, nearby) = weightedCrowding x dryAmplifier x (1 - buffer*0.48)",
+      "scoredBefore": "scoreDecision -0.72",
+      "scoredAfter": "scoreDecision -CROWDING_DECISION_COST_WEIGHT (0.96)",
+      "replacementMethod": "9.1 substitute 0 in the candidate's own breakdown; 9.2 substitute production's zero-crowding value",
+      "measurableExactly": true,
+      "measurableExactlyNote": "exact as an isolated named path and as part of the partition"
+    },
+    {
+      "field": "crowdingExploreBoost",
+      "arms": [
+        "before",
+        "after"
+      ],
+      "containsCrowding": true,
+      "kind": "direct",
+      "sourcePath": "before: clamp01(weightedCrowding*0.18); after: clamp01(residenceCrowdingPenalty*0.18)",
+      "scoredBefore": "scoreDecision +0.48, and nested inside explorationValue",
+      "scoredAfter": "scoreDecision +0.48, and nested inside explorationValue",
+      "replacementMethod": "9.1 substitute 0 in the candidate's own breakdown; 9.2 substitute production's zero-crowding value",
+      "measurableExactly": true,
+      "measurableExactlyNote": "exact as an isolated named path and as part of the partition"
+    },
+    {
+      "field": "mobilityPressure",
+      "arms": [
+        "before",
+        "after"
+      ],
+      "containsCrowding": true,
+      "kind": "composite",
+      "sourcePath": "pressure.ts deriveBandPressureState — contains crowdingPenalty*0.2",
+      "scoredBefore": "scoreDecision -0.05, and via netMovePressure",
+      "scoredAfter": "scoreDecision -0.05, and via netMovePressure",
+      "replacementMethod": "9.2 substitute production's zero-crowding value for the whole composite (its crowding term is not separable without a rebuild)",
+      "measurableExactly": true,
+      "measurableExactlyNote": "exact only as part of the partition; its crowding SHARE within the composite is not isolable at the scorer"
+    },
+    {
+      "field": "netMovePressure",
+      "arms": [
+        "before",
+        "after"
+      ],
+      "containsCrowding": true,
+      "kind": "composite",
+      "sourcePath": "pressure.ts — derived from mobilityPressure and placeAttachmentPull",
+      "scoredBefore": "scoreDecision +0.72",
+      "scoredAfter": "scoreDecision +0.72",
+      "replacementMethod": "9.2 substitute production's zero-crowding value for the whole composite (its crowding term is not separable without a rebuild)",
+      "measurableExactly": true,
+      "measurableExactlyNote": "exact only as part of the partition; its crowding SHARE within the composite is not isolable at the scorer"
+    },
+    {
+      "field": "rangeSaturation",
+      "arms": [
+        "before",
+        "after"
+      ],
+      "containsCrowding": true,
+      "kind": "composite",
+      "sourcePath": "before: RangeSaturationState.saturationPressure (contains nearbyCrowding*0.34 and a localPopulationEstimate over every band in radius); after: saturationPressureExcludingCrowding",
+      "scoredBefore": "scoreDecision -0.34, and inside getBadSiteStuckResidencePenalty",
+      "scoredAfter": "scoreDecision -0.34, and inside getBadSiteStuckResidencePenalty",
+      "replacementMethod": "9.2 substitute production's zero-crowding value for the whole composite (its crowding term is not separable without a rebuild)",
+      "measurableExactly": true,
+      "measurableExactlyNote": "exact only as part of the partition; its crowding SHARE within the composite is not isolable at the scorer"
+    },
+    {
+      "field": "saturationExploreBoost",
+      "arms": [
+        "before",
+        "after"
+      ],
+      "containsCrowding": true,
+      "kind": "composite",
+      "sourcePath": "built from range saturation and sustainedOverCapacity, both crowding-fed",
+      "scoredBefore": "scoreDecision +0.58, and nested inside explorationValue",
+      "scoredAfter": "scoreDecision +0.58, and nested inside explorationValue",
+      "replacementMethod": "9.2 substitute production's zero-crowding value for the whole composite (its crowding term is not separable without a rebuild)",
+      "measurableExactly": true,
+      "measurableExactlyNote": "exact only as part of the partition; its crowding SHARE within the composite is not isolable at the scorer"
+    },
+    {
+      "field": "perCapitaReturn",
+      "arms": [
+        "before",
+        "after"
+      ],
+      "containsCrowding": true,
+      "kind": "composite",
+      "sourcePath": "stay: RangeSaturationState.perCapitaReturnEstimate (ecology authority, still crowding-fed in BOTH arms — a stated CORRECTION-32 limit); move: before subtracted crowdingPenalty*0.24, after does not",
+      "scoredBefore": "scoreDecision +0.24",
+      "scoredAfter": "scoreDecision +0.24",
+      "replacementMethod": "9.2 substitute production's zero-crowding value for the whole composite (its crowding term is not separable without a rebuild)",
+      "measurableExactly": true,
+      "measurableExactlyNote": "exact only as part of the partition; its crowding SHARE within the composite is not isolable at the scorer"
+    },
+    {
+      "field": "populationPressure",
+      "arms": [
+        "before",
+        "after"
+      ],
+      "containsCrowding": true,
+      "kind": "composite",
+      "sourcePath": "carrying/range context — reads local population density including other bands",
+      "scoredBefore": "scoreDecision +0.22",
+      "scoredAfter": "scoreDecision +0.22",
+      "replacementMethod": "9.2 substitute production's zero-crowding value for the whole composite (its crowding term is not separable without a rebuild)",
+      "measurableExactly": true,
+      "measurableExactlyNote": "exact only as part of the partition; its crowding SHARE within the composite is not isolable at the scorer"
+    },
+    {
+      "field": "expectedFutureValue",
+      "arms": [
+        "before",
+        "after"
+      ],
+      "containsCrowding": true,
+      "kind": "composite",
+      "sourcePath": "buildKnownTileScoreBreakdown — before: crowdingPenalty*0.14 + weightedCrowding*0.08; after: crowdingPenalty*0.22",
+      "scoredBefore": "scoreDecision +1.1",
+      "scoredAfter": "scoreDecision +1.1",
+      "replacementMethod": "9.2 substitute production's zero-crowding value for the whole composite (its crowding term is not separable without a rebuild)",
+      "measurableExactly": true,
+      "measurableExactlyNote": "exact only as part of the partition; its crowding SHARE within the composite is not isolable at the scorer"
+    },
+    {
+      "field": "explorationValue",
+      "arms": [
+        "before",
+        "after"
+      ],
+      "containsCrowding": true,
+      "kind": "composite",
+      "sourcePath": "buildExploreCandidate — contains crowdingExploreBoost + saturationExploreBoost + safeFrontierPull*0.28 (+ before only: -crowdingPenalty*0.04), then clamp01",
+      "scoredBefore": "scoreDecision +1.25 and a candidate-local +0.8",
+      "scoredAfter": "scoreDecision +1.25 and a candidate-local +0.8",
+      "replacementMethod": "9.2 substitute production's zero-crowding value for the whole composite (its crowding term is not separable without a rebuild)",
+      "measurableExactly": true,
+      "measurableExactlyNote": "exact only as part of the partition; its crowding SHARE within the composite is not isolable at the scorer"
+    },
+    {
+      "field": "parentCoreOverlap",
+      "arms": [
+        "before",
+        "after"
+      ],
+      "containsCrowding": true,
+      "kind": "composite",
+      "sourcePath": "getDaughterDispersalPressure — kin proximity/memory overlap, moves with the crowding field",
+      "scoredBefore": "scoreDecision -0.16",
+      "scoredAfter": "scoreDecision -0.16",
+      "replacementMethod": "9.2 substitute production's zero-crowding value for the whole composite (its crowding term is not separable without a rebuild)",
+      "measurableExactly": true,
+      "measurableExactlyNote": "exact only as part of the partition; its crowding SHARE within the composite is not isolable at the scorer"
+    },
+    {
+      "field": "daughterDispersalPressure",
+      "arms": [
+        "before",
+        "after"
+      ],
+      "containsCrowding": true,
+      "kind": "composite",
+      "sourcePath": "getDaughterDispersalPressure — kinCoreCrowding + safeFrontierPull + localUsePressure",
+      "scoredBefore": "not scored directly; feeds daughterDispersalExploreBoost and the move/stay asymmetry",
+      "scoredAfter": "same",
+      "replacementMethod": "9.2 substitute production's zero-crowding value for the whole composite (its crowding term is not separable without a rebuild)",
+      "measurableExactly": true,
+      "measurableExactlyNote": "exact only as part of the partition; its crowding SHARE within the composite is not isolable at the scorer"
+    },
+    {
+      "field": "daughterDispersalExploreBoost",
+      "arms": [
+        "before",
+        "after"
+      ],
+      "containsCrowding": true,
+      "kind": "composite",
+      "sourcePath": "daughterDispersalPressure*0.28 (retained crowding path, §12.13)",
+      "scoredBefore": "scoreDecision +0.7",
+      "scoredAfter": "scoreDecision +0.7",
+      "replacementMethod": "9.2 substitute production's zero-crowding value for the whole composite (its crowding term is not separable without a rebuild)",
+      "measurableExactly": true,
+      "measurableExactlyNote": "exact only as part of the partition; its crowding SHARE within the composite is not isolable at the scorer"
+    },
+    {
+      "field": "inheritedFamiliarityPull",
+      "arms": [
+        "before",
+        "after"
+      ],
+      "containsCrowding": true,
+      "kind": "composite",
+      "sourcePath": "getDaughterDispersalPressure output",
+      "scoredBefore": "scoreDecision +0.18",
+      "scoredAfter": "scoreDecision +0.18",
+      "replacementMethod": "9.2 substitute production's zero-crowding value for the whole composite (its crowding term is not separable without a rebuild)",
+      "measurableExactly": true,
+      "measurableExactlyNote": "exact only as part of the partition; its crowding SHARE within the composite is not isolable at the scorer"
+    },
+    {
+      "field": "recoveryBenefit",
+      "arms": [
+        "before",
+        "after"
+      ],
+      "containsCrowding": true,
+      "kind": "composite",
+      "sourcePath": "bandDecision.ts:3950 (move side) = clamp01(currentUsePressure*0.46 + pressureState.netMovePressure*0.32 + targetRecovery*0.1 + ecologicalMovePressure*0.16). `netMovePressure` is itself a declared crowding composite (mobilityPressure <- crowdingPenalty*0.2), so crowding reaches the score a further step down through recoveryBenefit*0.52. Stay side is 0.",
+      "scoredBefore": "scoreDecision +0.52, and nested inside expectedFutureValue (recoveryBenefit*0.34)",
+      "scoredAfter": "same",
+      "replacementMethod": "9.2 substitute production's zero-crowding value for the whole composite (its crowding term is not separable without a rebuild)",
+      "measurableExactly": true,
+      "measurableExactlyNote": "exact only as part of the partition; its crowding SHARE within the composite is not isolable at the scorer"
+    },
+    {
+      "field": "knownOpportunityPull",
+      "arms": [
+        "before",
+        "after"
+      ],
+      "containsCrowding": true,
+      "kind": "composite",
+      "sourcePath": "bandDecision.ts:3874 = max(nearbyOpportunity.opportunityStrength, carryingOpportunityPull), where carryingOpportunityPull reads `band.carryingCapacity.knownUnusedHabitat` — which `applyRangeSaturationContext` recomputes from the same nearby-band pressure this instrument zeroes. Crowding therefore reaches it through the CARRYING-CAPACITY authority, not the scorer.",
+      "scoredBefore": "scoreDecision +1.04, and nested inside expectedFutureValue (knownOpportunityPull*0.3)",
+      "scoredAfter": "same",
+      "replacementMethod": "9.2 substitute production's zero-crowding value for the whole composite (its crowding term is not separable without a rebuild)",
+      "measurableExactly": true,
+      "measurableExactlyNote": "exact only as part of the partition; its crowding SHARE within the composite is not isolable at the scorer"
+    },
+    {
+      "field": "depletionPenalty",
+      "arms": [
+        "before",
+        "after"
+      ],
+      "containsCrowding": true,
+      "kind": "composite",
+      "sourcePath": "bandDecision.ts:3958. Stay side reads `ecologicalMovePressure`, which reads `band.ecologicalStressCauses.sharedCatchmentCrowding` — the SHARED-CATCHMENT ecology authority, a legitimate and deliberately SEPARATE consequence of neighbours that CORRECTION-32 never intended to remove. It moves here because the zero-crowding arm also re-derives carrying capacity. Declared so the guard is honest, NOT because it is duplication.",
+      "scoredBefore": "scoreDecision -0.88, and inside getBadSiteStuckResidencePenalty (*0.18)",
+      "scoredAfter": "same",
+      "replacementMethod": "9.2 substitute production's zero-crowding value for the whole composite (its crowding term is not separable without a rebuild)",
+      "measurableExactly": true,
+      "measurableExactlyNote": "exact only as part of the partition; its crowding SHARE within the composite is not isolable at the scorer"
+    },
+    {
+      "field": "placeAttachmentPull",
+      "arms": [
+        "before",
+        "after"
+      ],
+      "containsCrowding": true,
+      "kind": "composite",
+      "sourcePath": "pressure.ts — BEFORE subtracted crowdingPenalty*0.22 and riskPressure (crowding-fed). AFTER: no crowding term",
+      "scoredBefore": "scoreDecision +0.4, and via netMovePressure",
+      "scoredAfter": "declared for the guard; expected to be crowding-INVARIANT",
+      "replacementMethod": "9.2 substitute production's zero-crowding value for the whole composite (its crowding term is not separable without a rebuild)",
+      "measurableExactly": true,
+      "measurableExactlyNote": "exact only as part of the partition; its crowding SHARE within the composite is not isolable at the scorer"
+    },
+    {
+      "field": "riskCost",
+      "arms": [
+        "before",
+        "after"
+      ],
+      "containsCrowding": true,
+      "kind": "composite",
+      "sourcePath": "reads riskPressure, which BEFORE contained crowdingPenalty*0.08",
+      "scoredBefore": "scoreDecision -1.0",
+      "scoredAfter": "declared for the guard; expected to be crowding-INVARIANT",
+      "replacementMethod": "9.2 substitute production's zero-crowding value for the whole composite (its crowding term is not separable without a rebuild)",
+      "measurableExactly": true,
+      "measurableExactlyNote": "exact only as part of the partition; its crowding SHARE within the composite is not isolable at the scorer"
+    },
+    {
+      "field": "safeFrontierPull",
+      "arms": [
+        "before",
+        "after"
+      ],
+      "containsCrowding": true,
+      "kind": "composite",
+      "sourcePath": "getSafeFrontierPull — BEFORE subtracted nearby.weightedCrowding*0.22. AFTER: no crowding term",
+      "scoredBefore": "scoreDecision +0.62, and nested inside explorationValue and daughterDispersalPressure",
+      "scoredAfter": "declared for the guard; expected to be crowding-INVARIANT",
+      "replacementMethod": "9.2 substitute production's zero-crowding value for the whole composite (its crowding term is not separable without a rebuild)",
+      "measurableExactly": true,
+      "measurableExactlyNote": "exact only as part of the partition; its crowding SHARE within the composite is not isolable at the scorer"
+    },
+    {
+      "field": "socialAccessRisk",
+      "arms": [
+        "before",
+        "after"
+      ],
+      "containsCrowding": true,
+      "kind": "composite",
+      "sourcePath": "dryMargin.getSocialAccessRisk — BEFORE: clamp01(nearbyBandCount/5 + salientUsers/4)*0.26, i.e. physical bodies AND other bands' remembered places. AFTER: the band's own protoAccessMemory strangerCaution/rememberedRefusalAvoidance, which is NOT physical crowding",
+      "scoredBefore": "scoreDecision -0.36, x1.8 in getFallbackRank, and inside getBadSiteStuckResidencePenalty",
+      "scoredAfter": "declared for the guard; expected to be PHYSICAL-crowding-INVARIANT",
+      "replacementMethod": "9.2 substitute production's zero-crowding value for the whole composite (its crowding term is not separable without a rebuild)",
+      "measurableExactly": true,
+      "measurableExactlyNote": "exact only as part of the partition; its crowding SHARE within the composite is not isolable at the scorer"
+    }
+  ],
+  "intentionallyRetainedCrowdingPaths": [
+    {
+      "path": "daughterDispersalPressure -> daughterDispersalExploreBoost (+0.70)",
+      "why": "kin dispersal is permitted a crowding response by CLAUDE.md §12.13; documented, not removed"
+    },
+    {
+      "path": "rangeSaturation.perCapitaReturnEstimate -> perCapitaReturn on the STAY candidate",
+      "why": "ecology authority, explicitly out of CORRECTION-32's scope in both arms"
+    }
+  ]
+}

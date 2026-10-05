@@ -255,10 +255,88 @@ export function deriveMobilityRolePools(band: Band): MobilityRolePools {
   return { limited, typical, high };
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// CORRECTION-34D — THE TWO PARTY QUANTITIES, DERIVED IN EXACTLY ONE PLACE.
+//
+// A party has a physical headcount and a productive labour capacity, and they are
+// not the same number. Both are derived here, in the leaf module that already owns
+// "who is committed away", so no reader can compute its own version and drift — the
+// split-authority failure CORRECTION-34B had to repair once already.
+//
+//   physical headcount   = partyWorkers + nonWorkingPartyPeople   (bodies; who consumes,
+//                          who occupies space, who returns, who cannot found a daughter)
+//   productive labour    = partyWorkers                            (work, mobility roles,
+//                          travel pace, carrying capacity)
+//
+// The ordering `0 <= productive <= physical` is STRUCTURAL, not asserted: physical is the
+// sum of two non-negative counts one of which IS productive. No clamp maintains it, so no
+// clamp can hide it being broken.
+// ─────────────────────────────────────────────────────────────────────────────
+
+/** Productive labour this party can currently perform. */
+export function getExpeditionProductiveWorkers(
+  expedition: Pick<ExpeditionRecord, "partyWorkers">,
+): number {
+  return Math.max(0, expedition.partyWorkers ?? 0);
+}
+
 /**
- * Adults per pool currently committed to away parties. Legacy parties that recorded
- * only a worker count are treated as typical walkers — a conservative, deterministic
- * fallback that can never free more high-pool adults than were really taken.
+ * Bodies physically in this party. A legacy record with no `nonWorkingPartyPeople` reads as
+ * headcount === labour, which is what it always meant.
+ */
+export function getExpeditionPhysicalPeople(
+  expedition: Pick<ExpeditionRecord, "partyWorkers" | "nonWorkingPartyPeople">,
+): number {
+  return getExpeditionProductiveWorkers(expedition) + Math.max(0, expedition.nonWorkingPartyPeople ?? 0);
+}
+
+/**
+ * CORRECTION-34D §8 — PHYSICALLY AWAY IS NOT THE SAME AS COMMITTED.
+ *
+ * `prepared` means labour committed AT CAMP and not yet departed (types.ts). Those people are
+ * standing in the residence: they are inside the residential physical headcount, they are visible
+ * to anyone who walks past, and calling them distant is simply false. `isAwayPhase` below answers
+ * the LABOUR question (are these people spoken for?) and includes them; this answers the PHYSICAL
+ * question (are these people elsewhere?) and does not.
+ */
+export function isPhysicallyAwayPhase(phase: ExpeditionRecord["phase"]): boolean {
+  return phase === "outbound" || phase === "operating" || phase === "returning";
+}
+
+/** Bodies standing somewhere other than the residence. Prepared parties are excluded. */
+export function derivePhysicallyAwayPartyPeople(band: Band): number {
+  let people = 0;
+
+  for (const expedition of band.expeditions ?? []) {
+    if (isPhysicallyAwayPhase(expedition.phase)) {
+      people += getExpeditionPhysicalPeople(expedition);
+    }
+  }
+
+  return people;
+}
+
+/**
+ * People physically at the residence who hold a prior labour commitment to a party that has not
+ * departed. They are NOT absent — they are here, and unavailable for something else.
+ */
+export function derivePreparedCommitmentPartyPeople(band: Band): number {
+  let people = 0;
+
+  for (const expedition of band.expeditions ?? []) {
+    if (expedition.phase === "prepared") {
+      people += getExpeditionPhysicalPeople(expedition);
+    }
+  }
+
+  return people;
+}
+
+/**
+ * Adults per pool currently committed to away parties — PRODUCTIVE LABOUR, so a non-working party
+ * member draws from no pool. Legacy parties that recorded only a worker count are treated as
+ * typical walkers — a conservative, deterministic fallback that can never free more high-pool
+ * adults than were really taken.
  */
 export function deriveCommittedMobilityPools(band: Band): PartyComposition {
   let limited = 0;
@@ -341,13 +419,35 @@ export function selectPartyComposition(
   return remaining > 0 ? undefined : { limited: draw.limited, typical: draw.typical, high: draw.high };
 }
 
-/** Bounded pace factor of a mixed party: who walks shapes how far the party goes. */
-export function derivePartyPaceFactor(composition: PartyComposition | undefined): number {
+/**
+ * Bounded pace factor of a mixed party: who walks shapes how far the party goes.
+ *
+ * CORRECTION-34D — a non-working party member cannot be invisible here. They are walking with the
+ * party, and a party does not travel faster because one of its people stopped being able to work.
+ * They are counted with the EXISTING limited-walker penalty and the existing denominator — no new
+ * constant, and deliberately no elder/child physiology model, which this architecture has no state
+ * to support. The three alternatives §6 asks to be compared are recorded in the checkpoint
+ * evidence; this is the smallest bounded one that cannot grant a capability through a loss.
+ *
+ * Monotonicity, which is the property that matters: because reduction runs high -> typical ->
+ * limited, converting a worker to non-working moves them from a zero-or-bonus term into the
+ * penalty term over an unchanged denominator, so the factor can only fall or stay level. A party
+ * can never be sped up by losing labour.
+ */
+export function derivePartyPaceFactor(
+  composition: PartyComposition | undefined,
+  nonWorkingPartyPeople?: number,
+): number {
+  const nonWorking = Math.max(0, nonWorkingPartyPeople ?? 0);
+
   if (composition === undefined) {
-    return 1;
+    // No composition recorded. With nobody non-working this is the legacy neutral factor; with
+    // non-working members present they still cannot be free, so they walk as limited walkers
+    // against themselves.
+    return nonWorking > 0 ? 1 - LIMITED_POOL_PACE_PENALTY : 1;
   }
 
-  const total = partyCompositionTotal(composition);
+  const total = partyCompositionTotal(composition) + nonWorking;
 
   if (total <= 0) {
     return 1;
@@ -355,7 +455,9 @@ export function derivePartyPaceFactor(composition: PartyComposition | undefined)
 
   return (
     1 +
-    (composition.high * HIGH_POOL_PACE_BONUS - composition.limited * LIMITED_POOL_PACE_PENALTY) / total
+    (composition.high * HIGH_POOL_PACE_BONUS -
+      (composition.limited + nonWorking) * LIMITED_POOL_PACE_PENALTY) /
+      total
   );
 }
 
@@ -416,13 +518,15 @@ export function deriveTravelPace(
     readonly urgency?: number;
     readonly injuryLoad?: number;
     readonly partyComposition?: PartyComposition;
+    /** CORRECTION-34D — bodies walking with the party that supply no productive labour. */
+    readonly nonWorkingPartyPeople?: number;
   },
 ): TravelPace {
   const capacity = deriveMobilityCapacity(band, {
     loadRatio: options?.loadRatio,
     urgency: options?.urgency,
   });
-  const partyFactor = derivePartyPaceFactor(options?.partyComposition);
+  const partyFactor = derivePartyPaceFactor(options?.partyComposition, options?.nonWorkingPartyPeople);
   const injuryFactor = Math.max(0.4, 1 - clamp01(options?.injuryLoad ?? 0));
   const urgency = clamp01(options?.urgency ?? 0);
 

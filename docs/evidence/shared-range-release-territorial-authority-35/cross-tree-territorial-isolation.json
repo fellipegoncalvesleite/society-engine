@@ -1,0 +1,171 @@
+{
+  "audit": "CORRECTION-35-CROSS-TREE-TERRITORIAL-ISOLATION",
+  "gate": "T3",
+  "question": "does Band.territorialPressure still move current behaviour?",
+  "trees": {
+    "parent": "742b567",
+    "lifecycleOnly": "e5e3143",
+    "tip": "427d953"
+  },
+  "seed": "audit27:natural:s1",
+  "valuesCompared": [
+    0,
+    0.12,
+    0.8
+  ],
+  "verdict": "PARENT_CAUSAL_EFFECT_REPRODUCED_AND_REMOVED",
+  "parentCausalEffect": {
+    "bandsMeasured": 18,
+    "bandsInert": 0,
+    "bandsMoved": 18,
+    "movedKeyCounts": {
+      "mobilityPressure": 18,
+      "candidates": 18,
+      "reasonPressures": 15,
+      "netMovePressure": 15,
+      "score": 12
+    },
+    "attributionObservedBands": 3,
+    "attributionMovedBands": 3,
+    "note": "on the parent every measured band moves when the field alone is varied. The field is written once at spawn and once at daughter creation, so this is a motive with no lived provenance reaching real decisions."
+  },
+  "lifecycleOnlyStillHasIt": {
+    "bandsMeasured": 18,
+    "bandsInert": 0,
+    "bandsMoved": 18,
+    "movedKeyCounts": {
+      "mobilityPressure": 18,
+      "candidates": 18,
+      "reasonPressures": 15,
+      "netMovePressure": 15,
+      "score": 12
+    },
+    "attributionObservedBands": 3,
+    "attributionMovedBands": 3,
+    "note": "unchanged from the parent, which confirms Part A did not touch the territorial path and the two parts are genuinely separable."
+  },
+  "correctedEffect": {
+    "bandsMeasured": 18,
+    "bandsInert": 18,
+    "bandsMoved": 0,
+    "movedKeyCounts": {},
+    "attributionObservedBands": 3,
+    "attributionMovedBands": 0,
+    "note": "no measured band moves on any of mobilityPressure, netMovePressure, the selected action, its score, the candidate set, deliberation breadth or any reason's reported pressure."
+  },
+  "attributionChannel": {
+    "what": "bandDecision.getMobilityPressure fills the `pressure` figure carried by the STAY reasons `known_site_sufficient` and `low_mobility_pressure`. It is ATTRIBUTION — the number a reason reports about itself — rather than score.",
+    "howItWasMeasured": "read at `reason.pressure`, on a 180-day world where bands still stay. A 3600-day world produces no stay reason at all, and the first form of this probe read a non-existent `reason.detail.pressure`, so it returned the -1 fallback in every arm and compared three sentinels with each other.",
+    "parentBandsWhereAttributionMoved": 3,
+    "tipBandsWhereAttributionMoved": 0,
+    "parent": [
+      {
+        "band": "band:varied-estuary",
+        "arm": "warm_180d",
+        "moved": true,
+        "reasons": [
+          [
+            "primary:low_mobility_pressure=0.1523"
+          ],
+          [
+            "primary:low_mobility_pressure=0.1691"
+          ],
+          [
+            "primary:low_mobility_pressure=0.2643"
+          ]
+        ]
+      },
+      {
+        "band": "band:varied-pass-frontier",
+        "arm": "warm_180d",
+        "moved": true,
+        "reasons": [
+          [
+            "primary:known_site_sufficient=0.2272"
+          ],
+          [
+            "primary:known_site_sufficient=0.244"
+          ],
+          [
+            "primary:known_site_sufficient=0.3392"
+          ]
+        ]
+      },
+      {
+        "band": "band:varied-plains-creek",
+        "arm": "warm_180d",
+        "moved": true,
+        "reasons": [
+          [
+            "primary:low_mobility_pressure=0.2236"
+          ],
+          [
+            "primary:low_mobility_pressure=0.2404"
+          ],
+          [
+            "primary:low_mobility_pressure=0.3356"
+          ]
+        ]
+      }
+    ],
+    "tip": [
+      {
+        "band": "band:varied-estuary",
+        "arm": "warm_180d",
+        "moved": false,
+        "reasons": [
+          [
+            "primary:low_mobility_pressure=0.1523"
+          ],
+          [
+            "primary:low_mobility_pressure=0.1523"
+          ],
+          [
+            "primary:low_mobility_pressure=0.1523"
+          ]
+        ]
+      },
+      {
+        "band": "band:varied-pass-frontier",
+        "arm": "warm_180d",
+        "moved": false,
+        "reasons": [
+          [
+            "primary:known_site_sufficient=0.2272"
+          ],
+          [
+            "primary:known_site_sufficient=0.2272"
+          ],
+          [
+            "primary:known_site_sufficient=0.2272"
+          ]
+        ]
+      },
+      {
+        "band": "band:varied-plains-creek",
+        "arm": "warm_180d",
+        "moved": false,
+        "reasons": [
+          [
+            "primary:low_mobility_pressure=0.2236"
+          ],
+          [
+            "primary:low_mobility_pressure=0.2236"
+          ],
+          [
+            "primary:low_mobility_pressure=0.2236"
+          ]
+        ]
+      }
+    ],
+    "verdict": "ATTRIBUTION_MEASURED_MOVING_BEFORE_AND_STILL_AFTER_CORRECTION"
+  },
+  "zeroDivergenceControl": {
+    "digestParent": "3bb1964817c54fd27a727edbca1254c6",
+    "digestLifecycleOnly": "3bb1964817c54fd27a727edbca1254c6",
+    "digestTip": "3bb1964817c54fd27a727edbca1254c6",
+    "identical": true,
+    "whyItMatters": "at a long warm-up the parent and the corrected tree hold different worlds, because the term was live for every one of those days on the parent and `netMovePressure` reads accumulated band state. That divergence is the production change, not a surviving reader. This arm warms 0 days and pins every band's field to 0, so the trees see the identical world; agreeing bit for bit proves removing the term is exactly equivalent to holding the field at zero, and that no reader survives.",
+    "measuredResidualAtLongWarmUp": "2 of 18 band-measurements differ between parent-at-zero and the tip at 3600 days, by 0.01 on netMovePressure and on two candidate scores. Explained by the divergent warm-up above and by the complete field inventory, which finds no remaining reader."
+  }
+}

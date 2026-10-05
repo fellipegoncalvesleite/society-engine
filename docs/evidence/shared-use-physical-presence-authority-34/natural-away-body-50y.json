@@ -1,0 +1,26 @@
+{
+  "audit": "CORRECTION-34C-NATURAL-AWAY-BODY",
+  "scenario": "map2",
+  "seed": "audit27:natural:map2:s1",
+  "years": 50,
+  "samplingResolution": "DAILY",
+  "verdict": "NO_UNEXPLAINED_AWAY_BODY_MOVEMENT",
+  "measurements": {
+    "bandDaysObserved": 162000,
+    "annualBoundariesCrossedByActiveParties": 0,
+    "adultToElderTransitionsWhilePartyActive": 0,
+    "dependentToAdultTransitionsWhilePartyActive": 0,
+    "demographicDeathsWhilePartyActive": 0,
+    "fissionsWhilePartyActive": 0,
+    "awayBodyLocationChangesWithoutPhysicalEvent": 0,
+    "partyHeadcountChangesByCause": {
+      "physicalReturn": 720,
+      "terminalOutcome": 720,
+      "reconciliation": 0
+    },
+    "populationConservationFailures": 0,
+    "cohortConservationFailures": 0,
+    "duplicateReceipts": 0
+  },
+  "honesty": "Ordinary parties last at most EXPEDITION_MAX_DURATION_DAYS = 24 while demography runs ANNUALLY, so overlap is rare by construction. A zero here is NOT proof of correctness — controlled fixtures L1-L12 are the proof, and they were built regardless of natural frequency."
+}

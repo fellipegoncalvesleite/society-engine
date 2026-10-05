@@ -1,0 +1,221 @@
+{
+  "generatedAt": "2026-08-03T15:29:07.369Z",
+  "checkpoint": "ROADMAP ITEM 4 — parent residual viability",
+  "what_this_is": "Reproduction of the defect that shaped the parent-residual model. ARM 1 is a RECONSTRUCTION of an interrupted, uncommitted implementation and is labelled as one; there is no commit to run it from and no trajectory comparison is claimed.",
+  "supersededModelSource": {
+    "file": "src/sim/agents/fissionParentResidualViability.ts (interrupted, uncommitted)",
+    "threshold": 0.62,
+    "weights": {
+      "dependencyWorsening": 0.3,
+      "labourThinness": 0.34,
+      "nutritionStrain": 0.24,
+      "embodiedStrain": 0.2,
+      "mobilityStrain": 0.14,
+      "ecologicalStrain": 0.12
+    }
+  },
+  "rows": [
+    {
+      "id": "R1_natural_s1_sound",
+      "parentBefore": {
+        "workingAdults": 29,
+        "dependents": 14,
+        "elders": 7
+      },
+      "requestedFounders": 18,
+      "minimumFounderRequest": 18,
+      "allocation": {
+        "successor": {
+          "workingAdults": 11,
+          "dependents": 5,
+          "elders": 2
+        },
+        "parentRemainder": {
+          "workingAdults": 18,
+          "dependents": 9,
+          "elders": 5
+        },
+        "exact": true
+      },
+      "supersededModelReconstruction": {
+        "residualStrain": 0.0107,
+        "splitCausedPart": 0.0107,
+        "preExistingPart": 0,
+        "preExistingShareOfStrain": 0,
+        "structurallyRefused": false,
+        "refused": false,
+        "threshold": 0.62
+      },
+      "currentAuthority": {
+        "verdict": "residual_viable",
+        "blockKind": "none",
+        "splitCausedDamage": 0.21,
+        "priorFragility": 0.04,
+        "tolerance": 0.51,
+        "revisedFounderRequest": null,
+        "departureBlocked": false,
+        "revisionCandidatesEvaluated": 0
+      }
+    },
+    {
+      "id": "R2_struggling_parent_hardship",
+      "parentBefore": {
+        "workingAdults": 10,
+        "dependents": 26,
+        "elders": 14
+      },
+      "requestedFounders": 18,
+      "minimumFounderRequest": 18,
+      "allocation": {
+        "successor": {
+          "workingAdults": 4,
+          "dependents": 9,
+          "elders": 5
+        },
+        "parentRemainder": {
+          "workingAdults": 6,
+          "dependents": 17,
+          "elders": 9
+        },
+        "exact": true
+      },
+      "supersededModelReconstruction": {
+        "residualStrain": 0.9213,
+        "splitCausedPart": 0.2473,
+        "preExistingPart": 0.674,
+        "preExistingShareOfStrain": 0.7316,
+        "structurallyRefused": false,
+        "refused": true,
+        "threshold": 0.62
+      },
+      "currentAuthority": {
+        "verdict": "residual_nonviable",
+        "blockKind": "split_caused_damage_exceeds_tolerance",
+        "splitCausedDamage": 0.27,
+        "priorFragility": 1,
+        "tolerance": 0.18,
+        "revisedFounderRequest": null,
+        "departureBlocked": true,
+        "revisionCandidatesEvaluated": 0
+      }
+    },
+    {
+      "id": "R3_struggling_parent_hardship_low_minimum",
+      "parentBefore": {
+        "workingAdults": 10,
+        "dependents": 26,
+        "elders": 14
+      },
+      "requestedFounders": 18,
+      "minimumFounderRequest": 2,
+      "allocation": {
+        "successor": {
+          "workingAdults": 4,
+          "dependents": 9,
+          "elders": 5
+        },
+        "parentRemainder": {
+          "workingAdults": 6,
+          "dependents": 17,
+          "elders": 9
+        },
+        "exact": true
+      },
+      "supersededModelReconstruction": {
+        "residualStrain": 0.9213,
+        "splitCausedPart": 0.2473,
+        "preExistingPart": 0.674,
+        "preExistingShareOfStrain": 0.7316,
+        "structurallyRefused": false,
+        "refused": true,
+        "threshold": 0.62
+      },
+      "currentAuthority": {
+        "verdict": "residual_viable_only_after_revision",
+        "blockKind": "none",
+        "splitCausedDamage": 0.15,
+        "priorFragility": 1,
+        "tolerance": 0.18,
+        "revisedFounderRequest": 8,
+        "departureBlocked": false,
+        "revisionCandidatesEvaluated": 10
+      }
+    },
+    {
+      "id": "R4_healthy_composition_hardship_only",
+      "parentBefore": {
+        "workingAdults": 29,
+        "dependents": 14,
+        "elders": 7
+      },
+      "requestedFounders": 6,
+      "minimumFounderRequest": 2,
+      "allocation": {
+        "successor": {
+          "workingAdults": 5,
+          "dependents": 1,
+          "elders": 0
+        },
+        "parentRemainder": {
+          "workingAdults": 24,
+          "dependents": 13,
+          "elders": 7
+        },
+        "exact": true
+      },
+      "supersededModelReconstruction": {
+        "residualStrain": 0.6958,
+        "splitCausedPart": 0.0218,
+        "preExistingPart": 0.674,
+        "preExistingShareOfStrain": 0.9686,
+        "structurallyRefused": false,
+        "refused": true,
+        "threshold": 0.62
+      },
+      "currentAuthority": {
+        "verdict": "residual_viable",
+        "blockKind": "none",
+        "splitCausedDamage": 0.11,
+        "priorFragility": 0.84,
+        "tolerance": 0.23,
+        "revisedFounderRequest": null,
+        "departureBlocked": false,
+        "revisionCandidatesEvaluated": 0
+      }
+    }
+  ],
+  "claims": {
+    "prior_hardship_dominated_the_superseded_refusal": {
+      "holds": true,
+      "residualStrain": 0.9213,
+      "splitCausedPart": 0.2473,
+      "preExistingPart": 0.674,
+      "preExistingShareOfStrain": 0.7316,
+      "note": "the share of the refusing score contributed by hardship the split did not cause and could not change"
+    },
+    "superseded_refusal_was_invariant_to_founder_count": {
+      "holds": true,
+      "strainAtMinimum18": 0.9213,
+      "strainAtMinimum2": 0.9213,
+      "note": "lowering the caller's minimum founder request from 18 to 2 moved the superseded score not at all"
+    },
+    "current_authority_finds_a_smaller_request": {
+      "holds": true,
+      "verdict": "residual_viable_only_after_revision",
+      "revisedFounderRequest": 8,
+      "splitCausedDamage": 0.15,
+      "priorFragility": 1,
+      "tolerance": 0.18
+    },
+    "current_authority_still_narrows_tolerance_under_hardship": {
+      "holds": true,
+      "toleranceUnderHardship": 0.18,
+      "toleranceBase": 0.52
+    }
+  },
+  "summary": {
+    "claimsChecked": 4,
+    "claimsHolding": 4,
+    "claimsFailing": 0
+  }
+}

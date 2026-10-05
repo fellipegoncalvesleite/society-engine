@@ -1,0 +1,123 @@
+{
+  "audit": "ROADMAP ITEM 4 — untouched natural physical cutover reachability",
+  "seed": "audit27:natural:s1",
+  "map": "map2",
+  "snapshots": [
+    {
+      "label": "before_proposal",
+      "day": 44279,
+      "natural": [
+        {
+          "parentId": "band:varied-estuary",
+          "phase": "abandoned",
+          "phaseEnteredDay": 43922,
+          "lineageId": "fission-lineage:band:varied-estuary:488:tile:187:88",
+          "targetTileId": "tile:187:88",
+          "prepared": false,
+          "authorizationStatus": null
+        }
+      ],
+      "provisional": []
+    },
+    {
+      "label": "proposal",
+      "day": 44280,
+      "natural": [
+        {
+          "parentId": "band:varied-estuary",
+          "phase": "proposed",
+          "phaseEnteredDay": 44280,
+          "lineageId": "fission-lineage:band:varied-estuary:492:tile:186:87",
+          "targetTileId": "",
+          "prepared": false,
+          "authorizationStatus": null
+        }
+      ],
+      "provisional": []
+    },
+    {
+      "label": "planned",
+      "day": 44281,
+      "natural": [
+        {
+          "parentId": "band:varied-estuary",
+          "phase": "departure_planned",
+          "phaseEnteredDay": 44281,
+          "lineageId": "fission-lineage:band:varied-estuary:492:tile:186:87",
+          "targetTileId": "tile:186:87",
+          "prepared": false,
+          "authorizationStatus": null
+        }
+      ],
+      "provisional": []
+    },
+    {
+      "label": "ready",
+      "day": 44282,
+      "natural": [
+        {
+          "parentId": "band:varied-estuary",
+          "phase": "departure_ready",
+          "phaseEnteredDay": 44282,
+          "lineageId": "fission-lineage:band:varied-estuary:492:tile:186:87",
+          "targetTileId": "tile:186:87",
+          "prepared": true,
+          "authorizationStatus": "live"
+        }
+      ],
+      "provisional": []
+    },
+    {
+      "label": "departed",
+      "day": 44283,
+      "natural": [],
+      "provisional": [
+        {
+          "successorBandId": "successor:fission-lineage:band:varied-estuary:492:tile:186:87",
+          "parentBandId": "band:varied-estuary",
+          "phase": "travelling",
+          "phaseEnteredDay": 44283,
+          "lineageId": "fission-lineage:band:varied-estuary:492:tile:186:87",
+          "trailLength": 0,
+          "position": "tile:189:87",
+          "targetTileId": "tile:186:87"
+        }
+      ]
+    }
+  ],
+  "chain": {
+    "proposalDay": 44280,
+    "plannedDay": 44281,
+    "readyDay": 44282,
+    "departureDay": 44283,
+    "firstPostDepartureWorkDay": 44285,
+    "parentId": "band:varied-estuary",
+    "lineageId": "fission-lineage:band:varied-estuary:492:tile:186:87",
+    "successorBandId": "successor:fission-lineage:band:varied-estuary:492:tile:186:87",
+    "originTileId": "tile:189:87",
+    "targetTileId": "tile:186:87"
+  },
+  "conservation": {
+    "beforeParent": {
+      "workingAdults": 29,
+      "dependents": 15,
+      "elders": 7,
+      "population": 51
+    },
+    "afterParent": {
+      "workingAdults": 18,
+      "dependents": 10,
+      "elders": 5,
+      "population": 33
+    },
+    "successor": {
+      "workingAdults": 11,
+      "dependents": 5,
+      "elders": 2,
+      "population": 18
+    },
+    "worldPopulationBefore": 198,
+    "worldPopulationAfter": 198
+  },
+  "verdict": "PASS"
+}

@@ -1,0 +1,173 @@
+{
+  "audit": "CORRECTION-34B-NUMERIC-RESOURCE-CHAIN",
+  "scenario": "map2",
+  "seed": "audit27:natural:map2:s1",
+  "yearsSearched": 20,
+  "verdict": "NUMERIC_RESOURCE_CHAIN_RECONCILED",
+  "expedition": {
+    "id": "expedition:band:varied-lake-east:726:distant_plant_gathering:9198e84a",
+    "bandId": "band:varied-lake-east",
+    "targetTileId": "tile:88:79",
+    "outcome": {
+      "phase": "completed",
+      "outcomeReason": "returned_with_cargo",
+      "deliveredHarvestUnits": 0.0083,
+      "provisionUnitsConsumed": 0.042,
+      "lostUnits": 0
+    },
+    "receipt": {
+      "usableSupport": 0.0083,
+      "tick": 8,
+      "reasonIds": [
+        "reason:intra-season-trip:band:varied-lake-east:732:food_resource_check:tile:88:79",
+        "reason:activity-outcome:band:varied-lake-east:732:partial_success:tile:88:79",
+        "reason:activity-return:band:varied-lake-east:732:gathered_plant_food:tile:88:79",
+        "reason:physical-food-harvest:band:varied-lake-east:732:plant_patch:plant:tile:88:79:wetland_plant",
+        "reason:expedition-return:expedition:band:varied-lake-east:726:distant_plant_gathering:9198e84a"
+      ]
+    },
+    "dailyTrace": [
+      {
+        "day": 725,
+        "phase": "outbound",
+        "partyWorkers": 5,
+        "harvestUnits": 0,
+        "carryCapacityUnits": 0.6,
+        "provisionUnitsConsumed": 0.004,
+        "lostUnits": 0,
+        "pendingUsableSupportAtTarget": null,
+        "targetDepletionBefore": 0,
+        "targetDepletionAfter": 0
+      },
+      {
+        "day": 726,
+        "phase": "outbound",
+        "partyWorkers": 5,
+        "harvestUnits": 0,
+        "carryCapacityUnits": 0.6,
+        "provisionUnitsConsumed": 0.008,
+        "lostUnits": 0,
+        "pendingUsableSupportAtTarget": null,
+        "targetDepletionBefore": 0,
+        "targetDepletionAfter": 0
+      },
+      {
+        "day": 727,
+        "phase": "outbound",
+        "partyWorkers": 5,
+        "harvestUnits": 0,
+        "carryCapacityUnits": 0.6,
+        "provisionUnitsConsumed": 0.012,
+        "lostUnits": 0,
+        "pendingUsableSupportAtTarget": null,
+        "targetDepletionBefore": 0,
+        "targetDepletionAfter": 0
+      },
+      {
+        "day": 728,
+        "phase": "operating",
+        "partyWorkers": 5,
+        "harvestUnits": 0,
+        "carryCapacityUnits": 0.6,
+        "provisionUnitsConsumed": 0.018,
+        "lostUnits": 0,
+        "pendingUsableSupportAtTarget": null,
+        "targetDepletionBefore": 0,
+        "targetDepletionAfter": 0
+      },
+      {
+        "day": 729,
+        "phase": "operating",
+        "partyWorkers": 5,
+        "harvestUnits": 0.0337,
+        "carryCapacityUnits": 0.6,
+        "provisionUnitsConsumed": 0.022,
+        "lostUnits": 0,
+        "pendingUsableSupportAtTarget": 0.0337,
+        "targetDepletionBefore": 0,
+        "targetDepletionAfter": 0
+      },
+      {
+        "day": 730,
+        "phase": "operating",
+        "partyWorkers": 5,
+        "harvestUnits": 0.0674,
+        "carryCapacityUnits": 0.6,
+        "provisionUnitsConsumed": 0.026,
+        "lostUnits": 0,
+        "pendingUsableSupportAtTarget": 0.0337,
+        "targetDepletionBefore": 0,
+        "targetDepletionAfter": 0
+      },
+      {
+        "day": 731,
+        "phase": "returning",
+        "partyWorkers": 5,
+        "harvestUnits": 0.0757,
+        "carryCapacityUnits": 0.6,
+        "provisionUnitsConsumed": 0.03,
+        "lostUnits": 0,
+        "pendingUsableSupportAtTarget": 0.0083,
+        "targetDepletionBefore": 0,
+        "targetDepletionAfter": 0
+      },
+      {
+        "day": 732,
+        "phase": "returning",
+        "partyWorkers": 5,
+        "harvestUnits": 0.0757,
+        "carryCapacityUnits": 0.6,
+        "provisionUnitsConsumed": 0.034,
+        "lostUnits": 0,
+        "pendingUsableSupportAtTarget": 0.0083,
+        "targetDepletionBefore": 0,
+        "targetDepletionAfter": 0
+      },
+      {
+        "day": 733,
+        "phase": "returning",
+        "partyWorkers": 5,
+        "harvestUnits": 0.0757,
+        "carryCapacityUnits": 0.6,
+        "provisionUnitsConsumed": 0.038,
+        "lostUnits": 0,
+        "pendingUsableSupportAtTarget": 0.0083,
+        "targetDepletionBefore": 0,
+        "targetDepletionAfter": 0
+      }
+    ]
+  },
+  "reconciliation": {
+    "takenAtTarget_usableSupport": 0.0083,
+    "cargoHarvestUnitsAtLastAwayDay": 0.0757,
+    "peakCargoEverHeld": 0.0757,
+    "cargoAbandonedDuringJourney": 0,
+    "carryCapacityAtLastAwayDay": 0.6,
+    "capacityExcessNotCarried": 0,
+    "carried": 0.0757,
+    "provisionUnitsConsumed": 0.038,
+    "cargoLostUnits": 0,
+    "afterProvisions": 0.0377,
+    "deliveredHarvestUnits": 0.0083,
+    "receiptUsableSupport": 0.0083,
+    "deliveredFraction": 1,
+    "identityHolds": true,
+    "identity": "delivered = takenAtTarget_usableSupport * clamp01(afterProvisions / takenAtTarget_usableSupport), where carried = min(cargo.harvestUnits, cargo.carryCapacityUnits) and afterProvisions = max(0, carried - provisionUnitsConsumed). Equivalently delivered = min(takenAtTarget_usableSupport, afterProvisions) for positive support. NOTE cargo.harvestUnits (cargo units) and physicalFoodHarvest.usableSupport (support units) are DIFFERENT quantities and are reported separately rather than conflated."
+  },
+  "provisions": {
+    "classification": "trip-local accounting abstraction",
+    "evidence": [
+      "expedition.ts:139-149 — the constant's own header states 'trip-local provisioning; never a store'",
+      "consumeProvisions only INCREMENTS cargo.provisionUnitsConsumed; it reads and writes no band stock",
+      "no residential store is decremented at launch — grep for a provisioning withdrawal finds none",
+      "buildReturnedRecord subtracts provisionUnitsConsumed from the CARRIED cargo, so provisions reduce the receipt"
+    ],
+    "isBackedByAConservedStore": false,
+    "honestStatement": "Provisions are NOT residential stock transferred outward and are NOT modelled as target harvest consumed. They are a trip-local opportunity cost charged against the cargo at return. Full material conservation is therefore NOT claimed for provisions: what the party ate was never removed from a conserved store anywhere. What IS conserved is the cargo chain — harvest taken at the target, minus what exceeded the carry ceiling, minus what was eaten, equals what the receipt credits.",
+    "futureWork": "Backing provisions with a real store belongs to the Adaptation / Material Culture pass alongside outbound provisioning capacity and carrying technology; see DEFAULT_EXPEDITION_CARRYING_RULE.md."
+  },
+  "limitations": [
+    "the target tile's absolute stock before/after is read through world.depletion, which is a depletion index rather than an absolute stock ledger, so 'physical stock before/after' is reported as the depletion delta and not as an absolute quantity",
+    "one expedition on one map and seed; this proves the equation production implements, not that the equation is calibrated correctly"
+  ]
+}

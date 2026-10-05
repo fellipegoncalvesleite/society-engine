@@ -1,0 +1,191 @@
+{
+  "passed": 15,
+  "failed": 0,
+  "cases": [
+    {
+      "id": "B1",
+      "title": "UI eviction does not reopen",
+      "expectation": "the settled question stays ineligible with the display ring full of unrelated rows",
+      "observed": {
+        "ringLength": 12,
+        "allowed": false,
+        "reason": "already established here, and nothing about the question has changed"
+      },
+      "pass": true
+    },
+    {
+      "id": "B2",
+      "title": "evidence-cap pressure does not reopen",
+      "expectation": "48 unrelated evidence rows cannot evict the durable conclusion",
+      "observed": {
+        "evidenceRows": 48,
+        "settledRowPresentInEvidence": false,
+        "allowed": false,
+        "reason": "already established here, and nothing about the question has changed"
+      },
+      "pass": true,
+      "note": "before 23D this was 18.1% of all launches, with the cap under pressure on 75.3% of band-days."
+    },
+    {
+      "id": "B3",
+      "title": "hardship increase does not erase a confirmation",
+      "expectation": "the settled question stays settled across the whole hardship range",
+      "observed": {
+        "allowedAcrossHardship": [
+          false,
+          false,
+          false,
+          false,
+          false
+        ]
+      },
+      "pass": true
+    },
+    {
+      "id": "B4",
+      "title": "hardship increase does not erase a bounded negative",
+      "expectation": "the identical search stays suppressed across the whole hardship range",
+      "observed": {
+        "allowedAcrossHardship": [
+          false,
+          false,
+          false
+        ]
+      },
+      "pass": true
+    },
+    {
+      "id": "B5",
+      "title": "a different unresolved question remains eligible",
+      "expectation": "settling water access does not block resource presence at the same place",
+      "observed": {
+        "allowed": true,
+        "reason": "never asked here"
+      },
+      "pass": true
+    },
+    {
+      "id": "B6",
+      "title": "a different target remains eligible",
+      "expectation": "settling one place does not suppress investigation elsewhere",
+      "observed": {
+        "allowed": true,
+        "reason": "never asked here"
+      },
+      "pass": true
+    },
+    {
+      "id": "B7",
+      "title": "a new season permits a season-relevant retry",
+      "expectation": "a season the place has not been answered in reopens the question",
+      "observed": {
+        "allowed": true,
+        "reason": "a season this place has not been answered in"
+      },
+      "pass": true
+    },
+    {
+      "id": "B8",
+      "title": "repeated same season remains suppressed",
+      "expectation": "and once all four seasons are covered NO season reopens it — the old gate reopened 3 in 4 forever",
+      "observed": {
+        "sameSeasonAllowed": false,
+        "allSeasonsCoveredAllowed": [
+          false,
+          false,
+          false,
+          false
+        ],
+        "previousBehaviour": "lastSeason !== currentSeason fired 3 seasons in 4 — 45.8% of all launches"
+      },
+      "pass": true
+    },
+    {
+      "id": "B9",
+      "title": "a materially different route permits reconsideration",
+      "expectation": "and the destination evidence itself is untouched by the route changing",
+      "observed": {
+        "routeMovedAllowed": true,
+        "routeUnchangedAllowed": false,
+        "destinationEvidenceState": "accessed",
+        "destinationEvidenceSeasons": [
+          "spring"
+        ]
+      },
+      "pass": true
+    },
+    {
+      "id": "B10",
+      "title": "a materially different search permits a resource retry",
+      "expectation": "the identical search stays suppressed; a season it was never searched in reopens it",
+      "observed": {
+        "identicalSearchAllowed": false,
+        "newSeasonAllowed": true
+      },
+      "pass": true,
+      "note": "physical signs are not represented as band state, so season and route are the changes the model can honestly detect."
+    },
+    {
+      "id": "B11",
+      "title": "an inconclusive result retries only after material change, and is bounded",
+      "expectation": "too soon: no; after a real interval: yes; after three attempts: never again",
+      "observed": {
+        "tooSoon": false,
+        "afterInterval": true,
+        "afterThreeAttempts": false,
+        "cappedReason": "asked and left unresolved too many times"
+      },
+      "pass": true
+    },
+    {
+      "id": "B12",
+      "title": "authoritative place forgetting may reopen",
+      "expectation": "the question reopens ONLY when the place record itself is gone — not when a cap evicted",
+      "observed": {
+        "whilePlaceKnown": false,
+        "afterPlaceRecordRemoved": true,
+        "reason": "never asked here"
+      },
+      "pass": true,
+      "note": "this is the ONE legitimate reopening path, and it requires losing the place, not a list slot."
+    },
+    {
+      "id": "B13",
+      "title": "a lost party transfers no disposition",
+      "expectation": "an unanswered target is neither confirmed nor negative and stays eligible",
+      "observed": {
+        "state": "unasked",
+        "attempts": 0,
+        "stillEligible": true
+      },
+      "pass": true,
+      "note": "the hand-off is gated on phase === 'completed', so a lost party never reaches the write seam."
+    },
+    {
+      "id": "B14",
+      "title": "state exists only for attempted target/question pairs",
+      "expectation": "15 attempts across 3 questions produce 3 entries; an unattempted place carries none",
+      "observed": {
+        "attemptsMade": 15,
+        "entriesStored": 3,
+        "attemptsPerEntry": [
+          5,
+          5,
+          5
+        ],
+        "unattemptedPlaceHasNoState": true,
+        "worldTiles": 30800
+      },
+      "pass": true
+    },
+    {
+      "id": "B15",
+      "title": "deterministic retention",
+      "expectation": "identical inputs retain and order identical summaries",
+      "observed": {
+        "identical": true
+      },
+      "pass": true
+    }
+  ]
+}

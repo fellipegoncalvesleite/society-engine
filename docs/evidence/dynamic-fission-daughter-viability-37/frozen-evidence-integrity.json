@@ -1,0 +1,20 @@
+{
+  "audit": "ITEM-4-ACCEPTED-EVIDENCE-INTEGRITY",
+  "branch": "checkpoint/dynamic-fission-daughter-viability-37",
+  "branchedFrom": "ef76971bd66a7413313183349b9468a879405970",
+  "itemThreeProductionAuthority": "706166892d40189fc56ac7458b9e90a8ffdbddd7",
+  "method": "sha256 over every file under docs/evidence/ excluding this checkpoint own directory, taken before the checkpoint began and again after all work.",
+  "filesHashed": 635,
+  "result": "IDENTICAL",
+  "productionChanged": false,
+  "productionDiff": "git diff ef76971..HEAD -- src/ is EMPTY",
+  "temporaryOverwriteIncidents": [],
+  "temporaryOverwriteIncidentsNote": "NONE. The only audit run in this checkpoint (fissionBeforeAudit.mjs) has a single --out flag and was always given an explicit path.",
+  "itemThreeBranchesUnmodified": [
+    "checkpoint/shared-range-item-3-final-freeze-36",
+    "checkpoint/shared-range-release-territorial-authority-35",
+    "checkpoint/shared-range-item-3-final-freeze",
+    "checkpoint/shared-use-physical-presence-authority-34"
+  ],
+  "mainUntouched": "0a43083a3a9103bc6b8f693b8823a604ae2c6a8d"
+}

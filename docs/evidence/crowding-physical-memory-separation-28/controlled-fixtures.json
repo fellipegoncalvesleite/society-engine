@@ -1,0 +1,1000 @@
+{
+  "audit": "CORRECTION-28 — PHYSICAL VS REMEMBERED CROWDING CONTROLLED FIXTURES",
+  "arm": "after",
+  "seed": "c28:fixtures",
+  "seasons": 16,
+  "crowdingRadius": 4,
+  "richAnchor": "tile:195:90",
+  "productionInstrumentation": "NONE. Only exported production functions are called, read-only. Synthetic states are flagged.",
+  "fixtures": [
+    {
+      "id": "P1",
+      "question": "distant remembering band contributes physical crowding",
+      "verdict": "MEMORY_ONLY_CROWDING_ABSENT",
+      "syntheticState": true,
+      "precondition": "the relocated band still holds a salient memory within distance 2 of the observer's tile",
+      "preconditionMet": true,
+      "rememberingBand": "band:custom:0",
+      "observerBand": "band:custom:1",
+      "relocatedTo": "tile:195:124",
+      "observerAt": "tile:194:90",
+      "residenceDistance": 35,
+      "memoryNearB": [
+        "tile:194:90",
+        "tile:195:90"
+      ],
+      "observerWeightedCrowding": 0,
+      "observerCrowdingPenalty": 0,
+      "observerNearbyBandCount": 0,
+      "observerCrowdingBandIds": [],
+      "observerRsNearbyCrowding": 0.05,
+      "rememberingBandStillHoldsMemory": true,
+      "beforeRelocationA": {
+        "bandId": "band:custom:0",
+        "position": "tile:197:90",
+        "population": 30,
+        "weightedCrowding": 0.05,
+        "nearbyBandCount": 1,
+        "crowdingBandIds": [
+          "band:custom:1"
+        ],
+        "crowdingPenalty": 0.02,
+        "parentOverlap": 0,
+        "daughterOverlap": 0,
+        "parentCoreOverlap": 0,
+        "daughterDispersalPressure": 0.34,
+        "overlappingBandIds": [
+          "band:custom:1"
+        ],
+        "meanCatchmentShare": 0.9231,
+        "footprintTiles": 13,
+        "perCapitaReturn": 0.07,
+        "sharedPressurePenalty": 0.15,
+        "sharedReachableSupport": 122.73,
+        "saturationPressure": 0.2,
+        "rsNearbyCrowding": 0.05,
+        "rsLocalBandCount": 2,
+        "rsLocalPopulationEstimate": 42,
+        "tileDepletionHere": 0.089,
+        "salientMemoryTileIds": [
+          "tile:194:90",
+          "tile:195:90",
+          "tile:197:89",
+          "tile:198:89"
+        ],
+        "placeMemoryCount": 34,
+        "anchorMemoryCount": 0,
+        "accessPlaceCount": 8,
+        "contactMemoryBandIds": [
+          "band:custom:1"
+        ],
+        "frictionEventCount": 8,
+        "reportCount": 16
+      },
+      "afterA": {
+        "bandId": "band:custom:0",
+        "position": "tile:195:124",
+        "population": 30,
+        "weightedCrowding": 0,
+        "nearbyBandCount": 0,
+        "crowdingBandIds": [],
+        "crowdingPenalty": 0,
+        "parentOverlap": 0,
+        "daughterOverlap": 0,
+        "parentCoreOverlap": 0,
+        "daughterDispersalPressure": 0.28,
+        "overlappingBandIds": [],
+        "meanCatchmentShare": null,
+        "footprintTiles": 0,
+        "perCapitaReturn": 0.07,
+        "sharedPressurePenalty": 0.15,
+        "sharedReachableSupport": 122.73,
+        "saturationPressure": 0.2,
+        "rsNearbyCrowding": 0.05,
+        "rsLocalBandCount": 2,
+        "rsLocalPopulationEstimate": 42,
+        "tileDepletionHere": 0,
+        "salientMemoryTileIds": [
+          "tile:194:90",
+          "tile:195:90",
+          "tile:197:89",
+          "tile:198:89"
+        ],
+        "placeMemoryCount": 34,
+        "anchorMemoryCount": 0,
+        "accessPlaceCount": 8,
+        "contactMemoryBandIds": [
+          "band:custom:1"
+        ],
+        "frictionEventCount": 8,
+        "reportCount": 16
+      },
+      "afterB": {
+        "bandId": "band:custom:1",
+        "position": "tile:194:90",
+        "population": 30,
+        "weightedCrowding": 0,
+        "nearbyBandCount": 0,
+        "crowdingBandIds": [],
+        "crowdingPenalty": 0,
+        "parentOverlap": 0,
+        "daughterOverlap": 0,
+        "parentCoreOverlap": 0,
+        "daughterDispersalPressure": 0.31,
+        "overlappingBandIds": [],
+        "meanCatchmentShare": 1,
+        "footprintTiles": 13,
+        "perCapitaReturn": 0.12,
+        "sharedPressurePenalty": 0.15,
+        "sharedReachableSupport": 125.81,
+        "saturationPressure": 0.21,
+        "rsNearbyCrowding": 0.05,
+        "rsLocalBandCount": 2,
+        "rsLocalPopulationEstimate": 42,
+        "tileDepletionHere": 0.2106,
+        "salientMemoryTileIds": [
+          "tile:194:89",
+          "tile:194:88"
+        ],
+        "placeMemoryCount": 27,
+        "anchorMemoryCount": 0,
+        "accessPlaceCount": 8,
+        "contactMemoryBandIds": [
+          "band:custom:0"
+        ],
+        "frictionEventCount": 8,
+        "reportCount": 16
+      }
+    },
+    {
+      "id": "P2",
+      "question": "currently nearby active band still produces physical crowding",
+      "verdict": "PROXIMITY_CROWDING_PRESENT",
+      "precondition": "residence distance within the crowding radius",
+      "preconditionMet": true,
+      "residenceDistance": 2,
+      "reads": [
+        {
+          "bandId": "band:custom:0",
+          "position": "tile:195:90",
+          "population": 30,
+          "weightedCrowding": 0.11,
+          "nearbyBandCount": 1,
+          "crowdingBandIds": [
+            "band:custom:1"
+          ],
+          "crowdingPenalty": 0.04,
+          "parentOverlap": 0,
+          "daughterOverlap": 0,
+          "parentCoreOverlap": 0,
+          "daughterDispersalPressure": 0,
+          "overlappingBandIds": [
+            "band:custom:1"
+          ],
+          "meanCatchmentShare": 0.6923,
+          "footprintTiles": 13,
+          "perCapitaReturn": 1,
+          "sharedPressurePenalty": 0.37,
+          "sharedReachableSupport": 79.19,
+          "saturationPressure": 0.09,
+          "rsNearbyCrowding": 0.11,
+          "rsLocalBandCount": 2,
+          "rsLocalPopulationEstimate": 48,
+          "tileDepletionHere": 0.0489,
+          "salientMemoryTileIds": [],
+          "placeMemoryCount": 18,
+          "anchorMemoryCount": 0,
+          "accessPlaceCount": 6,
+          "contactMemoryBandIds": [
+            "band:custom:1"
+          ],
+          "frictionEventCount": 6,
+          "reportCount": 3
+        },
+        {
+          "bandId": "band:custom:1",
+          "position": "tile:194:89",
+          "population": 30,
+          "weightedCrowding": 0.11,
+          "nearbyBandCount": 1,
+          "crowdingBandIds": [
+            "band:custom:0"
+          ],
+          "crowdingPenalty": 0.04,
+          "parentOverlap": 0,
+          "daughterOverlap": 0,
+          "parentCoreOverlap": 0,
+          "daughterDispersalPressure": 0,
+          "overlappingBandIds": [
+            "band:custom:0"
+          ],
+          "meanCatchmentShare": 0.6923,
+          "footprintTiles": 13,
+          "perCapitaReturn": 1,
+          "sharedPressurePenalty": 0.35,
+          "sharedReachableSupport": 79.48,
+          "saturationPressure": 0.08,
+          "rsNearbyCrowding": 0.11,
+          "rsLocalBandCount": 2,
+          "rsLocalPopulationEstimate": 48,
+          "tileDepletionHere": 0.0489,
+          "salientMemoryTileIds": [],
+          "placeMemoryCount": 21,
+          "anchorMemoryCount": 0,
+          "accessPlaceCount": 7,
+          "contactMemoryBandIds": [
+            "band:custom:0"
+          ],
+          "frictionEventCount": 7,
+          "reportCount": 3
+        }
+      ]
+    },
+    {
+      "id": "P3",
+      "question": "proximity crowding without any remembered overlap",
+      "verdict": "PROXIMITY_ALONE_SUFFICES",
+      "precondition": "neither band holds any salient memory",
+      "preconditionMet": true,
+      "salientTileCounts": [
+        0,
+        0
+      ],
+      "residenceDistance": 1,
+      "reads": [
+        {
+          "bandId": "band:custom:0",
+          "position": "tile:195:90",
+          "population": 30,
+          "weightedCrowding": 0.15,
+          "nearbyBandCount": 1,
+          "crowdingBandIds": [
+            "band:custom:1"
+          ],
+          "crowdingPenalty": 0.06,
+          "parentOverlap": 0,
+          "daughterOverlap": 0,
+          "parentCoreOverlap": 0,
+          "daughterDispersalPressure": 0,
+          "overlappingBandIds": [
+            "band:custom:1"
+          ],
+          "meanCatchmentShare": 0.6923,
+          "footprintTiles": 13,
+          "perCapitaReturn": null,
+          "sharedPressurePenalty": null,
+          "sharedReachableSupport": null,
+          "saturationPressure": null,
+          "rsNearbyCrowding": null,
+          "rsLocalBandCount": null,
+          "rsLocalPopulationEstimate": null,
+          "tileDepletionHere": 0,
+          "salientMemoryTileIds": [],
+          "placeMemoryCount": 0,
+          "anchorMemoryCount": 0,
+          "accessPlaceCount": 0,
+          "contactMemoryBandIds": [],
+          "frictionEventCount": 0,
+          "reportCount": 0
+        },
+        {
+          "bandId": "band:custom:1",
+          "position": "tile:196:90",
+          "population": 30,
+          "weightedCrowding": 0.15,
+          "nearbyBandCount": 1,
+          "crowdingBandIds": [
+            "band:custom:0"
+          ],
+          "crowdingPenalty": 0.06,
+          "parentOverlap": 0,
+          "daughterOverlap": 0,
+          "parentCoreOverlap": 0,
+          "daughterDispersalPressure": 0,
+          "overlappingBandIds": [
+            "band:custom:0"
+          ],
+          "meanCatchmentShare": 0.6923,
+          "footprintTiles": 13,
+          "perCapitaReturn": null,
+          "sharedPressurePenalty": null,
+          "sharedReachableSupport": null,
+          "saturationPressure": null,
+          "rsNearbyCrowding": null,
+          "rsLocalBandCount": null,
+          "rsLocalPopulationEstimate": null,
+          "tileDepletionHere": 0,
+          "salientMemoryTileIds": [],
+          "placeMemoryCount": 0,
+          "anchorMemoryCount": 0,
+          "accessPlaceCount": 0,
+          "contactMemoryBandIds": [],
+          "frictionEventCount": 0,
+          "reportCount": 0
+        }
+      ]
+    },
+    {
+      "id": "P4",
+      "question": "nearby band that also holds remembered overlap is counted once",
+      "verdict": "MEASURED",
+      "syntheticState": true,
+      "precondition": "the other band is within the crowding radius AND holds a salient memory within 2 of the observer",
+      "preconditionMet": true,
+      "residenceDistance": 1,
+      "otherBandMovedTo": "tile:195:89",
+      "otherBandSalientTilesNearObserver": [
+        "tile:194:89",
+        "tile:194:88"
+      ],
+      "observerWeightedCrowding": 0.15,
+      "observerCrowdingPenalty": 0.06,
+      "observerNearbyBandCount": 1,
+      "reads": [
+        {
+          "bandId": "band:custom:0",
+          "position": "tile:194:89",
+          "population": 30,
+          "weightedCrowding": 0.15,
+          "nearbyBandCount": 1,
+          "crowdingBandIds": [
+            "band:custom:1"
+          ],
+          "crowdingPenalty": 0.06,
+          "parentOverlap": 0,
+          "daughterOverlap": 0,
+          "parentCoreOverlap": 0,
+          "daughterDispersalPressure": 0.33,
+          "overlappingBandIds": [
+            "band:custom:1"
+          ],
+          "meanCatchmentShare": 0.6,
+          "footprintTiles": 10,
+          "perCapitaReturn": 0.07,
+          "sharedPressurePenalty": 0.15,
+          "sharedReachableSupport": 122.73,
+          "saturationPressure": 0.2,
+          "rsNearbyCrowding": 0.05,
+          "rsLocalBandCount": 2,
+          "rsLocalPopulationEstimate": 42,
+          "tileDepletionHere": 0.2311,
+          "salientMemoryTileIds": [
+            "tile:194:90",
+            "tile:195:90",
+            "tile:197:89",
+            "tile:198:89"
+          ],
+          "placeMemoryCount": 34,
+          "anchorMemoryCount": 0,
+          "accessPlaceCount": 8,
+          "contactMemoryBandIds": [
+            "band:custom:1"
+          ],
+          "frictionEventCount": 8,
+          "reportCount": 16
+        },
+        {
+          "bandId": "band:custom:1",
+          "position": "tile:195:89",
+          "population": 30,
+          "weightedCrowding": 0.15,
+          "nearbyBandCount": 1,
+          "crowdingBandIds": [
+            "band:custom:0"
+          ],
+          "crowdingPenalty": 0.06,
+          "parentOverlap": 0,
+          "daughterOverlap": 0,
+          "parentCoreOverlap": 0,
+          "daughterDispersalPressure": 0.31,
+          "overlappingBandIds": [
+            "band:custom:0"
+          ],
+          "meanCatchmentShare": 0.6923,
+          "footprintTiles": 13,
+          "perCapitaReturn": 0.12,
+          "sharedPressurePenalty": 0.15,
+          "sharedReachableSupport": 125.81,
+          "saturationPressure": 0.21,
+          "rsNearbyCrowding": 0.05,
+          "rsLocalBandCount": 2,
+          "rsLocalPopulationEstimate": 42,
+          "tileDepletionHere": 0.2055,
+          "salientMemoryTileIds": [
+            "tile:194:89",
+            "tile:194:88"
+          ],
+          "placeMemoryCount": 27,
+          "anchorMemoryCount": 0,
+          "accessPlaceCount": 8,
+          "contactMemoryBandIds": [
+            "band:custom:0"
+          ],
+          "frictionEventCount": 8,
+          "reportCount": 16
+        }
+      ]
+    },
+    {
+      "id": "P5",
+      "question": "equal-demand overlapping catchments still split support symmetrically",
+      "verdict": "SYMMETRIC_SPLIT_OBSERVED",
+      "symmetricSeasons": 17,
+      "rows": [
+        {
+          "season": 0,
+          "shares": [
+            0.6923,
+            0.6923
+          ],
+          "overlaps": [
+            [
+              "band:custom:1"
+            ],
+            [
+              "band:custom:0"
+            ]
+          ],
+          "footprints": [
+            13,
+            13
+          ],
+          "sharedReachableSupport": [
+            null,
+            null
+          ],
+          "perCapitaReturn": [
+            null,
+            null
+          ],
+          "depletionAtA": 0
+        },
+        {
+          "season": 1,
+          "shares": [
+            0.5,
+            0.5
+          ],
+          "overlaps": [
+            [
+              "band:custom:1"
+            ],
+            [
+              "band:custom:0"
+            ]
+          ],
+          "footprints": [
+            13,
+            13
+          ],
+          "sharedReachableSupport": [
+            72.5,
+            72.5
+          ],
+          "perCapitaReturn": [
+            1,
+            1
+          ],
+          "depletionAtA": 0.0368
+        },
+        {
+          "season": 2,
+          "shares": [
+            0.6923,
+            0.6923
+          ],
+          "overlaps": [
+            [
+              "band:custom:1"
+            ],
+            [
+              "band:custom:0"
+            ]
+          ],
+          "footprints": [
+            13,
+            13
+          ],
+          "sharedReachableSupport": [
+            79.19,
+            79.48
+          ],
+          "perCapitaReturn": [
+            1,
+            1
+          ],
+          "depletionAtA": 0.0489
+        },
+        {
+          "season": 3,
+          "shares": [
+            0.6923,
+            0.6923
+          ],
+          "overlaps": [
+            [
+              "band:custom:1"
+            ],
+            [
+              "band:custom:0"
+            ]
+          ],
+          "footprints": [
+            13,
+            13
+          ],
+          "sharedReachableSupport": [
+            63.32,
+            63.08
+          ],
+          "perCapitaReturn": [
+            1,
+            1
+          ],
+          "depletionAtA": 0.0727
+        },
+        {
+          "season": 4,
+          "shares": [
+            0.8077,
+            0.8077
+          ],
+          "overlaps": [
+            [
+              "band:custom:1"
+            ],
+            [
+              "band:custom:0"
+            ]
+          ],
+          "footprints": [
+            13,
+            13
+          ],
+          "sharedReachableSupport": [
+            114.98,
+            117.49
+          ],
+          "perCapitaReturn": [
+            0.07,
+            0.34
+          ],
+          "depletionAtA": 0.1053
+        },
+        {
+          "season": 5,
+          "shares": [
+            0.8462,
+            0.8462
+          ],
+          "overlaps": [
+            [
+              "band:custom:1"
+            ],
+            [
+              "band:custom:0"
+            ]
+          ],
+          "footprints": [
+            13,
+            13
+          ],
+          "sharedReachableSupport": [
+            119.17,
+            121.41
+          ],
+          "perCapitaReturn": [
+            1,
+            1
+          ],
+          "depletionAtA": 0.0955
+        },
+        {
+          "season": 6,
+          "shares": [
+            0.6923,
+            0.6923
+          ],
+          "overlaps": [
+            [
+              "band:custom:1"
+            ],
+            [
+              "band:custom:0"
+            ]
+          ],
+          "footprints": [
+            13,
+            13
+          ],
+          "sharedReachableSupport": [
+            77.01,
+            75.31
+          ],
+          "perCapitaReturn": [
+            1,
+            0.77
+          ],
+          "depletionAtA": 0.1179
+        },
+        {
+          "season": 7,
+          "shares": [
+            0.8462,
+            0.8462
+          ],
+          "overlaps": [
+            [
+              "band:custom:1"
+            ],
+            [
+              "band:custom:0"
+            ]
+          ],
+          "footprints": [
+            13,
+            13
+          ],
+          "sharedReachableSupport": [
+            80.53,
+            73.87
+          ],
+          "perCapitaReturn": [
+            1,
+            1
+          ],
+          "depletionAtA": 0.0698
+        },
+        {
+          "season": 8,
+          "shares": [
+            1,
+            1
+          ],
+          "overlaps": [
+            [],
+            []
+          ],
+          "footprints": [
+            13,
+            13
+          ],
+          "sharedReachableSupport": [
+            133.57,
+            142.62
+          ],
+          "perCapitaReturn": [
+            0.04,
+            0.03
+          ],
+          "depletionAtA": 0.0254
+        },
+        {
+          "season": 9,
+          "shares": [
+            0.9231,
+            0.9231
+          ],
+          "overlaps": [
+            [
+              "band:custom:1"
+            ],
+            [
+              "band:custom:0"
+            ]
+          ],
+          "footprints": [
+            13,
+            13
+          ],
+          "sharedReachableSupport": [
+            121.19,
+            125.5
+          ],
+          "perCapitaReturn": [
+            0.91,
+            1
+          ],
+          "depletionAtA": 0.0256
+        },
+        {
+          "season": 10,
+          "shares": [
+            0.9231,
+            0.9231
+          ],
+          "overlaps": [
+            [
+              "band:custom:1"
+            ],
+            [
+              "band:custom:0"
+            ]
+          ],
+          "footprints": [
+            13,
+            13
+          ],
+          "sharedReachableSupport": [
+            93.31,
+            98.11
+          ],
+          "perCapitaReturn": [
+            1,
+            1
+          ],
+          "depletionAtA": 0.0412
+        },
+        {
+          "season": 11,
+          "shares": [
+            0.9231,
+            0.9231
+          ],
+          "overlaps": [
+            [
+              "band:custom:1"
+            ],
+            [
+              "band:custom:0"
+            ]
+          ],
+          "footprints": [
+            13,
+            13
+          ],
+          "sharedReachableSupport": [
+            74.98,
+            78.84
+          ],
+          "perCapitaReturn": [
+            1,
+            1
+          ],
+          "depletionAtA": 0.0564
+        },
+        {
+          "season": 12,
+          "shares": [
+            1,
+            1
+          ],
+          "overlaps": [
+            [],
+            []
+          ],
+          "footprints": [
+            13,
+            13
+          ],
+          "sharedReachableSupport": [
+            134.08,
+            139.01
+          ],
+          "perCapitaReturn": [
+            0.06,
+            0.04
+          ],
+          "depletionAtA": 0.0445
+        },
+        {
+          "season": 13,
+          "shares": [
+            1,
+            1
+          ],
+          "overlaps": [
+            [],
+            []
+          ],
+          "footprints": [
+            13,
+            13
+          ],
+          "sharedReachableSupport": [
+            132.52,
+            137.7
+          ],
+          "perCapitaReturn": [
+            1,
+            1
+          ],
+          "depletionAtA": 0.0598
+        },
+        {
+          "season": 14,
+          "shares": [
+            1,
+            1
+          ],
+          "overlaps": [
+            [],
+            []
+          ],
+          "footprints": [
+            13,
+            13
+          ],
+          "sharedReachableSupport": [
+            102.27,
+            107.11
+          ],
+          "perCapitaReturn": [
+            1,
+            1
+          ],
+          "depletionAtA": 0.0748
+        },
+        {
+          "season": 15,
+          "shares": [
+            0.9231,
+            0.9231
+          ],
+          "overlaps": [
+            [
+              "band:custom:1"
+            ],
+            [
+              "band:custom:0"
+            ]
+          ],
+          "footprints": [
+            13,
+            13
+          ],
+          "sharedReachableSupport": [
+            74.41,
+            78.79
+          ],
+          "perCapitaReturn": [
+            0.76,
+            0.68
+          ],
+          "depletionAtA": 0.0976
+        },
+        {
+          "season": 16,
+          "shares": [
+            0.9231,
+            0.9231
+          ],
+          "overlaps": [
+            [
+              "band:custom:1"
+            ],
+            [
+              "band:custom:0"
+            ]
+          ],
+          "footprints": [
+            13,
+            13
+          ],
+          "sharedReachableSupport": [
+            122.73,
+            125.81
+          ],
+          "perCapitaReturn": [
+            0.07,
+            0.12
+          ],
+          "depletionAtA": 0.089
+        }
+      ]
+    },
+    {
+      "id": "P6",
+      "question": "distant remembered place remains social/spatial memory",
+      "verdict": "MEMORY_PRESERVED",
+      "syntheticState": true,
+      "rememberedTile": "tile:194:90",
+      "placeMemoryRecordPresent": true,
+      "placeMemoryAttachment": 0.44,
+      "isReturnPlace": true,
+      "inFamiliarCountry": true,
+      "familiarCountryCounts": {
+        "core": 8,
+        "familiar": 7,
+        "edge": 26,
+        "rangeTotal": 41,
+        "observedTotal": 45
+      },
+      "placeMemoryCount": 34,
+      "anchorMemoryCount": 0,
+      "accessPlaceCount": 8
+    },
+    {
+      "id": "P7",
+      "question": "dispersed / absorbed / extinct bands contribute zero",
+      "verdict": "CLEAN_TERMINAL_EXCLUSION",
+      "rows": [
+        {
+          "terminalKind": "dispersed",
+          "syntheticState": true,
+          "preconditionMet": true,
+          "beforeWeightedCrowding": 0.15,
+          "afterWeightedCrowding": 0,
+          "afterNamed": false,
+          "afterOverlapping": []
+        },
+        {
+          "terminalKind": "absorbed",
+          "syntheticState": true,
+          "preconditionMet": true,
+          "beforeWeightedCrowding": 0.15,
+          "afterWeightedCrowding": 0,
+          "afterNamed": false,
+          "afterOverlapping": []
+        },
+        {
+          "terminalKind": "extinct",
+          "syntheticState": true,
+          "preconditionMet": true,
+          "beforeWeightedCrowding": 0.15,
+          "afterWeightedCrowding": 0,
+          "afterNamed": false,
+          "afterOverlapping": []
+        }
+      ]
+    },
+    {
+      "id": "P8",
+      "question": "cached field path and cache-less scan path agree on every public field",
+      "verdict": "FIELD_SCAN_PARITY",
+      "compared": 408,
+      "mismatches": 0,
+      "sampleMismatches": []
+    },
+    {
+      "id": "P9",
+      "question": "band processing order invariance",
+      "verdict": "ORDER_INVARIANT",
+      "fingerprints": {
+        "ascending": "band:custom:0|tile:197:90|30|0.05|0.02|0.2|0.9231|0.07|2|42|8|34|0.089 ;; band:custom:1|tile:194:90|30|0.05|0.02|0.21|0.9231|0.12|2|42|8|27|0.2106",
+        "descending": "band:custom:0|tile:197:90|30|0.05|0.02|0.2|0.9231|0.07|2|42|8|34|0.089 ;; band:custom:1|tile:194:90|30|0.05|0.02|0.21|0.9231|0.12|2|42|8|27|0.2106",
+        "permuted": "band:custom:0|tile:197:90|30|0.05|0.02|0.2|0.9231|0.07|2|42|8|34|0.089 ;; band:custom:1|tile:194:90|30|0.05|0.02|0.21|0.9231|0.12|2|42|8|27|0.2106"
+      }
+    },
+    {
+      "id": "P10",
+      "question": "step-mode invariance (daily/weekly/monthly/seasonal)",
+      "verdict": "STEP_MODE_INVARIANT",
+      "totalDays": 1440,
+      "fingerprints": {
+        "daily": "band:custom:0|tile:197:90|30|0.05|0.02|0.2|0.9231|34|0.089 ;; band:custom:1|tile:194:90|30|0.05|0.02|0.21|0.9231|27|0.2106",
+        "weekly": "band:custom:0|tile:197:90|30|0.05|0.02|0.2|0.9231|34|0.089 ;; band:custom:1|tile:194:90|30|0.05|0.02|0.21|0.9231|27|0.2106",
+        "monthly": "band:custom:0|tile:197:90|30|0.05|0.02|0.2|0.9231|34|0.089 ;; band:custom:1|tile:194:90|30|0.05|0.02|0.21|0.9231|27|0.2106",
+        "seasonal": "band:custom:0|tile:197:90|30|0.05|0.02|0.2|0.9231|34|0.089 ;; band:custom:1|tile:194:90|30|0.05|0.02|0.21|0.9231|27|0.2106"
+      }
+    },
+    {
+      "id": "P11",
+      "question": "memory-only distant pair gains no new contact evidence",
+      "verdict": "MEASURED",
+      "syntheticState": true,
+      "separationDistance": 44,
+      "observer": "band:custom:0",
+      "distantBand": "band:custom:1",
+      "contactMemoryNamesDistantBand": true,
+      "contactMemoryCount": 1,
+      "frictionEventsNamingDistantBand": 8,
+      "frictionEventCount": 8,
+      "reportCount": 16
+    },
+    {
+      "id": "P12",
+      "question": "crowding derivations do not modify remembered state",
+      "verdict": "MEMORY_UNMODIFIED_BY_DERIVATION",
+      "derivationIsPure": true,
+      "placeMemoryCount": 34,
+      "anchorMemoryCount": 0,
+      "travelCorridorCount": 8,
+      "accessPlaceCount": 8,
+      "seasonZeroPlaceMemoryCounts": [
+        0,
+        0
+      ]
+    }
+  ]
+}

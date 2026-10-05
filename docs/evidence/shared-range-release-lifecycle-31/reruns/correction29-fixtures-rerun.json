@@ -1,0 +1,481 @@
+{
+  "audit": "CORRECTION-29 — DIRECT ENCOUNTER PROVENANCE CONTROLLED FIXTURES",
+  "arm": "after",
+  "seed": "c29:fixtures",
+  "seasons": 16,
+  "richAnchor": "tile:195:90",
+  "productionInstrumentation": "NONE. Only exported production functions are called, read-only. Synthetic band state is flagged.",
+  "fixtures": [
+    {
+      "id": "P1",
+      "question": "distant bands sharing a remembered place gain direct contact",
+      "verdict": "NO_GHOST_CONTACT",
+      "syntheticState": true,
+      "precondition": "two bands with NO prior contact, separated far beyond every proximity radius, sharing one remembered tile",
+      "preconditionMet": true,
+      "separation": 42,
+      "sharedTile": "tile:194:90",
+      "rememberingBandKeptItsPlaceMemory": true,
+      "beforeStep": {
+        "bandId": "band:custom:0",
+        "position": "tile:195:88",
+        "contactMemoryExists": false,
+        "contactCount": 0,
+        "lastContactAtTick": null,
+        "firstContactAtTick": null,
+        "familiarity": null,
+        "contactMemoryBandIds": [],
+        "encounterRecordCount": 0,
+        "encountersNamingOther": 0,
+        "encounterKindsNamingOther": [],
+        "frictionEventsNamingOther": 0,
+        "frictionEventCount": 0,
+        "reportCount": 16,
+        "reportsNamingOther": 0,
+        "placeMemoryCount": 32,
+        "salientTileCount": 4
+      },
+      "afterStep": {
+        "bandId": "band:custom:0",
+        "position": "tile:195:87",
+        "contactMemoryExists": false,
+        "contactCount": 0,
+        "lastContactAtTick": null,
+        "firstContactAtTick": null,
+        "familiarity": null,
+        "contactMemoryBandIds": [],
+        "encounterRecordCount": 0,
+        "encountersNamingOther": 0,
+        "encounterKindsNamingOther": [],
+        "frictionEventsNamingOther": 0,
+        "frictionEventCount": 0,
+        "reportCount": 16,
+        "reportsNamingOther": 0,
+        "placeMemoryCount": 35,
+        "salientTileCount": 4
+      }
+    },
+    {
+      "id": "P2",
+      "question": "genuinely close bands still produce an encounter and contact memory",
+      "verdict": "LEGITIMATE_ENCOUNTER_PRESENT",
+      "precondition": "residence distance within the encounter admission radius (<= 3)",
+      "preconditionMet": true,
+      "residenceDistance": 2,
+      "reads": {
+        "bandId": "band:custom:0",
+        "position": "tile:195:90",
+        "contactMemoryExists": true,
+        "contactCount": 6,
+        "lastContactAtTick": 2,
+        "firstContactAtTick": 1,
+        "familiarity": 0.56,
+        "contactMemoryBandIds": [
+          "band:custom:1"
+        ],
+        "encounterRecordCount": 6,
+        "encountersNamingOther": 6,
+        "encounterKindsNamingOther": [
+          "adjacent_contact",
+          "same_tile",
+          "same_tile",
+          "same_tile",
+          "unrelated_overlap",
+          "unrelated_overlap"
+        ],
+        "frictionEventsNamingOther": 4,
+        "frictionEventCount": 4,
+        "reportCount": 3,
+        "reportsNamingOther": 0,
+        "placeMemoryCount": 18,
+        "salientTileCount": 0
+      }
+    },
+    {
+      "id": "P3",
+      "question": "geometric proximity alone under current world constraints",
+      "verdict": "PROXIMITY_ALONE_SUFFICES_NO_VISIBILITY_RULE_EXISTS",
+      "note": "Production has no visibility, route or barrier rule for encounters. This fixture reports what production does; it does not assert what it should do, and this checkpoint invents no such rule.",
+      "landTileA": "tile:102:44",
+      "landTileB": "tile:104:44",
+      "separatedByWater": true,
+      "residenceDistance": 3,
+      "reads": {
+        "bandId": "band:custom:0",
+        "position": "tile:102:45",
+        "contactMemoryExists": true,
+        "contactCount": 3,
+        "lastContactAtTick": 1,
+        "firstContactAtTick": 1,
+        "familiarity": 0.32,
+        "contactMemoryBandIds": [
+          "band:custom:1"
+        ],
+        "encounterRecordCount": 3,
+        "encountersNamingOther": 3,
+        "encounterKindsNamingOther": [
+          "unrelated_overlap",
+          "unrelated_overlap",
+          "unrelated_overlap"
+        ],
+        "frictionEventsNamingOther": 2,
+        "frictionEventCount": 2,
+        "reportCount": 3,
+        "reportsNamingOther": 0,
+        "placeMemoryCount": 13,
+        "salientTileCount": 0
+      }
+    },
+    {
+      "id": "P4",
+      "question": "previous contact survives separation without refreshing",
+      "verdict": "CONTACT_PRESERVED_NOT_REFRESHED",
+      "syntheticState": true,
+      "precondition": "a genuine prior contact exists before separation",
+      "preconditionMet": true,
+      "separationAfter": 41,
+      "priorContactCount": 12,
+      "afterContactCount": 12,
+      "priorLastContactAtTick": 4,
+      "afterLastContactAtTick": 4,
+      "contactHistoryPreserved": true,
+      "prior": {
+        "bandId": "band:custom:0",
+        "position": "tile:194:90",
+        "contactMemoryExists": true,
+        "contactCount": 12,
+        "lastContactAtTick": 4,
+        "firstContactAtTick": 1,
+        "familiarity": 1,
+        "contactMemoryBandIds": [
+          "band:custom:1"
+        ],
+        "encounterRecordCount": 12,
+        "encountersNamingOther": 12,
+        "encounterKindsNamingOther": [
+          "adjacent_contact",
+          "same_tile",
+          "same_tile",
+          "same_tile",
+          "unrelated_overlap",
+          "unrelated_overlap",
+          "unrelated_overlap",
+          "unrelated_overlap",
+          "unrelated_overlap",
+          "unrelated_overlap",
+          "unrelated_overlap",
+          "unrelated_overlap"
+        ],
+        "frictionEventsNamingOther": 7,
+        "frictionEventCount": 7,
+        "reportCount": 6,
+        "reportsNamingOther": 0,
+        "placeMemoryCount": 18,
+        "salientTileCount": 2
+      },
+      "after": {
+        "bandId": "band:custom:0",
+        "position": "tile:195:90",
+        "contactMemoryExists": true,
+        "contactCount": 12,
+        "lastContactAtTick": 4,
+        "firstContactAtTick": 1,
+        "familiarity": 1,
+        "contactMemoryBandIds": [
+          "band:custom:1"
+        ],
+        "encounterRecordCount": 12,
+        "encountersNamingOther": 12,
+        "encounterKindsNamingOther": [
+          "adjacent_contact",
+          "same_tile",
+          "same_tile",
+          "same_tile",
+          "unrelated_overlap",
+          "unrelated_overlap",
+          "unrelated_overlap",
+          "unrelated_overlap",
+          "unrelated_overlap",
+          "unrelated_overlap",
+          "unrelated_overlap",
+          "unrelated_overlap"
+        ],
+        "frictionEventsNamingOther": 7,
+        "frictionEventCount": 7,
+        "reportCount": 9,
+        "reportsNamingOther": 0,
+        "placeMemoryCount": 18,
+        "salientTileCount": 2
+      }
+    },
+    {
+      "id": "P5",
+      "question": "reports stay reports; no encounter is admitted beyond the radius",
+      "verdict": "MEASURED",
+      "note": "maxEncounterDistance is measured at the END position of both bands, so it is an upper bound rather than the distance at the moment of the encounter.",
+      "totalReports": 48,
+      "encounterRecords": 60,
+      "maxEncounterDistanceAtEndPositions": 9
+    },
+    {
+      "id": "P6",
+      "question": "shared remembered place transfers no social identity knowledge",
+      "verdict": "NO_IDENTITY_KNOWLEDGE_CROSSED",
+      "syntheticState": true,
+      "separation": 42,
+      "sharedTile": "tile:194:90",
+      "observerA": {
+        "bandId": "band:custom:0",
+        "position": "tile:195:87",
+        "contactMemoryExists": false,
+        "contactCount": 0,
+        "lastContactAtTick": null,
+        "firstContactAtTick": null,
+        "familiarity": null,
+        "contactMemoryBandIds": [],
+        "encounterRecordCount": 0,
+        "encountersNamingOther": 0,
+        "encounterKindsNamingOther": [],
+        "frictionEventsNamingOther": 0,
+        "frictionEventCount": 0,
+        "reportCount": 16,
+        "reportsNamingOther": 0,
+        "placeMemoryCount": 35,
+        "salientTileCount": 4
+      },
+      "observerB": {
+        "bandId": "band:custom:1",
+        "position": "tile:196:130",
+        "contactMemoryExists": false,
+        "contactCount": 0,
+        "lastContactAtTick": null,
+        "firstContactAtTick": null,
+        "familiarity": null,
+        "contactMemoryBandIds": [],
+        "encounterRecordCount": 0,
+        "encountersNamingOther": 0,
+        "encounterKindsNamingOther": [],
+        "frictionEventsNamingOther": 0,
+        "frictionEventCount": 0,
+        "reportCount": 10,
+        "reportsNamingOther": 0,
+        "placeMemoryCount": 19,
+        "salientTileCount": 5
+      }
+    },
+    {
+      "id": "P7",
+      "question": "repeated legitimate contact still increases the counters",
+      "verdict": "REPEATED_CONTACT_ACCUMULATES",
+      "series": [
+        {
+          "season": 1,
+          "residenceDistance": 0,
+          "contactCount": 3,
+          "familiarity": 0.32
+        },
+        {
+          "season": 2,
+          "residenceDistance": 2,
+          "contactCount": 6,
+          "familiarity": 0.56
+        },
+        {
+          "season": 3,
+          "residenceDistance": 2,
+          "contactCount": 9,
+          "familiarity": 0.8
+        },
+        {
+          "season": 4,
+          "residenceDistance": 2,
+          "contactCount": 12,
+          "familiarity": 1
+        },
+        {
+          "season": 5,
+          "residenceDistance": 3,
+          "contactCount": 15,
+          "familiarity": 1
+        },
+        {
+          "season": 6,
+          "residenceDistance": 2,
+          "contactCount": 18,
+          "familiarity": 1
+        }
+      ]
+    },
+    {
+      "id": "P8",
+      "question": "kin identity alone creates no contemporary encounter at distance",
+      "verdict": "NO_KIN_ENCOUNTER_AT_DISTANCE",
+      "note": "Kin recognition rules are NOT redesigned here.",
+      "rows": [
+        {
+          "arm": "kin_only_at_distance",
+          "syntheticState": true,
+          "separation": 41,
+          "reads": {
+            "bandId": "band:custom:0",
+            "position": "tile:195:90",
+            "contactMemoryExists": false,
+            "contactCount": 0,
+            "lastContactAtTick": null,
+            "firstContactAtTick": null,
+            "familiarity": null,
+            "contactMemoryBandIds": [],
+            "encounterRecordCount": 0,
+            "encountersNamingOther": 0,
+            "encounterKindsNamingOther": [],
+            "frictionEventsNamingOther": 0,
+            "frictionEventCount": 0,
+            "reportCount": 9,
+            "reportsNamingOther": 0,
+            "placeMemoryCount": 18,
+            "salientTileCount": 2
+          }
+        },
+        {
+          "arm": "kin_plus_shared_memory_at_distance",
+          "syntheticState": true,
+          "separation": 44,
+          "priorContact": false,
+          "reads": {
+            "bandId": "band:custom:0",
+            "position": "tile:195:87",
+            "contactMemoryExists": false,
+            "contactCount": 0,
+            "lastContactAtTick": null,
+            "firstContactAtTick": null,
+            "familiarity": null,
+            "contactMemoryBandIds": [],
+            "encounterRecordCount": 0,
+            "encountersNamingOther": 0,
+            "encounterKindsNamingOther": [],
+            "frictionEventsNamingOther": 0,
+            "frictionEventCount": 0,
+            "reportCount": 16,
+            "reportsNamingOther": 0,
+            "placeMemoryCount": 35,
+            "salientTileCount": 4
+          }
+        }
+      ]
+    },
+    {
+      "id": "P9",
+      "question": "ghost case creates no friction through the encounter chain",
+      "verdict": "NO_GHOST_FRICTION",
+      "syntheticState": true,
+      "note": "rangeFriction.deriveCandidateBands adds every band in contactMemories as a candidate with no distance limit; closing the encounter gate removes the contact memory that would have made this pair a candidate. rangeFriction's own private-trip provenance is NOT repaired here.",
+      "separation": 42,
+      "beforeFrictionNamingOther": 0,
+      "afterFrictionNamingOther": 0,
+      "newFriction": 0,
+      "before": {
+        "bandId": "band:custom:0",
+        "position": "tile:195:88",
+        "contactMemoryExists": false,
+        "contactCount": 0,
+        "lastContactAtTick": null,
+        "firstContactAtTick": null,
+        "familiarity": null,
+        "contactMemoryBandIds": [],
+        "encounterRecordCount": 0,
+        "encountersNamingOther": 0,
+        "encounterKindsNamingOther": [],
+        "frictionEventsNamingOther": 0,
+        "frictionEventCount": 0,
+        "reportCount": 16,
+        "reportsNamingOther": 0,
+        "placeMemoryCount": 32,
+        "salientTileCount": 4
+      },
+      "after": {
+        "bandId": "band:custom:0",
+        "position": "tile:195:87",
+        "contactMemoryExists": false,
+        "contactCount": 0,
+        "lastContactAtTick": null,
+        "firstContactAtTick": null,
+        "familiarity": null,
+        "contactMemoryBandIds": [],
+        "encounterRecordCount": 0,
+        "encountersNamingOther": 0,
+        "encounterKindsNamingOther": [],
+        "frictionEventsNamingOther": 0,
+        "frictionEventCount": 0,
+        "reportCount": 16,
+        "reportsNamingOther": 0,
+        "placeMemoryCount": 35,
+        "salientTileCount": 4
+      }
+    },
+    {
+      "id": "P10",
+      "question": "physical crowding, catchment, support and depletion unchanged",
+      "verdict": "MEASURED",
+      "reads": [
+        {
+          "bandId": "band:custom:0",
+          "weightedCrowding": 0.02,
+          "crowdingPenalty": 0.01,
+          "crowdingBandIds": [
+            "band:custom:1"
+          ],
+          "meanCatchmentShare": 0.8846,
+          "overlappingBandIds": [
+            "band:custom:1"
+          ],
+          "sharedReachableSupport": 132.06,
+          "perCapitaReturn": 0.09,
+          "tileDepletionHere": 0.0162
+        },
+        {
+          "bandId": "band:custom:1",
+          "weightedCrowding": 0.02,
+          "crowdingPenalty": 0.01,
+          "crowdingBandIds": [
+            "band:custom:0"
+          ],
+          "meanCatchmentShare": 0.8846,
+          "overlappingBandIds": [
+            "band:custom:0"
+          ],
+          "sharedReachableSupport": 116.76,
+          "perCapitaReturn": 0.28,
+          "tileDepletionHere": 0.2633
+        }
+      ],
+      "correction28Guard": {
+        "note": "§7.8 — the distant remembering band must contribute zero physical crowding.",
+        "separation": 42,
+        "observerWeightedCrowding": 0,
+        "observerCrowdingBandIds": []
+      }
+    },
+    {
+      "id": "P11",
+      "question": "band processing order invariance",
+      "verdict": "ORDER_INVARIANT",
+      "fingerprints": {
+        "ascending": "band:custom:0|tile:192:88|30|0.02|0.8846|0.0162|24|band:custom:1|37|8 ;; band:custom:1|tile:194:90|30|0.02|0.8846|0.2633|24|band:custom:0|37|8",
+        "descending": "band:custom:0|tile:192:88|30|0.02|0.8846|0.0162|24|band:custom:1|37|8 ;; band:custom:1|tile:194:90|30|0.02|0.8846|0.2633|24|band:custom:0|37|8",
+        "permuted": "band:custom:0|tile:192:88|30|0.02|0.8846|0.0162|24|band:custom:1|37|8 ;; band:custom:1|tile:194:90|30|0.02|0.8846|0.2633|24|band:custom:0|37|8"
+      }
+    },
+    {
+      "id": "P12",
+      "question": "step-mode invariance",
+      "verdict": "STEP_MODE_INVARIANT",
+      "totalDays": 1440,
+      "fingerprints": {
+        "daily": "band:custom:0|tile:192:88|30|0.02|0.8846|0.0162|24|37 ;; band:custom:1|tile:194:90|30|0.02|0.8846|0.2633|24|37",
+        "weekly": "band:custom:0|tile:192:88|30|0.02|0.8846|0.0162|24|37 ;; band:custom:1|tile:194:90|30|0.02|0.8846|0.2633|24|37",
+        "monthly": "band:custom:0|tile:192:88|30|0.02|0.8846|0.0162|24|37 ;; band:custom:1|tile:194:90|30|0.02|0.8846|0.2633|24|37",
+        "seasonal": "band:custom:0|tile:192:88|30|0.02|0.8846|0.0162|24|37 ;; band:custom:1|tile:194:90|30|0.02|0.8846|0.2633|24|37"
+      }
+    }
+  ]
+}

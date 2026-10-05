@@ -1,0 +1,211 @@
+{
+  "audit": "CORRECTION-34D-NATURAL-HEADCOUNT-LABOR",
+  "years": 50,
+  "seed": "audit27:natural:map2:s1",
+  "map": "map2",
+  "sampling": "daily",
+  "counters": {
+    "bandDays": 162000,
+    "activePartyDays": 2011,
+    "physicalPartyPeopleDays": 4842,
+    "productivePartyWorkerDays": 4842,
+    "nonWorkingAwayPeopleDays": 0,
+    "partyDaysCarryingANonWorkingMember": 0,
+    "annualBoundariesCrossedWhileActive": 50,
+    "cohortTransitionsWhileActive": 0,
+    "productiveLaborReductions": 0,
+    "productiveLaborReducedWorkers": 0,
+    "physicalHeadcountReductions": 0,
+    "physicalHeadcountReducedPeople": 0,
+    "partyLocalLosses": 0,
+    "preparedCommitmentsAtFission": 0,
+    "physicallyAwayPeopleAtFission": 0,
+    "fissionsObserved": 0,
+    "fissionsBlockedByPhysicalUnavailability": 0,
+    "consumptionMismatches": 0,
+    "carryingMismatches": 0,
+    "catchmentMismatches": 0,
+    "unexplainedPhysicalMovements": 0,
+    "populationConservationFailures": 0,
+    "cohortConservationFailures": 0,
+    "laborBoundFailures": 0,
+    "compositionMismatches": 0,
+    "workersExceedingPeople": 0,
+    "invalidStateRepairs": 0,
+    "laborUnsupportedReturns": 0
+  },
+  "adverseTotal": 0,
+  "verdict": "NO_ADVERSE_OBSERVATIONS",
+  "naturalNulls": [
+    "nonWorkingAwayPeopleDays",
+    "partyDaysCarryingANonWorkingMember",
+    "cohortTransitionsWhileActive",
+    "productiveLaborReductions",
+    "productiveLaborReducedWorkers",
+    "physicalHeadcountReductions",
+    "physicalHeadcountReducedPeople",
+    "partyLocalLosses",
+    "preparedCommitmentsAtFission",
+    "physicallyAwayPeopleAtFission",
+    "fissionsObserved",
+    "fissionsBlockedByPhysicalUnavailability",
+    "consumptionMismatches",
+    "carryingMismatches",
+    "catchmentMismatches",
+    "unexplainedPhysicalMovements",
+    "populationConservationFailures",
+    "cohortConservationFailures",
+    "laborBoundFailures",
+    "compositionMismatches",
+    "workersExceedingPeople",
+    "invalidStateRepairs",
+    "laborUnsupportedReturns"
+  ],
+  "nullHonesty": "Counters reading zero are NATURAL ZEROS and are stated as such. A party lives at most 24 days against ANNUAL demography, so cohort transitions and labour reductions while a party is away do not occur naturally in this world. These zeros therefore prove NOTHING about the correctness of the reduction path — the controlled H1-H14 fixtures are that proof, and they were built regardless of natural frequency.",
+  "examples": [
+    {
+      "kind": "annual_boundary_crossed_while_active",
+      "band": "band:varied-lake-east",
+      "day": 2879,
+      "season": "spring",
+      "activeParties": 1,
+      "awayPeople": 2,
+      "awayWorkers": 2,
+      "phases": [
+        "outbound"
+      ]
+    },
+    {
+      "kind": "annual_boundary_crossed_while_active",
+      "band": "band:varied-lake-west",
+      "day": 2879,
+      "season": "spring",
+      "activeParties": 1,
+      "awayPeople": 2,
+      "awayWorkers": 2,
+      "phases": [
+        "outbound"
+      ]
+    },
+    {
+      "kind": "annual_boundary_crossed_while_active",
+      "band": "band:varied-river-mid",
+      "day": 2879,
+      "season": "spring",
+      "activeParties": 1,
+      "awayPeople": 2,
+      "awayWorkers": 2,
+      "phases": [
+        "outbound"
+      ]
+    },
+    {
+      "kind": "annual_boundary_crossed_while_active",
+      "band": "band:varied-lake-east",
+      "day": 3239,
+      "season": "spring",
+      "activeParties": 1,
+      "awayPeople": 2,
+      "awayWorkers": 2,
+      "phases": [
+        "outbound"
+      ]
+    },
+    {
+      "kind": "annual_boundary_crossed_while_active",
+      "band": "band:varied-dry-corridor-mid",
+      "day": 3599,
+      "season": "spring",
+      "activeParties": 1,
+      "awayPeople": 2,
+      "awayWorkers": 2,
+      "phases": [
+        "outbound"
+      ]
+    },
+    {
+      "kind": "annual_boundary_crossed_while_active",
+      "band": "band:varied-dry-corridor-upper",
+      "day": 3599,
+      "season": "spring",
+      "activeParties": 1,
+      "awayPeople": 2,
+      "awayWorkers": 2,
+      "phases": [
+        "outbound"
+      ]
+    },
+    {
+      "kind": "annual_boundary_crossed_while_active",
+      "band": "band:varied-lake-east",
+      "day": 3599,
+      "season": "spring",
+      "activeParties": 1,
+      "awayPeople": 2,
+      "awayWorkers": 2,
+      "phases": [
+        "outbound"
+      ]
+    },
+    {
+      "kind": "annual_boundary_crossed_while_active",
+      "band": "band:varied-lake-north",
+      "day": 3599,
+      "season": "spring",
+      "activeParties": 1,
+      "awayPeople": 2,
+      "awayWorkers": 2,
+      "phases": [
+        "outbound"
+      ]
+    },
+    {
+      "kind": "annual_boundary_crossed_while_active",
+      "band": "band:varied-lake-west",
+      "day": 3599,
+      "season": "spring",
+      "activeParties": 1,
+      "awayPeople": 2,
+      "awayWorkers": 2,
+      "phases": [
+        "outbound"
+      ]
+    },
+    {
+      "kind": "annual_boundary_crossed_while_active",
+      "band": "band:varied-plains-creek",
+      "day": 3599,
+      "season": "spring",
+      "activeParties": 1,
+      "awayPeople": 2,
+      "awayWorkers": 2,
+      "phases": [
+        "outbound"
+      ]
+    },
+    {
+      "kind": "annual_boundary_crossed_while_active",
+      "band": "band:varied-dry-corridor-mid",
+      "day": 3959,
+      "season": "spring",
+      "activeParties": 1,
+      "awayPeople": 2,
+      "awayWorkers": 2,
+      "phases": [
+        "outbound"
+      ]
+    },
+    {
+      "kind": "annual_boundary_crossed_while_active",
+      "band": "band:varied-pass-frontier",
+      "day": 5039,
+      "season": "spring",
+      "activeParties": 1,
+      "awayPeople": 2,
+      "awayWorkers": 2,
+      "phases": [
+        "outbound"
+      ]
+    }
+  ]
+}

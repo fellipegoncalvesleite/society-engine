@@ -1,0 +1,882 @@
+{
+  "site": "tile:188:92",
+  "map": "map2",
+  "years": 150,
+  "seeds": [
+    "s1",
+    "s2",
+    "s3",
+    "s4",
+    "s5",
+    "s6",
+    "s7",
+    "s8",
+    "s9",
+    "s10"
+  ],
+  "label": "exceptionally_rich",
+  "summary": {
+    "E2": {
+      "seeds": 10,
+      "survival": 1,
+      "medianFinalPopulation": 62,
+      "meanFinalPopulation": 60.3,
+      "medianExtinctionYear": null,
+      "totalVerificationAttempts": 5068,
+      "meanSupport": 0.19,
+      "totalReceipts": 117.11
+    }
+  },
+  "rows": [
+    {
+      "arm": "E2",
+      "seed": "s1",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 62,
+      "finalBands": 2,
+      "peakPopulation": 62,
+      "peakBands": 2,
+      "meanSupport": 0.18,
+      "births": 1,
+      "deaths": 1,
+      "physicalFoodReceipts": 10.66,
+      "firstHardshipYear": 1,
+      "firstShallowOpportunityYear": 1,
+      "firstVerificationYear": 19,
+      "firstVerificationQuestion": "water_access",
+      "firstVerificationOutcome": "confirmed",
+      "verificationAttempts": 609,
+      "outcomeCounts": {
+        "confirmed": 607,
+        "negative": 2,
+        "inconclusive": 0,
+        "lost": 0
+      },
+      "laterMovementAfterVerification": 176,
+      "laterResourceActionAfterVerification": 0,
+      "trajectory": [
+        {
+          "year": 1,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 2,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 3,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 4,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 5,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 25,
+          "population": 37,
+          "bands": 1
+        },
+        {
+          "year": 50,
+          "population": 42,
+          "bands": 1
+        },
+        {
+          "year": 75,
+          "population": 46,
+          "bands": 1
+        },
+        {
+          "year": 100,
+          "population": 51,
+          "bands": 2
+        },
+        {
+          "year": 125,
+          "population": 57,
+          "bands": 2
+        },
+        {
+          "year": 150,
+          "population": 62,
+          "bands": 2
+        }
+      ]
+    },
+    {
+      "arm": "E2",
+      "seed": "s2",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 64,
+      "finalBands": 2,
+      "peakPopulation": 64,
+      "peakBands": 2,
+      "meanSupport": 0.21,
+      "births": 1,
+      "deaths": 0,
+      "physicalFoodReceipts": 12.63,
+      "firstHardshipYear": 1,
+      "firstShallowOpportunityYear": 1,
+      "firstVerificationYear": 15,
+      "firstVerificationQuestion": "water_access",
+      "firstVerificationOutcome": "confirmed",
+      "verificationAttempts": 501,
+      "outcomeCounts": {
+        "confirmed": 496,
+        "negative": 0,
+        "inconclusive": 5,
+        "lost": 0
+      },
+      "laterMovementAfterVerification": 196,
+      "laterResourceActionAfterVerification": 0,
+      "trajectory": [
+        {
+          "year": 1,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 2,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 3,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 4,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 5,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 25,
+          "population": 37,
+          "bands": 1
+        },
+        {
+          "year": 50,
+          "population": 42,
+          "bands": 1
+        },
+        {
+          "year": 75,
+          "population": 45,
+          "bands": 1
+        },
+        {
+          "year": 100,
+          "population": 50,
+          "bands": 2
+        },
+        {
+          "year": 125,
+          "population": 57,
+          "bands": 2
+        },
+        {
+          "year": 150,
+          "population": 64,
+          "bands": 2
+        }
+      ]
+    },
+    {
+      "arm": "E2",
+      "seed": "s3",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 49,
+      "finalBands": 2,
+      "peakPopulation": 49,
+      "peakBands": 2,
+      "meanSupport": 0.17,
+      "births": 1,
+      "deaths": 1,
+      "physicalFoodReceipts": 10.44,
+      "firstHardshipYear": 1,
+      "firstShallowOpportunityYear": 1,
+      "firstVerificationYear": 15,
+      "firstVerificationQuestion": "water_access",
+      "firstVerificationOutcome": "confirmed",
+      "verificationAttempts": 645,
+      "outcomeCounts": {
+        "confirmed": 639,
+        "negative": 4,
+        "inconclusive": 2,
+        "lost": 0
+      },
+      "laterMovementAfterVerification": 154,
+      "laterResourceActionAfterVerification": 0,
+      "trajectory": [
+        {
+          "year": 1,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 2,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 3,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 4,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 5,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 25,
+          "population": 37,
+          "bands": 1
+        },
+        {
+          "year": 50,
+          "population": 42,
+          "bands": 1
+        },
+        {
+          "year": 75,
+          "population": 44,
+          "bands": 1
+        },
+        {
+          "year": 100,
+          "population": 44,
+          "bands": 1
+        },
+        {
+          "year": 125,
+          "population": 46,
+          "bands": 2
+        },
+        {
+          "year": 150,
+          "population": 49,
+          "bands": 2
+        }
+      ]
+    },
+    {
+      "arm": "E2",
+      "seed": "s4",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 61,
+      "finalBands": 2,
+      "peakPopulation": 61,
+      "peakBands": 2,
+      "meanSupport": 0.19,
+      "births": 1,
+      "deaths": 0,
+      "physicalFoodReceipts": 11.6,
+      "firstHardshipYear": 1,
+      "firstShallowOpportunityYear": 1,
+      "firstVerificationYear": 21,
+      "firstVerificationQuestion": "water_access",
+      "firstVerificationOutcome": "confirmed",
+      "verificationAttempts": 492,
+      "outcomeCounts": {
+        "confirmed": 492,
+        "negative": 0,
+        "inconclusive": 0,
+        "lost": 0
+      },
+      "laterMovementAfterVerification": 175,
+      "laterResourceActionAfterVerification": 0,
+      "trajectory": [
+        {
+          "year": 1,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 2,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 3,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 4,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 5,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 25,
+          "population": 37,
+          "bands": 1
+        },
+        {
+          "year": 50,
+          "population": 41,
+          "bands": 1
+        },
+        {
+          "year": 75,
+          "population": 45,
+          "bands": 1
+        },
+        {
+          "year": 100,
+          "population": 48,
+          "bands": 1
+        },
+        {
+          "year": 125,
+          "population": 54,
+          "bands": 2
+        },
+        {
+          "year": 150,
+          "population": 61,
+          "bands": 2
+        }
+      ]
+    },
+    {
+      "arm": "E2",
+      "seed": "s5",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 66,
+      "finalBands": 2,
+      "peakPopulation": 66,
+      "peakBands": 2,
+      "meanSupport": 0.21,
+      "births": 1,
+      "deaths": 0,
+      "physicalFoodReceipts": 12.41,
+      "firstHardshipYear": 1,
+      "firstShallowOpportunityYear": 1,
+      "firstVerificationYear": 31,
+      "firstVerificationQuestion": "water_access",
+      "firstVerificationOutcome": "confirmed",
+      "verificationAttempts": 294,
+      "outcomeCounts": {
+        "confirmed": 294,
+        "negative": 0,
+        "inconclusive": 0,
+        "lost": 0
+      },
+      "laterMovementAfterVerification": 173,
+      "laterResourceActionAfterVerification": 0,
+      "trajectory": [
+        {
+          "year": 1,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 2,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 3,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 4,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 5,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 25,
+          "population": 37,
+          "bands": 1
+        },
+        {
+          "year": 50,
+          "population": 42,
+          "bands": 1
+        },
+        {
+          "year": 75,
+          "population": 46,
+          "bands": 1
+        },
+        {
+          "year": 100,
+          "population": 52,
+          "bands": 2
+        },
+        {
+          "year": 125,
+          "population": 58,
+          "bands": 2
+        },
+        {
+          "year": 150,
+          "population": 66,
+          "bands": 2
+        }
+      ]
+    },
+    {
+      "arm": "E2",
+      "seed": "s6",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 63,
+      "finalBands": 2,
+      "peakPopulation": 63,
+      "peakBands": 2,
+      "meanSupport": 0.21,
+      "births": 1,
+      "deaths": 1,
+      "physicalFoodReceipts": 12.87,
+      "firstHardshipYear": 1,
+      "firstShallowOpportunityYear": 1,
+      "firstVerificationYear": 26,
+      "firstVerificationQuestion": "water_access",
+      "firstVerificationOutcome": "confirmed",
+      "verificationAttempts": 422,
+      "outcomeCounts": {
+        "confirmed": 418,
+        "negative": 1,
+        "inconclusive": 3,
+        "lost": 0
+      },
+      "laterMovementAfterVerification": 173,
+      "laterResourceActionAfterVerification": 0,
+      "trajectory": [
+        {
+          "year": 1,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 2,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 3,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 4,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 5,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 25,
+          "population": 37,
+          "bands": 1
+        },
+        {
+          "year": 50,
+          "population": 41,
+          "bands": 1
+        },
+        {
+          "year": 75,
+          "population": 45,
+          "bands": 1
+        },
+        {
+          "year": 100,
+          "population": 51,
+          "bands": 2
+        },
+        {
+          "year": 125,
+          "population": 56,
+          "bands": 2
+        },
+        {
+          "year": 150,
+          "population": 63,
+          "bands": 2
+        }
+      ]
+    },
+    {
+      "arm": "E2",
+      "seed": "s7",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 59,
+      "finalBands": 2,
+      "peakPopulation": 59,
+      "peakBands": 2,
+      "meanSupport": 0.17,
+      "births": 1,
+      "deaths": 1,
+      "physicalFoodReceipts": 10.83,
+      "firstHardshipYear": 1,
+      "firstShallowOpportunityYear": 1,
+      "firstVerificationYear": 16,
+      "firstVerificationQuestion": "water_access",
+      "firstVerificationOutcome": "confirmed",
+      "verificationAttempts": 660,
+      "outcomeCounts": {
+        "confirmed": 659,
+        "negative": 0,
+        "inconclusive": 1,
+        "lost": 0
+      },
+      "laterMovementAfterVerification": 164,
+      "laterResourceActionAfterVerification": 0,
+      "trajectory": [
+        {
+          "year": 1,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 2,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 3,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 4,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 5,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 25,
+          "population": 37,
+          "bands": 1
+        },
+        {
+          "year": 50,
+          "population": 42,
+          "bands": 1
+        },
+        {
+          "year": 75,
+          "population": 45,
+          "bands": 1
+        },
+        {
+          "year": 100,
+          "population": 49,
+          "bands": 2
+        },
+        {
+          "year": 125,
+          "population": 52,
+          "bands": 2
+        },
+        {
+          "year": 150,
+          "population": 59,
+          "bands": 2
+        }
+      ]
+    },
+    {
+      "arm": "E2",
+      "seed": "s8",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 65,
+      "finalBands": 2,
+      "peakPopulation": 65,
+      "peakBands": 2,
+      "meanSupport": 0.19,
+      "births": 1,
+      "deaths": 0,
+      "physicalFoodReceipts": 11.77,
+      "firstHardshipYear": 1,
+      "firstShallowOpportunityYear": 1,
+      "firstVerificationYear": 31,
+      "firstVerificationQuestion": "water_access",
+      "firstVerificationOutcome": "confirmed",
+      "verificationAttempts": 319,
+      "outcomeCounts": {
+        "confirmed": 319,
+        "negative": 0,
+        "inconclusive": 0,
+        "lost": 0
+      },
+      "laterMovementAfterVerification": 179,
+      "laterResourceActionAfterVerification": 0,
+      "trajectory": [
+        {
+          "year": 1,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 2,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 3,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 4,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 5,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 25,
+          "population": 37,
+          "bands": 1
+        },
+        {
+          "year": 50,
+          "population": 42,
+          "bands": 1
+        },
+        {
+          "year": 75,
+          "population": 46,
+          "bands": 1
+        },
+        {
+          "year": 100,
+          "population": 50,
+          "bands": 2
+        },
+        {
+          "year": 125,
+          "population": 57,
+          "bands": 2
+        },
+        {
+          "year": 150,
+          "population": 65,
+          "bands": 2
+        }
+      ]
+    },
+    {
+      "arm": "E2",
+      "seed": "s9",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 62,
+      "finalBands": 2,
+      "peakPopulation": 62,
+      "peakBands": 2,
+      "meanSupport": 0.19,
+      "births": 1,
+      "deaths": 1,
+      "physicalFoodReceipts": 12.8,
+      "firstHardshipYear": 1,
+      "firstShallowOpportunityYear": 1,
+      "firstVerificationYear": 8,
+      "firstVerificationQuestion": "water_access",
+      "firstVerificationOutcome": "confirmed",
+      "verificationAttempts": 521,
+      "outcomeCounts": {
+        "confirmed": 518,
+        "negative": 0,
+        "inconclusive": 3,
+        "lost": 0
+      },
+      "laterMovementAfterVerification": 191,
+      "laterResourceActionAfterVerification": 0,
+      "trajectory": [
+        {
+          "year": 1,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 2,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 3,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 4,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 5,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 25,
+          "population": 37,
+          "bands": 1
+        },
+        {
+          "year": 50,
+          "population": 42,
+          "bands": 1
+        },
+        {
+          "year": 75,
+          "population": 46,
+          "bands": 1
+        },
+        {
+          "year": 100,
+          "population": 51,
+          "bands": 2
+        },
+        {
+          "year": 125,
+          "population": 56,
+          "bands": 2
+        },
+        {
+          "year": 150,
+          "population": 62,
+          "bands": 2
+        }
+      ]
+    },
+    {
+      "arm": "E2",
+      "seed": "s10",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 52,
+      "finalBands": 2,
+      "peakPopulation": 52,
+      "peakBands": 2,
+      "meanSupport": 0.2,
+      "births": 1,
+      "deaths": 1,
+      "physicalFoodReceipts": 11.1,
+      "firstHardshipYear": 1,
+      "firstShallowOpportunityYear": 1,
+      "firstVerificationYear": 8,
+      "firstVerificationQuestion": "water_access",
+      "firstVerificationOutcome": "confirmed",
+      "verificationAttempts": 605,
+      "outcomeCounts": {
+        "confirmed": 594,
+        "negative": 4,
+        "inconclusive": 7,
+        "lost": 0
+      },
+      "laterMovementAfterVerification": 180,
+      "laterResourceActionAfterVerification": 0,
+      "trajectory": [
+        {
+          "year": 1,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 2,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 3,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 4,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 5,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 25,
+          "population": 37,
+          "bands": 1
+        },
+        {
+          "year": 50,
+          "population": 41,
+          "bands": 1
+        },
+        {
+          "year": 75,
+          "population": 45,
+          "bands": 1
+        },
+        {
+          "year": 100,
+          "population": 46,
+          "bands": 1
+        },
+        {
+          "year": 125,
+          "population": 48,
+          "bands": 2
+        },
+        {
+          "year": 150,
+          "population": 52,
+          "bands": 2
+        }
+      ]
+    }
+  ]
+}

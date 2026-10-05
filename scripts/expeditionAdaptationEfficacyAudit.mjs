@@ -120,7 +120,9 @@ try {
     // resolver (no depletion, no cargo) and require real standing availability.
     const probe = trips.resolveExpeditionTargetWork(
       world, band, probeMemory(tile), tile.id, d, route, Number(world.time.day ?? 0), "food_resource_check",
-      { verifyOnly: true },
+      // CORRECTION-34E — the resolver now requires the party's productive labour; this probe
+      // states the party it is simulating instead of inheriting the residence's.
+      { verifyOnly: true, partyWorkers: 2 },
     );
     const availability = probe.record.physicalFoodHarvest?.physicalAvailability ?? 0;
     if (probe.record.physicalFoodHarvest?.physicalSourceFound !== true || availability < 0.08) continue;

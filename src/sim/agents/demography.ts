@@ -17,6 +17,16 @@ import type {
   SeasonalSupportState,
   TravelCorridorMemory,
 } from "./types";
+// CORRECTION-34C — the away-party headcount, read from the same leaf authority
+// `deriveAvailableMobilityPools` and the shared-catchment effort term use, so a fission cannot
+// disagree with them about who is physically at camp. `bandMobility` imports only types.
+import {
+  derivePhysicallyAwayPartyPeople,
+  derivePreparedCommitmentPartyPeople,
+} from "./bandMobility";
+import { isFissionEligibleParent } from "./bandLifecycle";
+import { beginNaturalFissionProposal } from "./naturalFissionPreDeparture";
+import { getLatestPhysicalSeparationTick } from "./fissionSeparationHistory";
 import { createDaughterDeepHistory } from "./bandHistory";
 import {
   inheritAdaptiveHumanForDaughter,
@@ -26,6 +36,7 @@ import { inheritAnimalPatternKnowledgeForDaughter } from "./animalLearning";
 import { inheritResourceKnowledgeForDaughter } from "./resourceKnowledge";
 import { deriveReportedKnowledgeTargetBias } from "./reportedKnowledge";
 import { deriveDaughterColor } from "./lineageColor";
+import { deriveLegacyNonCloneableFields } from "./fissionFieldTransferPolicy";
 import { getLocalUsePressureValue } from "./pressure";
 import {
   getCrowdingPenalty,
@@ -64,7 +75,7 @@ import { FISSION_TIEBREAK_EPSILON, seededTieBreakJitter } from "../core/seededVa
 import { getDepletionAdjustedRichness } from "../world/depletion";
 import { getNomadicScaleClass, NOMADIC_MAX_MOBILE_BANDS_WARNING_COUNT } from "./nomadicScale";
 import {
-  deriveCanonicalNutritionState,
+  deriveAnnualNutritionState,
   type CanonicalNutritionState,
 } from "./seasonalSurvival";
 import type {
@@ -72,6 +83,10 @@ import type {
   DiagnosticDemographyMode,
   FoodDemographyDiagnostics,
 } from "../diagnostics/foodDemographyDiagnostics";
+import {
+  getFissionEvaluationObserver,
+  isFissionSuppressedForAudit,
+} from "../diagnostics/fissionDiagnostics";
 import {
   getRiverCrossingForMovement,
   makeRiverCrossingKey,
@@ -88,6 +103,7 @@ interface DemographyComputation {
   readonly viableFrontier: FissionTargetCandidate | undefined;
   readonly shouldCreateDaughter: boolean;
   readonly deferredReason: Reason | undefined;
+  readonly naturalFissionCause: "accumulated_split_pressure" | "crisis_breakaway_pressure" | undefined;
 }
 
 interface FissionTargetCandidate {
@@ -168,23 +184,43 @@ export function updateBandsDemographyAndFission(
     };
     const computation = computeBandDemography(currentWorld, band, contextCache, diagnostics);
     const bandWithDemography = applyDemographyUpdate(currentWorld, band, computation);
-    const maybeFission =
-      computation.shouldCreateDaughter && Object.keys(bandsById).length < MAX_BANDS
-        ? createDaughterBand(currentWorld, bandWithDemography, computation)
+    // ROADMAP ITEM 4 — CUTOVER PREPARATION, NOT PHYSICAL CUTOVER.
+    //
+    // This exact legacy eligibility boundary used to call `createDaughterBand` and immediately move
+    // bodies into an ordinary daughter. It now opens ONE parent-side proposal through the dedicated
+    // natural adapter. `createDaughterBand` remains in source unchanged as compatibility/debt, but
+    // ordinary ecology no longer calls it. No daughter, event or population transfer is produced.
+    const worldWithUpdatedParent: WorldState = {
+      ...currentWorld,
+      bands: { ...currentWorld.bands, [bandWithDemography.id]: bandWithDemography },
+    };
+    const proposed =
+      computation.shouldCreateDaughter &&
+      computation.viableFrontier !== undefined &&
+      computation.naturalFissionCause !== undefined &&
+      Object.keys(bandsById).length < MAX_BANDS
+        ? beginNaturalFissionProposal({
+            world: worldWithUpdatedParent,
+            parentId: bandWithDemography.id,
+            today: Number(world.time.day ?? Number(world.time.tick) * 90),
+            input: {
+              cause: computation.naturalFissionCause,
+              splitPressure: computation.demography.splitPressure,
+              ecologicalFounderRequest: getDaughterPopulation(computation.demography.population),
+              minimumFounderRequest: DAUGHTER_MIN_POPULATION,
+              targetTileId: computation.viableFrontier.tileId,
+              targetScore: computation.viableFrontier.score,
+              targetReason: computation.viableFrontier.reasonType,
+              reasonIds: [computation.primaryReason.id],
+            },
+          })
         : undefined;
-
-    if (maybeFission === undefined) {
-      bandsById = {
-        ...bandsById,
-        [bandWithDemography.id]: bandWithDemography,
-      };
-      continue;
-    }
 
     bandsById = {
       ...bandsById,
-      [maybeFission.parent.id]: maybeFission.parent,
-      [maybeFission.daughter.id]: maybeFission.daughter,
+      [bandWithDemography.id]: proposed?.ok === true
+        ? proposed.world.bands[bandWithDemography.id] ?? bandWithDemography
+        : bandWithDemography,
     };
   }
 
@@ -349,7 +385,12 @@ function computeBandDemography(
   const logisticalInefficiency = band.nomadicScalePressure?.logisticalInefficiencyPenalty ?? getPopulationLogisticalPressure(population);
   const largeBandFissionPressure = band.nomadicScalePressure?.largeBandFissionPressure ?? getPopulationScalePressure(population);
   const seasonalSupport = band.seasonalSupport;
-  const nutrition = deriveCanonicalNutritionState(seasonalSupport);
+  // REPEATED-BAND-EXPANSION-FISSION-14 — demography is an ANNUAL step
+  // (`shouldRunAnnualDemography`, spring) and must read the YEAR it integrates, not
+  // the single season it happens to land on. The seasonal read is retained for every
+  // behavioral consumer (movement, pressure, hardship, social readability); only the
+  // annual vital-rate step reads the annual state. See `deriveAnnualNutritionState`.
+  const nutrition = deriveAnnualNutritionState(seasonalSupport);
   const foodTerms = deriveFoodDemographyRateTerms(
     nutrition,
     seasonalSupport,
@@ -630,6 +671,90 @@ function computeBandDemography(
     viableFrontier !== undefined &&
     demographicState.splitPressure >= 0.48 &&
     hasFissionCooldownElapsed(world.time, band, population);
+  // ── THE LIFECYCLE GATE, AND IT IS FIRST BECAUSE IT IS A QUESTION ABOUT WHO MAY ASK ──
+  //
+  // `isFissionEligibleParent` — established, and not already splitting — is the canonical boundary,
+  // It was originally added before production consumed it, so the annual step once let a
+  // provisional successor satisfy pure split-pressure/cooldown checks and reach the legacy instant
+  // daughter path. It now guards the natural proposal boundary itself.
+  //
+  // The gate belongs HERE, at the producer, rather than at the single call site: `shouldCreateDaughter`
+  // is derived from this, and a field that reads true for a band no caller may act on is a field that
+  // lies. Gating the one caller instead would leave the next caller to rediscover the rule.
+  //
+  // It gates PROPOSAL INITIATION ONLY. Everything above — cohorts, births, deaths, nutrition, the
+  // whole annual bodily step — is computed before this line and is untouched, because a provisional
+  // group is a LIVING band: `bandLifecycle` says so in as many words, and hiding its bodies from the
+  // physical layer would recreate the ghosts CORRECTION-34 removed. Quarantine is not immunity.
+  const eligible =
+    isFissionEligibleParent(band) &&
+    deferredReason === undefined &&
+    (demographicState.splitPressure >= SPLIT_PRESSURE_THRESHOLD || crisisBreakawayCreatesDaughter) &&
+    hasFissionCooldownElapsed(world.time, band, population);
+  const fissionObserver = getFissionEvaluationObserver();
+
+  if (fissionObserver !== undefined) {
+    // AUDIT-ONLY (CORRECTION-14). Reports the gate values the decision above already
+    // computed. Never reached in production/UI/worker runs; creates no state.
+    const latestPhysicalSeparationTick = getLatestPhysicalSeparationTick(band);
+    fissionObserver({
+      tick: world.time.tick,
+      year: world.time.year,
+      bandId: band.id,
+      ...(band.parentBandId === undefined ? {} : { parentBandId: band.parentBandId }),
+      population: roundedPopulation,
+      dependents: cohorts.dependents,
+      workingAdults: cohorts.workingAdults,
+      elders: cohorts.elders,
+      rawSupportRatio: seasonalSupport?.currentSeasonSupport.rawSupportRatio ?? 0,
+      annualMeanRawSupport: getAnnualMeanRawSupport(seasonalSupport),
+      currentFoodStress: nutrition.currentFoodStress,
+      recentFoodStress: nutrition.recentFoodStress,
+      chronicFoodStress: nutrition.chronicFoodStress,
+      recoveryRelief: nutrition.recoveryRelief,
+      nutritionalSurplus: nutrition.nutritionalSurplus,
+      foodDemographicPressure: nutrition.foodDemographicPressure,
+      chronicDeficitStreak: seasonalSupport?.chronicDeficitStreak ?? 0,
+      sustainedRecoveryStreak: seasonalSupport?.seasonalRecoveryStreak ?? 0,
+      fertilityPressure: round2(fertilityPressure),
+      mortalityPressure: round2(mortalityPressure),
+      netDemographicRate: round4(growthRate),
+      uncappedDemographicRate: round4(uncappedDemographicRate),
+      births: populationAccounting.births,
+      deaths: populationAccounting.deaths,
+      comfortablePopulation,
+      householdCrowdingPressure: round2(householdCrowdingPressure),
+      localUsePressure: round2(currentUsePressure),
+      nomadicScalePressure: round2(nomadicScalePressure),
+      largeBandFissionPressure: round2(largeBandFissionPressure),
+      rangeSaturation: round2(band.rangeSaturation?.saturationPressure ?? 0),
+      knowledgeSaturation: round2(knowledgeSaturation),
+      frontierOpportunity: round2(frontierOpportunity),
+      pressureSignal: round2(pressureSignal),
+      dangerPenalty: round2(dangerPenalty),
+      splitPressure: demographicState.splitPressure,
+      splitPressureThreshold: SPLIT_PRESSURE_THRESHOLD,
+      minimumSplitPopulation: MINIMUM_SPLIT_POPULATION,
+      cooldownElapsed: hasFissionCooldownElapsed(world.time, band, population),
+      ticksSinceLastFission: latestPhysicalSeparationTick === undefined
+        ? undefined
+        : Number(world.time.tick) - latestPhysicalSeparationTick,
+      requiredCooldownTicks: getRequiredFissionCooldownTicks(population),
+      bandCount: Object.keys(world.bands).length,
+      maxBands: MAX_BANDS,
+      fissionTargetEvaluated: shouldEvaluateFissionTarget,
+      fissionTargetCandidatesConsidered: shouldEvaluateFissionTarget
+        ? getFissionTargetRecordIds(band, contextCache).length
+        : 0,
+      viableFrontierTileId: viableFrontier?.tileId,
+      viableFrontierScore: viableFrontier?.score,
+      crisisBreakawayEligible,
+      deferredReasonType: deferredReason === undefined ? undefined : String(deferredReason.type),
+      projectedDaughterPopulation: getDaughterPopulation(roundedPopulation),
+      daughterMinPopulation: DAUGHTER_MIN_POPULATION,
+      eligible,
+    });
+  }
 
   return {
     demography: demographicState,
@@ -638,11 +763,13 @@ function computeBandDemography(
     localUsePressure: currentUsePressure,
     comfortablePopulation,
     viableFrontier,
-    shouldCreateDaughter:
-      deferredReason === undefined &&
-      (demographicState.splitPressure >= SPLIT_PRESSURE_THRESHOLD || crisisBreakawayCreatesDaughter) &&
-      hasFissionCooldownElapsed(world.time, band, population),
+    shouldCreateDaughter: eligible && !isFissionSuppressedForAudit(),
     deferredReason,
+    naturalFissionCause: eligible
+      ? crisisBreakawayCreatesDaughter
+        ? "crisis_breakaway_pressure"
+        : "accumulated_split_pressure"
+      : undefined,
   };
 }
 
@@ -670,7 +797,22 @@ function applyDemographyUpdate(
 // `{ ...parent }` spread — each is explicitly inherited (partial), reset, or
 // degraded in createDaughterBand. `satisfies readonly (keyof Band)[]` keeps the
 // list valid if a field is renamed. 2K.1D-A.
-const DAUGHTER_NON_CLONEABLE_FIELDS = [
+//
+// ── ROADMAP ITEM 4 §5 — THIS LIST IS NO LONGER THE POLICY, IT IS A CONSUMER OF IT. ────────────
+//
+// The literal below is RETAINED VERBATIM as the historical record of what this path registered,
+// and the value actually used is now derived from `fissionFieldTransferPolicy.ts`, which classifies
+// all 133 `keyof Band` rather than the 67 someone remembered. Two policies for one question is how
+// they drift; there is now one, and the daughter path and the Direction-D successor read the same
+// table.
+//
+// The derived set is a SUPERSET of this literal by exactly two fields — `pendingInvestigation` and
+// `recentInvestigationOutcomes` — and adding them is provably inert rather than merely believed to
+// be: the guard fires only when `parentValue !== undefined && daughter[field] === parentValue`, and
+// `createDaughterBand` writes `undefined` to both explicitly, so the second condition can hold only
+// when the first is false. `scripts/fissionFieldTransferAudit.mjs` asserts the derived set against
+// this literal on every run, so a future edit to either cannot silently separate them.
+export const DAUGHTER_NON_CLONEABLE_FIELDS_HISTORICAL_LITERAL = [
   "knowledge", // inherit: partial known tiles
   "placeMemory", // inherit: partial
   "travelCorridors", // inherit: partial
@@ -740,6 +882,9 @@ const DAUGHTER_NON_CLONEABLE_FIELDS = [
   "deepHistory", // inherit: OWN founding snapshot + bounded inherited summaries (DEEP-TIME-HISTORY-TECH-1) — never the parent's history object
 ] as const satisfies readonly (keyof Band)[];
 
+/** The value the guard actually iterates: one policy, two consumers. See the note above. */
+const DAUGHTER_NON_CLONEABLE_FIELDS = deriveLegacyNonCloneableFields();
+
 // Structural guard (2K.1D-A): fail loudly when a non-cloneable field still points
 // at the parent's object/array (i.e. it slipped through the spread unhandled).
 // Only fires on a genuine clone bug — current construction overrides each with a
@@ -775,7 +920,51 @@ function createDaughterBand(
   }
 
   const parentPopulationBefore = toPopulationCount(parent.demography.population);
-  const daughterPopulation = getDaughterPopulation(parentPopulationBefore);
+
+  // ── CORRECTION-34C — A DAUGHTER IS FOUNDED BY PEOPLE WHO ARE PHYSICALLY HERE. ────────────────
+  //
+  // `getDaughterPopulation` reads the parent's TOTAL population, and nothing in this function ever
+  // knew about expeditions, so a fission could allocate founders who are standing on an expedition
+  // route or at its target — people who cannot walk out to found anything, because they are not at
+  // the camp the founding party leaves from. It could also drop the parent's cohorts beneath its
+  // own committed party and let the daily reconciler delete those bodies the next day.
+  //
+  // The founding draw is therefore capped by the people physically at the residence. The away
+  // headcount comes from `bandMobility`, a leaf module, and is the SAME authority
+  // `deriveAvailableMobilityPools` and the shared-catchment effort term already use, so "who is at
+  // camp" cannot diverge between readers. When too many people are away the daughter falls below
+  // `DAUGHTER_MIN_POPULATION` and the fission is BLOCKED rather than borrowing bodies it cannot
+  // reach — the parent may be numerically large while being physically thin at home.
+  //
+  // This is the minimum ownership boundary Item 3 needs. Full dynamic fission, daughter viability
+  // and successor groups remain Roadmap Item 4 and are NOT started here.
+  //
+  // ── CORRECTION-34D §8 — PHYSICALLY AWAY IS NOT THE SAME AS UNAVAILABLE. ──────────────────────
+  //
+  // CORRECTION-34C used `partyCompositionTotal(deriveCommittedMobilityPools(parent))`, which
+  // counts `prepared` parties — people standing in this very camp, whose labour is promised but
+  // whose bodies never went anywhere. Calling them physically absent was simply false, and it
+  // conflated two different reasons a person cannot found a daughter.
+  //
+  // They are now separated and both are honoured, each under its own name:
+  //
+  //   PHYSICALLY AWAY — bodies on a route or at a target. They cannot walk out of a camp they are
+  //   not standing in. This is the physical-headcount authority, the same one that places them on
+  //   the map.
+  //
+  //   PREPARED COMMITMENT — bodies here, hands already promised to a party about to depart. They
+  //   are inside the residential physical headcount and are NOT distant. They are withheld from
+  //   founding as a PRIOR LABOUR COMMITMENT, which is a policy choice and is named as one:
+  //   cancelling a prepared party to free founders is a fission decision, and dynamic fission is
+  //   Roadmap Item 4. Nothing here cancels a party as a side effect of a demographic step.
+  const physicallyAwayPeople = derivePhysicallyAwayPartyPeople(parent);
+  const preparedCommitmentPeople = derivePreparedCommitmentPartyPeople(parent);
+  const residentialPhysicalPeople = Math.max(0, parentPopulationBefore - physicallyAwayPeople);
+  const foundersActuallyAvailable = Math.max(0, residentialPhysicalPeople - preparedCommitmentPeople);
+  const daughterPopulation = Math.min(
+    getDaughterPopulation(parentPopulationBefore),
+    foundersActuallyAvailable,
+  );
 
   if (daughterPopulation < DAUGHTER_MIN_POPULATION) {
     return undefined;
@@ -784,7 +973,7 @@ function createDaughterBand(
   const daughterIndex = parent.daughterBandIds.length + 1;
   const daughterBandId = makeDaughterBandId(parent.id, daughterIndex, world.time.tick);
   const splitReason = makeFissionReason(world, parent, daughterBandId, target, daughterPopulation);
-  const inheritedKnowledge = inheritKnowledgeState(world, parent, daughterBandId, target.tileId);
+  const inheritedKnowledge = inheritKnowledgeState(world, parent, daughterBandId, target.tileId, world.time);
   const inheritedMemory = inheritPlaceMemory(parent, inheritedKnowledge);
   const inheritedCrossings = inheritCrossingMemories(parent, inheritedKnowledge);
   const inheritedCorridors = inheritTravelCorridors(parent, inheritedKnowledge);
@@ -917,7 +1106,17 @@ function createDaughterBand(
     activityOutcomeSummary: undefined,
     activityShadowSubsistenceSummary: undefined,
     activityMemoryUpdateSummary: undefined,
+    // CORRECTION-23B §4/§11 — a daughter inherits no verification evidence and no retry
+    // memory. It did not walk to those places and did not draw that water, so it must
+    // establish its own answers rather than acting on its parent's.
+    verificationEvidence: undefined,
+    frontierVerificationAttempts: undefined,
     probeMemory: undefined, // 2K.1G: a daughter starts with no probe history of its own
+    // CORRECTION-26: an investigation the PARENT selected belongs to the parent. A
+    // daughter did not take that decision and cannot execute it, so it inherits neither
+    // the pending record nor the parent's terminal outcomes.
+    pendingInvestigation: undefined,
+    recentInvestigationOutcomes: undefined,
     recentScoutLearning: undefined, // 2K.1I-A: do not clone the parent's debug learning ring
     lastResourceScout: undefined, // 2K.5: the parent's last scout debug (incl. patch-return guidance) resets on fission
     lastPlantUseTest: undefined, // 2K.2E: plant test events are not perfectly inherited
@@ -1085,7 +1284,11 @@ function selectFissionTarget(
     return undefined;
   }
 
-  return getFissionTargetRecordIds(band, contextCache)
+  return getFissionTargetRecordIds(
+    band,
+    contextCache,
+    world.auditOptions?.frontierKnowledgeHiddenFromFission === true,
+  )
     .map((tileId) => band.knowledge.observedTiles[tileId])
     .filter((record): record is KnownTileRecord =>
       record !== undefined &&
@@ -1140,11 +1343,17 @@ function compareFissionTargetsSeeded(
 function getFissionTargetRecordIds(
   band: Band,
   contextCache?: TickContextCache,
+  // CORRECTION-20 §6 — audit-only. Withhold frontier-derived tiles from FISSION TARGET
+  // selection specifically, leaving them readable by movement, resource and camp systems.
+  hideFrontierDerived = false,
 ): readonly TileId[] {
+  const keep = (tileId: TileId): boolean =>
+    !hideFrontierDerived ||
+    band.knowledge.observedTiles[tileId]?.acquisition !== "returned_frontier_exploration";
   const salient = getSalientMemorySummary(contextCache, band.id);
 
   if (salient === undefined) {
-    return Object.keys(band.knowledge.observedTiles) as TileId[];
+    return (Object.keys(band.knowledge.observedTiles) as TileId[]).filter(keep);
   }
 
   return [...new Set<TileId>([
@@ -1152,7 +1361,7 @@ function getFissionTargetRecordIds(
     ...salient.knownOpportunityCandidateIds,
     ...salient.topAnchorPlaceIds,
     ...salient.topReturnPlaceIds,
-  ])].slice(0, 72);
+  ])].filter(keep).slice(0, 72);
 }
 
 // RANGE-3B: founder-style daughter colonization fission bias constants
@@ -1794,11 +2003,12 @@ function makeFissionReason(
   };
 }
 
-function inheritKnowledgeState(
+export function inheritKnowledgeState(
   world: WorldState,
   parent: Band,
   daughterBandId: BandId,
   targetTileId: TileId,
+  observationTime: WorldTime,
 ): KnowledgeState {
   const inheritedRecords = selectInheritedKnownTileRecords(world, parent, targetTileId);
   const observedTiles: Record<string, KnownTileRecord> = {};
@@ -1809,11 +2019,15 @@ function inheritKnowledgeState(
 
     observedTiles[record.tileId] = {
       ...record,
-      firstObservedAt: world.time,
-      lastObservedAt: world.time,
+      firstObservedAt: observationTime,
+      lastObservedAt: observationTime,
       visits: 0,
       confidence,
       knowledgeSource: "inherited_memory",
+      // CORRECTION-23D §6 — a daughter inherits the PLACE, not the verification conclusions
+      // about it. It did not walk there, did not draw that water and did not run that search,
+      // so it holds no settled question and no retry suppression of its own.
+      verificationDisposition: undefined,
       observedSeasonalPattern:
         record.observedSeasonalPattern === undefined
           ? undefined
@@ -1824,8 +2038,8 @@ function inheritKnowledgeState(
     };
     tileObservationHistory.push({
       tileId: record.tileId,
-      observedAt: world.time,
-      season: world.time.season,
+      observedAt: observationTime,
+      season: observationTime.season,
       observedRichness: record.observedRichness,
       observedAquaticPotential: record.observedAquaticPotential,
       observedRisk: record.observedRisk ?? 0.35,
@@ -1833,7 +2047,7 @@ function inheritKnowledgeState(
     });
   }
 
-  for (const physicalRecord of createSpawnPhysicalPerceptionRecords(world, daughterBandId, targetTileId)) {
+  for (const physicalRecord of createSpawnPhysicalPerceptionRecords(world, daughterBandId, targetTileId, observationTime)) {
     observedTiles[physicalRecord.record.tileId] = physicalRecord.record;
     tileObservationHistory.push(physicalRecord.observation);
   }
@@ -1843,7 +2057,7 @@ function inheritKnowledgeState(
     observedTiles: observedTiles as Readonly<Record<TileId, KnownTileRecord>>,
     compressedKnownTileSummaries: [],
     knownAreaSummaries: [],
-    knownBands: [createParentBandRecord(world, parent)],
+    knownBands: [createParentBandRecord(parent, observationTime)],
     knownSettlements: [],
     knownRoutes: [],
     placeAttachments: createInheritedPlaceAttachments(parent, targetTileId),
@@ -1856,6 +2070,7 @@ function createSpawnPhysicalPerceptionRecords(
   world: WorldState,
   daughterBandId: BandId,
   targetTileId: TileId,
+  observationTime: WorldTime,
 ): readonly {
   readonly record: KnownTileRecord;
   readonly observation: TileObservation;
@@ -1885,9 +2100,9 @@ function createSpawnPhysicalPerceptionRecords(
     return {
       record: {
         tileId: tile.id,
-        firstObservedAt: world.time,
-        lastObservedAt: world.time,
-        seasonsObserved: [world.time.season],
+        firstObservedAt: observationTime,
+        lastObservedAt: observationTime,
+        seasonsObserved: [observationTime.season],
         visits,
         observedRichness: getDepletionAdjustedRichness(world, tile),
         observedWaterAccess: tile.resourceProfile.waterAccess,
@@ -1906,8 +2121,8 @@ function createSpawnPhysicalPerceptionRecords(
       },
       observation: {
         tileId: tile.id,
-        observedAt: world.time,
-        season: world.time.season,
+        observedAt: observationTime,
+        season: observationTime.season,
         observedRichness: getDepletionAdjustedRichness(world, tile),
         observedAquaticPotential: tile.resourceProfile.aquaticPotential,
         observedRisk,
@@ -1950,7 +2165,7 @@ function selectInheritedKnownTileRecords(
   return records.slice(0, inheritedLimit);
 }
 
-function inheritPlaceMemory(
+export function inheritPlaceMemory(
   parent: Band,
   knowledge: KnowledgeState,
 ): Readonly<Record<TileId, PlaceMemoryRecord>> {
@@ -1976,7 +2191,7 @@ function inheritPlaceMemory(
   return inherited as Readonly<Record<TileId, PlaceMemoryRecord>>;
 }
 
-function inheritCrossingMemories(
+export function inheritCrossingMemories(
   parent: Band,
   knowledge: KnowledgeState,
 ): Readonly<Record<string, KnownCrossingMemory>> {
@@ -2003,7 +2218,7 @@ function inheritCrossingMemories(
   return inherited as Readonly<Record<string, KnownCrossingMemory>>;
 }
 
-function inheritTravelCorridors(
+export function inheritTravelCorridors(
   parent: Band,
   knowledge: KnowledgeState,
 ): Readonly<Record<RouteId, TravelCorridorMemory>> {
@@ -2027,7 +2242,7 @@ function inheritTravelCorridors(
   return inherited as Readonly<Record<RouteId, TravelCorridorMemory>>;
 }
 
-function getInheritanceProfile(
+export function getInheritanceProfile(
   parent: Band,
   knowledge: KnowledgeState,
   memories: Readonly<Record<TileId, PlaceMemoryRecord>>,
@@ -2064,11 +2279,11 @@ function getInheritanceProfile(
   };
 }
 
-function createParentBandRecord(world: WorldState, parent: Band): KnownBandRecord {
+function createParentBandRecord(parent: Band, observationTime: WorldTime): KnownBandRecord {
   return {
     bandId: parent.id,
-    firstObservedAt: world.time,
-    lastObservedAt: world.time,
+    firstObservedAt: observationTime,
+    lastObservedAt: observationTime,
     confidence: 1,
     estimatedSize: Math.round(parent.demography.population),
     lastKnownTileId: parent.position,
@@ -2227,16 +2442,36 @@ function makeFissionTrace(
   };
 }
 
-function hasFissionCooldownElapsed(time: WorldTime, band: Band, population: number): boolean {
-  const latestFission = band.fissionEvents[band.fissionEvents.length - 1];
-  const requiredCooldown =
-    population >= 300
-      ? MEGA_BAND_FISSION_COOLDOWN_TICKS
-      : population >= 150
-        ? LARGE_BAND_FISSION_COOLDOWN_TICKS
-        : FISSION_COOLDOWN_TICKS;
+function getRequiredFissionCooldownTicks(population: number): number {
+  return population >= 300
+    ? MEGA_BAND_FISSION_COOLDOWN_TICKS
+    : population >= 150
+      ? LARGE_BAND_FISSION_COOLDOWN_TICKS
+      : FISSION_COOLDOWN_TICKS;
+}
 
-  return latestFission === undefined || time.tick - latestFission.tick >= requiredCooldown;
+function hasFissionCooldownElapsed(time: WorldTime, band: Band, population: number): boolean {
+  const latestPhysicalSeparationTick = getLatestPhysicalSeparationTick(band);
+  const requiredCooldown = getRequiredFissionCooldownTicks(population);
+
+  return latestPhysicalSeparationTick === undefined || Number(time.tick) - latestPhysicalSeparationTick >= requiredCooldown;
+}
+
+// CORRECTION-14 audit helper: the uncapped mean raw support over the last four
+// seasons — the YEAR the annual demographic step integrates. Read-only; used by
+// the audit record and by the annual nutrition read (see seasonalSurvival.ts).
+function getAnnualMeanRawSupport(support: SeasonalSupportState | undefined): number {
+  const samples = support?.recentSamples;
+
+  if (samples === undefined || samples.length === 0) {
+    return 1;
+  }
+
+  const window = samples.slice(-4);
+
+  return round4(
+    window.reduce((sum, entry) => sum + Math.max(0, entry.rawSupportRatio), 0) / window.length,
+  );
 }
 
 function getComfortablePopulation(
@@ -3237,7 +3472,7 @@ function normalizeVector(vector: Coord): Coord | undefined {
 
 // RANGE-2: colours of currently-active bands, so a new daughter colour can be pushed clear of
 // them (display-only — band.color affects no decision, fingerprint, or baseline).
-function activeBandColors(world: WorldState): readonly string[] {
+export function activeBandColors(world: WorldState): readonly string[] {
   return Object.values(world.bands)
     .filter((band) => band.viability?.status !== "absorbed" && band.viability?.status !== "extinct")
     .map((band) => band.color);

@@ -1,0 +1,438 @@
+{
+  "audit": "frontierDefaultMapAndBounds",
+  "checkpoint": "CORRECTION-17 §19/§20/§22",
+  "years": 300,
+  "results": [
+    {
+      "map": "map1",
+      "seed": "c17:default:map1:a",
+      "explorationEnabled": true,
+      "finalBands": 8,
+      "peakBands": 8,
+      "startBands": 5,
+      "extinctions": 0,
+      "totalPopulation": 192,
+      "meanBandSpreadTiles": 33,
+      "totalExplorations": 554,
+      "bandsThatExplored": 8,
+      "fractionOfBandsThatExplored": 1,
+      "explorationsPerBandYear": 0.23,
+      "horizon": {
+        "residentialMaxKnownDistance": 43,
+        "residentialMaxConfidenceQualifiedDistance": 43,
+        "partyLocalMaxCarriedDistance": 0,
+        "resourceSpecificMaxDistance": 40
+      },
+      "bounds": {
+        "maxBreadcrumbTrail": 1,
+        "maxCarriedObservations": 0,
+        "maxRetainedOutcomes": 6,
+        "maxActiveFrontierPartiesPerBand": 1,
+        "maxKnownTileRecords": 223,
+        "maxResourceMemories": 48
+      },
+      "runtimeMs": 61080,
+      "msPerSeason": 50.9
+    },
+    {
+      "map": "map1",
+      "seed": "c17:default:map1:a",
+      "explorationEnabled": false,
+      "finalBands": 10,
+      "peakBands": 10,
+      "startBands": 5,
+      "extinctions": 0,
+      "totalPopulation": 235,
+      "meanBandSpreadTiles": 27.1,
+      "totalExplorations": 0,
+      "bandsThatExplored": 0,
+      "fractionOfBandsThatExplored": 0,
+      "explorationsPerBandYear": 0,
+      "horizon": {
+        "residentialMaxKnownDistance": 37,
+        "residentialMaxConfidenceQualifiedDistance": 37,
+        "partyLocalMaxCarriedDistance": 0,
+        "resourceSpecificMaxDistance": 32
+      },
+      "bounds": {
+        "maxBreadcrumbTrail": 0,
+        "maxCarriedObservations": 0,
+        "maxRetainedOutcomes": 6,
+        "maxActiveFrontierPartiesPerBand": 0,
+        "maxKnownTileRecords": 150,
+        "maxResourceMemories": 48
+      },
+      "runtimeMs": 61461,
+      "msPerSeason": 51.22
+    },
+    {
+      "map": "map1",
+      "seed": "c17:default:map1:b",
+      "explorationEnabled": true,
+      "finalBands": 8,
+      "peakBands": 8,
+      "startBands": 5,
+      "extinctions": 0,
+      "totalPopulation": 226,
+      "meanBandSpreadTiles": 35.75,
+      "totalExplorations": 558,
+      "bandsThatExplored": 8,
+      "fractionOfBandsThatExplored": 1,
+      "explorationsPerBandYear": 0.23,
+      "horizon": {
+        "residentialMaxKnownDistance": 54,
+        "residentialMaxConfidenceQualifiedDistance": 54,
+        "partyLocalMaxCarriedDistance": 0,
+        "resourceSpecificMaxDistance": 40
+      },
+      "bounds": {
+        "maxBreadcrumbTrail": 1,
+        "maxCarriedObservations": 0,
+        "maxRetainedOutcomes": 6,
+        "maxActiveFrontierPartiesPerBand": 1,
+        "maxKnownTileRecords": 201,
+        "maxResourceMemories": 48
+      },
+      "runtimeMs": 61525,
+      "msPerSeason": 51.27
+    },
+    {
+      "map": "map1",
+      "seed": "c17:default:map1:b",
+      "explorationEnabled": false,
+      "finalBands": 10,
+      "peakBands": 10,
+      "startBands": 5,
+      "extinctions": 0,
+      "totalPopulation": 292,
+      "meanBandSpreadTiles": 28.68,
+      "totalExplorations": 0,
+      "bandsThatExplored": 0,
+      "fractionOfBandsThatExplored": 0,
+      "explorationsPerBandYear": 0,
+      "horizon": {
+        "residentialMaxKnownDistance": 36,
+        "residentialMaxConfidenceQualifiedDistance": 36,
+        "partyLocalMaxCarriedDistance": 0,
+        "resourceSpecificMaxDistance": 30
+      },
+      "bounds": {
+        "maxBreadcrumbTrail": 0,
+        "maxCarriedObservations": 0,
+        "maxRetainedOutcomes": 6,
+        "maxActiveFrontierPartiesPerBand": 0,
+        "maxKnownTileRecords": 148,
+        "maxResourceMemories": 48
+      },
+      "runtimeMs": 71054,
+      "msPerSeason": 59.21
+    },
+    {
+      "map": "map1",
+      "seed": "c17:default:map1:c",
+      "explorationEnabled": true,
+      "finalBands": 7,
+      "peakBands": 7,
+      "startBands": 5,
+      "extinctions": 0,
+      "totalPopulation": 220,
+      "meanBandSpreadTiles": 37.59,
+      "totalExplorations": 502,
+      "bandsThatExplored": 7,
+      "fractionOfBandsThatExplored": 1,
+      "explorationsPerBandYear": 0.24,
+      "horizon": {
+        "residentialMaxKnownDistance": 36,
+        "residentialMaxConfidenceQualifiedDistance": 36,
+        "partyLocalMaxCarriedDistance": 0,
+        "resourceSpecificMaxDistance": 27
+      },
+      "bounds": {
+        "maxBreadcrumbTrail": 1,
+        "maxCarriedObservations": 0,
+        "maxRetainedOutcomes": 6,
+        "maxActiveFrontierPartiesPerBand": 1,
+        "maxKnownTileRecords": 183,
+        "maxResourceMemories": 48
+      },
+      "runtimeMs": 58721,
+      "msPerSeason": 48.93
+    },
+    {
+      "map": "map1",
+      "seed": "c17:default:map1:c",
+      "explorationEnabled": false,
+      "finalBands": 9,
+      "peakBands": 9,
+      "startBands": 5,
+      "extinctions": 0,
+      "totalPopulation": 229,
+      "meanBandSpreadTiles": 30.67,
+      "totalExplorations": 0,
+      "bandsThatExplored": 0,
+      "fractionOfBandsThatExplored": 0,
+      "explorationsPerBandYear": 0,
+      "horizon": {
+        "residentialMaxKnownDistance": 38,
+        "residentialMaxConfidenceQualifiedDistance": 38,
+        "partyLocalMaxCarriedDistance": 0,
+        "resourceSpecificMaxDistance": 35
+      },
+      "bounds": {
+        "maxBreadcrumbTrail": 0,
+        "maxCarriedObservations": 0,
+        "maxRetainedOutcomes": 6,
+        "maxActiveFrontierPartiesPerBand": 0,
+        "maxKnownTileRecords": 132,
+        "maxResourceMemories": 48
+      },
+      "runtimeMs": 59882,
+      "msPerSeason": 49.9
+    },
+    {
+      "map": "map2",
+      "seed": "c17:default:map2:a",
+      "explorationEnabled": true,
+      "finalBands": 10,
+      "peakBands": 10,
+      "startBands": 9,
+      "extinctions": 0,
+      "totalPopulation": 151,
+      "meanBandSpreadTiles": 58.48,
+      "totalExplorations": 626,
+      "bandsThatExplored": 10,
+      "fractionOfBandsThatExplored": 1,
+      "explorationsPerBandYear": 0.21,
+      "horizon": {
+        "residentialMaxKnownDistance": 37,
+        "residentialMaxConfidenceQualifiedDistance": 37,
+        "partyLocalMaxCarriedDistance": 0,
+        "resourceSpecificMaxDistance": 27
+      },
+      "bounds": {
+        "maxBreadcrumbTrail": 1,
+        "maxCarriedObservations": 0,
+        "maxRetainedOutcomes": 6,
+        "maxActiveFrontierPartiesPerBand": 1,
+        "maxKnownTileRecords": 153,
+        "maxResourceMemories": 48
+      },
+      "runtimeMs": 104913,
+      "msPerSeason": 87.43
+    },
+    {
+      "map": "map2",
+      "seed": "c17:default:map2:a",
+      "explorationEnabled": false,
+      "finalBands": 11,
+      "peakBands": 11,
+      "startBands": 9,
+      "extinctions": 0,
+      "totalPopulation": 226,
+      "meanBandSpreadTiles": 63.55,
+      "totalExplorations": 0,
+      "bandsThatExplored": 0,
+      "fractionOfBandsThatExplored": 0,
+      "explorationsPerBandYear": 0,
+      "horizon": {
+        "residentialMaxKnownDistance": 18,
+        "residentialMaxConfidenceQualifiedDistance": 18,
+        "partyLocalMaxCarriedDistance": 0,
+        "resourceSpecificMaxDistance": 17
+      },
+      "bounds": {
+        "maxBreadcrumbTrail": 0,
+        "maxCarriedObservations": 0,
+        "maxRetainedOutcomes": 6,
+        "maxActiveFrontierPartiesPerBand": 0,
+        "maxKnownTileRecords": 88,
+        "maxResourceMemories": 48
+      },
+      "runtimeMs": 118135,
+      "msPerSeason": 98.45
+    },
+    {
+      "map": "map2",
+      "seed": "c17:default:map2:b",
+      "explorationEnabled": true,
+      "finalBands": 11,
+      "peakBands": 11,
+      "startBands": 9,
+      "extinctions": 0,
+      "totalPopulation": 192,
+      "meanBandSpreadTiles": 63.65,
+      "totalExplorations": 726,
+      "bandsThatExplored": 11,
+      "fractionOfBandsThatExplored": 1,
+      "explorationsPerBandYear": 0.22,
+      "horizon": {
+        "residentialMaxKnownDistance": 45,
+        "residentialMaxConfidenceQualifiedDistance": 45,
+        "partyLocalMaxCarriedDistance": 0,
+        "resourceSpecificMaxDistance": 37
+      },
+      "bounds": {
+        "maxBreadcrumbTrail": 1,
+        "maxCarriedObservations": 0,
+        "maxRetainedOutcomes": 6,
+        "maxActiveFrontierPartiesPerBand": 1,
+        "maxKnownTileRecords": 182,
+        "maxResourceMemories": 48
+      },
+      "runtimeMs": 114856,
+      "msPerSeason": 95.71
+    },
+    {
+      "map": "map2",
+      "seed": "c17:default:map2:b",
+      "explorationEnabled": false,
+      "finalBands": 11,
+      "peakBands": 11,
+      "startBands": 9,
+      "extinctions": 0,
+      "totalPopulation": 208,
+      "meanBandSpreadTiles": 65.17,
+      "totalExplorations": 0,
+      "bandsThatExplored": 0,
+      "fractionOfBandsThatExplored": 0,
+      "explorationsPerBandYear": 0,
+      "horizon": {
+        "residentialMaxKnownDistance": 27,
+        "residentialMaxConfidenceQualifiedDistance": 27,
+        "partyLocalMaxCarriedDistance": 0,
+        "resourceSpecificMaxDistance": 26
+      },
+      "bounds": {
+        "maxBreadcrumbTrail": 0,
+        "maxCarriedObservations": 0,
+        "maxRetainedOutcomes": 6,
+        "maxActiveFrontierPartiesPerBand": 0,
+        "maxKnownTileRecords": 114,
+        "maxResourceMemories": 48
+      },
+      "runtimeMs": 111108,
+      "msPerSeason": 92.59
+    },
+    {
+      "map": "map2",
+      "seed": "c17:default:map2:c",
+      "explorationEnabled": true,
+      "finalBands": 11,
+      "peakBands": 11,
+      "startBands": 9,
+      "extinctions": 0,
+      "totalPopulation": 180,
+      "meanBandSpreadTiles": 62.53,
+      "totalExplorations": 696,
+      "bandsThatExplored": 11,
+      "fractionOfBandsThatExplored": 1,
+      "explorationsPerBandYear": 0.21,
+      "horizon": {
+        "residentialMaxKnownDistance": 34,
+        "residentialMaxConfidenceQualifiedDistance": 34,
+        "partyLocalMaxCarriedDistance": 0,
+        "resourceSpecificMaxDistance": 22
+      },
+      "bounds": {
+        "maxBreadcrumbTrail": 1,
+        "maxCarriedObservations": 0,
+        "maxRetainedOutcomes": 6,
+        "maxActiveFrontierPartiesPerBand": 1,
+        "maxKnownTileRecords": 147,
+        "maxResourceMemories": 48
+      },
+      "runtimeMs": 114407,
+      "msPerSeason": 95.34
+    },
+    {
+      "map": "map2",
+      "seed": "c17:default:map2:c",
+      "explorationEnabled": false,
+      "finalBands": 11,
+      "peakBands": 11,
+      "startBands": 9,
+      "extinctions": 0,
+      "totalPopulation": 208,
+      "meanBandSpreadTiles": 62.5,
+      "totalExplorations": 0,
+      "bandsThatExplored": 0,
+      "fractionOfBandsThatExplored": 0,
+      "explorationsPerBandYear": 0,
+      "horizon": {
+        "residentialMaxKnownDistance": 21,
+        "residentialMaxConfidenceQualifiedDistance": 21,
+        "partyLocalMaxCarriedDistance": 0,
+        "resourceSpecificMaxDistance": 18
+      },
+      "bounds": {
+        "maxBreadcrumbTrail": 0,
+        "maxCarriedObservations": 0,
+        "maxRetainedOutcomes": 6,
+        "maxActiveFrontierPartiesPerBand": 0,
+        "maxKnownTileRecords": 94,
+        "maxResourceMemories": 48
+      },
+      "runtimeMs": 106731,
+      "msPerSeason": 88.94
+    }
+  ],
+  "rescueChecks": [
+    {
+      "map": "map1",
+      "extinctionEliminated": false,
+      "populationInflated": false,
+      "bandCountInflated": false,
+      "lineagesConverged": false,
+      "expeditionSpam": false,
+      "horizonExtended": true,
+      "deltas": {
+        "population": -39.33000000000001,
+        "finalBands": -2,
+        "extinctions": 0,
+        "residentialHorizon": 7.329999999999998
+      },
+      "everyBandExploredAtLeastOnce": true,
+      "criterionNote": "everyBandExploredAtLeastOnce is reported as a trigger-permissiveness signal, NOT as the §20 expansion criterion: band counts DECREASE with exploration enabled, so nothing expanded. Expansion is tested by bandCountInflated/populationInflated; spam by explorationsPerBandYear."
+    },
+    {
+      "map": "map2",
+      "extinctionEliminated": false,
+      "populationInflated": false,
+      "bandCountInflated": false,
+      "lineagesConverged": false,
+      "expeditionSpam": false,
+      "horizonExtended": true,
+      "deltas": {
+        "population": -39.66999999999999,
+        "finalBands": -0.33000000000000007,
+        "extinctions": 0,
+        "residentialHorizon": 16.67
+      },
+      "everyBandExploredAtLeastOnce": true,
+      "criterionNote": "everyBandExploredAtLeastOnce is reported as a trigger-permissiveness signal, NOT as the §20 expansion criterion: band counts DECREASE with exploration enabled, so nothing expanded. Expansion is tested by bandCountInflated/populationInflated; spam by explorationsPerBandYear."
+    }
+  ],
+  "noUniversalRescue": true,
+  "knowledgeClassSeparation": {
+    "note": "residentialBand / partyLocal / resourceSpecific / debugWorldTruth are reported as four distinct fields and are never summed or averaged into one number.",
+    "classes": [
+      "residentialBand",
+      "partyLocal",
+      "resourceSpecific",
+      "debugWorldTruth"
+    ]
+  },
+  "verdict": "PASS",
+  "confirmedRegression": {
+    "claim": "Frontier exploration REDUCES population on both default maps, reproducibly.",
+    "map1PopulationDelta": -39.33000000000001,
+    "map2PopulationDelta": -39.66999999999999,
+    "map1BandDelta": -2,
+    "map2BandDelta": -0.33000000000000007,
+    "seedsPerMap": 3,
+    "years": 300,
+    "mechanismRuledOut": "labour cost (0.21-0.25 journeys/band-year, ~5-10 worker-days of ~3600)",
+    "mechanismUnresolved": "downstream use of the returned knowledge (movement/fission/candidate sets)",
+    "blocking": true
+  }
+}

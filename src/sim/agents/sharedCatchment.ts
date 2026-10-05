@@ -1,3 +1,4 @@
+import { deriveCommittedMobilityPools, partyCompositionTotal } from "./bandMobility";
 import type { TickContextCache } from "./contextCache";
 import type { Band } from "./types";
 import type { BandId, TileId } from "../core/types";
@@ -254,16 +255,72 @@ function getFallbackFootprintCandidateIds(
   return result;
 }
 
-// Foraging draw approximates how hard the band pulls on its catchment. Matches the
-// adult-equivalent demand formula in carryingCapacity.derivePopulationDemand so the
-// shared division and the demand denominator are on the same scale.
+// CORRECTION-34A §9 — LOCAL EXTRACTION EFFORT. Read the history before changing this.
+//
+// This quantity divides a CONTESTED PHYSICAL CATCHMENT between bands: it decides how much of a
+// tile's support each competing band draws. It is therefore an extraction-effort term, and the
+// previous comment here said something different — it said the value "Matches the adult-equivalent
+// demand formula in carryingCapacity.derivePopulationDemand so the shared division and the demand
+// denominator are on the same scale." Naming a quantity extraction effort while calibrating it to
+// consumption demand is the §9 conflation, and it had a physical consequence: `demo.workingAdults`
+// is the FULL count, so a band with three of nine adults away kept claiming the residential
+// catchment as though all nine were foraging locally, while those same three were provisioned from
+// the party's own carried budget and were removing stock at a DIFFERENT tile through
+// `resolveExpeditionTargetWork`. One worker, two extractions.
+//
+// The repair is Option C — separate effort from demand — applied to the AUTHORITY only:
+//   * effort (here) counts the adults PHYSICALLY AT CAMP, so an away worker extracts in exactly
+//     one place, the place where their body is;
+//   * demand (carryingCapacity.derivePopulationDemand) is deliberately UNTOUCHED and still counts
+//     the whole band, because an away worker still has to be fed.
+//
+// The dependent/elder weights are deliberately NOT retuned. They are the existing calibration, and
+// §9 forbids preserving aggregate output by adjusting unrelated terms — so this changes WHO is
+// counted, never how strongly each person counts. Committed adults come from the same authority
+// `deriveAvailableMobilityPools` uses, so "who is at camp" cannot diverge between the two readers.
 function getBandForagingDraw(band: Band): number {
   const demo = band.demography;
-  const adults = Math.max(0, demo.workingAdults);
+
+  // ── CORRECTION-34D — THE AWAY NON-WORKING COUNT IS READ, NOT INFERRED. ──────────────────────
+  //
+  // CORRECTION-34C derived the non-working away people as `max(0, committedAway - workingAdults)`.
+  // That expression only detects the case where the WHOLE cohort has fallen below the committed
+  // total, so a band with twenty adults and a party of six saw an adult age and inferred an
+  // overflow of zero — correct arithmetic, but it was being presented as knowledge about where a
+  // person was, which it never was.
+  //
+  // The party now records its own non-working members, so both quantities are READ from the
+  // record. Away productive workers come out of the adult cohort; away non-working people come out
+  // of `elders`, which is the only cohort an away adult can be reclassified into by the ordinary
+  // annual step (`adults -= adultsAged; elders += adultsAged;`). That allocation is an AGGREGATE
+  // CONVENTION and is named as one — the model has cohorts, not people, and cannot observe which
+  // cohort an away individual now belongs to.
+  //
+  // Dependents are never reduced: a party is not staffed from them, so an away person can never be
+  // one. The 0.65/0.85 weights are deliberately NOT retuned — this changes WHO is counted, never
+  // how strongly each person counts.
+  const awayWorkers = partyCompositionTotal(deriveCommittedMobilityPools(band));
+  let awayNonWorking = 0;
+
+  for (const expedition of band.expeditions ?? []) {
+    if (isAwayPhaseForEffort(expedition.phase)) {
+      awayNonWorking += Math.max(0, expedition.nonWorkingPartyPeople ?? 0);
+    }
+  }
+
+  const adults = Math.max(0, demo.workingAdults - awayWorkers);
+  const elders = Math.max(0, Math.max(0, demo.elders) - awayNonWorking);
   const dependents = Math.max(0, demo.dependents);
-  const elders = Math.max(0, demo.elders);
 
   return Math.max(1, adults * 1.0 + dependents * 0.65 + elders * 0.85);
+}
+
+/**
+ * The LABOUR-committed phases, matching `deriveCommittedMobilityPools`, so the worker term and the
+ * non-working term are drawn over exactly the same set of parties.
+ */
+function isAwayPhaseForEffort(phase: string): boolean {
+  return phase === "prepared" || phase === "outbound" || phase === "operating" || phase === "returning";
 }
 
 function distanceDecay(distance: number): number {

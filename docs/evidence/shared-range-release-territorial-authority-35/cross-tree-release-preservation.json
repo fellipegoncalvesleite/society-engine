@@ -1,0 +1,70 @@
+{
+  "audit": "CORRECTION-35-CROSS-TREE-RELEASE-PRESERVATION",
+  "gate": "L9",
+  "question": "does the release-lifecycle correction change any behaviour?",
+  "trees": {
+    "parent": "742b567",
+    "lifecycleOnly": "e5e3143",
+    "tip": "427d953"
+  },
+  "seed": "audit27:natural:s1",
+  "warmDays": 3600,
+  "verdict": "PART_A_CHANGES_NO_BEHAVIOUR",
+  "behaviourDigests": {
+    "accessBehaviour": {
+      "parent": "1fb8d19823ba8e757c2b8824bba2bf6a",
+      "lifecycleOnly": "1fb8d19823ba8e757c2b8824bba2bf6a",
+      "tip": "1fb8d19823ba8e757c2b8824bba2bf6a",
+      "parentEqualsLifecycleOnly": true,
+      "lifecycleOnlyEqualsTip": true
+    },
+    "decision": {
+      "parent": "87d690b173b28e00d3b59f8b7d39b375",
+      "lifecycleOnly": "87d690b173b28e00d3b59f8b7d39b375",
+      "tip": "9aebd8e2b0d82485ee32d55be212b467",
+      "parentEqualsLifecycleOnly": true,
+      "lifecycleOnlyEqualsTip": false
+    },
+    "pressureState": {
+      "parent": "f589076403aedc0d6f95b62cbdab1b1e",
+      "lifecycleOnly": "f589076403aedc0d6f95b62cbdab1b1e",
+      "tip": "75323278415626be0e9272076cd512d5",
+      "parentEqualsLifecycleOnly": true,
+      "lifecycleOnlyEqualsTip": false
+    },
+    "reasonPressures": {
+      "parent": "a7ca6293d9a6641315deb1c08ea73d0d",
+      "lifecycleOnly": "a7ca6293d9a6641315deb1c08ea73d0d",
+      "tip": "ab6e69efc525a5d96a1e195aa81a61e6",
+      "parentEqualsLifecycleOnly": true,
+      "lifecycleOnlyEqualsTip": false
+    }
+  },
+  "lifecycleMetadataDigest": {
+    "parent": "5ab8627f39178c4909bb1c228532bf0b",
+    "lifecycleOnly": "5ab8627f39178c4909bb1c228532bf0b",
+    "tip": "5ab8627f39178c4909bb1c228532bf0b",
+    "differs": false,
+    "interpretation": "THIS WORLD DOES NOT OCCUPY THE CORRECTED INTERVAL. No place at this seed and warm-up holds evidence weighing strictly between 0 and SOCIAL_EVIDENCE_ACTIVE_MIN_WEIGHT, so the parent's labels happened to be right here and the digests agree. The correction is demonstrated by the controlled fixtures L1/L2 and its natural frequency is measured separately in release-lifecycle-natural-*.json. An agreeing digest here is NOT evidence that the correction does nothing."
+  },
+  "whyThisIsNotVacuous": {
+    "bands": 9,
+    "placeRowsCompared": 72,
+    "placeRowsWithANonZeroAccessScalar": 72,
+    "scalarsCompared": [
+      "strangerCaution",
+      "sharedUsePressure",
+      "rememberedRefusalAvoidance",
+      "rememberedCooperationTolerance",
+      "kinTolerance",
+      "familiarTolerance",
+      "confidence"
+    ],
+    "note": "every compared place carries at least one non-zero access scalar, so 'identical' is a comparison of live readings and not of zeros. kinTolerance and familiarTolerance are included deliberately: the first form of this probe omitted them, and kinTolerance is the scalar the ORIGINAL Item 3 finding missed."
+  },
+  "partBIsSeparate": {
+    "note": "the tip differs from the lifecycle-only commit on decision, pressureState and reasonPressures. That is Part B (the territorial field), measured in cross-tree-territorial-isolation.json, and is intended.",
+    "accessBehaviourUnchangedByPartB": true,
+    "lifecycleMetadataUnchangedByPartB": true
+  }
+}

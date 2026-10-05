@@ -1,0 +1,83 @@
+{
+  "audit": "CORRECTION-34E-CALLER-MATRIX",
+  "distinction": "same-day residential task group != multi-day expedition party",
+  "callers": [
+    {
+      "caller": "applyTripDay -> buildTripRecord (intraSeasonTrips.ts, same-day path)",
+      "activityType": "same-day residential task group",
+      "physicalLocation": "target within the same-day round-trip budget; the group sleeps at camp",
+      "laborAuthority": "estimateTaskGroupPeople(band) — a capped SHARE of residential working adults minus expedition commitments, floored at 1",
+      "depletesStock": true,
+      "producesCargo": false,
+      "reachesEconomy": true,
+      "whyLegitimate": "the group IS drawn from the residence that day, so residential labour is the correct authority. Unchanged by CORRECTION-34E; it passes no party context."
+    },
+    {
+      "caller": "expeditionDailyAction -> resolveExpeditionTargetWork -> buildTripRecord (work)",
+      "activityType": "multi-day expedition party, operating at its target",
+      "physicalLocation": "the party's own positionTileId, up to many days from camp",
+      "laborAuthority": "options.partyWorkers = getExpeditionProductiveWorkers(expedition) — REQUIRED, no fallback",
+      "depletesStock": true,
+      "producesCargo": true,
+      "reachesEconomy": true,
+      "whyLegitimate": "the people doing the work are physically standing at the target. Repaired by CORRECTION-34E; previously read residential labour."
+    },
+    {
+      "caller": "expeditionDailyAction -> resolveExpeditionTargetWork (verification, verifyOnly)",
+      "activityType": "multi-day verification party, looking without taking",
+      "physicalLocation": "the party's own positionTileId",
+      "laborAuthority": "options.partyWorkers = getExpeditionProductiveWorkers(expedition) — REQUIRED",
+      "depletesStock": false,
+      "producesCargo": false,
+      "reachesEconomy": false,
+      "whyLegitimate": "who looks is the party; the take is suppressed by verifyOnly, not by labour. Repaired by CORRECTION-34E."
+    },
+    {
+      "caller": "resolvePhysicalFoodHarvest (intraSeasonTrips.ts, private)",
+      "activityType": "the ONE physical resolver, shared by both paths",
+      "physicalLocation": "the record's own target",
+      "laborAuthority": "none of its own — consumes record.resourceReturn.estimatedReturnValue as the requested amount",
+      "depletesStock": true,
+      "producesCargo": false,
+      "reachesEconomy": true,
+      "whyLegitimate": "deliberately labour-blind so there is exactly one physical harvest equation; correctness therefore depends entirely on the record it is handed, which is why the repair is at the record builder."
+    },
+    {
+      "caller": "estimateTaskGroupPeople (intraSeasonTrips.ts, private)",
+      "activityType": "residential task-group sizing",
+      "physicalLocation": "the residence",
+      "laborAuthority": "band.demography.workingAdults minus committed expedition productive workers, capped and floored at 1",
+      "depletesStock": false,
+      "producesCargo": false,
+      "reachesEconomy": false,
+      "whyLegitimate": "a labour question against a labour cohort. NOT globally replaced: it remains correct for the same-day path and is simply not consulted by the expedition path."
+    }
+  ],
+  "accidentalCallersOnTheWrongAuthority": 0,
+  "auditScriptCallers": [
+    {
+      "script": "expeditionTargetResolutionAudit.mjs (2 sites)",
+      "nowPassesPartyWorkers": true
+    },
+    {
+      "script": "expeditionAdaptationEfficacyAudit.mjs",
+      "nowPassesPartyWorkers": true
+    },
+    {
+      "script": "taskCampComparisonAudit.mjs",
+      "nowPassesPartyWorkers": true
+    },
+    {
+      "script": "expeditionPerformanceMatrixAudit.mjs",
+      "nowPassesPartyWorkers": true
+    },
+    {
+      "script": "targetWorkLaborAudit.mjs",
+      "nowPassesPartyWorkers": true
+    },
+    {
+      "script": "targetWorkFixturesAudit.mjs",
+      "nowPassesPartyWorkers": true
+    }
+  ]
+}

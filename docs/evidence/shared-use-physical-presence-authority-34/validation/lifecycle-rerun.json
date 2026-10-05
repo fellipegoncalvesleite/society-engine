@@ -1,0 +1,113 @@
+{
+  "check": "EXPEDITION-LIFECYCLE-1",
+  "verdict": "PASS",
+  "canonicalSampling": "daily",
+  "years": 40,
+  "checks": {
+    "registryBoundaryIsOrderedAndAcyclic": true,
+    "sameDayVsExpeditionBoundaryIsDurationBased": true,
+    "expeditionsLaunchNaturally": true,
+    "outboundLegIsPhysical": true,
+    "targetWorkOccurs": true,
+    "returnLegIsPhysical": true,
+    "travelTakesDays": true,
+    "noTeleportPositionAlwaysOnRoute": true,
+    "noFoodBeforePhysicalReturn": true,
+    "laborNeverOverCommitted": true,
+    "provisionsAreConsumed": true,
+    "returnedCargoBecomesFood": true,
+    "terminalOutcomesRecorded": true,
+    "activeExpeditionsBounded": true,
+    "outcomeRecordsBounded": true,
+    "routeLengthBounded": true,
+    "deterministicExpeditionIdentities": true,
+    "personConserved": true,
+    "operatingObservedNonVacuously": true,
+    "returningObservedNonVacuously": true,
+    "taskCampObservedNonVacuously": true
+  },
+  "durationBoundary": {
+    "oneTile": 1,
+    "fourTiles": 1,
+    "fiveTiles": 2,
+    "tenTiles": 3
+  },
+  "observed": {
+    "launched": 161,
+    "completed": 161,
+    "aborted": 0,
+    "lost": 0,
+    "depositsWithFood": 11,
+    "informationOnly": 150,
+    "maxActivePerBand": 2,
+    "maxOutcomeRecords": 6,
+    "maxRouteTiles": 26,
+    "sawPrepared": false,
+    "sawOutbound": true,
+    "sawOperating": true,
+    "sawReturning": true,
+    "sawTaskCamp": true,
+    "sawConcurrentParties": true,
+    "phaseDays": {
+      "prepared": 0,
+      "outbound": 504,
+      "operating": 130,
+      "returning": 488
+    },
+    "taskCampDays": 375,
+    "samples": 14400,
+    "travelDaysSeen": 13,
+    "provisionsConsumed": 2.5748,
+    "cargoLost": 0,
+    "laborOverCommitViolations": 0,
+    "positionOffRouteViolations": 0,
+    "personConservationViolations": 0,
+    "receiptsBeforeReturn": 0,
+    "deliveredUnits": 0.4966999999999999,
+    "outcomeReasons": {
+      "frontier_return_budget_reached": 35,
+      "frontier_barrier_blocked": 28,
+      "returned_information_only": 74,
+      "returned_with_cargo": 11,
+      "physically_exhausted": 6,
+      "verification_confirmed": 5,
+      "seasonally_inactive": 1,
+      "target_absent": 1
+    }
+  },
+  "boundaryBlindness": {
+    "sampling": {
+      "daily": 14400,
+      "seasonal": 160
+    },
+    "operating": {
+      "daily": 130,
+      "seasonal": 0
+    },
+    "returning": {
+      "daily": 488,
+      "seasonal": 0
+    },
+    "taskCampDays": {
+      "daily": 375,
+      "seasonal": 0
+    },
+    "sawOperating": {
+      "daily": true,
+      "seasonal": false
+    },
+    "sawReturning": {
+      "daily": true,
+      "seasonal": false
+    },
+    "sawTaskCamp": {
+      "daily": true,
+      "seasonal": false
+    },
+    "sawConcurrentParties": {
+      "daily": true,
+      "seasonal": false
+    },
+    "interpretation": "An expedition's whole lifecycle fits inside a season (EXPEDITION_MAX_DURATION_DAYS = 24 of 90), so a boundary sample can only ever catch a party that happens to straddle the boundary. The daily arm is canonical; the seasonal arm is retained to show why."
+  }
+}

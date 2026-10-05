@@ -1,0 +1,412 @@
+{
+  "audit": "CORRECTION-29 — BEFORE / AFTER CAUSAL PROOF",
+  "beforeCommit": "c5eb58a8f5ff7054665f9c376ac4ca856403efab",
+  "afterBranch": "checkpoint/shared-range-encounter-provenance-29",
+  "method": "The identical fixture and natural scripts were run in a detached worktree at the before commit and on the corrected branch — same seeds, scenarios, durations and measurement seams. Nothing was deleted, no band removed, no duration shortened, no retention changed.",
+  "headline": {
+    "memoryOnlyDistantPairCreatingNewDirectContact": {
+      "requirement": "before = yes, after = no",
+      "before": {
+        "verdict": "GHOST_CONTACT_CREATED",
+        "separation": 42,
+        "priorContact": false,
+        "newContactMemory": true,
+        "contactCount": 3,
+        "encounterRecordsNamingOther": 3,
+        "encounterKinds": [
+          "unrelated_overlap",
+          "unrelated_overlap",
+          "unrelated_overlap"
+        ],
+        "rememberingBandKeptItsPlaceMemory": true
+      },
+      "after": {
+        "verdict": "NO_GHOST_CONTACT",
+        "separation": 42,
+        "priorContact": false,
+        "newContactMemory": false,
+        "contactCount": 0,
+        "encounterRecordsNamingOther": 0,
+        "encounterKinds": [],
+        "rememberingBandKeptItsPlaceMemory": true
+      },
+      "satisfied": true
+    },
+    "legitimateNearbyPairCreatingDirectContact": {
+      "requirement": "before = yes, after = yes",
+      "before": {
+        "verdict": "LEGITIMATE_ENCOUNTER_PRESENT",
+        "residenceDistance": 2,
+        "contactMemoryExists": true,
+        "encounters": 6
+      },
+      "after": {
+        "verdict": "LEGITIMATE_ENCOUNTER_PRESENT",
+        "residenceDistance": 2,
+        "contactMemoryExists": true,
+        "encounters": 6
+      },
+      "satisfied": true
+    }
+  },
+  "fixtureVerdicts": [
+    {
+      "id": "P1",
+      "question": "distant bands sharing a remembered place gain direct contact",
+      "before": "GHOST_CONTACT_CREATED",
+      "after": "NO_GHOST_CONTACT",
+      "changed": true
+    },
+    {
+      "id": "P2",
+      "question": "genuinely close bands still produce an encounter and contact memory",
+      "before": "LEGITIMATE_ENCOUNTER_PRESENT",
+      "after": "LEGITIMATE_ENCOUNTER_PRESENT",
+      "changed": false
+    },
+    {
+      "id": "P3",
+      "question": "geometric proximity alone under current world constraints",
+      "before": "PROXIMITY_ALONE_SUFFICES_NO_VISIBILITY_RULE_EXISTS",
+      "after": "PROXIMITY_ALONE_SUFFICES_NO_VISIBILITY_RULE_EXISTS",
+      "changed": false
+    },
+    {
+      "id": "P4",
+      "question": "previous contact survives separation without refreshing",
+      "before": "CONTACT_PRESERVED_NOT_REFRESHED",
+      "after": "CONTACT_PRESERVED_NOT_REFRESHED",
+      "changed": false
+    },
+    {
+      "id": "P5",
+      "question": "reports stay reports; no encounter is admitted beyond the radius",
+      "before": "MEASURED",
+      "after": "MEASURED",
+      "changed": false
+    },
+    {
+      "id": "P6",
+      "question": "shared remembered place transfers no social identity knowledge",
+      "before": "IDENTITY_KNOWLEDGE_CROSSED",
+      "after": "NO_IDENTITY_KNOWLEDGE_CROSSED",
+      "changed": true
+    },
+    {
+      "id": "P7",
+      "question": "repeated legitimate contact still increases the counters",
+      "before": "REPEATED_CONTACT_ACCUMULATES",
+      "after": "REPEATED_CONTACT_ACCUMULATES",
+      "changed": false
+    },
+    {
+      "id": "P8",
+      "question": "kin identity alone creates no contemporary encounter at distance",
+      "before": "KIN_ENCOUNTER_AT_DISTANCE",
+      "after": "NO_KIN_ENCOUNTER_AT_DISTANCE",
+      "changed": true
+    },
+    {
+      "id": "P9",
+      "question": "ghost case creates no friction through the encounter chain",
+      "before": "NO_GHOST_FRICTION",
+      "after": "NO_GHOST_FRICTION",
+      "changed": false
+    },
+    {
+      "id": "P10",
+      "question": "physical crowding, catchment, support and depletion unchanged",
+      "before": "MEASURED",
+      "after": "MEASURED",
+      "changed": false
+    },
+    {
+      "id": "P11",
+      "question": "band processing order invariance",
+      "before": "ORDER_INVARIANT",
+      "after": "ORDER_INVARIANT",
+      "changed": false
+    },
+    {
+      "id": "P12",
+      "question": "step-mode invariance",
+      "before": "STEP_MODE_INVARIANT",
+      "after": "STEP_MODE_INVARIANT",
+      "changed": false
+    }
+  ],
+  "provenanceClasses": {
+    "note": "The four things §11 requires to be kept apart, measured separately over the same worlds.",
+    "directEncounter": {
+      "before": 22,
+      "after": 17
+    },
+    "rememberedContact": {
+      "before": 50,
+      "after": 60
+    },
+    "reportedAwareness": {
+      "before": 35776,
+      "after": 35776
+    },
+    "socialRangeRecognition": {
+      "before": 94,
+      "after": 94
+    }
+  },
+  "distanceComparison": {
+    "note": "Distance is measured at the END of the tick in which the encounter record first appears. Encounters are written inside updateBandContextStates BEFORE the decision loop moves bands, so this is an UPPER BOUND on the distance at detection, not the detection distance itself. After the change getEncounterKind returns undefined for every distance > 3, so admission beyond 3 is impossible by construction and any residual row is post-encounter movement.",
+    "before": {
+      "4": 6,
+      "2-3": 11,
+      "5-10": 5
+    },
+    "after": {
+      "4": 2,
+      "2-3": 12,
+      "5-10": 3
+    },
+    "maxDirectEncounterDistance": {
+      "before": 5,
+      "after": 5
+    },
+    "encountersBeyondAdmissionRadiusAtEndOfTick": {
+      "before": 11,
+      "after": 5
+    },
+    "beforeSamples": [
+      {
+        "tick": 38,
+        "encounterId": "encounter:38:band:varied-dry-corridor-mid:band:varied-dry-corridor-upper",
+        "kind": "unrelated_overlap",
+        "bandA": "band:varied-dry-corridor-mid",
+        "bandB": "band:varied-dry-corridor-upper",
+        "distanceAtTick": 5
+      },
+      {
+        "tick": 43,
+        "encounterId": "encounter:43:band:varied-dry-corridor-mid:band:varied-dry-corridor-upper",
+        "kind": "unrelated_overlap",
+        "bandA": "band:varied-dry-corridor-mid",
+        "bandB": "band:varied-dry-corridor-upper",
+        "distanceAtTick": 5
+      },
+      {
+        "tick": 47,
+        "encounterId": "encounter:47:band:varied-dry-corridor-mid:band:varied-dry-corridor-upper",
+        "kind": "unrelated_overlap",
+        "bandA": "band:varied-dry-corridor-mid",
+        "bandB": "band:varied-dry-corridor-upper",
+        "distanceAtTick": 4
+      },
+      {
+        "tick": 48,
+        "encounterId": "encounter:48:band:varied-dry-corridor-mid:band:varied-dry-corridor-upper",
+        "kind": "unrelated_overlap",
+        "bandA": "band:varied-dry-corridor-mid",
+        "bandB": "band:varied-dry-corridor-upper",
+        "distanceAtTick": 5
+      },
+      {
+        "tick": 66,
+        "encounterId": "encounter:66:band:varied-dry-corridor-mid:band:varied-dry-corridor-upper",
+        "kind": "unrelated_overlap",
+        "bandA": "band:varied-dry-corridor-mid",
+        "bandB": "band:varied-dry-corridor-upper",
+        "distanceAtTick": 4
+      },
+      {
+        "tick": 67,
+        "encounterId": "encounter:67:band:varied-dry-corridor-mid:band:varied-dry-corridor-upper",
+        "kind": "unrelated_overlap",
+        "bandA": "band:varied-dry-corridor-mid",
+        "bandB": "band:varied-dry-corridor-upper",
+        "distanceAtTick": 4
+      },
+      {
+        "tick": 68,
+        "encounterId": "encounter:68:band:varied-dry-corridor-mid:band:varied-dry-corridor-upper",
+        "kind": "unrelated_overlap",
+        "bandA": "band:varied-dry-corridor-mid",
+        "bandB": "band:varied-dry-corridor-upper",
+        "distanceAtTick": 5
+      },
+      {
+        "tick": 73,
+        "encounterId": "encounter:73:band:varied-dry-corridor-mid:band:varied-dry-corridor-upper",
+        "kind": "unrelated_overlap",
+        "bandA": "band:varied-dry-corridor-mid",
+        "bandB": "band:varied-dry-corridor-upper",
+        "distanceAtTick": 4
+      },
+      {
+        "tick": 77,
+        "encounterId": "encounter:77:band:varied-dry-corridor-mid:band:varied-dry-corridor-upper",
+        "kind": "unrelated_overlap",
+        "bandA": "band:varied-dry-corridor-mid",
+        "bandB": "band:varied-dry-corridor-upper",
+        "distanceAtTick": 5
+      },
+      {
+        "tick": 79,
+        "encounterId": "encounter:79:band:varied-dry-corridor-mid:band:varied-dry-corridor-upper",
+        "kind": "unrelated_overlap",
+        "bandA": "band:varied-dry-corridor-mid",
+        "bandB": "band:varied-dry-corridor-upper",
+        "distanceAtTick": 4
+      },
+      {
+        "tick": 80,
+        "encounterId": "encounter:80:band:varied-dry-corridor-mid:band:varied-dry-corridor-upper",
+        "kind": "unrelated_overlap",
+        "bandA": "band:varied-dry-corridor-mid",
+        "bandB": "band:varied-dry-corridor-upper",
+        "distanceAtTick": 4
+      }
+    ],
+    "afterSamples": [
+      {
+        "tick": 38,
+        "encounterId": "encounter:38:band:varied-dry-corridor-mid:band:varied-dry-corridor-upper",
+        "kind": "unrelated_overlap",
+        "bandA": "band:varied-dry-corridor-mid",
+        "bandB": "band:varied-dry-corridor-upper",
+        "distanceAtTick": 5
+      },
+      {
+        "tick": 43,
+        "encounterId": "encounter:43:band:varied-dry-corridor-mid:band:varied-dry-corridor-upper",
+        "kind": "unrelated_overlap",
+        "bandA": "band:varied-dry-corridor-mid",
+        "bandB": "band:varied-dry-corridor-upper",
+        "distanceAtTick": 5
+      },
+      {
+        "tick": 47,
+        "encounterId": "encounter:47:band:varied-dry-corridor-mid:band:varied-dry-corridor-upper",
+        "kind": "unrelated_overlap",
+        "bandA": "band:varied-dry-corridor-mid",
+        "bandB": "band:varied-dry-corridor-upper",
+        "distanceAtTick": 4
+      },
+      {
+        "tick": 72,
+        "encounterId": "encounter:72:band:varied-dry-corridor-mid:band:varied-dry-corridor-upper",
+        "kind": "unrelated_overlap",
+        "bandA": "band:varied-dry-corridor-mid",
+        "bandB": "band:varied-dry-corridor-upper",
+        "distanceAtTick": 5
+      },
+      {
+        "tick": 80,
+        "encounterId": "encounter:80:band:varied-dry-corridor-mid:band:varied-dry-corridor-upper",
+        "kind": "unrelated_overlap",
+        "bandA": "band:varied-dry-corridor-mid",
+        "bandB": "band:varied-dry-corridor-upper",
+        "distanceAtTick": 4
+      }
+    ]
+  },
+  "naturalOccurrenceComparison": {
+    "seasons": {
+      "before": 480,
+      "after": 480,
+      "delta": 0
+    },
+    "livingBandSeasons": {
+      "before": 2400,
+      "after": 2400,
+      "delta": 0
+    },
+    "encounterCandidatePairSeasons": {
+      "before": 27,
+      "after": 28,
+      "delta": 1
+    },
+    "directEncounters": {
+      "before": 22,
+      "after": 17,
+      "delta": -5
+    },
+    "maxDirectEncounterDistance": {
+      "before": 5,
+      "after": 5,
+      "delta": 0
+    },
+    "encountersBeyondAdmissionRadius": {
+      "before": 11,
+      "after": 5,
+      "delta": -6
+    },
+    "contactMemoriesFirstCreated": {
+      "before": 2,
+      "after": 2,
+      "delta": 0
+    },
+    "contactMemoriesRefreshed": {
+      "before": 42,
+      "after": 32,
+      "delta": -10
+    },
+    "rememberedContactBandSeasons": {
+      "before": 50,
+      "after": 60,
+      "delta": 10
+    },
+    "reportedAwarenessRecords": {
+      "before": 35776,
+      "after": 35776,
+      "delta": 0
+    },
+    "socialRangeRecognizedNeighbours": {
+      "before": 94,
+      "after": 94,
+      "delta": 0
+    },
+    "frictionEventsTotal": {
+      "before": 746,
+      "after": 746,
+      "delta": 0
+    },
+    "frictionEventsNamingAContact": {
+      "before": 735,
+      "after": 735,
+      "delta": 0
+    },
+    "bandSeasonsWithCrowding": {
+      "before": 54,
+      "after": 56,
+      "delta": 2
+    },
+    "contestedCatchmentTileSeasons": {
+      "before": 42,
+      "after": 43,
+      "delta": 1
+    },
+    "moves": {
+      "before": 1546,
+      "after": 1547,
+      "delta": 1
+    },
+    "fissions": {
+      "before": 0,
+      "after": 0,
+      "delta": 0
+    },
+    "finalLivingBandCount": {
+      "before": 30,
+      "after": 30,
+      "delta": 0
+    },
+    "finalPopulation": {
+      "before": 817,
+      "after": 817,
+      "delta": 0
+    },
+    "survived": {
+      "before": 6,
+      "after": 6,
+      "delta": 0
+    }
+  }
+}

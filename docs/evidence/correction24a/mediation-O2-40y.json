@@ -1,0 +1,8315 @@
+{
+  "arm": "O2",
+  "years": 40,
+  "seeds": [
+    "s1",
+    "s2",
+    "s3",
+    "s4",
+    "s5"
+  ],
+  "scenarios": [
+    "map1",
+    "map2",
+    "site_A_coast",
+    "site_B_dry_plains",
+    "site_C_dry_plains",
+    "site_D_aquatic",
+    "site_E_hills",
+    "site_F_hills",
+    "ordinary",
+    "isolated_marginal",
+    "hostile"
+  ],
+  "pairedRuns": 55,
+  "populationPairedDifference": {
+    "positive": 6,
+    "negative": 5,
+    "tied": 44,
+    "median": 0,
+    "mean": 0.0727,
+    "bootstrap95": {
+      "lower": -0.1273,
+      "upper": 0.2909,
+      "iterations": 2000
+    },
+    "crossesZero": true
+  },
+  "firstJourneyIdenticalRuns": "55/55",
+  "pairs": [
+    {
+      "scenario": "map1",
+      "seed": "s1",
+      "firstDivergenceDay": 1350,
+      "launches": [
+        59,
+        62
+      ],
+      "fallthrough": [
+        423,
+        0
+      ],
+      "journeys": [
+        60,
+        63
+      ],
+      "routeSteps": [
+        772,
+        814
+      ],
+      "records": [
+        832,
+        877
+      ],
+      "workerDaysAway": [
+        3192,
+        2524
+      ],
+      "receipts": [
+        0.1259,
+        0.1191
+      ],
+      "support": [
+        0.614,
+        0.62
+      ],
+      "births": [
+        0,
+        0
+      ],
+      "deaths": [
+        0,
+        0
+      ],
+      "population": [
+        159,
+        162
+      ],
+      "survived": [
+        1,
+        1
+      ],
+      "firstJourney": [
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 18,
+          "deepestReach": 18,
+          "durationDays": 9,
+          "forcedReturn": false,
+          "lost": false
+        },
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 18,
+          "deepestReach": 18,
+          "durationDays": 9,
+          "forcedReturn": false,
+          "lost": false
+        }
+      ],
+      "firstJourneyIdentical": true,
+      "populationDiff": 3
+    },
+    {
+      "scenario": "map1",
+      "seed": "s2",
+      "firstDivergenceDay": 1350,
+      "launches": [
+        60,
+        63
+      ],
+      "fallthrough": [
+        466,
+        0
+      ],
+      "journeys": [
+        60,
+        62
+      ],
+      "routeSteps": [
+        836,
+        865
+      ],
+      "records": [
+        896,
+        927
+      ],
+      "workerDaysAway": [
+        3052,
+        3116
+      ],
+      "receipts": [
+        0.1739,
+        0.514
+      ],
+      "support": [
+        0.68,
+        0.652
+      ],
+      "births": [
+        0,
+        0
+      ],
+      "deaths": [
+        0,
+        0
+      ],
+      "population": [
+        159,
+        158
+      ],
+      "survived": [
+        1,
+        1
+      ],
+      "firstJourney": [
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 18,
+          "deepestReach": 18,
+          "durationDays": 10,
+          "forcedReturn": false,
+          "lost": false
+        },
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 18,
+          "deepestReach": 18,
+          "durationDays": 10,
+          "forcedReturn": false,
+          "lost": false
+        }
+      ],
+      "firstJourneyIdentical": true,
+      "populationDiff": -1
+    },
+    {
+      "scenario": "map1",
+      "seed": "s3",
+      "firstDivergenceDay": 3690,
+      "launches": [
+        61,
+        62
+      ],
+      "fallthrough": [
+        423,
+        0
+      ],
+      "journeys": [
+        60,
+        63
+      ],
+      "routeSteps": [
+        794,
+        860
+      ],
+      "records": [
+        854,
+        923
+      ],
+      "workerDaysAway": [
+        2600,
+        2696
+      ],
+      "receipts": [
+        0.5931,
+        0.7819
+      ],
+      "support": [
+        0.808,
+        0.834
+      ],
+      "births": [
+        0,
+        0
+      ],
+      "deaths": [
+        0,
+        0
+      ],
+      "population": [
+        165,
+        164
+      ],
+      "survived": [
+        1,
+        1
+      ],
+      "firstJourney": [
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 18,
+          "deepestReach": 18,
+          "durationDays": 10,
+          "forcedReturn": false,
+          "lost": false
+        },
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 18,
+          "deepestReach": 18,
+          "durationDays": 10,
+          "forcedReturn": false,
+          "lost": false
+        }
+      ],
+      "firstJourneyIdentical": true,
+      "populationDiff": -1
+    },
+    {
+      "scenario": "map1",
+      "seed": "s4",
+      "firstDivergenceDay": 1350,
+      "launches": [
+        60,
+        61
+      ],
+      "fallthrough": [
+        131,
+        0
+      ],
+      "journeys": [
+        62,
+        63
+      ],
+      "routeSteps": [
+        836,
+        889
+      ],
+      "records": [
+        898,
+        952
+      ],
+      "workerDaysAway": [
+        2636,
+        2700
+      ],
+      "receipts": [
+        0.8813,
+        0.8753
+      ],
+      "support": [
+        0.854,
+        0.834
+      ],
+      "births": [
+        0,
+        0
+      ],
+      "deaths": [
+        0,
+        0
+      ],
+      "population": [
+        162,
+        162
+      ],
+      "survived": [
+        1,
+        1
+      ],
+      "firstJourney": [
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 18,
+          "deepestReach": 18,
+          "durationDays": 9,
+          "forcedReturn": false,
+          "lost": false
+        },
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 18,
+          "deepestReach": 18,
+          "durationDays": 9,
+          "forcedReturn": false,
+          "lost": false
+        }
+      ],
+      "firstJourneyIdentical": true,
+      "populationDiff": 0
+    },
+    {
+      "scenario": "map1",
+      "seed": "s5",
+      "firstDivergenceDay": 8286,
+      "launches": [
+        59,
+        59
+      ],
+      "fallthrough": [
+        4,
+        0
+      ],
+      "journeys": [
+        62,
+        62
+      ],
+      "routeSteps": [
+        826,
+        826
+      ],
+      "records": [
+        888,
+        888
+      ],
+      "workerDaysAway": [
+        2644,
+        2650
+      ],
+      "receipts": [
+        0.1458,
+        0.1458
+      ],
+      "support": [
+        0.678,
+        0.678
+      ],
+      "births": [
+        0,
+        0
+      ],
+      "deaths": [
+        0,
+        0
+      ],
+      "population": [
+        163,
+        163
+      ],
+      "survived": [
+        1,
+        1
+      ],
+      "firstJourney": [
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 18,
+          "deepestReach": 18,
+          "durationDays": 9,
+          "forcedReturn": false,
+          "lost": false
+        },
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 18,
+          "deepestReach": 18,
+          "durationDays": 9,
+          "forcedReturn": false,
+          "lost": false
+        }
+      ],
+      "firstJourneyIdentical": true,
+      "populationDiff": 0
+    },
+    {
+      "scenario": "map2",
+      "seed": "s1",
+      "firstDivergenceDay": 1350,
+      "launches": [
+        101,
+        106
+      ],
+      "fallthrough": [
+        916,
+        0
+      ],
+      "journeys": [
+        109,
+        114
+      ],
+      "routeSteps": [
+        1519,
+        1595
+      ],
+      "records": [
+        1628,
+        1709
+      ],
+      "workerDaysAway": [
+        3710,
+        3984
+      ],
+      "receipts": [
+        0.1257,
+        0.163
+      ],
+      "support": [
+        0.5144,
+        0.4767
+      ],
+      "births": [
+        0,
+        0
+      ],
+      "deaths": [
+        0,
+        0
+      ],
+      "population": [
+        213,
+        210
+      ],
+      "survived": [
+        1,
+        1
+      ],
+      "firstJourney": [
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 2,
+          "deepestReach": 2,
+          "durationDays": 2,
+          "forcedReturn": true,
+          "lost": false
+        },
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 2,
+          "deepestReach": 2,
+          "durationDays": 2,
+          "forcedReturn": true,
+          "lost": false
+        }
+      ],
+      "firstJourneyIdentical": true,
+      "populationDiff": -3
+    },
+    {
+      "scenario": "map2",
+      "seed": "s2",
+      "firstDivergenceDay": 1260,
+      "launches": [
+        104,
+        107
+      ],
+      "fallthrough": [
+        923,
+        0
+      ],
+      "journeys": [
+        110,
+        115
+      ],
+      "routeSteps": [
+        1577,
+        1681
+      ],
+      "records": [
+        1687,
+        1796
+      ],
+      "workerDaysAway": [
+        4230,
+        4240
+      ],
+      "receipts": [
+        0.7242,
+        0.3907
+      ],
+      "support": [
+        0.5867,
+        0.49
+      ],
+      "births": [
+        0,
+        0
+      ],
+      "deaths": [
+        0,
+        0
+      ],
+      "population": [
+        217,
+        217
+      ],
+      "survived": [
+        1,
+        1
+      ],
+      "firstJourney": [
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 2,
+          "deepestReach": 2,
+          "durationDays": 2,
+          "forcedReturn": true,
+          "lost": false
+        },
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 2,
+          "deepestReach": 2,
+          "durationDays": 2,
+          "forcedReturn": true,
+          "lost": false
+        }
+      ],
+      "firstJourneyIdentical": true,
+      "populationDiff": 0
+    },
+    {
+      "scenario": "map2",
+      "seed": "s3",
+      "firstDivergenceDay": 1350,
+      "launches": [
+        100,
+        108
+      ],
+      "fallthrough": [
+        1497,
+        0
+      ],
+      "journeys": [
+        105,
+        115
+      ],
+      "routeSteps": [
+        1476,
+        1554
+      ],
+      "records": [
+        1581,
+        1669
+      ],
+      "workerDaysAway": [
+        3344,
+        3360
+      ],
+      "receipts": [
+        0.2192,
+        0.2397
+      ],
+      "support": [
+        0.5567,
+        0.56
+      ],
+      "births": [
+        0,
+        0
+      ],
+      "deaths": [
+        0,
+        0
+      ],
+      "population": [
+        214,
+        214
+      ],
+      "survived": [
+        1,
+        1
+      ],
+      "firstJourney": [
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 2,
+          "deepestReach": 2,
+          "durationDays": 2,
+          "forcedReturn": true,
+          "lost": false
+        },
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 2,
+          "deepestReach": 2,
+          "durationDays": 2,
+          "forcedReturn": true,
+          "lost": false
+        }
+      ],
+      "firstJourneyIdentical": true,
+      "populationDiff": 0
+    },
+    {
+      "scenario": "map2",
+      "seed": "s4",
+      "firstDivergenceDay": 1350,
+      "launches": [
+        101,
+        112
+      ],
+      "fallthrough": [
+        990,
+        0
+      ],
+      "journeys": [
+        108,
+        115
+      ],
+      "routeSteps": [
+        1377,
+        1515
+      ],
+      "records": [
+        1485,
+        1630
+      ],
+      "workerDaysAway": [
+        4002,
+        4156
+      ],
+      "receipts": [
+        0.3609,
+        0.7266
+      ],
+      "support": [
+        0.6189,
+        0.6511
+      ],
+      "births": [
+        0,
+        0
+      ],
+      "deaths": [
+        0,
+        0
+      ],
+      "population": [
+        216,
+        218
+      ],
+      "survived": [
+        1,
+        1
+      ],
+      "firstJourney": [
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 2,
+          "deepestReach": 2,
+          "durationDays": 2,
+          "forcedReturn": true,
+          "lost": false
+        },
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 2,
+          "deepestReach": 2,
+          "durationDays": 2,
+          "forcedReturn": true,
+          "lost": false
+        }
+      ],
+      "firstJourneyIdentical": true,
+      "populationDiff": 2
+    },
+    {
+      "scenario": "map2",
+      "seed": "s5",
+      "firstDivergenceDay": 1350,
+      "launches": [
+        106,
+        108
+      ],
+      "fallthrough": [
+        444,
+        0
+      ],
+      "journeys": [
+        112,
+        115
+      ],
+      "routeSteps": [
+        1547,
+        1652
+      ],
+      "records": [
+        1659,
+        1767
+      ],
+      "workerDaysAway": [
+        3666,
+        3866
+      ],
+      "receipts": [
+        0.4153,
+        0.3906
+      ],
+      "support": [
+        0.53,
+        0.5444
+      ],
+      "births": [
+        0,
+        0
+      ],
+      "deaths": [
+        0,
+        0
+      ],
+      "population": [
+        219,
+        220
+      ],
+      "survived": [
+        1,
+        1
+      ],
+      "firstJourney": [
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 2,
+          "deepestReach": 2,
+          "durationDays": 2,
+          "forcedReturn": true,
+          "lost": false
+        },
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 2,
+          "deepestReach": 2,
+          "durationDays": 2,
+          "forcedReturn": true,
+          "lost": false
+        }
+      ],
+      "firstJourneyIdentical": true,
+      "populationDiff": 1
+    },
+    {
+      "scenario": "site_A_coast",
+      "seed": "s1",
+      "firstDivergenceDay": null,
+      "launches": [
+        13,
+        13
+      ],
+      "fallthrough": [
+        0,
+        0
+      ],
+      "journeys": [
+        13,
+        13
+      ],
+      "routeSteps": [
+        147,
+        147
+      ],
+      "records": [
+        160,
+        160
+      ],
+      "workerDaysAway": [
+        470,
+        470
+      ],
+      "receipts": [
+        0.0356,
+        0.0356
+      ],
+      "support": [
+        0,
+        0
+      ],
+      "births": [
+        0,
+        0
+      ],
+      "deaths": [
+        0,
+        0
+      ],
+      "population": [
+        20,
+        20
+      ],
+      "survived": [
+        1,
+        1
+      ],
+      "firstJourney": [
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 9,
+          "deepestReach": 9,
+          "durationDays": 4,
+          "forcedReturn": true,
+          "lost": false
+        },
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 9,
+          "deepestReach": 9,
+          "durationDays": 4,
+          "forcedReturn": true,
+          "lost": false
+        }
+      ],
+      "firstJourneyIdentical": true,
+      "populationDiff": 0
+    },
+    {
+      "scenario": "site_A_coast",
+      "seed": "s2",
+      "firstDivergenceDay": 5946,
+      "launches": [
+        11,
+        11
+      ],
+      "fallthrough": [
+        1,
+        0
+      ],
+      "journeys": [
+        13,
+        13
+      ],
+      "routeSteps": [
+        94,
+        94
+      ],
+      "records": [
+        107,
+        107
+      ],
+      "workerDaysAway": [
+        606,
+        610
+      ],
+      "receipts": [
+        0.006,
+        0.006
+      ],
+      "support": [
+        0,
+        0
+      ],
+      "births": [
+        0,
+        0
+      ],
+      "deaths": [
+        0,
+        0
+      ],
+      "population": [
+        19,
+        19
+      ],
+      "survived": [
+        1,
+        1
+      ],
+      "firstJourney": [
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 9,
+          "deepestReach": 9,
+          "durationDays": 4,
+          "forcedReturn": true,
+          "lost": false
+        },
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 9,
+          "deepestReach": 9,
+          "durationDays": 4,
+          "forcedReturn": true,
+          "lost": false
+        }
+      ],
+      "firstJourneyIdentical": true,
+      "populationDiff": 0
+    },
+    {
+      "scenario": "site_A_coast",
+      "seed": "s3",
+      "firstDivergenceDay": 5946,
+      "launches": [
+        10,
+        11
+      ],
+      "fallthrough": [
+        1,
+        0
+      ],
+      "journeys": [
+        13,
+        13
+      ],
+      "routeSteps": [
+        88,
+        92
+      ],
+      "records": [
+        101,
+        105
+      ],
+      "workerDaysAway": [
+        626,
+        612
+      ],
+      "receipts": [
+        0.1134,
+        0.0069
+      ],
+      "support": [
+        0,
+        0.15
+      ],
+      "births": [
+        0,
+        0
+      ],
+      "deaths": [
+        0,
+        0
+      ],
+      "population": [
+        19,
+        19
+      ],
+      "survived": [
+        1,
+        1
+      ],
+      "firstJourney": [
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 9,
+          "deepestReach": 9,
+          "durationDays": 4,
+          "forcedReturn": true,
+          "lost": false
+        },
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 9,
+          "deepestReach": 9,
+          "durationDays": 4,
+          "forcedReturn": true,
+          "lost": false
+        }
+      ],
+      "firstJourneyIdentical": true,
+      "populationDiff": 0
+    },
+    {
+      "scenario": "site_A_coast",
+      "seed": "s4",
+      "firstDivergenceDay": 5946,
+      "launches": [
+        9,
+        9
+      ],
+      "fallthrough": [
+        1,
+        0
+      ],
+      "journeys": [
+        13,
+        13
+      ],
+      "routeSteps": [
+        83,
+        83
+      ],
+      "records": [
+        96,
+        96
+      ],
+      "workerDaysAway": [
+        722,
+        726
+      ],
+      "receipts": [
+        0.0248,
+        0.0248
+      ],
+      "support": [
+        0,
+        0
+      ],
+      "births": [
+        0,
+        0
+      ],
+      "deaths": [
+        0,
+        0
+      ],
+      "population": [
+        19,
+        19
+      ],
+      "survived": [
+        1,
+        1
+      ],
+      "firstJourney": [
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 9,
+          "deepestReach": 9,
+          "durationDays": 4,
+          "forcedReturn": true,
+          "lost": false
+        },
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 9,
+          "deepestReach": 9,
+          "durationDays": 4,
+          "forcedReturn": true,
+          "lost": false
+        }
+      ],
+      "firstJourneyIdentical": true,
+      "populationDiff": 0
+    },
+    {
+      "scenario": "site_A_coast",
+      "seed": "s5",
+      "firstDivergenceDay": 5944,
+      "launches": [
+        13,
+        13
+      ],
+      "fallthrough": [
+        2,
+        0
+      ],
+      "journeys": [
+        13,
+        13
+      ],
+      "routeSteps": [
+        148,
+        148
+      ],
+      "records": [
+        161,
+        161
+      ],
+      "workerDaysAway": [
+        454,
+        454
+      ],
+      "receipts": [
+        0.066,
+        0.066
+      ],
+      "support": [
+        0,
+        0
+      ],
+      "births": [
+        0,
+        0
+      ],
+      "deaths": [
+        0,
+        0
+      ],
+      "population": [
+        20,
+        20
+      ],
+      "survived": [
+        1,
+        1
+      ],
+      "firstJourney": [
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 9,
+          "deepestReach": 9,
+          "durationDays": 4,
+          "forcedReturn": true,
+          "lost": false
+        },
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 9,
+          "deepestReach": 9,
+          "durationDays": 4,
+          "forcedReturn": true,
+          "lost": false
+        }
+      ],
+      "firstJourneyIdentical": true,
+      "populationDiff": 0
+    },
+    {
+      "scenario": "site_B_dry_plains",
+      "seed": "s1",
+      "firstDivergenceDay": 3600,
+      "launches": [
+        5,
+        12
+      ],
+      "fallthrough": [
+        1276,
+        0
+      ],
+      "journeys": [
+        6,
+        13
+      ],
+      "routeSteps": [
+        81,
+        207
+      ],
+      "records": [
+        87,
+        220
+      ],
+      "workerDaysAway": [
+        122,
+        266
+      ],
+      "receipts": [
+        0.0228,
+        0.0063
+      ],
+      "support": [
+        0.45,
+        0.14
+      ],
+      "births": [
+        0,
+        0
+      ],
+      "deaths": [
+        0,
+        0
+      ],
+      "population": [
+        23,
+        23
+      ],
+      "survived": [
+        1,
+        1
+      ],
+      "firstJourney": [
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 9,
+          "deepestReach": 9,
+          "durationDays": 4,
+          "forcedReturn": true,
+          "lost": false
+        },
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 9,
+          "deepestReach": 9,
+          "durationDays": 4,
+          "forcedReturn": true,
+          "lost": false
+        }
+      ],
+      "firstJourneyIdentical": true,
+      "populationDiff": 0
+    },
+    {
+      "scenario": "site_B_dry_plains",
+      "seed": "s2",
+      "firstDivergenceDay": 3600,
+      "launches": [
+        2,
+        12
+      ],
+      "fallthrough": [
+        1440,
+        0
+      ],
+      "journeys": [
+        3,
+        13
+      ],
+      "routeSteps": [
+        27,
+        207
+      ],
+      "records": [
+        30,
+        220
+      ],
+      "workerDaysAway": [
+        106,
+        254
+      ],
+      "receipts": [
+        0.0128,
+        0.0116
+      ],
+      "support": [
+        0.4,
+        0.37
+      ],
+      "births": [
+        0,
+        0
+      ],
+      "deaths": [
+        0,
+        0
+      ],
+      "population": [
+        22,
+        22
+      ],
+      "survived": [
+        1,
+        1
+      ],
+      "firstJourney": [
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 9,
+          "deepestReach": 9,
+          "durationDays": 4,
+          "forcedReturn": true,
+          "lost": false
+        },
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 9,
+          "deepestReach": 9,
+          "durationDays": 4,
+          "forcedReturn": true,
+          "lost": false
+        }
+      ],
+      "firstJourneyIdentical": true,
+      "populationDiff": 0
+    },
+    {
+      "scenario": "site_B_dry_plains",
+      "seed": "s3",
+      "firstDivergenceDay": 3600,
+      "launches": [
+        2,
+        12
+      ],
+      "fallthrough": [
+        1801,
+        0
+      ],
+      "journeys": [
+        3,
+        13
+      ],
+      "routeSteps": [
+        27,
+        207
+      ],
+      "records": [
+        30,
+        220
+      ],
+      "workerDaysAway": [
+        38,
+        268
+      ],
+      "receipts": [
+        0.1199,
+        0.0153
+      ],
+      "support": [
+        0.22,
+        0.42
+      ],
+      "births": [
+        0,
+        0
+      ],
+      "deaths": [
+        0,
+        0
+      ],
+      "population": [
+        19,
+        21
+      ],
+      "survived": [
+        1,
+        1
+      ],
+      "firstJourney": [
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 9,
+          "deepestReach": 9,
+          "durationDays": 4,
+          "forcedReturn": true,
+          "lost": false
+        },
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 9,
+          "deepestReach": 9,
+          "durationDays": 4,
+          "forcedReturn": true,
+          "lost": false
+        }
+      ],
+      "firstJourneyIdentical": true,
+      "populationDiff": 2
+    },
+    {
+      "scenario": "site_B_dry_plains",
+      "seed": "s4",
+      "firstDivergenceDay": 3600,
+      "launches": [
+        5,
+        12
+      ],
+      "fallthrough": [
+        1218,
+        0
+      ],
+      "journeys": [
+        6,
+        13
+      ],
+      "routeSteps": [
+        81,
+        207
+      ],
+      "records": [
+        87,
+        220
+      ],
+      "workerDaysAway": [
+        136,
+        264
+      ],
+      "receipts": [
+        0.003,
+        0.0184
+      ],
+      "support": [
+        0.51,
+        0.46
+      ],
+      "births": [
+        0,
+        0
+      ],
+      "deaths": [
+        0,
+        0
+      ],
+      "population": [
+        22,
+        24
+      ],
+      "survived": [
+        1,
+        1
+      ],
+      "firstJourney": [
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 9,
+          "deepestReach": 9,
+          "durationDays": 4,
+          "forcedReturn": true,
+          "lost": false
+        },
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 9,
+          "deepestReach": 9,
+          "durationDays": 4,
+          "forcedReturn": true,
+          "lost": false
+        }
+      ],
+      "firstJourneyIdentical": true,
+      "populationDiff": 2
+    },
+    {
+      "scenario": "site_B_dry_plains",
+      "seed": "s5",
+      "firstDivergenceDay": 3600,
+      "launches": [
+        2,
+        12
+      ],
+      "fallthrough": [
+        1801,
+        0
+      ],
+      "journeys": [
+        3,
+        13
+      ],
+      "routeSteps": [
+        27,
+        207
+      ],
+      "records": [
+        30,
+        220
+      ],
+      "workerDaysAway": [
+        38,
+        250
+      ],
+      "receipts": [
+        0.1178,
+        0.1178
+      ],
+      "support": [
+        0.21,
+        0.27
+      ],
+      "births": [
+        0,
+        0
+      ],
+      "deaths": [
+        0,
+        0
+      ],
+      "population": [
+        19,
+        19
+      ],
+      "survived": [
+        1,
+        1
+      ],
+      "firstJourney": [
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 9,
+          "deepestReach": 9,
+          "durationDays": 4,
+          "forcedReturn": true,
+          "lost": false
+        },
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 9,
+          "deepestReach": 9,
+          "durationDays": 4,
+          "forcedReturn": true,
+          "lost": false
+        }
+      ],
+      "firstJourneyIdentical": true,
+      "populationDiff": 0
+    },
+    {
+      "scenario": "site_C_dry_plains",
+      "seed": "s1",
+      "firstDivergenceDay": 14135,
+      "launches": [
+        13,
+        13
+      ],
+      "fallthrough": [
+        2,
+        0
+      ],
+      "journeys": [
+        13,
+        13
+      ],
+      "routeSteps": [
+        210,
+        210
+      ],
+      "records": [
+        223,
+        223
+      ],
+      "workerDaysAway": [
+        666,
+        666
+      ],
+      "receipts": [
+        0.0124,
+        0.0124
+      ],
+      "support": [
+        0.63,
+        0.63
+      ],
+      "births": [
+        0,
+        0
+      ],
+      "deaths": [
+        0,
+        0
+      ],
+      "population": [
+        29,
+        29
+      ],
+      "survived": [
+        1,
+        1
+      ],
+      "firstJourney": [
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 9,
+          "deepestReach": 9,
+          "durationDays": 4,
+          "forcedReturn": true,
+          "lost": false
+        },
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 9,
+          "deepestReach": 9,
+          "durationDays": 4,
+          "forcedReturn": true,
+          "lost": false
+        }
+      ],
+      "firstJourneyIdentical": true,
+      "populationDiff": 0
+    },
+    {
+      "scenario": "site_C_dry_plains",
+      "seed": "s2",
+      "firstDivergenceDay": null,
+      "launches": [
+        13,
+        13
+      ],
+      "fallthrough": [
+        0,
+        0
+      ],
+      "journeys": [
+        13,
+        13
+      ],
+      "routeSteps": [
+        211,
+        211
+      ],
+      "records": [
+        224,
+        224
+      ],
+      "workerDaysAway": [
+        678,
+        678
+      ],
+      "receipts": [
+        0.0157,
+        0.0157
+      ],
+      "support": [
+        0.55,
+        0.55
+      ],
+      "births": [
+        0,
+        0
+      ],
+      "deaths": [
+        0,
+        0
+      ],
+      "population": [
+        28,
+        28
+      ],
+      "survived": [
+        1,
+        1
+      ],
+      "firstJourney": [
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 9,
+          "deepestReach": 9,
+          "durationDays": 4,
+          "forcedReturn": true,
+          "lost": false
+        },
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 9,
+          "deepestReach": 9,
+          "durationDays": 4,
+          "forcedReturn": true,
+          "lost": false
+        }
+      ],
+      "firstJourneyIdentical": true,
+      "populationDiff": 0
+    },
+    {
+      "scenario": "site_C_dry_plains",
+      "seed": "s3",
+      "firstDivergenceDay": 3606,
+      "launches": [
+        13,
+        13
+      ],
+      "fallthrough": [
+        1,
+        0
+      ],
+      "journeys": [
+        13,
+        13
+      ],
+      "routeSteps": [
+        211,
+        211
+      ],
+      "records": [
+        224,
+        224
+      ],
+      "workerDaysAway": [
+        566,
+        570
+      ],
+      "receipts": [
+        0.013,
+        0.013
+      ],
+      "support": [
+        0.56,
+        0.56
+      ],
+      "births": [
+        0,
+        0
+      ],
+      "deaths": [
+        0,
+        0
+      ],
+      "population": [
+        29,
+        29
+      ],
+      "survived": [
+        1,
+        1
+      ],
+      "firstJourney": [
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 9,
+          "deepestReach": 9,
+          "durationDays": 4,
+          "forcedReturn": true,
+          "lost": false
+        },
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 9,
+          "deepestReach": 9,
+          "durationDays": 4,
+          "forcedReturn": true,
+          "lost": false
+        }
+      ],
+      "firstJourneyIdentical": true,
+      "populationDiff": 0
+    },
+    {
+      "scenario": "site_C_dry_plains",
+      "seed": "s4",
+      "firstDivergenceDay": 3606,
+      "launches": [
+        13,
+        13
+      ],
+      "fallthrough": [
+        1,
+        0
+      ],
+      "journeys": [
+        13,
+        13
+      ],
+      "routeSteps": [
+        211,
+        211
+      ],
+      "records": [
+        224,
+        224
+      ],
+      "workerDaysAway": [
+        790,
+        796
+      ],
+      "receipts": [
+        0.1235,
+        0.1235
+      ],
+      "support": [
+        0.13,
+        0.13
+      ],
+      "births": [
+        0,
+        0
+      ],
+      "deaths": [
+        0,
+        0
+      ],
+      "population": [
+        28,
+        28
+      ],
+      "survived": [
+        1,
+        1
+      ],
+      "firstJourney": [
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 9,
+          "deepestReach": 9,
+          "durationDays": 4,
+          "forcedReturn": true,
+          "lost": false
+        },
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 9,
+          "deepestReach": 9,
+          "durationDays": 4,
+          "forcedReturn": true,
+          "lost": false
+        }
+      ],
+      "firstJourneyIdentical": true,
+      "populationDiff": 0
+    },
+    {
+      "scenario": "site_C_dry_plains",
+      "seed": "s5",
+      "firstDivergenceDay": 5944,
+      "launches": [
+        13,
+        13
+      ],
+      "fallthrough": [
+        4,
+        0
+      ],
+      "journeys": [
+        13,
+        13
+      ],
+      "routeSteps": [
+        211,
+        211
+      ],
+      "records": [
+        224,
+        224
+      ],
+      "workerDaysAway": [
+        670,
+        676
+      ],
+      "receipts": [
+        0.0142,
+        0.0142
+      ],
+      "support": [
+        0.65,
+        0.65
+      ],
+      "births": [
+        0,
+        0
+      ],
+      "deaths": [
+        0,
+        0
+      ],
+      "population": [
+        30,
+        30
+      ],
+      "survived": [
+        1,
+        1
+      ],
+      "firstJourney": [
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 9,
+          "deepestReach": 9,
+          "durationDays": 4,
+          "forcedReturn": true,
+          "lost": false
+        },
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 9,
+          "deepestReach": 9,
+          "durationDays": 4,
+          "forcedReturn": true,
+          "lost": false
+        }
+      ],
+      "firstJourneyIdentical": true,
+      "populationDiff": 0
+    },
+    {
+      "scenario": "site_D_aquatic",
+      "seed": "s1",
+      "firstDivergenceDay": 5940,
+      "launches": [
+        9,
+        11
+      ],
+      "fallthrough": [
+        380,
+        0
+      ],
+      "journeys": [
+        11,
+        13
+      ],
+      "routeSteps": [
+        83,
+        89
+      ],
+      "records": [
+        94,
+        102
+      ],
+      "workerDaysAway": [
+        678,
+        682
+      ],
+      "receipts": [
+        0.013,
+        0.013
+      ],
+      "support": [
+        0.49,
+        0.49
+      ],
+      "births": [
+        0,
+        0
+      ],
+      "deaths": [
+        0,
+        0
+      ],
+      "population": [
+        26,
+        26
+      ],
+      "survived": [
+        1,
+        1
+      ],
+      "firstJourney": [
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 7,
+          "deepestReach": 7,
+          "durationDays": 4,
+          "forcedReturn": true,
+          "lost": false
+        },
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 7,
+          "deepestReach": 7,
+          "durationDays": 4,
+          "forcedReturn": true,
+          "lost": false
+        }
+      ],
+      "firstJourneyIdentical": true,
+      "populationDiff": 0
+    },
+    {
+      "scenario": "site_D_aquatic",
+      "seed": "s2",
+      "firstDivergenceDay": 3600,
+      "launches": [
+        2,
+        12
+      ],
+      "fallthrough": [
+        1635,
+        0
+      ],
+      "journeys": [
+        3,
+        13
+      ],
+      "routeSteps": [
+        9,
+        129
+      ],
+      "records": [
+        12,
+        142
+      ],
+      "workerDaysAway": [
+        70,
+        228
+      ],
+      "receipts": [
+        0.0211,
+        0.0236
+      ],
+      "support": [
+        0.5,
+        0.53
+      ],
+      "births": [
+        0,
+        0
+      ],
+      "deaths": [
+        0,
+        0
+      ],
+      "population": [
+        25,
+        24
+      ],
+      "survived": [
+        1,
+        1
+      ],
+      "firstJourney": [
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 7,
+          "deepestReach": 7,
+          "durationDays": 4,
+          "forcedReturn": true,
+          "lost": false
+        },
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 7,
+          "deepestReach": 7,
+          "durationDays": 4,
+          "forcedReturn": true,
+          "lost": false
+        }
+      ],
+      "firstJourneyIdentical": true,
+      "populationDiff": -1
+    },
+    {
+      "scenario": "site_D_aquatic",
+      "seed": "s3",
+      "firstDivergenceDay": 5940,
+      "launches": [
+        5,
+        11
+      ],
+      "fallthrough": [
+        916,
+        0
+      ],
+      "journeys": [
+        6,
+        13
+      ],
+      "routeSteps": [
+        15,
+        30
+      ],
+      "records": [
+        21,
+        43
+      ],
+      "workerDaysAway": [
+        332,
+        468
+      ],
+      "receipts": [
+        0.0044,
+        0.0177
+      ],
+      "support": [
+        0.1,
+        0.4
+      ],
+      "births": [
+        0,
+        0
+      ],
+      "deaths": [
+        0,
+        0
+      ],
+      "population": [
+        24,
+        25
+      ],
+      "survived": [
+        1,
+        1
+      ],
+      "firstJourney": [
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 7,
+          "deepestReach": 7,
+          "durationDays": 4,
+          "forcedReturn": true,
+          "lost": false
+        },
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 7,
+          "deepestReach": 7,
+          "durationDays": 4,
+          "forcedReturn": true,
+          "lost": false
+        }
+      ],
+      "firstJourneyIdentical": true,
+      "populationDiff": 1
+    },
+    {
+      "scenario": "site_D_aquatic",
+      "seed": "s4",
+      "firstDivergenceDay": 4770,
+      "launches": [
+        7,
+        10
+      ],
+      "fallthrough": [
+        470,
+        0
+      ],
+      "journeys": [
+        10,
+        13
+      ],
+      "routeSteps": [
+        56,
+        54
+      ],
+      "records": [
+        66,
+        67
+      ],
+      "workerDaysAway": [
+        568,
+        340
+      ],
+      "receipts": [
+        0.0127,
+        0.0247
+      ],
+      "support": [
+        0.5,
+        0.5
+      ],
+      "births": [
+        0,
+        0
+      ],
+      "deaths": [
+        0,
+        0
+      ],
+      "population": [
+        26,
+        26
+      ],
+      "survived": [
+        1,
+        1
+      ],
+      "firstJourney": [
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 7,
+          "deepestReach": 7,
+          "durationDays": 4,
+          "forcedReturn": true,
+          "lost": false
+        },
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 7,
+          "deepestReach": 7,
+          "durationDays": 4,
+          "forcedReturn": true,
+          "lost": false
+        }
+      ],
+      "firstJourneyIdentical": true,
+      "populationDiff": 0
+    },
+    {
+      "scenario": "site_D_aquatic",
+      "seed": "s5",
+      "firstDivergenceDay": 7110,
+      "launches": [
+        5,
+        11
+      ],
+      "fallthrough": [
+        646,
+        0
+      ],
+      "journeys": [
+        8,
+        13
+      ],
+      "routeSteps": [
+        20,
+        35
+      ],
+      "records": [
+        28,
+        48
+      ],
+      "workerDaysAway": [
+        414,
+        438
+      ],
+      "receipts": [
+        0.0177,
+        0.0177
+      ],
+      "support": [
+        0.36,
+        0.36
+      ],
+      "births": [
+        0,
+        0
+      ],
+      "deaths": [
+        0,
+        0
+      ],
+      "population": [
+        24,
+        24
+      ],
+      "survived": [
+        1,
+        1
+      ],
+      "firstJourney": [
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 7,
+          "deepestReach": 7,
+          "durationDays": 4,
+          "forcedReturn": true,
+          "lost": false
+        },
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 7,
+          "deepestReach": 7,
+          "durationDays": 4,
+          "forcedReturn": true,
+          "lost": false
+        }
+      ],
+      "firstJourneyIdentical": true,
+      "populationDiff": 0
+    },
+    {
+      "scenario": "site_E_hills",
+      "seed": "s1",
+      "firstDivergenceDay": 14134,
+      "launches": [
+        11,
+        11
+      ],
+      "fallthrough": [
+        2,
+        0
+      ],
+      "journeys": [
+        13,
+        13
+      ],
+      "routeSteps": [
+        164,
+        164
+      ],
+      "records": [
+        177,
+        177
+      ],
+      "workerDaysAway": [
+        446,
+        450
+      ],
+      "receipts": [
+        0.0054,
+        0.0054
+      ],
+      "support": [
+        0.53,
+        0.53
+      ],
+      "births": [
+        0,
+        0
+      ],
+      "deaths": [
+        0,
+        0
+      ],
+      "population": [
+        28,
+        28
+      ],
+      "survived": [
+        1,
+        1
+      ],
+      "firstJourney": [
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 18,
+          "deepestReach": 18,
+          "durationDays": 8,
+          "forcedReturn": false,
+          "lost": false
+        },
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 18,
+          "deepestReach": 18,
+          "durationDays": 8,
+          "forcedReturn": false,
+          "lost": false
+        }
+      ],
+      "firstJourneyIdentical": true,
+      "populationDiff": 0
+    },
+    {
+      "scenario": "site_E_hills",
+      "seed": "s2",
+      "firstDivergenceDay": 3604,
+      "launches": [
+        13,
+        13
+      ],
+      "fallthrough": [
+        3,
+        0
+      ],
+      "journeys": [
+        13,
+        13
+      ],
+      "routeSteps": [
+        217,
+        217
+      ],
+      "records": [
+        230,
+        230
+      ],
+      "workerDaysAway": [
+        570,
+        570
+      ],
+      "receipts": [
+        0.1447,
+        0.1447
+      ],
+      "support": [
+        0.38,
+        0.38
+      ],
+      "births": [
+        0,
+        0
+      ],
+      "deaths": [
+        0,
+        0
+      ],
+      "population": [
+        28,
+        28
+      ],
+      "survived": [
+        1,
+        1
+      ],
+      "firstJourney": [
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 18,
+          "deepestReach": 18,
+          "durationDays": 10,
+          "forcedReturn": false,
+          "lost": false
+        },
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 18,
+          "deepestReach": 18,
+          "durationDays": 10,
+          "forcedReturn": false,
+          "lost": false
+        }
+      ],
+      "firstJourneyIdentical": true,
+      "populationDiff": 0
+    },
+    {
+      "scenario": "site_E_hills",
+      "seed": "s3",
+      "firstDivergenceDay": null,
+      "launches": [
+        12,
+        12
+      ],
+      "fallthrough": [
+        0,
+        0
+      ],
+      "journeys": [
+        13,
+        13
+      ],
+      "routeSteps": [
+        199,
+        199
+      ],
+      "records": [
+        212,
+        212
+      ],
+      "workerDaysAway": [
+        450,
+        450
+      ],
+      "receipts": [
+        0.3938,
+        0.3938
+      ],
+      "support": [
+        0.61,
+        0.61
+      ],
+      "births": [
+        0,
+        0
+      ],
+      "deaths": [
+        0,
+        0
+      ],
+      "population": [
+        29,
+        29
+      ],
+      "survived": [
+        1,
+        1
+      ],
+      "firstJourney": [
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 18,
+          "deepestReach": 18,
+          "durationDays": 8,
+          "forcedReturn": false,
+          "lost": false
+        },
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 18,
+          "deepestReach": 18,
+          "durationDays": 8,
+          "forcedReturn": false,
+          "lost": false
+        }
+      ],
+      "firstJourneyIdentical": true,
+      "populationDiff": 0
+    },
+    {
+      "scenario": "site_E_hills",
+      "seed": "s4",
+      "firstDivergenceDay": null,
+      "launches": [
+        11,
+        11
+      ],
+      "fallthrough": [
+        0,
+        0
+      ],
+      "journeys": [
+        13,
+        13
+      ],
+      "routeSteps": [
+        181,
+        181
+      ],
+      "records": [
+        194,
+        194
+      ],
+      "workerDaysAway": [
+        450,
+        450
+      ],
+      "receipts": [
+        0.0087,
+        0.0087
+      ],
+      "support": [
+        0.56,
+        0.56
+      ],
+      "births": [
+        0,
+        0
+      ],
+      "deaths": [
+        0,
+        0
+      ],
+      "population": [
+        28,
+        28
+      ],
+      "survived": [
+        1,
+        1
+      ],
+      "firstJourney": [
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 18,
+          "deepestReach": 18,
+          "durationDays": 8,
+          "forcedReturn": false,
+          "lost": false
+        },
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 18,
+          "deepestReach": 18,
+          "durationDays": 8,
+          "forcedReturn": false,
+          "lost": false
+        }
+      ],
+      "firstJourneyIdentical": true,
+      "populationDiff": 0
+    },
+    {
+      "scenario": "site_E_hills",
+      "seed": "s5",
+      "firstDivergenceDay": null,
+      "launches": [
+        13,
+        13
+      ],
+      "fallthrough": [
+        0,
+        0
+      ],
+      "journeys": [
+        13,
+        13
+      ],
+      "routeSteps": [
+        218,
+        218
+      ],
+      "records": [
+        231,
+        231
+      ],
+      "workerDaysAway": [
+        458,
+        458
+      ],
+      "receipts": [
+        0.3376,
+        0.3376
+      ],
+      "support": [
+        0.56,
+        0.56
+      ],
+      "births": [
+        0,
+        0
+      ],
+      "deaths": [
+        0,
+        0
+      ],
+      "population": [
+        28,
+        28
+      ],
+      "survived": [
+        1,
+        1
+      ],
+      "firstJourney": [
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 18,
+          "deepestReach": 18,
+          "durationDays": 8,
+          "forcedReturn": false,
+          "lost": false
+        },
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 18,
+          "deepestReach": 18,
+          "durationDays": 8,
+          "forcedReturn": false,
+          "lost": false
+        }
+      ],
+      "firstJourneyIdentical": true,
+      "populationDiff": 0
+    },
+    {
+      "scenario": "site_F_hills",
+      "seed": "s1",
+      "firstDivergenceDay": null,
+      "launches": [
+        13,
+        13
+      ],
+      "fallthrough": [
+        0,
+        0
+      ],
+      "journeys": [
+        13,
+        13
+      ],
+      "routeSteps": [
+        234,
+        234
+      ],
+      "records": [
+        247,
+        247
+      ],
+      "workerDaysAway": [
+        420,
+        420
+      ],
+      "receipts": [
+        0.0136,
+        0.0136
+      ],
+      "support": [
+        0.76,
+        0.76
+      ],
+      "births": [
+        0,
+        0
+      ],
+      "deaths": [
+        0,
+        0
+      ],
+      "population": [
+        30,
+        30
+      ],
+      "survived": [
+        1,
+        1
+      ],
+      "firstJourney": [
+        {
+          "id": "",
+          "departureDay": 102,
+          "routeSteps": 18,
+          "deepestReach": 18,
+          "durationDays": 7,
+          "forcedReturn": false,
+          "lost": false
+        },
+        {
+          "id": "",
+          "departureDay": 102,
+          "routeSteps": 18,
+          "deepestReach": 18,
+          "durationDays": 7,
+          "forcedReturn": false,
+          "lost": false
+        }
+      ],
+      "firstJourneyIdentical": true,
+      "populationDiff": 0
+    },
+    {
+      "scenario": "site_F_hills",
+      "seed": "s2",
+      "firstDivergenceDay": null,
+      "launches": [
+        13,
+        13
+      ],
+      "fallthrough": [
+        0,
+        0
+      ],
+      "journeys": [
+        13,
+        13
+      ],
+      "routeSteps": [
+        234,
+        234
+      ],
+      "records": [
+        247,
+        247
+      ],
+      "workerDaysAway": [
+        438,
+        438
+      ],
+      "receipts": [
+        0.0259,
+        0.0259
+      ],
+      "support": [
+        0.78,
+        0.78
+      ],
+      "births": [
+        0,
+        0
+      ],
+      "deaths": [
+        0,
+        0
+      ],
+      "population": [
+        30,
+        30
+      ],
+      "survived": [
+        1,
+        1
+      ],
+      "firstJourney": [
+        {
+          "id": "",
+          "departureDay": 102,
+          "routeSteps": 18,
+          "deepestReach": 18,
+          "durationDays": 7,
+          "forcedReturn": false,
+          "lost": false
+        },
+        {
+          "id": "",
+          "departureDay": 102,
+          "routeSteps": 18,
+          "deepestReach": 18,
+          "durationDays": 7,
+          "forcedReturn": false,
+          "lost": false
+        }
+      ],
+      "firstJourneyIdentical": true,
+      "populationDiff": 0
+    },
+    {
+      "scenario": "site_F_hills",
+      "seed": "s3",
+      "firstDivergenceDay": null,
+      "launches": [
+        13,
+        13
+      ],
+      "fallthrough": [
+        0,
+        0
+      ],
+      "journeys": [
+        13,
+        13
+      ],
+      "routeSteps": [
+        234,
+        234
+      ],
+      "records": [
+        247,
+        247
+      ],
+      "workerDaysAway": [
+        472,
+        472
+      ],
+      "receipts": [
+        0.0053,
+        0.0053
+      ],
+      "support": [
+        0.67,
+        0.67
+      ],
+      "births": [
+        0,
+        0
+      ],
+      "deaths": [
+        0,
+        0
+      ],
+      "population": [
+        31,
+        31
+      ],
+      "survived": [
+        1,
+        1
+      ],
+      "firstJourney": [
+        {
+          "id": "",
+          "departureDay": 102,
+          "routeSteps": 18,
+          "deepestReach": 18,
+          "durationDays": 7,
+          "forcedReturn": false,
+          "lost": false
+        },
+        {
+          "id": "",
+          "departureDay": 102,
+          "routeSteps": 18,
+          "deepestReach": 18,
+          "durationDays": 7,
+          "forcedReturn": false,
+          "lost": false
+        }
+      ],
+      "firstJourneyIdentical": true,
+      "populationDiff": 0
+    },
+    {
+      "scenario": "site_F_hills",
+      "seed": "s4",
+      "firstDivergenceDay": null,
+      "launches": [
+        13,
+        13
+      ],
+      "fallthrough": [
+        0,
+        0
+      ],
+      "journeys": [
+        13,
+        13
+      ],
+      "routeSteps": [
+        234,
+        234
+      ],
+      "records": [
+        247,
+        247
+      ],
+      "workerDaysAway": [
+        444,
+        444
+      ],
+      "receipts": [
+        0.0034,
+        0.0034
+      ],
+      "support": [
+        0.51,
+        0.51
+      ],
+      "births": [
+        0,
+        0
+      ],
+      "deaths": [
+        0,
+        0
+      ],
+      "population": [
+        31,
+        31
+      ],
+      "survived": [
+        1,
+        1
+      ],
+      "firstJourney": [
+        {
+          "id": "",
+          "departureDay": 102,
+          "routeSteps": 18,
+          "deepestReach": 18,
+          "durationDays": 7,
+          "forcedReturn": false,
+          "lost": false
+        },
+        {
+          "id": "",
+          "departureDay": 102,
+          "routeSteps": 18,
+          "deepestReach": 18,
+          "durationDays": 7,
+          "forcedReturn": false,
+          "lost": false
+        }
+      ],
+      "firstJourneyIdentical": true,
+      "populationDiff": 0
+    },
+    {
+      "scenario": "site_F_hills",
+      "seed": "s5",
+      "firstDivergenceDay": null,
+      "launches": [
+        13,
+        13
+      ],
+      "fallthrough": [
+        0,
+        0
+      ],
+      "journeys": [
+        13,
+        13
+      ],
+      "routeSteps": [
+        234,
+        234
+      ],
+      "records": [
+        247,
+        247
+      ],
+      "workerDaysAway": [
+        446,
+        446
+      ],
+      "receipts": [
+        0.0225,
+        0.0225
+      ],
+      "support": [
+        0.77,
+        0.77
+      ],
+      "births": [
+        0,
+        0
+      ],
+      "deaths": [
+        0,
+        0
+      ],
+      "population": [
+        29,
+        29
+      ],
+      "survived": [
+        1,
+        1
+      ],
+      "firstJourney": [
+        {
+          "id": "",
+          "departureDay": 102,
+          "routeSteps": 18,
+          "deepestReach": 18,
+          "durationDays": 7,
+          "forcedReturn": false,
+          "lost": false
+        },
+        {
+          "id": "",
+          "departureDay": 102,
+          "routeSteps": 18,
+          "deepestReach": 18,
+          "durationDays": 7,
+          "forcedReturn": false,
+          "lost": false
+        }
+      ],
+      "firstJourneyIdentical": true,
+      "populationDiff": 0
+    },
+    {
+      "scenario": "ordinary",
+      "seed": "s1",
+      "firstDivergenceDay": 3600,
+      "launches": [
+        13,
+        13
+      ],
+      "fallthrough": [
+        19,
+        0
+      ],
+      "journeys": [
+        13,
+        13
+      ],
+      "routeSteps": [
+        217,
+        217
+      ],
+      "records": [
+        230,
+        230
+      ],
+      "workerDaysAway": [
+        816,
+        822
+      ],
+      "receipts": [
+        0.003,
+        0.0148
+      ],
+      "support": [
+        0.04,
+        0.04
+      ],
+      "births": [
+        0,
+        0
+      ],
+      "deaths": [
+        0,
+        0
+      ],
+      "population": [
+        20,
+        20
+      ],
+      "survived": [
+        1,
+        1
+      ],
+      "firstJourney": [
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 1,
+          "deepestReach": 1,
+          "durationDays": 2,
+          "forcedReturn": true,
+          "lost": false
+        },
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 1,
+          "deepestReach": 1,
+          "durationDays": 2,
+          "forcedReturn": true,
+          "lost": false
+        }
+      ],
+      "firstJourneyIdentical": true,
+      "populationDiff": 0
+    },
+    {
+      "scenario": "ordinary",
+      "seed": "s2",
+      "firstDivergenceDay": 9450,
+      "launches": [
+        13,
+        12
+      ],
+      "fallthrough": [
+        16,
+        0
+      ],
+      "journeys": [
+        13,
+        13
+      ],
+      "routeSteps": [
+        200,
+        199
+      ],
+      "records": [
+        213,
+        212
+      ],
+      "workerDaysAway": [
+        1306,
+        1304
+      ],
+      "receipts": [
+        0.0246,
+        0.0246
+      ],
+      "support": [
+        0.36,
+        0.36
+      ],
+      "births": [
+        0,
+        0
+      ],
+      "deaths": [
+        0,
+        0
+      ],
+      "population": [
+        22,
+        22
+      ],
+      "survived": [
+        1,
+        1
+      ],
+      "firstJourney": [
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 1,
+          "deepestReach": 1,
+          "durationDays": 2,
+          "forcedReturn": true,
+          "lost": false
+        },
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 1,
+          "deepestReach": 1,
+          "durationDays": 2,
+          "forcedReturn": true,
+          "lost": false
+        }
+      ],
+      "firstJourneyIdentical": true,
+      "populationDiff": 0
+    },
+    {
+      "scenario": "ordinary",
+      "seed": "s3",
+      "firstDivergenceDay": null,
+      "launches": [
+        13,
+        13
+      ],
+      "fallthrough": [
+        0,
+        0
+      ],
+      "journeys": [
+        13,
+        13
+      ],
+      "routeSteps": [
+        204,
+        204
+      ],
+      "records": [
+        217,
+        217
+      ],
+      "workerDaysAway": [
+        842,
+        842
+      ],
+      "receipts": [
+        0.003,
+        0.003
+      ],
+      "support": [
+        0.25,
+        0.25
+      ],
+      "births": [
+        0,
+        0
+      ],
+      "deaths": [
+        0,
+        0
+      ],
+      "population": [
+        21,
+        21
+      ],
+      "survived": [
+        1,
+        1
+      ],
+      "firstJourney": [
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 1,
+          "deepestReach": 1,
+          "durationDays": 2,
+          "forcedReturn": true,
+          "lost": false
+        },
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 1,
+          "deepestReach": 1,
+          "durationDays": 2,
+          "forcedReturn": true,
+          "lost": false
+        }
+      ],
+      "firstJourneyIdentical": true,
+      "populationDiff": 0
+    },
+    {
+      "scenario": "ordinary",
+      "seed": "s4",
+      "firstDivergenceDay": 3600,
+      "launches": [
+        13,
+        13
+      ],
+      "fallthrough": [
+        16,
+        0
+      ],
+      "journeys": [
+        13,
+        13
+      ],
+      "routeSteps": [
+        217,
+        217
+      ],
+      "records": [
+        230,
+        230
+      ],
+      "workerDaysAway": [
+        702,
+        848
+      ],
+      "receipts": [
+        0.0357,
+        0.0164
+      ],
+      "support": [
+        0.45,
+        0.19
+      ],
+      "births": [
+        0,
+        0
+      ],
+      "deaths": [
+        0,
+        0
+      ],
+      "population": [
+        23,
+        22
+      ],
+      "survived": [
+        1,
+        1
+      ],
+      "firstJourney": [
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 1,
+          "deepestReach": 1,
+          "durationDays": 2,
+          "forcedReturn": true,
+          "lost": false
+        },
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 1,
+          "deepestReach": 1,
+          "durationDays": 2,
+          "forcedReturn": true,
+          "lost": false
+        }
+      ],
+      "firstJourneyIdentical": true,
+      "populationDiff": -1
+    },
+    {
+      "scenario": "ordinary",
+      "seed": "s5",
+      "firstDivergenceDay": 4770,
+      "launches": [
+        11,
+        13
+      ],
+      "fallthrough": [
+        383,
+        0
+      ],
+      "journeys": [
+        11,
+        13
+      ],
+      "routeSteps": [
+        181,
+        217
+      ],
+      "records": [
+        192,
+        230
+      ],
+      "workerDaysAway": [
+        900,
+        932
+      ],
+      "receipts": [
+        0.0062,
+        0.0062
+      ],
+      "support": [
+        0.19,
+        0.19
+      ],
+      "births": [
+        0,
+        0
+      ],
+      "deaths": [
+        0,
+        0
+      ],
+      "population": [
+        20,
+        20
+      ],
+      "survived": [
+        1,
+        1
+      ],
+      "firstJourney": [
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 1,
+          "deepestReach": 1,
+          "durationDays": 2,
+          "forcedReturn": true,
+          "lost": false
+        },
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 1,
+          "deepestReach": 1,
+          "durationDays": 2,
+          "forcedReturn": true,
+          "lost": false
+        }
+      ],
+      "firstJourneyIdentical": true,
+      "populationDiff": 0
+    },
+    {
+      "scenario": "isolated_marginal",
+      "seed": "s1",
+      "firstDivergenceDay": null,
+      "launches": [
+        13,
+        13
+      ],
+      "fallthrough": [
+        0,
+        0
+      ],
+      "journeys": [
+        13,
+        13
+      ],
+      "routeSteps": [
+        234,
+        234
+      ],
+      "records": [
+        247,
+        247
+      ],
+      "workerDaysAway": [
+        512,
+        512
+      ],
+      "receipts": [
+        0.0041,
+        0.0041
+      ],
+      "support": [
+        0.29,
+        0.29
+      ],
+      "births": [
+        0,
+        0
+      ],
+      "deaths": [
+        0,
+        0
+      ],
+      "population": [
+        22,
+        22
+      ],
+      "survived": [
+        1,
+        1
+      ],
+      "firstJourney": [
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 18,
+          "deepestReach": 18,
+          "durationDays": 8,
+          "forcedReturn": false,
+          "lost": false
+        },
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 18,
+          "deepestReach": 18,
+          "durationDays": 8,
+          "forcedReturn": false,
+          "lost": false
+        }
+      ],
+      "firstJourneyIdentical": true,
+      "populationDiff": 0
+    },
+    {
+      "scenario": "isolated_marginal",
+      "seed": "s2",
+      "firstDivergenceDay": 5944,
+      "launches": [
+        13,
+        13
+      ],
+      "fallthrough": [
+        6,
+        0
+      ],
+      "journeys": [
+        13,
+        13
+      ],
+      "routeSteps": [
+        234,
+        234
+      ],
+      "records": [
+        247,
+        247
+      ],
+      "workerDaysAway": [
+        1060,
+        1068
+      ],
+      "receipts": [
+        0.0248,
+        0.0248
+      ],
+      "support": [
+        0.25,
+        0.25
+      ],
+      "births": [
+        0,
+        0
+      ],
+      "deaths": [
+        0,
+        0
+      ],
+      "population": [
+        20,
+        20
+      ],
+      "survived": [
+        1,
+        1
+      ],
+      "firstJourney": [
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 18,
+          "deepestReach": 18,
+          "durationDays": 8,
+          "forcedReturn": false,
+          "lost": false
+        },
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 18,
+          "deepestReach": 18,
+          "durationDays": 8,
+          "forcedReturn": false,
+          "lost": false
+        }
+      ],
+      "firstJourneyIdentical": true,
+      "populationDiff": 0
+    },
+    {
+      "scenario": "isolated_marginal",
+      "seed": "s3",
+      "firstDivergenceDay": 14136,
+      "launches": [
+        13,
+        13
+      ],
+      "fallthrough": [
+        2,
+        0
+      ],
+      "journeys": [
+        13,
+        13
+      ],
+      "routeSteps": [
+        234,
+        234
+      ],
+      "records": [
+        247,
+        247
+      ],
+      "workerDaysAway": [
+        652,
+        652
+      ],
+      "receipts": [
+        0.0108,
+        0.0108
+      ],
+      "support": [
+        0.33,
+        0.33
+      ],
+      "births": [
+        0,
+        0
+      ],
+      "deaths": [
+        0,
+        0
+      ],
+      "population": [
+        21,
+        21
+      ],
+      "survived": [
+        1,
+        1
+      ],
+      "firstJourney": [
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 18,
+          "deepestReach": 18,
+          "durationDays": 8,
+          "forcedReturn": false,
+          "lost": false
+        },
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 18,
+          "deepestReach": 18,
+          "durationDays": 8,
+          "forcedReturn": false,
+          "lost": false
+        }
+      ],
+      "firstJourneyIdentical": true,
+      "populationDiff": 0
+    },
+    {
+      "scenario": "isolated_marginal",
+      "seed": "s4",
+      "firstDivergenceDay": 10626,
+      "launches": [
+        13,
+        13
+      ],
+      "fallthrough": [
+        2,
+        0
+      ],
+      "journeys": [
+        13,
+        13
+      ],
+      "routeSteps": [
+        234,
+        234
+      ],
+      "records": [
+        247,
+        247
+      ],
+      "workerDaysAway": [
+        572,
+        576
+      ],
+      "receipts": [
+        0.0351,
+        0.0351
+      ],
+      "support": [
+        0.14,
+        0.14
+      ],
+      "births": [
+        0,
+        0
+      ],
+      "deaths": [
+        0,
+        0
+      ],
+      "population": [
+        20,
+        20
+      ],
+      "survived": [
+        1,
+        1
+      ],
+      "firstJourney": [
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 18,
+          "deepestReach": 18,
+          "durationDays": 8,
+          "forcedReturn": false,
+          "lost": false
+        },
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 18,
+          "deepestReach": 18,
+          "durationDays": 8,
+          "forcedReturn": false,
+          "lost": false
+        }
+      ],
+      "firstJourneyIdentical": true,
+      "populationDiff": 0
+    },
+    {
+      "scenario": "isolated_marginal",
+      "seed": "s5",
+      "firstDivergenceDay": null,
+      "launches": [
+        13,
+        13
+      ],
+      "fallthrough": [
+        0,
+        0
+      ],
+      "journeys": [
+        13,
+        13
+      ],
+      "routeSteps": [
+        234,
+        234
+      ],
+      "records": [
+        247,
+        247
+      ],
+      "workerDaysAway": [
+        552,
+        552
+      ],
+      "receipts": [
+        0.005,
+        0.005
+      ],
+      "support": [
+        0.42,
+        0.42
+      ],
+      "births": [
+        0,
+        0
+      ],
+      "deaths": [
+        0,
+        0
+      ],
+      "population": [
+        22,
+        22
+      ],
+      "survived": [
+        1,
+        1
+      ],
+      "firstJourney": [
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 18,
+          "deepestReach": 18,
+          "durationDays": 8,
+          "forcedReturn": false,
+          "lost": false
+        },
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 18,
+          "deepestReach": 18,
+          "durationDays": 8,
+          "forcedReturn": false,
+          "lost": false
+        }
+      ],
+      "firstJourneyIdentical": true,
+      "populationDiff": 0
+    },
+    {
+      "scenario": "hostile",
+      "seed": "s1",
+      "firstDivergenceDay": 4776,
+      "launches": [
+        9,
+        9
+      ],
+      "fallthrough": [
+        0,
+        0
+      ],
+      "journeys": [
+        13,
+        13
+      ],
+      "routeSteps": [
+        136,
+        136
+      ],
+      "records": [
+        149,
+        149
+      ],
+      "workerDaysAway": [
+        664,
+        662
+      ],
+      "receipts": [
+        0.0053,
+        0.0053
+      ],
+      "support": [
+        0.24,
+        0.24
+      ],
+      "births": [
+        0,
+        0
+      ],
+      "deaths": [
+        0,
+        0
+      ],
+      "population": [
+        20,
+        20
+      ],
+      "survived": [
+        1,
+        1
+      ],
+      "firstJourney": [
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 18,
+          "deepestReach": 18,
+          "durationDays": 6,
+          "forcedReturn": false,
+          "lost": false
+        },
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 18,
+          "deepestReach": 18,
+          "durationDays": 6,
+          "forcedReturn": false,
+          "lost": false
+        }
+      ],
+      "firstJourneyIdentical": true,
+      "populationDiff": 0
+    },
+    {
+      "scenario": "hostile",
+      "seed": "s2",
+      "firstDivergenceDay": 4776,
+      "launches": [
+        9,
+        9
+      ],
+      "fallthrough": [
+        4,
+        0
+      ],
+      "journeys": [
+        13,
+        13
+      ],
+      "routeSteps": [
+        136,
+        136
+      ],
+      "records": [
+        149,
+        149
+      ],
+      "workerDaysAway": [
+        732,
+        732
+      ],
+      "receipts": [
+        0.0416,
+        0.0416
+      ],
+      "support": [
+        0.44,
+        0.44
+      ],
+      "births": [
+        0,
+        0
+      ],
+      "deaths": [
+        0,
+        0
+      ],
+      "population": [
+        20,
+        20
+      ],
+      "survived": [
+        1,
+        1
+      ],
+      "firstJourney": [
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 18,
+          "deepestReach": 18,
+          "durationDays": 6,
+          "forcedReturn": false,
+          "lost": false
+        },
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 18,
+          "deepestReach": 18,
+          "durationDays": 6,
+          "forcedReturn": false,
+          "lost": false
+        }
+      ],
+      "firstJourneyIdentical": true,
+      "populationDiff": 0
+    },
+    {
+      "scenario": "hostile",
+      "seed": "s3",
+      "firstDivergenceDay": 4776,
+      "launches": [
+        10,
+        10
+      ],
+      "fallthrough": [
+        1,
+        0
+      ],
+      "journeys": [
+        13,
+        13
+      ],
+      "routeSteps": [
+        137,
+        137
+      ],
+      "records": [
+        150,
+        150
+      ],
+      "workerDaysAway": [
+        640,
+        638
+      ],
+      "receipts": [
+        0.0062,
+        0.0062
+      ],
+      "support": [
+        0.41,
+        0.41
+      ],
+      "births": [
+        0,
+        0
+      ],
+      "deaths": [
+        0,
+        0
+      ],
+      "population": [
+        21,
+        21
+      ],
+      "survived": [
+        1,
+        1
+      ],
+      "firstJourney": [
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 18,
+          "deepestReach": 18,
+          "durationDays": 6,
+          "forcedReturn": false,
+          "lost": false
+        },
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 18,
+          "deepestReach": 18,
+          "durationDays": 6,
+          "forcedReturn": false,
+          "lost": false
+        }
+      ],
+      "firstJourneyIdentical": true,
+      "populationDiff": 0
+    },
+    {
+      "scenario": "hostile",
+      "seed": "s4",
+      "firstDivergenceDay": 4776,
+      "launches": [
+        10,
+        10
+      ],
+      "fallthrough": [
+        4,
+        0
+      ],
+      "journeys": [
+        13,
+        13
+      ],
+      "routeSteps": [
+        130,
+        130
+      ],
+      "records": [
+        143,
+        143
+      ],
+      "workerDaysAway": [
+        784,
+        788
+      ],
+      "receipts": [
+        0.0277,
+        0.0277
+      ],
+      "support": [
+        0.04,
+        0.04
+      ],
+      "births": [
+        0,
+        0
+      ],
+      "deaths": [
+        0,
+        0
+      ],
+      "population": [
+        19,
+        19
+      ],
+      "survived": [
+        1,
+        1
+      ],
+      "firstJourney": [
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 18,
+          "deepestReach": 18,
+          "durationDays": 6,
+          "forcedReturn": false,
+          "lost": false
+        },
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 18,
+          "deepestReach": 18,
+          "durationDays": 6,
+          "forcedReturn": false,
+          "lost": false
+        }
+      ],
+      "firstJourneyIdentical": true,
+      "populationDiff": 0
+    },
+    {
+      "scenario": "hostile",
+      "seed": "s5",
+      "firstDivergenceDay": 4776,
+      "launches": [
+        10,
+        10
+      ],
+      "fallthrough": [
+        1,
+        0
+      ],
+      "journeys": [
+        13,
+        13
+      ],
+      "routeSteps": [
+        137,
+        137
+      ],
+      "records": [
+        150,
+        150
+      ],
+      "workerDaysAway": [
+        634,
+        634
+      ],
+      "receipts": [
+        0.044,
+        0.044
+      ],
+      "support": [
+        0.13,
+        0.13
+      ],
+      "births": [
+        0,
+        0
+      ],
+      "deaths": [
+        0,
+        0
+      ],
+      "population": [
+        20,
+        20
+      ],
+      "survived": [
+        1,
+        1
+      ],
+      "firstJourney": [
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 18,
+          "deepestReach": 18,
+          "durationDays": 6,
+          "forcedReturn": false,
+          "lost": false
+        },
+        {
+          "id": "",
+          "departureDay": 96,
+          "routeSteps": 18,
+          "deepestReach": 18,
+          "durationDays": 6,
+          "forcedReturn": false,
+          "lost": false
+        }
+      ],
+      "firstJourneyIdentical": true,
+      "populationDiff": 0
+    }
+  ],
+  "perScenario": {
+    "map1": [
+      {
+        "scenario": "map1",
+        "seed": "s1",
+        "firstDivergenceDay": 1350,
+        "launches": [
+          59,
+          62
+        ],
+        "fallthrough": [
+          423,
+          0
+        ],
+        "journeys": [
+          60,
+          63
+        ],
+        "routeSteps": [
+          772,
+          814
+        ],
+        "records": [
+          832,
+          877
+        ],
+        "workerDaysAway": [
+          3192,
+          2524
+        ],
+        "receipts": [
+          0.1259,
+          0.1191
+        ],
+        "support": [
+          0.614,
+          0.62
+        ],
+        "births": [
+          0,
+          0
+        ],
+        "deaths": [
+          0,
+          0
+        ],
+        "population": [
+          159,
+          162
+        ],
+        "survived": [
+          1,
+          1
+        ],
+        "firstJourney": [
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 18,
+            "deepestReach": 18,
+            "durationDays": 9,
+            "forcedReturn": false,
+            "lost": false
+          },
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 18,
+            "deepestReach": 18,
+            "durationDays": 9,
+            "forcedReturn": false,
+            "lost": false
+          }
+        ],
+        "firstJourneyIdentical": true,
+        "populationDiff": 3
+      },
+      {
+        "scenario": "map1",
+        "seed": "s2",
+        "firstDivergenceDay": 1350,
+        "launches": [
+          60,
+          63
+        ],
+        "fallthrough": [
+          466,
+          0
+        ],
+        "journeys": [
+          60,
+          62
+        ],
+        "routeSteps": [
+          836,
+          865
+        ],
+        "records": [
+          896,
+          927
+        ],
+        "workerDaysAway": [
+          3052,
+          3116
+        ],
+        "receipts": [
+          0.1739,
+          0.514
+        ],
+        "support": [
+          0.68,
+          0.652
+        ],
+        "births": [
+          0,
+          0
+        ],
+        "deaths": [
+          0,
+          0
+        ],
+        "population": [
+          159,
+          158
+        ],
+        "survived": [
+          1,
+          1
+        ],
+        "firstJourney": [
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 18,
+            "deepestReach": 18,
+            "durationDays": 10,
+            "forcedReturn": false,
+            "lost": false
+          },
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 18,
+            "deepestReach": 18,
+            "durationDays": 10,
+            "forcedReturn": false,
+            "lost": false
+          }
+        ],
+        "firstJourneyIdentical": true,
+        "populationDiff": -1
+      },
+      {
+        "scenario": "map1",
+        "seed": "s3",
+        "firstDivergenceDay": 3690,
+        "launches": [
+          61,
+          62
+        ],
+        "fallthrough": [
+          423,
+          0
+        ],
+        "journeys": [
+          60,
+          63
+        ],
+        "routeSteps": [
+          794,
+          860
+        ],
+        "records": [
+          854,
+          923
+        ],
+        "workerDaysAway": [
+          2600,
+          2696
+        ],
+        "receipts": [
+          0.5931,
+          0.7819
+        ],
+        "support": [
+          0.808,
+          0.834
+        ],
+        "births": [
+          0,
+          0
+        ],
+        "deaths": [
+          0,
+          0
+        ],
+        "population": [
+          165,
+          164
+        ],
+        "survived": [
+          1,
+          1
+        ],
+        "firstJourney": [
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 18,
+            "deepestReach": 18,
+            "durationDays": 10,
+            "forcedReturn": false,
+            "lost": false
+          },
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 18,
+            "deepestReach": 18,
+            "durationDays": 10,
+            "forcedReturn": false,
+            "lost": false
+          }
+        ],
+        "firstJourneyIdentical": true,
+        "populationDiff": -1
+      },
+      {
+        "scenario": "map1",
+        "seed": "s4",
+        "firstDivergenceDay": 1350,
+        "launches": [
+          60,
+          61
+        ],
+        "fallthrough": [
+          131,
+          0
+        ],
+        "journeys": [
+          62,
+          63
+        ],
+        "routeSteps": [
+          836,
+          889
+        ],
+        "records": [
+          898,
+          952
+        ],
+        "workerDaysAway": [
+          2636,
+          2700
+        ],
+        "receipts": [
+          0.8813,
+          0.8753
+        ],
+        "support": [
+          0.854,
+          0.834
+        ],
+        "births": [
+          0,
+          0
+        ],
+        "deaths": [
+          0,
+          0
+        ],
+        "population": [
+          162,
+          162
+        ],
+        "survived": [
+          1,
+          1
+        ],
+        "firstJourney": [
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 18,
+            "deepestReach": 18,
+            "durationDays": 9,
+            "forcedReturn": false,
+            "lost": false
+          },
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 18,
+            "deepestReach": 18,
+            "durationDays": 9,
+            "forcedReturn": false,
+            "lost": false
+          }
+        ],
+        "firstJourneyIdentical": true,
+        "populationDiff": 0
+      },
+      {
+        "scenario": "map1",
+        "seed": "s5",
+        "firstDivergenceDay": 8286,
+        "launches": [
+          59,
+          59
+        ],
+        "fallthrough": [
+          4,
+          0
+        ],
+        "journeys": [
+          62,
+          62
+        ],
+        "routeSteps": [
+          826,
+          826
+        ],
+        "records": [
+          888,
+          888
+        ],
+        "workerDaysAway": [
+          2644,
+          2650
+        ],
+        "receipts": [
+          0.1458,
+          0.1458
+        ],
+        "support": [
+          0.678,
+          0.678
+        ],
+        "births": [
+          0,
+          0
+        ],
+        "deaths": [
+          0,
+          0
+        ],
+        "population": [
+          163,
+          163
+        ],
+        "survived": [
+          1,
+          1
+        ],
+        "firstJourney": [
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 18,
+            "deepestReach": 18,
+            "durationDays": 9,
+            "forcedReturn": false,
+            "lost": false
+          },
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 18,
+            "deepestReach": 18,
+            "durationDays": 9,
+            "forcedReturn": false,
+            "lost": false
+          }
+        ],
+        "firstJourneyIdentical": true,
+        "populationDiff": 0
+      }
+    ],
+    "map2": [
+      {
+        "scenario": "map2",
+        "seed": "s1",
+        "firstDivergenceDay": 1350,
+        "launches": [
+          101,
+          106
+        ],
+        "fallthrough": [
+          916,
+          0
+        ],
+        "journeys": [
+          109,
+          114
+        ],
+        "routeSteps": [
+          1519,
+          1595
+        ],
+        "records": [
+          1628,
+          1709
+        ],
+        "workerDaysAway": [
+          3710,
+          3984
+        ],
+        "receipts": [
+          0.1257,
+          0.163
+        ],
+        "support": [
+          0.5144,
+          0.4767
+        ],
+        "births": [
+          0,
+          0
+        ],
+        "deaths": [
+          0,
+          0
+        ],
+        "population": [
+          213,
+          210
+        ],
+        "survived": [
+          1,
+          1
+        ],
+        "firstJourney": [
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 2,
+            "deepestReach": 2,
+            "durationDays": 2,
+            "forcedReturn": true,
+            "lost": false
+          },
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 2,
+            "deepestReach": 2,
+            "durationDays": 2,
+            "forcedReturn": true,
+            "lost": false
+          }
+        ],
+        "firstJourneyIdentical": true,
+        "populationDiff": -3
+      },
+      {
+        "scenario": "map2",
+        "seed": "s2",
+        "firstDivergenceDay": 1260,
+        "launches": [
+          104,
+          107
+        ],
+        "fallthrough": [
+          923,
+          0
+        ],
+        "journeys": [
+          110,
+          115
+        ],
+        "routeSteps": [
+          1577,
+          1681
+        ],
+        "records": [
+          1687,
+          1796
+        ],
+        "workerDaysAway": [
+          4230,
+          4240
+        ],
+        "receipts": [
+          0.7242,
+          0.3907
+        ],
+        "support": [
+          0.5867,
+          0.49
+        ],
+        "births": [
+          0,
+          0
+        ],
+        "deaths": [
+          0,
+          0
+        ],
+        "population": [
+          217,
+          217
+        ],
+        "survived": [
+          1,
+          1
+        ],
+        "firstJourney": [
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 2,
+            "deepestReach": 2,
+            "durationDays": 2,
+            "forcedReturn": true,
+            "lost": false
+          },
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 2,
+            "deepestReach": 2,
+            "durationDays": 2,
+            "forcedReturn": true,
+            "lost": false
+          }
+        ],
+        "firstJourneyIdentical": true,
+        "populationDiff": 0
+      },
+      {
+        "scenario": "map2",
+        "seed": "s3",
+        "firstDivergenceDay": 1350,
+        "launches": [
+          100,
+          108
+        ],
+        "fallthrough": [
+          1497,
+          0
+        ],
+        "journeys": [
+          105,
+          115
+        ],
+        "routeSteps": [
+          1476,
+          1554
+        ],
+        "records": [
+          1581,
+          1669
+        ],
+        "workerDaysAway": [
+          3344,
+          3360
+        ],
+        "receipts": [
+          0.2192,
+          0.2397
+        ],
+        "support": [
+          0.5567,
+          0.56
+        ],
+        "births": [
+          0,
+          0
+        ],
+        "deaths": [
+          0,
+          0
+        ],
+        "population": [
+          214,
+          214
+        ],
+        "survived": [
+          1,
+          1
+        ],
+        "firstJourney": [
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 2,
+            "deepestReach": 2,
+            "durationDays": 2,
+            "forcedReturn": true,
+            "lost": false
+          },
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 2,
+            "deepestReach": 2,
+            "durationDays": 2,
+            "forcedReturn": true,
+            "lost": false
+          }
+        ],
+        "firstJourneyIdentical": true,
+        "populationDiff": 0
+      },
+      {
+        "scenario": "map2",
+        "seed": "s4",
+        "firstDivergenceDay": 1350,
+        "launches": [
+          101,
+          112
+        ],
+        "fallthrough": [
+          990,
+          0
+        ],
+        "journeys": [
+          108,
+          115
+        ],
+        "routeSteps": [
+          1377,
+          1515
+        ],
+        "records": [
+          1485,
+          1630
+        ],
+        "workerDaysAway": [
+          4002,
+          4156
+        ],
+        "receipts": [
+          0.3609,
+          0.7266
+        ],
+        "support": [
+          0.6189,
+          0.6511
+        ],
+        "births": [
+          0,
+          0
+        ],
+        "deaths": [
+          0,
+          0
+        ],
+        "population": [
+          216,
+          218
+        ],
+        "survived": [
+          1,
+          1
+        ],
+        "firstJourney": [
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 2,
+            "deepestReach": 2,
+            "durationDays": 2,
+            "forcedReturn": true,
+            "lost": false
+          },
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 2,
+            "deepestReach": 2,
+            "durationDays": 2,
+            "forcedReturn": true,
+            "lost": false
+          }
+        ],
+        "firstJourneyIdentical": true,
+        "populationDiff": 2
+      },
+      {
+        "scenario": "map2",
+        "seed": "s5",
+        "firstDivergenceDay": 1350,
+        "launches": [
+          106,
+          108
+        ],
+        "fallthrough": [
+          444,
+          0
+        ],
+        "journeys": [
+          112,
+          115
+        ],
+        "routeSteps": [
+          1547,
+          1652
+        ],
+        "records": [
+          1659,
+          1767
+        ],
+        "workerDaysAway": [
+          3666,
+          3866
+        ],
+        "receipts": [
+          0.4153,
+          0.3906
+        ],
+        "support": [
+          0.53,
+          0.5444
+        ],
+        "births": [
+          0,
+          0
+        ],
+        "deaths": [
+          0,
+          0
+        ],
+        "population": [
+          219,
+          220
+        ],
+        "survived": [
+          1,
+          1
+        ],
+        "firstJourney": [
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 2,
+            "deepestReach": 2,
+            "durationDays": 2,
+            "forcedReturn": true,
+            "lost": false
+          },
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 2,
+            "deepestReach": 2,
+            "durationDays": 2,
+            "forcedReturn": true,
+            "lost": false
+          }
+        ],
+        "firstJourneyIdentical": true,
+        "populationDiff": 1
+      }
+    ],
+    "site_A_coast": [
+      {
+        "scenario": "site_A_coast",
+        "seed": "s1",
+        "firstDivergenceDay": null,
+        "launches": [
+          13,
+          13
+        ],
+        "fallthrough": [
+          0,
+          0
+        ],
+        "journeys": [
+          13,
+          13
+        ],
+        "routeSteps": [
+          147,
+          147
+        ],
+        "records": [
+          160,
+          160
+        ],
+        "workerDaysAway": [
+          470,
+          470
+        ],
+        "receipts": [
+          0.0356,
+          0.0356
+        ],
+        "support": [
+          0,
+          0
+        ],
+        "births": [
+          0,
+          0
+        ],
+        "deaths": [
+          0,
+          0
+        ],
+        "population": [
+          20,
+          20
+        ],
+        "survived": [
+          1,
+          1
+        ],
+        "firstJourney": [
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 9,
+            "deepestReach": 9,
+            "durationDays": 4,
+            "forcedReturn": true,
+            "lost": false
+          },
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 9,
+            "deepestReach": 9,
+            "durationDays": 4,
+            "forcedReturn": true,
+            "lost": false
+          }
+        ],
+        "firstJourneyIdentical": true,
+        "populationDiff": 0
+      },
+      {
+        "scenario": "site_A_coast",
+        "seed": "s2",
+        "firstDivergenceDay": 5946,
+        "launches": [
+          11,
+          11
+        ],
+        "fallthrough": [
+          1,
+          0
+        ],
+        "journeys": [
+          13,
+          13
+        ],
+        "routeSteps": [
+          94,
+          94
+        ],
+        "records": [
+          107,
+          107
+        ],
+        "workerDaysAway": [
+          606,
+          610
+        ],
+        "receipts": [
+          0.006,
+          0.006
+        ],
+        "support": [
+          0,
+          0
+        ],
+        "births": [
+          0,
+          0
+        ],
+        "deaths": [
+          0,
+          0
+        ],
+        "population": [
+          19,
+          19
+        ],
+        "survived": [
+          1,
+          1
+        ],
+        "firstJourney": [
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 9,
+            "deepestReach": 9,
+            "durationDays": 4,
+            "forcedReturn": true,
+            "lost": false
+          },
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 9,
+            "deepestReach": 9,
+            "durationDays": 4,
+            "forcedReturn": true,
+            "lost": false
+          }
+        ],
+        "firstJourneyIdentical": true,
+        "populationDiff": 0
+      },
+      {
+        "scenario": "site_A_coast",
+        "seed": "s3",
+        "firstDivergenceDay": 5946,
+        "launches": [
+          10,
+          11
+        ],
+        "fallthrough": [
+          1,
+          0
+        ],
+        "journeys": [
+          13,
+          13
+        ],
+        "routeSteps": [
+          88,
+          92
+        ],
+        "records": [
+          101,
+          105
+        ],
+        "workerDaysAway": [
+          626,
+          612
+        ],
+        "receipts": [
+          0.1134,
+          0.0069
+        ],
+        "support": [
+          0,
+          0.15
+        ],
+        "births": [
+          0,
+          0
+        ],
+        "deaths": [
+          0,
+          0
+        ],
+        "population": [
+          19,
+          19
+        ],
+        "survived": [
+          1,
+          1
+        ],
+        "firstJourney": [
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 9,
+            "deepestReach": 9,
+            "durationDays": 4,
+            "forcedReturn": true,
+            "lost": false
+          },
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 9,
+            "deepestReach": 9,
+            "durationDays": 4,
+            "forcedReturn": true,
+            "lost": false
+          }
+        ],
+        "firstJourneyIdentical": true,
+        "populationDiff": 0
+      },
+      {
+        "scenario": "site_A_coast",
+        "seed": "s4",
+        "firstDivergenceDay": 5946,
+        "launches": [
+          9,
+          9
+        ],
+        "fallthrough": [
+          1,
+          0
+        ],
+        "journeys": [
+          13,
+          13
+        ],
+        "routeSteps": [
+          83,
+          83
+        ],
+        "records": [
+          96,
+          96
+        ],
+        "workerDaysAway": [
+          722,
+          726
+        ],
+        "receipts": [
+          0.0248,
+          0.0248
+        ],
+        "support": [
+          0,
+          0
+        ],
+        "births": [
+          0,
+          0
+        ],
+        "deaths": [
+          0,
+          0
+        ],
+        "population": [
+          19,
+          19
+        ],
+        "survived": [
+          1,
+          1
+        ],
+        "firstJourney": [
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 9,
+            "deepestReach": 9,
+            "durationDays": 4,
+            "forcedReturn": true,
+            "lost": false
+          },
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 9,
+            "deepestReach": 9,
+            "durationDays": 4,
+            "forcedReturn": true,
+            "lost": false
+          }
+        ],
+        "firstJourneyIdentical": true,
+        "populationDiff": 0
+      },
+      {
+        "scenario": "site_A_coast",
+        "seed": "s5",
+        "firstDivergenceDay": 5944,
+        "launches": [
+          13,
+          13
+        ],
+        "fallthrough": [
+          2,
+          0
+        ],
+        "journeys": [
+          13,
+          13
+        ],
+        "routeSteps": [
+          148,
+          148
+        ],
+        "records": [
+          161,
+          161
+        ],
+        "workerDaysAway": [
+          454,
+          454
+        ],
+        "receipts": [
+          0.066,
+          0.066
+        ],
+        "support": [
+          0,
+          0
+        ],
+        "births": [
+          0,
+          0
+        ],
+        "deaths": [
+          0,
+          0
+        ],
+        "population": [
+          20,
+          20
+        ],
+        "survived": [
+          1,
+          1
+        ],
+        "firstJourney": [
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 9,
+            "deepestReach": 9,
+            "durationDays": 4,
+            "forcedReturn": true,
+            "lost": false
+          },
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 9,
+            "deepestReach": 9,
+            "durationDays": 4,
+            "forcedReturn": true,
+            "lost": false
+          }
+        ],
+        "firstJourneyIdentical": true,
+        "populationDiff": 0
+      }
+    ],
+    "site_B_dry_plains": [
+      {
+        "scenario": "site_B_dry_plains",
+        "seed": "s1",
+        "firstDivergenceDay": 3600,
+        "launches": [
+          5,
+          12
+        ],
+        "fallthrough": [
+          1276,
+          0
+        ],
+        "journeys": [
+          6,
+          13
+        ],
+        "routeSteps": [
+          81,
+          207
+        ],
+        "records": [
+          87,
+          220
+        ],
+        "workerDaysAway": [
+          122,
+          266
+        ],
+        "receipts": [
+          0.0228,
+          0.0063
+        ],
+        "support": [
+          0.45,
+          0.14
+        ],
+        "births": [
+          0,
+          0
+        ],
+        "deaths": [
+          0,
+          0
+        ],
+        "population": [
+          23,
+          23
+        ],
+        "survived": [
+          1,
+          1
+        ],
+        "firstJourney": [
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 9,
+            "deepestReach": 9,
+            "durationDays": 4,
+            "forcedReturn": true,
+            "lost": false
+          },
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 9,
+            "deepestReach": 9,
+            "durationDays": 4,
+            "forcedReturn": true,
+            "lost": false
+          }
+        ],
+        "firstJourneyIdentical": true,
+        "populationDiff": 0
+      },
+      {
+        "scenario": "site_B_dry_plains",
+        "seed": "s2",
+        "firstDivergenceDay": 3600,
+        "launches": [
+          2,
+          12
+        ],
+        "fallthrough": [
+          1440,
+          0
+        ],
+        "journeys": [
+          3,
+          13
+        ],
+        "routeSteps": [
+          27,
+          207
+        ],
+        "records": [
+          30,
+          220
+        ],
+        "workerDaysAway": [
+          106,
+          254
+        ],
+        "receipts": [
+          0.0128,
+          0.0116
+        ],
+        "support": [
+          0.4,
+          0.37
+        ],
+        "births": [
+          0,
+          0
+        ],
+        "deaths": [
+          0,
+          0
+        ],
+        "population": [
+          22,
+          22
+        ],
+        "survived": [
+          1,
+          1
+        ],
+        "firstJourney": [
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 9,
+            "deepestReach": 9,
+            "durationDays": 4,
+            "forcedReturn": true,
+            "lost": false
+          },
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 9,
+            "deepestReach": 9,
+            "durationDays": 4,
+            "forcedReturn": true,
+            "lost": false
+          }
+        ],
+        "firstJourneyIdentical": true,
+        "populationDiff": 0
+      },
+      {
+        "scenario": "site_B_dry_plains",
+        "seed": "s3",
+        "firstDivergenceDay": 3600,
+        "launches": [
+          2,
+          12
+        ],
+        "fallthrough": [
+          1801,
+          0
+        ],
+        "journeys": [
+          3,
+          13
+        ],
+        "routeSteps": [
+          27,
+          207
+        ],
+        "records": [
+          30,
+          220
+        ],
+        "workerDaysAway": [
+          38,
+          268
+        ],
+        "receipts": [
+          0.1199,
+          0.0153
+        ],
+        "support": [
+          0.22,
+          0.42
+        ],
+        "births": [
+          0,
+          0
+        ],
+        "deaths": [
+          0,
+          0
+        ],
+        "population": [
+          19,
+          21
+        ],
+        "survived": [
+          1,
+          1
+        ],
+        "firstJourney": [
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 9,
+            "deepestReach": 9,
+            "durationDays": 4,
+            "forcedReturn": true,
+            "lost": false
+          },
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 9,
+            "deepestReach": 9,
+            "durationDays": 4,
+            "forcedReturn": true,
+            "lost": false
+          }
+        ],
+        "firstJourneyIdentical": true,
+        "populationDiff": 2
+      },
+      {
+        "scenario": "site_B_dry_plains",
+        "seed": "s4",
+        "firstDivergenceDay": 3600,
+        "launches": [
+          5,
+          12
+        ],
+        "fallthrough": [
+          1218,
+          0
+        ],
+        "journeys": [
+          6,
+          13
+        ],
+        "routeSteps": [
+          81,
+          207
+        ],
+        "records": [
+          87,
+          220
+        ],
+        "workerDaysAway": [
+          136,
+          264
+        ],
+        "receipts": [
+          0.003,
+          0.0184
+        ],
+        "support": [
+          0.51,
+          0.46
+        ],
+        "births": [
+          0,
+          0
+        ],
+        "deaths": [
+          0,
+          0
+        ],
+        "population": [
+          22,
+          24
+        ],
+        "survived": [
+          1,
+          1
+        ],
+        "firstJourney": [
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 9,
+            "deepestReach": 9,
+            "durationDays": 4,
+            "forcedReturn": true,
+            "lost": false
+          },
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 9,
+            "deepestReach": 9,
+            "durationDays": 4,
+            "forcedReturn": true,
+            "lost": false
+          }
+        ],
+        "firstJourneyIdentical": true,
+        "populationDiff": 2
+      },
+      {
+        "scenario": "site_B_dry_plains",
+        "seed": "s5",
+        "firstDivergenceDay": 3600,
+        "launches": [
+          2,
+          12
+        ],
+        "fallthrough": [
+          1801,
+          0
+        ],
+        "journeys": [
+          3,
+          13
+        ],
+        "routeSteps": [
+          27,
+          207
+        ],
+        "records": [
+          30,
+          220
+        ],
+        "workerDaysAway": [
+          38,
+          250
+        ],
+        "receipts": [
+          0.1178,
+          0.1178
+        ],
+        "support": [
+          0.21,
+          0.27
+        ],
+        "births": [
+          0,
+          0
+        ],
+        "deaths": [
+          0,
+          0
+        ],
+        "population": [
+          19,
+          19
+        ],
+        "survived": [
+          1,
+          1
+        ],
+        "firstJourney": [
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 9,
+            "deepestReach": 9,
+            "durationDays": 4,
+            "forcedReturn": true,
+            "lost": false
+          },
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 9,
+            "deepestReach": 9,
+            "durationDays": 4,
+            "forcedReturn": true,
+            "lost": false
+          }
+        ],
+        "firstJourneyIdentical": true,
+        "populationDiff": 0
+      }
+    ],
+    "site_C_dry_plains": [
+      {
+        "scenario": "site_C_dry_plains",
+        "seed": "s1",
+        "firstDivergenceDay": 14135,
+        "launches": [
+          13,
+          13
+        ],
+        "fallthrough": [
+          2,
+          0
+        ],
+        "journeys": [
+          13,
+          13
+        ],
+        "routeSteps": [
+          210,
+          210
+        ],
+        "records": [
+          223,
+          223
+        ],
+        "workerDaysAway": [
+          666,
+          666
+        ],
+        "receipts": [
+          0.0124,
+          0.0124
+        ],
+        "support": [
+          0.63,
+          0.63
+        ],
+        "births": [
+          0,
+          0
+        ],
+        "deaths": [
+          0,
+          0
+        ],
+        "population": [
+          29,
+          29
+        ],
+        "survived": [
+          1,
+          1
+        ],
+        "firstJourney": [
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 9,
+            "deepestReach": 9,
+            "durationDays": 4,
+            "forcedReturn": true,
+            "lost": false
+          },
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 9,
+            "deepestReach": 9,
+            "durationDays": 4,
+            "forcedReturn": true,
+            "lost": false
+          }
+        ],
+        "firstJourneyIdentical": true,
+        "populationDiff": 0
+      },
+      {
+        "scenario": "site_C_dry_plains",
+        "seed": "s2",
+        "firstDivergenceDay": null,
+        "launches": [
+          13,
+          13
+        ],
+        "fallthrough": [
+          0,
+          0
+        ],
+        "journeys": [
+          13,
+          13
+        ],
+        "routeSteps": [
+          211,
+          211
+        ],
+        "records": [
+          224,
+          224
+        ],
+        "workerDaysAway": [
+          678,
+          678
+        ],
+        "receipts": [
+          0.0157,
+          0.0157
+        ],
+        "support": [
+          0.55,
+          0.55
+        ],
+        "births": [
+          0,
+          0
+        ],
+        "deaths": [
+          0,
+          0
+        ],
+        "population": [
+          28,
+          28
+        ],
+        "survived": [
+          1,
+          1
+        ],
+        "firstJourney": [
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 9,
+            "deepestReach": 9,
+            "durationDays": 4,
+            "forcedReturn": true,
+            "lost": false
+          },
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 9,
+            "deepestReach": 9,
+            "durationDays": 4,
+            "forcedReturn": true,
+            "lost": false
+          }
+        ],
+        "firstJourneyIdentical": true,
+        "populationDiff": 0
+      },
+      {
+        "scenario": "site_C_dry_plains",
+        "seed": "s3",
+        "firstDivergenceDay": 3606,
+        "launches": [
+          13,
+          13
+        ],
+        "fallthrough": [
+          1,
+          0
+        ],
+        "journeys": [
+          13,
+          13
+        ],
+        "routeSteps": [
+          211,
+          211
+        ],
+        "records": [
+          224,
+          224
+        ],
+        "workerDaysAway": [
+          566,
+          570
+        ],
+        "receipts": [
+          0.013,
+          0.013
+        ],
+        "support": [
+          0.56,
+          0.56
+        ],
+        "births": [
+          0,
+          0
+        ],
+        "deaths": [
+          0,
+          0
+        ],
+        "population": [
+          29,
+          29
+        ],
+        "survived": [
+          1,
+          1
+        ],
+        "firstJourney": [
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 9,
+            "deepestReach": 9,
+            "durationDays": 4,
+            "forcedReturn": true,
+            "lost": false
+          },
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 9,
+            "deepestReach": 9,
+            "durationDays": 4,
+            "forcedReturn": true,
+            "lost": false
+          }
+        ],
+        "firstJourneyIdentical": true,
+        "populationDiff": 0
+      },
+      {
+        "scenario": "site_C_dry_plains",
+        "seed": "s4",
+        "firstDivergenceDay": 3606,
+        "launches": [
+          13,
+          13
+        ],
+        "fallthrough": [
+          1,
+          0
+        ],
+        "journeys": [
+          13,
+          13
+        ],
+        "routeSteps": [
+          211,
+          211
+        ],
+        "records": [
+          224,
+          224
+        ],
+        "workerDaysAway": [
+          790,
+          796
+        ],
+        "receipts": [
+          0.1235,
+          0.1235
+        ],
+        "support": [
+          0.13,
+          0.13
+        ],
+        "births": [
+          0,
+          0
+        ],
+        "deaths": [
+          0,
+          0
+        ],
+        "population": [
+          28,
+          28
+        ],
+        "survived": [
+          1,
+          1
+        ],
+        "firstJourney": [
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 9,
+            "deepestReach": 9,
+            "durationDays": 4,
+            "forcedReturn": true,
+            "lost": false
+          },
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 9,
+            "deepestReach": 9,
+            "durationDays": 4,
+            "forcedReturn": true,
+            "lost": false
+          }
+        ],
+        "firstJourneyIdentical": true,
+        "populationDiff": 0
+      },
+      {
+        "scenario": "site_C_dry_plains",
+        "seed": "s5",
+        "firstDivergenceDay": 5944,
+        "launches": [
+          13,
+          13
+        ],
+        "fallthrough": [
+          4,
+          0
+        ],
+        "journeys": [
+          13,
+          13
+        ],
+        "routeSteps": [
+          211,
+          211
+        ],
+        "records": [
+          224,
+          224
+        ],
+        "workerDaysAway": [
+          670,
+          676
+        ],
+        "receipts": [
+          0.0142,
+          0.0142
+        ],
+        "support": [
+          0.65,
+          0.65
+        ],
+        "births": [
+          0,
+          0
+        ],
+        "deaths": [
+          0,
+          0
+        ],
+        "population": [
+          30,
+          30
+        ],
+        "survived": [
+          1,
+          1
+        ],
+        "firstJourney": [
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 9,
+            "deepestReach": 9,
+            "durationDays": 4,
+            "forcedReturn": true,
+            "lost": false
+          },
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 9,
+            "deepestReach": 9,
+            "durationDays": 4,
+            "forcedReturn": true,
+            "lost": false
+          }
+        ],
+        "firstJourneyIdentical": true,
+        "populationDiff": 0
+      }
+    ],
+    "site_D_aquatic": [
+      {
+        "scenario": "site_D_aquatic",
+        "seed": "s1",
+        "firstDivergenceDay": 5940,
+        "launches": [
+          9,
+          11
+        ],
+        "fallthrough": [
+          380,
+          0
+        ],
+        "journeys": [
+          11,
+          13
+        ],
+        "routeSteps": [
+          83,
+          89
+        ],
+        "records": [
+          94,
+          102
+        ],
+        "workerDaysAway": [
+          678,
+          682
+        ],
+        "receipts": [
+          0.013,
+          0.013
+        ],
+        "support": [
+          0.49,
+          0.49
+        ],
+        "births": [
+          0,
+          0
+        ],
+        "deaths": [
+          0,
+          0
+        ],
+        "population": [
+          26,
+          26
+        ],
+        "survived": [
+          1,
+          1
+        ],
+        "firstJourney": [
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 7,
+            "deepestReach": 7,
+            "durationDays": 4,
+            "forcedReturn": true,
+            "lost": false
+          },
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 7,
+            "deepestReach": 7,
+            "durationDays": 4,
+            "forcedReturn": true,
+            "lost": false
+          }
+        ],
+        "firstJourneyIdentical": true,
+        "populationDiff": 0
+      },
+      {
+        "scenario": "site_D_aquatic",
+        "seed": "s2",
+        "firstDivergenceDay": 3600,
+        "launches": [
+          2,
+          12
+        ],
+        "fallthrough": [
+          1635,
+          0
+        ],
+        "journeys": [
+          3,
+          13
+        ],
+        "routeSteps": [
+          9,
+          129
+        ],
+        "records": [
+          12,
+          142
+        ],
+        "workerDaysAway": [
+          70,
+          228
+        ],
+        "receipts": [
+          0.0211,
+          0.0236
+        ],
+        "support": [
+          0.5,
+          0.53
+        ],
+        "births": [
+          0,
+          0
+        ],
+        "deaths": [
+          0,
+          0
+        ],
+        "population": [
+          25,
+          24
+        ],
+        "survived": [
+          1,
+          1
+        ],
+        "firstJourney": [
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 7,
+            "deepestReach": 7,
+            "durationDays": 4,
+            "forcedReturn": true,
+            "lost": false
+          },
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 7,
+            "deepestReach": 7,
+            "durationDays": 4,
+            "forcedReturn": true,
+            "lost": false
+          }
+        ],
+        "firstJourneyIdentical": true,
+        "populationDiff": -1
+      },
+      {
+        "scenario": "site_D_aquatic",
+        "seed": "s3",
+        "firstDivergenceDay": 5940,
+        "launches": [
+          5,
+          11
+        ],
+        "fallthrough": [
+          916,
+          0
+        ],
+        "journeys": [
+          6,
+          13
+        ],
+        "routeSteps": [
+          15,
+          30
+        ],
+        "records": [
+          21,
+          43
+        ],
+        "workerDaysAway": [
+          332,
+          468
+        ],
+        "receipts": [
+          0.0044,
+          0.0177
+        ],
+        "support": [
+          0.1,
+          0.4
+        ],
+        "births": [
+          0,
+          0
+        ],
+        "deaths": [
+          0,
+          0
+        ],
+        "population": [
+          24,
+          25
+        ],
+        "survived": [
+          1,
+          1
+        ],
+        "firstJourney": [
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 7,
+            "deepestReach": 7,
+            "durationDays": 4,
+            "forcedReturn": true,
+            "lost": false
+          },
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 7,
+            "deepestReach": 7,
+            "durationDays": 4,
+            "forcedReturn": true,
+            "lost": false
+          }
+        ],
+        "firstJourneyIdentical": true,
+        "populationDiff": 1
+      },
+      {
+        "scenario": "site_D_aquatic",
+        "seed": "s4",
+        "firstDivergenceDay": 4770,
+        "launches": [
+          7,
+          10
+        ],
+        "fallthrough": [
+          470,
+          0
+        ],
+        "journeys": [
+          10,
+          13
+        ],
+        "routeSteps": [
+          56,
+          54
+        ],
+        "records": [
+          66,
+          67
+        ],
+        "workerDaysAway": [
+          568,
+          340
+        ],
+        "receipts": [
+          0.0127,
+          0.0247
+        ],
+        "support": [
+          0.5,
+          0.5
+        ],
+        "births": [
+          0,
+          0
+        ],
+        "deaths": [
+          0,
+          0
+        ],
+        "population": [
+          26,
+          26
+        ],
+        "survived": [
+          1,
+          1
+        ],
+        "firstJourney": [
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 7,
+            "deepestReach": 7,
+            "durationDays": 4,
+            "forcedReturn": true,
+            "lost": false
+          },
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 7,
+            "deepestReach": 7,
+            "durationDays": 4,
+            "forcedReturn": true,
+            "lost": false
+          }
+        ],
+        "firstJourneyIdentical": true,
+        "populationDiff": 0
+      },
+      {
+        "scenario": "site_D_aquatic",
+        "seed": "s5",
+        "firstDivergenceDay": 7110,
+        "launches": [
+          5,
+          11
+        ],
+        "fallthrough": [
+          646,
+          0
+        ],
+        "journeys": [
+          8,
+          13
+        ],
+        "routeSteps": [
+          20,
+          35
+        ],
+        "records": [
+          28,
+          48
+        ],
+        "workerDaysAway": [
+          414,
+          438
+        ],
+        "receipts": [
+          0.0177,
+          0.0177
+        ],
+        "support": [
+          0.36,
+          0.36
+        ],
+        "births": [
+          0,
+          0
+        ],
+        "deaths": [
+          0,
+          0
+        ],
+        "population": [
+          24,
+          24
+        ],
+        "survived": [
+          1,
+          1
+        ],
+        "firstJourney": [
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 7,
+            "deepestReach": 7,
+            "durationDays": 4,
+            "forcedReturn": true,
+            "lost": false
+          },
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 7,
+            "deepestReach": 7,
+            "durationDays": 4,
+            "forcedReturn": true,
+            "lost": false
+          }
+        ],
+        "firstJourneyIdentical": true,
+        "populationDiff": 0
+      }
+    ],
+    "site_E_hills": [
+      {
+        "scenario": "site_E_hills",
+        "seed": "s1",
+        "firstDivergenceDay": 14134,
+        "launches": [
+          11,
+          11
+        ],
+        "fallthrough": [
+          2,
+          0
+        ],
+        "journeys": [
+          13,
+          13
+        ],
+        "routeSteps": [
+          164,
+          164
+        ],
+        "records": [
+          177,
+          177
+        ],
+        "workerDaysAway": [
+          446,
+          450
+        ],
+        "receipts": [
+          0.0054,
+          0.0054
+        ],
+        "support": [
+          0.53,
+          0.53
+        ],
+        "births": [
+          0,
+          0
+        ],
+        "deaths": [
+          0,
+          0
+        ],
+        "population": [
+          28,
+          28
+        ],
+        "survived": [
+          1,
+          1
+        ],
+        "firstJourney": [
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 18,
+            "deepestReach": 18,
+            "durationDays": 8,
+            "forcedReturn": false,
+            "lost": false
+          },
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 18,
+            "deepestReach": 18,
+            "durationDays": 8,
+            "forcedReturn": false,
+            "lost": false
+          }
+        ],
+        "firstJourneyIdentical": true,
+        "populationDiff": 0
+      },
+      {
+        "scenario": "site_E_hills",
+        "seed": "s2",
+        "firstDivergenceDay": 3604,
+        "launches": [
+          13,
+          13
+        ],
+        "fallthrough": [
+          3,
+          0
+        ],
+        "journeys": [
+          13,
+          13
+        ],
+        "routeSteps": [
+          217,
+          217
+        ],
+        "records": [
+          230,
+          230
+        ],
+        "workerDaysAway": [
+          570,
+          570
+        ],
+        "receipts": [
+          0.1447,
+          0.1447
+        ],
+        "support": [
+          0.38,
+          0.38
+        ],
+        "births": [
+          0,
+          0
+        ],
+        "deaths": [
+          0,
+          0
+        ],
+        "population": [
+          28,
+          28
+        ],
+        "survived": [
+          1,
+          1
+        ],
+        "firstJourney": [
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 18,
+            "deepestReach": 18,
+            "durationDays": 10,
+            "forcedReturn": false,
+            "lost": false
+          },
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 18,
+            "deepestReach": 18,
+            "durationDays": 10,
+            "forcedReturn": false,
+            "lost": false
+          }
+        ],
+        "firstJourneyIdentical": true,
+        "populationDiff": 0
+      },
+      {
+        "scenario": "site_E_hills",
+        "seed": "s3",
+        "firstDivergenceDay": null,
+        "launches": [
+          12,
+          12
+        ],
+        "fallthrough": [
+          0,
+          0
+        ],
+        "journeys": [
+          13,
+          13
+        ],
+        "routeSteps": [
+          199,
+          199
+        ],
+        "records": [
+          212,
+          212
+        ],
+        "workerDaysAway": [
+          450,
+          450
+        ],
+        "receipts": [
+          0.3938,
+          0.3938
+        ],
+        "support": [
+          0.61,
+          0.61
+        ],
+        "births": [
+          0,
+          0
+        ],
+        "deaths": [
+          0,
+          0
+        ],
+        "population": [
+          29,
+          29
+        ],
+        "survived": [
+          1,
+          1
+        ],
+        "firstJourney": [
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 18,
+            "deepestReach": 18,
+            "durationDays": 8,
+            "forcedReturn": false,
+            "lost": false
+          },
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 18,
+            "deepestReach": 18,
+            "durationDays": 8,
+            "forcedReturn": false,
+            "lost": false
+          }
+        ],
+        "firstJourneyIdentical": true,
+        "populationDiff": 0
+      },
+      {
+        "scenario": "site_E_hills",
+        "seed": "s4",
+        "firstDivergenceDay": null,
+        "launches": [
+          11,
+          11
+        ],
+        "fallthrough": [
+          0,
+          0
+        ],
+        "journeys": [
+          13,
+          13
+        ],
+        "routeSteps": [
+          181,
+          181
+        ],
+        "records": [
+          194,
+          194
+        ],
+        "workerDaysAway": [
+          450,
+          450
+        ],
+        "receipts": [
+          0.0087,
+          0.0087
+        ],
+        "support": [
+          0.56,
+          0.56
+        ],
+        "births": [
+          0,
+          0
+        ],
+        "deaths": [
+          0,
+          0
+        ],
+        "population": [
+          28,
+          28
+        ],
+        "survived": [
+          1,
+          1
+        ],
+        "firstJourney": [
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 18,
+            "deepestReach": 18,
+            "durationDays": 8,
+            "forcedReturn": false,
+            "lost": false
+          },
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 18,
+            "deepestReach": 18,
+            "durationDays": 8,
+            "forcedReturn": false,
+            "lost": false
+          }
+        ],
+        "firstJourneyIdentical": true,
+        "populationDiff": 0
+      },
+      {
+        "scenario": "site_E_hills",
+        "seed": "s5",
+        "firstDivergenceDay": null,
+        "launches": [
+          13,
+          13
+        ],
+        "fallthrough": [
+          0,
+          0
+        ],
+        "journeys": [
+          13,
+          13
+        ],
+        "routeSteps": [
+          218,
+          218
+        ],
+        "records": [
+          231,
+          231
+        ],
+        "workerDaysAway": [
+          458,
+          458
+        ],
+        "receipts": [
+          0.3376,
+          0.3376
+        ],
+        "support": [
+          0.56,
+          0.56
+        ],
+        "births": [
+          0,
+          0
+        ],
+        "deaths": [
+          0,
+          0
+        ],
+        "population": [
+          28,
+          28
+        ],
+        "survived": [
+          1,
+          1
+        ],
+        "firstJourney": [
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 18,
+            "deepestReach": 18,
+            "durationDays": 8,
+            "forcedReturn": false,
+            "lost": false
+          },
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 18,
+            "deepestReach": 18,
+            "durationDays": 8,
+            "forcedReturn": false,
+            "lost": false
+          }
+        ],
+        "firstJourneyIdentical": true,
+        "populationDiff": 0
+      }
+    ],
+    "site_F_hills": [
+      {
+        "scenario": "site_F_hills",
+        "seed": "s1",
+        "firstDivergenceDay": null,
+        "launches": [
+          13,
+          13
+        ],
+        "fallthrough": [
+          0,
+          0
+        ],
+        "journeys": [
+          13,
+          13
+        ],
+        "routeSteps": [
+          234,
+          234
+        ],
+        "records": [
+          247,
+          247
+        ],
+        "workerDaysAway": [
+          420,
+          420
+        ],
+        "receipts": [
+          0.0136,
+          0.0136
+        ],
+        "support": [
+          0.76,
+          0.76
+        ],
+        "births": [
+          0,
+          0
+        ],
+        "deaths": [
+          0,
+          0
+        ],
+        "population": [
+          30,
+          30
+        ],
+        "survived": [
+          1,
+          1
+        ],
+        "firstJourney": [
+          {
+            "id": "",
+            "departureDay": 102,
+            "routeSteps": 18,
+            "deepestReach": 18,
+            "durationDays": 7,
+            "forcedReturn": false,
+            "lost": false
+          },
+          {
+            "id": "",
+            "departureDay": 102,
+            "routeSteps": 18,
+            "deepestReach": 18,
+            "durationDays": 7,
+            "forcedReturn": false,
+            "lost": false
+          }
+        ],
+        "firstJourneyIdentical": true,
+        "populationDiff": 0
+      },
+      {
+        "scenario": "site_F_hills",
+        "seed": "s2",
+        "firstDivergenceDay": null,
+        "launches": [
+          13,
+          13
+        ],
+        "fallthrough": [
+          0,
+          0
+        ],
+        "journeys": [
+          13,
+          13
+        ],
+        "routeSteps": [
+          234,
+          234
+        ],
+        "records": [
+          247,
+          247
+        ],
+        "workerDaysAway": [
+          438,
+          438
+        ],
+        "receipts": [
+          0.0259,
+          0.0259
+        ],
+        "support": [
+          0.78,
+          0.78
+        ],
+        "births": [
+          0,
+          0
+        ],
+        "deaths": [
+          0,
+          0
+        ],
+        "population": [
+          30,
+          30
+        ],
+        "survived": [
+          1,
+          1
+        ],
+        "firstJourney": [
+          {
+            "id": "",
+            "departureDay": 102,
+            "routeSteps": 18,
+            "deepestReach": 18,
+            "durationDays": 7,
+            "forcedReturn": false,
+            "lost": false
+          },
+          {
+            "id": "",
+            "departureDay": 102,
+            "routeSteps": 18,
+            "deepestReach": 18,
+            "durationDays": 7,
+            "forcedReturn": false,
+            "lost": false
+          }
+        ],
+        "firstJourneyIdentical": true,
+        "populationDiff": 0
+      },
+      {
+        "scenario": "site_F_hills",
+        "seed": "s3",
+        "firstDivergenceDay": null,
+        "launches": [
+          13,
+          13
+        ],
+        "fallthrough": [
+          0,
+          0
+        ],
+        "journeys": [
+          13,
+          13
+        ],
+        "routeSteps": [
+          234,
+          234
+        ],
+        "records": [
+          247,
+          247
+        ],
+        "workerDaysAway": [
+          472,
+          472
+        ],
+        "receipts": [
+          0.0053,
+          0.0053
+        ],
+        "support": [
+          0.67,
+          0.67
+        ],
+        "births": [
+          0,
+          0
+        ],
+        "deaths": [
+          0,
+          0
+        ],
+        "population": [
+          31,
+          31
+        ],
+        "survived": [
+          1,
+          1
+        ],
+        "firstJourney": [
+          {
+            "id": "",
+            "departureDay": 102,
+            "routeSteps": 18,
+            "deepestReach": 18,
+            "durationDays": 7,
+            "forcedReturn": false,
+            "lost": false
+          },
+          {
+            "id": "",
+            "departureDay": 102,
+            "routeSteps": 18,
+            "deepestReach": 18,
+            "durationDays": 7,
+            "forcedReturn": false,
+            "lost": false
+          }
+        ],
+        "firstJourneyIdentical": true,
+        "populationDiff": 0
+      },
+      {
+        "scenario": "site_F_hills",
+        "seed": "s4",
+        "firstDivergenceDay": null,
+        "launches": [
+          13,
+          13
+        ],
+        "fallthrough": [
+          0,
+          0
+        ],
+        "journeys": [
+          13,
+          13
+        ],
+        "routeSteps": [
+          234,
+          234
+        ],
+        "records": [
+          247,
+          247
+        ],
+        "workerDaysAway": [
+          444,
+          444
+        ],
+        "receipts": [
+          0.0034,
+          0.0034
+        ],
+        "support": [
+          0.51,
+          0.51
+        ],
+        "births": [
+          0,
+          0
+        ],
+        "deaths": [
+          0,
+          0
+        ],
+        "population": [
+          31,
+          31
+        ],
+        "survived": [
+          1,
+          1
+        ],
+        "firstJourney": [
+          {
+            "id": "",
+            "departureDay": 102,
+            "routeSteps": 18,
+            "deepestReach": 18,
+            "durationDays": 7,
+            "forcedReturn": false,
+            "lost": false
+          },
+          {
+            "id": "",
+            "departureDay": 102,
+            "routeSteps": 18,
+            "deepestReach": 18,
+            "durationDays": 7,
+            "forcedReturn": false,
+            "lost": false
+          }
+        ],
+        "firstJourneyIdentical": true,
+        "populationDiff": 0
+      },
+      {
+        "scenario": "site_F_hills",
+        "seed": "s5",
+        "firstDivergenceDay": null,
+        "launches": [
+          13,
+          13
+        ],
+        "fallthrough": [
+          0,
+          0
+        ],
+        "journeys": [
+          13,
+          13
+        ],
+        "routeSteps": [
+          234,
+          234
+        ],
+        "records": [
+          247,
+          247
+        ],
+        "workerDaysAway": [
+          446,
+          446
+        ],
+        "receipts": [
+          0.0225,
+          0.0225
+        ],
+        "support": [
+          0.77,
+          0.77
+        ],
+        "births": [
+          0,
+          0
+        ],
+        "deaths": [
+          0,
+          0
+        ],
+        "population": [
+          29,
+          29
+        ],
+        "survived": [
+          1,
+          1
+        ],
+        "firstJourney": [
+          {
+            "id": "",
+            "departureDay": 102,
+            "routeSteps": 18,
+            "deepestReach": 18,
+            "durationDays": 7,
+            "forcedReturn": false,
+            "lost": false
+          },
+          {
+            "id": "",
+            "departureDay": 102,
+            "routeSteps": 18,
+            "deepestReach": 18,
+            "durationDays": 7,
+            "forcedReturn": false,
+            "lost": false
+          }
+        ],
+        "firstJourneyIdentical": true,
+        "populationDiff": 0
+      }
+    ],
+    "ordinary": [
+      {
+        "scenario": "ordinary",
+        "seed": "s1",
+        "firstDivergenceDay": 3600,
+        "launches": [
+          13,
+          13
+        ],
+        "fallthrough": [
+          19,
+          0
+        ],
+        "journeys": [
+          13,
+          13
+        ],
+        "routeSteps": [
+          217,
+          217
+        ],
+        "records": [
+          230,
+          230
+        ],
+        "workerDaysAway": [
+          816,
+          822
+        ],
+        "receipts": [
+          0.003,
+          0.0148
+        ],
+        "support": [
+          0.04,
+          0.04
+        ],
+        "births": [
+          0,
+          0
+        ],
+        "deaths": [
+          0,
+          0
+        ],
+        "population": [
+          20,
+          20
+        ],
+        "survived": [
+          1,
+          1
+        ],
+        "firstJourney": [
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 1,
+            "deepestReach": 1,
+            "durationDays": 2,
+            "forcedReturn": true,
+            "lost": false
+          },
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 1,
+            "deepestReach": 1,
+            "durationDays": 2,
+            "forcedReturn": true,
+            "lost": false
+          }
+        ],
+        "firstJourneyIdentical": true,
+        "populationDiff": 0
+      },
+      {
+        "scenario": "ordinary",
+        "seed": "s2",
+        "firstDivergenceDay": 9450,
+        "launches": [
+          13,
+          12
+        ],
+        "fallthrough": [
+          16,
+          0
+        ],
+        "journeys": [
+          13,
+          13
+        ],
+        "routeSteps": [
+          200,
+          199
+        ],
+        "records": [
+          213,
+          212
+        ],
+        "workerDaysAway": [
+          1306,
+          1304
+        ],
+        "receipts": [
+          0.0246,
+          0.0246
+        ],
+        "support": [
+          0.36,
+          0.36
+        ],
+        "births": [
+          0,
+          0
+        ],
+        "deaths": [
+          0,
+          0
+        ],
+        "population": [
+          22,
+          22
+        ],
+        "survived": [
+          1,
+          1
+        ],
+        "firstJourney": [
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 1,
+            "deepestReach": 1,
+            "durationDays": 2,
+            "forcedReturn": true,
+            "lost": false
+          },
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 1,
+            "deepestReach": 1,
+            "durationDays": 2,
+            "forcedReturn": true,
+            "lost": false
+          }
+        ],
+        "firstJourneyIdentical": true,
+        "populationDiff": 0
+      },
+      {
+        "scenario": "ordinary",
+        "seed": "s3",
+        "firstDivergenceDay": null,
+        "launches": [
+          13,
+          13
+        ],
+        "fallthrough": [
+          0,
+          0
+        ],
+        "journeys": [
+          13,
+          13
+        ],
+        "routeSteps": [
+          204,
+          204
+        ],
+        "records": [
+          217,
+          217
+        ],
+        "workerDaysAway": [
+          842,
+          842
+        ],
+        "receipts": [
+          0.003,
+          0.003
+        ],
+        "support": [
+          0.25,
+          0.25
+        ],
+        "births": [
+          0,
+          0
+        ],
+        "deaths": [
+          0,
+          0
+        ],
+        "population": [
+          21,
+          21
+        ],
+        "survived": [
+          1,
+          1
+        ],
+        "firstJourney": [
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 1,
+            "deepestReach": 1,
+            "durationDays": 2,
+            "forcedReturn": true,
+            "lost": false
+          },
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 1,
+            "deepestReach": 1,
+            "durationDays": 2,
+            "forcedReturn": true,
+            "lost": false
+          }
+        ],
+        "firstJourneyIdentical": true,
+        "populationDiff": 0
+      },
+      {
+        "scenario": "ordinary",
+        "seed": "s4",
+        "firstDivergenceDay": 3600,
+        "launches": [
+          13,
+          13
+        ],
+        "fallthrough": [
+          16,
+          0
+        ],
+        "journeys": [
+          13,
+          13
+        ],
+        "routeSteps": [
+          217,
+          217
+        ],
+        "records": [
+          230,
+          230
+        ],
+        "workerDaysAway": [
+          702,
+          848
+        ],
+        "receipts": [
+          0.0357,
+          0.0164
+        ],
+        "support": [
+          0.45,
+          0.19
+        ],
+        "births": [
+          0,
+          0
+        ],
+        "deaths": [
+          0,
+          0
+        ],
+        "population": [
+          23,
+          22
+        ],
+        "survived": [
+          1,
+          1
+        ],
+        "firstJourney": [
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 1,
+            "deepestReach": 1,
+            "durationDays": 2,
+            "forcedReturn": true,
+            "lost": false
+          },
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 1,
+            "deepestReach": 1,
+            "durationDays": 2,
+            "forcedReturn": true,
+            "lost": false
+          }
+        ],
+        "firstJourneyIdentical": true,
+        "populationDiff": -1
+      },
+      {
+        "scenario": "ordinary",
+        "seed": "s5",
+        "firstDivergenceDay": 4770,
+        "launches": [
+          11,
+          13
+        ],
+        "fallthrough": [
+          383,
+          0
+        ],
+        "journeys": [
+          11,
+          13
+        ],
+        "routeSteps": [
+          181,
+          217
+        ],
+        "records": [
+          192,
+          230
+        ],
+        "workerDaysAway": [
+          900,
+          932
+        ],
+        "receipts": [
+          0.0062,
+          0.0062
+        ],
+        "support": [
+          0.19,
+          0.19
+        ],
+        "births": [
+          0,
+          0
+        ],
+        "deaths": [
+          0,
+          0
+        ],
+        "population": [
+          20,
+          20
+        ],
+        "survived": [
+          1,
+          1
+        ],
+        "firstJourney": [
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 1,
+            "deepestReach": 1,
+            "durationDays": 2,
+            "forcedReturn": true,
+            "lost": false
+          },
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 1,
+            "deepestReach": 1,
+            "durationDays": 2,
+            "forcedReturn": true,
+            "lost": false
+          }
+        ],
+        "firstJourneyIdentical": true,
+        "populationDiff": 0
+      }
+    ],
+    "isolated_marginal": [
+      {
+        "scenario": "isolated_marginal",
+        "seed": "s1",
+        "firstDivergenceDay": null,
+        "launches": [
+          13,
+          13
+        ],
+        "fallthrough": [
+          0,
+          0
+        ],
+        "journeys": [
+          13,
+          13
+        ],
+        "routeSteps": [
+          234,
+          234
+        ],
+        "records": [
+          247,
+          247
+        ],
+        "workerDaysAway": [
+          512,
+          512
+        ],
+        "receipts": [
+          0.0041,
+          0.0041
+        ],
+        "support": [
+          0.29,
+          0.29
+        ],
+        "births": [
+          0,
+          0
+        ],
+        "deaths": [
+          0,
+          0
+        ],
+        "population": [
+          22,
+          22
+        ],
+        "survived": [
+          1,
+          1
+        ],
+        "firstJourney": [
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 18,
+            "deepestReach": 18,
+            "durationDays": 8,
+            "forcedReturn": false,
+            "lost": false
+          },
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 18,
+            "deepestReach": 18,
+            "durationDays": 8,
+            "forcedReturn": false,
+            "lost": false
+          }
+        ],
+        "firstJourneyIdentical": true,
+        "populationDiff": 0
+      },
+      {
+        "scenario": "isolated_marginal",
+        "seed": "s2",
+        "firstDivergenceDay": 5944,
+        "launches": [
+          13,
+          13
+        ],
+        "fallthrough": [
+          6,
+          0
+        ],
+        "journeys": [
+          13,
+          13
+        ],
+        "routeSteps": [
+          234,
+          234
+        ],
+        "records": [
+          247,
+          247
+        ],
+        "workerDaysAway": [
+          1060,
+          1068
+        ],
+        "receipts": [
+          0.0248,
+          0.0248
+        ],
+        "support": [
+          0.25,
+          0.25
+        ],
+        "births": [
+          0,
+          0
+        ],
+        "deaths": [
+          0,
+          0
+        ],
+        "population": [
+          20,
+          20
+        ],
+        "survived": [
+          1,
+          1
+        ],
+        "firstJourney": [
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 18,
+            "deepestReach": 18,
+            "durationDays": 8,
+            "forcedReturn": false,
+            "lost": false
+          },
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 18,
+            "deepestReach": 18,
+            "durationDays": 8,
+            "forcedReturn": false,
+            "lost": false
+          }
+        ],
+        "firstJourneyIdentical": true,
+        "populationDiff": 0
+      },
+      {
+        "scenario": "isolated_marginal",
+        "seed": "s3",
+        "firstDivergenceDay": 14136,
+        "launches": [
+          13,
+          13
+        ],
+        "fallthrough": [
+          2,
+          0
+        ],
+        "journeys": [
+          13,
+          13
+        ],
+        "routeSteps": [
+          234,
+          234
+        ],
+        "records": [
+          247,
+          247
+        ],
+        "workerDaysAway": [
+          652,
+          652
+        ],
+        "receipts": [
+          0.0108,
+          0.0108
+        ],
+        "support": [
+          0.33,
+          0.33
+        ],
+        "births": [
+          0,
+          0
+        ],
+        "deaths": [
+          0,
+          0
+        ],
+        "population": [
+          21,
+          21
+        ],
+        "survived": [
+          1,
+          1
+        ],
+        "firstJourney": [
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 18,
+            "deepestReach": 18,
+            "durationDays": 8,
+            "forcedReturn": false,
+            "lost": false
+          },
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 18,
+            "deepestReach": 18,
+            "durationDays": 8,
+            "forcedReturn": false,
+            "lost": false
+          }
+        ],
+        "firstJourneyIdentical": true,
+        "populationDiff": 0
+      },
+      {
+        "scenario": "isolated_marginal",
+        "seed": "s4",
+        "firstDivergenceDay": 10626,
+        "launches": [
+          13,
+          13
+        ],
+        "fallthrough": [
+          2,
+          0
+        ],
+        "journeys": [
+          13,
+          13
+        ],
+        "routeSteps": [
+          234,
+          234
+        ],
+        "records": [
+          247,
+          247
+        ],
+        "workerDaysAway": [
+          572,
+          576
+        ],
+        "receipts": [
+          0.0351,
+          0.0351
+        ],
+        "support": [
+          0.14,
+          0.14
+        ],
+        "births": [
+          0,
+          0
+        ],
+        "deaths": [
+          0,
+          0
+        ],
+        "population": [
+          20,
+          20
+        ],
+        "survived": [
+          1,
+          1
+        ],
+        "firstJourney": [
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 18,
+            "deepestReach": 18,
+            "durationDays": 8,
+            "forcedReturn": false,
+            "lost": false
+          },
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 18,
+            "deepestReach": 18,
+            "durationDays": 8,
+            "forcedReturn": false,
+            "lost": false
+          }
+        ],
+        "firstJourneyIdentical": true,
+        "populationDiff": 0
+      },
+      {
+        "scenario": "isolated_marginal",
+        "seed": "s5",
+        "firstDivergenceDay": null,
+        "launches": [
+          13,
+          13
+        ],
+        "fallthrough": [
+          0,
+          0
+        ],
+        "journeys": [
+          13,
+          13
+        ],
+        "routeSteps": [
+          234,
+          234
+        ],
+        "records": [
+          247,
+          247
+        ],
+        "workerDaysAway": [
+          552,
+          552
+        ],
+        "receipts": [
+          0.005,
+          0.005
+        ],
+        "support": [
+          0.42,
+          0.42
+        ],
+        "births": [
+          0,
+          0
+        ],
+        "deaths": [
+          0,
+          0
+        ],
+        "population": [
+          22,
+          22
+        ],
+        "survived": [
+          1,
+          1
+        ],
+        "firstJourney": [
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 18,
+            "deepestReach": 18,
+            "durationDays": 8,
+            "forcedReturn": false,
+            "lost": false
+          },
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 18,
+            "deepestReach": 18,
+            "durationDays": 8,
+            "forcedReturn": false,
+            "lost": false
+          }
+        ],
+        "firstJourneyIdentical": true,
+        "populationDiff": 0
+      }
+    ],
+    "hostile": [
+      {
+        "scenario": "hostile",
+        "seed": "s1",
+        "firstDivergenceDay": 4776,
+        "launches": [
+          9,
+          9
+        ],
+        "fallthrough": [
+          0,
+          0
+        ],
+        "journeys": [
+          13,
+          13
+        ],
+        "routeSteps": [
+          136,
+          136
+        ],
+        "records": [
+          149,
+          149
+        ],
+        "workerDaysAway": [
+          664,
+          662
+        ],
+        "receipts": [
+          0.0053,
+          0.0053
+        ],
+        "support": [
+          0.24,
+          0.24
+        ],
+        "births": [
+          0,
+          0
+        ],
+        "deaths": [
+          0,
+          0
+        ],
+        "population": [
+          20,
+          20
+        ],
+        "survived": [
+          1,
+          1
+        ],
+        "firstJourney": [
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 18,
+            "deepestReach": 18,
+            "durationDays": 6,
+            "forcedReturn": false,
+            "lost": false
+          },
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 18,
+            "deepestReach": 18,
+            "durationDays": 6,
+            "forcedReturn": false,
+            "lost": false
+          }
+        ],
+        "firstJourneyIdentical": true,
+        "populationDiff": 0
+      },
+      {
+        "scenario": "hostile",
+        "seed": "s2",
+        "firstDivergenceDay": 4776,
+        "launches": [
+          9,
+          9
+        ],
+        "fallthrough": [
+          4,
+          0
+        ],
+        "journeys": [
+          13,
+          13
+        ],
+        "routeSteps": [
+          136,
+          136
+        ],
+        "records": [
+          149,
+          149
+        ],
+        "workerDaysAway": [
+          732,
+          732
+        ],
+        "receipts": [
+          0.0416,
+          0.0416
+        ],
+        "support": [
+          0.44,
+          0.44
+        ],
+        "births": [
+          0,
+          0
+        ],
+        "deaths": [
+          0,
+          0
+        ],
+        "population": [
+          20,
+          20
+        ],
+        "survived": [
+          1,
+          1
+        ],
+        "firstJourney": [
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 18,
+            "deepestReach": 18,
+            "durationDays": 6,
+            "forcedReturn": false,
+            "lost": false
+          },
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 18,
+            "deepestReach": 18,
+            "durationDays": 6,
+            "forcedReturn": false,
+            "lost": false
+          }
+        ],
+        "firstJourneyIdentical": true,
+        "populationDiff": 0
+      },
+      {
+        "scenario": "hostile",
+        "seed": "s3",
+        "firstDivergenceDay": 4776,
+        "launches": [
+          10,
+          10
+        ],
+        "fallthrough": [
+          1,
+          0
+        ],
+        "journeys": [
+          13,
+          13
+        ],
+        "routeSteps": [
+          137,
+          137
+        ],
+        "records": [
+          150,
+          150
+        ],
+        "workerDaysAway": [
+          640,
+          638
+        ],
+        "receipts": [
+          0.0062,
+          0.0062
+        ],
+        "support": [
+          0.41,
+          0.41
+        ],
+        "births": [
+          0,
+          0
+        ],
+        "deaths": [
+          0,
+          0
+        ],
+        "population": [
+          21,
+          21
+        ],
+        "survived": [
+          1,
+          1
+        ],
+        "firstJourney": [
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 18,
+            "deepestReach": 18,
+            "durationDays": 6,
+            "forcedReturn": false,
+            "lost": false
+          },
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 18,
+            "deepestReach": 18,
+            "durationDays": 6,
+            "forcedReturn": false,
+            "lost": false
+          }
+        ],
+        "firstJourneyIdentical": true,
+        "populationDiff": 0
+      },
+      {
+        "scenario": "hostile",
+        "seed": "s4",
+        "firstDivergenceDay": 4776,
+        "launches": [
+          10,
+          10
+        ],
+        "fallthrough": [
+          4,
+          0
+        ],
+        "journeys": [
+          13,
+          13
+        ],
+        "routeSteps": [
+          130,
+          130
+        ],
+        "records": [
+          143,
+          143
+        ],
+        "workerDaysAway": [
+          784,
+          788
+        ],
+        "receipts": [
+          0.0277,
+          0.0277
+        ],
+        "support": [
+          0.04,
+          0.04
+        ],
+        "births": [
+          0,
+          0
+        ],
+        "deaths": [
+          0,
+          0
+        ],
+        "population": [
+          19,
+          19
+        ],
+        "survived": [
+          1,
+          1
+        ],
+        "firstJourney": [
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 18,
+            "deepestReach": 18,
+            "durationDays": 6,
+            "forcedReturn": false,
+            "lost": false
+          },
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 18,
+            "deepestReach": 18,
+            "durationDays": 6,
+            "forcedReturn": false,
+            "lost": false
+          }
+        ],
+        "firstJourneyIdentical": true,
+        "populationDiff": 0
+      },
+      {
+        "scenario": "hostile",
+        "seed": "s5",
+        "firstDivergenceDay": 4776,
+        "launches": [
+          10,
+          10
+        ],
+        "fallthrough": [
+          1,
+          0
+        ],
+        "journeys": [
+          13,
+          13
+        ],
+        "routeSteps": [
+          137,
+          137
+        ],
+        "records": [
+          150,
+          150
+        ],
+        "workerDaysAway": [
+          634,
+          634
+        ],
+        "receipts": [
+          0.044,
+          0.044
+        ],
+        "support": [
+          0.13,
+          0.13
+        ],
+        "births": [
+          0,
+          0
+        ],
+        "deaths": [
+          0,
+          0
+        ],
+        "population": [
+          20,
+          20
+        ],
+        "survived": [
+          1,
+          1
+        ],
+        "firstJourney": [
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 18,
+            "deepestReach": 18,
+            "durationDays": 6,
+            "forcedReturn": false,
+            "lost": false
+          },
+          {
+            "id": "",
+            "departureDay": 96,
+            "routeSteps": 18,
+            "deepestReach": 18,
+            "durationDays": 6,
+            "forcedReturn": false,
+            "lost": false
+          }
+        ],
+        "firstJourneyIdentical": true,
+        "populationDiff": 0
+      }
+    ]
+  }
+}

@@ -1,0 +1,334 @@
+{
+  "audit": "CORRECTION-32 before/after",
+  "before": "3e2c1215b4ccef2beb799b3a7882247f6cd186cd",
+  "after": "checkpoint/crowding-decision-pressure-authority-32",
+  "headline": "one physical nearby-band condition -> one explicit bounded decision influence -> no unjustified duplicate direct or indirect score charge",
+  "decisionAuthority": {
+    "candidatesWithThreeOrMoreCrowdingPaths": {
+      "syntheticAndNatural": {
+        "before": 49,
+        "after": 0
+      },
+      "natural20y": {
+        "before": 56,
+        "after": 0
+      },
+      "natural50y": {
+        "before": 144,
+        "after": 0
+      }
+    },
+    "maxPathsOnAnyCandidate": {
+      "natural20y": {
+        "before": 4,
+        "after": 2
+      },
+      "natural50y": {
+        "before": 4,
+        "after": 2
+      }
+    },
+    "pathContribution20y": {
+      "directNearbyBandPressure": {
+        "before": 0.97,
+        "after": 0
+      },
+      "directCrowdingPenalty": {
+        "before": 2.33,
+        "after": 3.09
+      },
+      "indirectPressureState": {
+        "before": 0.2,
+        "after": 0.18
+      },
+      "rangeSaturationOverlap": {
+        "before": 0.09,
+        "after": 0
+      },
+      "crowdingExploration": {
+        "before": 0,
+        "after": 0
+      },
+      "daughterDerived": {
+        "before": 0.54,
+        "after": 0
+      },
+      "combinedEffective": {
+        "before": 4.92,
+        "after": 3.78
+      }
+    },
+    "noAutomaticHostility20y": {
+      "crowdingRaisedRiskPressure": {
+        "before": 3,
+        "after": 0
+      },
+      "crowdingReducedPlaceAttachment": {
+        "before": 11,
+        "after": 0
+      }
+    }
+  },
+  "preservation": {
+    "physicalCrowdingLayer20y": {
+      "livingBandSeasons": {
+        "before": 2400,
+        "after": 2400
+      },
+      "bandSeasonsWithPhysicalCrowding": {
+        "before": 20,
+        "after": 20
+      },
+      "weightedCrowdingSum": {
+        "before": 0.74,
+        "after": 0.74
+      },
+      "weightedCrowdingMax": {
+        "before": 0.07,
+        "after": 0.07
+      },
+      "crowdingPenaltySum": {
+        "before": 0.52,
+        "after": 0.52
+      },
+      "crowdingPenaltyMax": {
+        "before": 0.06,
+        "after": 0.06
+      },
+      "note": "identical on all six keys at 20 years: the physical crowding field is untouched"
+    },
+    "priorCheckpointFixtures": {
+      "AUDIT-27": "11/11 unchanged between arms",
+      "CORRECTION-28": "12/12 unchanged between arms",
+      "CORRECTION-29": "12/12 unchanged between arms",
+      "CORRECTION-30": "15/15 unchanged between arms",
+      "CORRECTION-31": "22/22 unchanged between arms",
+      "socialCausalityAudit": "byte-identical between arms (7226 bytes)"
+    },
+    "stepModeInvariance": {
+      "map1": {
+        "pass": true,
+        "fullCanonicalStateMatch": true,
+        "firstDivergence": null
+      },
+      "map2": {
+        "pass": true,
+        "fullCanonicalStateMatch": true,
+        "firstDivergence": null
+      }
+    }
+  },
+  "naturalFinalState": {
+    "at20Years": {
+      "identicalKeys": 75,
+      "changed": [
+        {
+          "run": "map2:s1",
+          "key": "population",
+          "before": 224,
+          "after": 226
+        },
+        {
+          "run": "map2:s1",
+          "key": "residentialMoves",
+          "before": 448,
+          "after": 450
+        },
+        {
+          "run": "map2:s1",
+          "key": "meanSupportRatio",
+          "before": 0.07,
+          "after": 0.08
+        },
+        {
+          "run": "map2:s2",
+          "key": "population",
+          "before": 226,
+          "after": 227
+        },
+        {
+          "run": "map2:s2",
+          "key": "residentialMoves",
+          "before": 395,
+          "after": 401
+        },
+        {
+          "run": "map2:s2",
+          "key": "meanSupportRatio",
+          "before": 0.0822,
+          "after": 0.1256
+        },
+        {
+          "run": "ordinary:s1",
+          "key": "population",
+          "before": 21,
+          "after": 20
+        },
+        {
+          "run": "ordinary:s1",
+          "key": "residentialMoves",
+          "before": 53,
+          "after": 57
+        },
+        {
+          "run": "ordinary:s1",
+          "key": "meanSupportRatio",
+          "before": 0.03,
+          "after": 0.26
+        }
+      ]
+    },
+    "at50Years": {
+      "identicalKeys": 75,
+      "changed": [
+        {
+          "run": "map1:s1",
+          "key": "population",
+          "before": 165,
+          "after": 164
+        },
+        {
+          "run": "map1:s1",
+          "key": "meanSupportRatio",
+          "before": 0.468,
+          "after": 0.292
+        },
+        {
+          "run": "map2:s1",
+          "key": "population",
+          "before": 205,
+          "after": 209
+        },
+        {
+          "run": "map2:s1",
+          "key": "residentialMoves",
+          "before": 701,
+          "after": 720
+        },
+        {
+          "run": "map2:s1",
+          "key": "meanSupportRatio",
+          "before": 0.1767,
+          "after": 0.1444
+        },
+        {
+          "run": "map2:s2",
+          "key": "population",
+          "before": 210,
+          "after": 216
+        },
+        {
+          "run": "map2:s2",
+          "key": "meanSupportRatio",
+          "before": 0.0978,
+          "after": 0.1056
+        },
+        {
+          "run": "ordinary:s1",
+          "key": "population",
+          "before": 14,
+          "after": 17
+        },
+        {
+          "run": "ordinary:s1",
+          "key": "meanSupportRatio",
+          "before": 0.02,
+          "after": 0.06
+        }
+      ]
+    }
+  },
+  "fixtureVerdicts": {
+    "before": {
+      "P1_zero_crowding_control": "ZERO_CROWDING_IS_ZERO",
+      "P2_one_neutral_non_kin_neighbour": "MULTIPLE_CROWDING_PATHS",
+      "P3_residence_crowded_target_clear": "TARGET_KEEPS_NO_RESIDENCE_COST",
+      "P4_residence_clear_target_crowded": "TARGET_COSTED_AND_NO_FALSE_HOME_PUSH",
+      "P5_residence_and_target_crowded": "SYMMETRIC_NO_ARTIFICIAL_PREFERENCE",
+      "P6_terrain_capacity_comparison": "CAPACITY_TRANSFORM_EXPLAINS_DIFFERENCE",
+      "P7_crowding_without_depletion": "MEASURED",
+      "P8_depletion_without_current_crowding": "MEASURED",
+      "P9_crowding_plus_depletion": "MEASURED",
+      "P10_crowding_plus_social_friction": "MEASURED",
+      "P11_kin_crowding": "KIN_DISCOUNTED_BUT_STILL_CONSUME_SPACE",
+      "P12_tolerated_aggregation": "PHYSICAL_AND_SOCIAL_COEXIST",
+      "P13_range_saturation_overlap": "SATURATION_STILL_CARRIES_CROWDING_INTO_SCORE",
+      "P14_crowding_driven_exploration": "EXPLORATION_RESPONSE_MULTIPLIED",
+      "P15_repeated_nearby_seasons": "BOUNDED",
+      "P16_departure": "PHYSICAL_RELEASES_IMMEDIATELY",
+      "P17_several_nearby_bands": "MONOTONE_AND_BOUNDED",
+      "P18_candidate_family_parity": "A_FAMILY_DUPLICATES",
+      "P19_order_invariance": "ORDER_INVARIANT",
+      "P20_step_mode_invariance": "STEP_MODE_EQUIVALENT",
+      "P21_long_horizon": "NO_RESIDUAL_AFTER_DEPARTURE"
+    },
+    "after": {
+      "P1_zero_crowding_control": "ZERO_CROWDING_IS_ZERO",
+      "P2_one_neutral_non_kin_neighbour": "SINGLE_BOUNDED_AUTHORITY",
+      "P3_residence_crowded_target_clear": "TARGET_KEEPS_NO_RESIDENCE_COST",
+      "P4_residence_clear_target_crowded": "TARGET_COSTED_AND_NO_FALSE_HOME_PUSH",
+      "P5_residence_and_target_crowded": "SYMMETRIC_NO_ARTIFICIAL_PREFERENCE",
+      "P6_terrain_capacity_comparison": "CAPACITY_TRANSFORM_EXPLAINS_DIFFERENCE",
+      "P7_crowding_without_depletion": "MEASURED",
+      "P8_depletion_without_current_crowding": "MEASURED",
+      "P9_crowding_plus_depletion": "MEASURED",
+      "P10_crowding_plus_social_friction": "MEASURED",
+      "P11_kin_crowding": "KIN_DISCOUNTED_BUT_STILL_CONSUME_SPACE",
+      "P12_tolerated_aggregation": "PHYSICAL_AND_SOCIAL_COEXIST",
+      "P13_range_saturation_overlap": "OVERLAP_PARTITIONED_OUT_OF_DECISION",
+      "P14_crowding_driven_exploration": "EXPLORATION_RESPONSE_BOUNDED",
+      "P15_repeated_nearby_seasons": "BOUNDED",
+      "P16_departure": "PHYSICAL_RELEASES_IMMEDIATELY",
+      "P17_several_nearby_bands": "MONOTONE_AND_BOUNDED",
+      "P18_candidate_family_parity": "NO_FAMILY_DUPLICATES",
+      "P19_order_invariance": "ORDER_INVARIANT",
+      "P20_step_mode_invariance": "STEP_MODE_EQUIVALENT",
+      "P21_long_horizon": "NO_RESIDUAL_AFTER_DEPARTURE"
+    },
+    "flipped": [
+      {
+        "fixture": "P2_one_neutral_non_kin_neighbour",
+        "before": "MULTIPLE_CROWDING_PATHS",
+        "after": "SINGLE_BOUNDED_AUTHORITY"
+      },
+      {
+        "fixture": "P13_range_saturation_overlap",
+        "before": "SATURATION_STILL_CARRIES_CROWDING_INTO_SCORE",
+        "after": "OVERLAP_PARTITIONED_OUT_OF_DECISION"
+      },
+      {
+        "fixture": "P14_crowding_driven_exploration",
+        "before": "EXPLORATION_RESPONSE_MULTIPLIED",
+        "after": "EXPLORATION_RESPONSE_BOUNDED"
+      },
+      {
+        "fixture": "P18_candidate_family_parity",
+        "before": "A_FAMILY_DUPLICATES",
+        "after": "NO_FAMILY_DUPLICATES"
+      }
+    ],
+    "unchanged": [
+      "P1_zero_crowding_control",
+      "P3_residence_crowded_target_clear",
+      "P4_residence_clear_target_crowded",
+      "P5_residence_and_target_crowded",
+      "P6_terrain_capacity_comparison",
+      "P7_crowding_without_depletion",
+      "P8_depletion_without_current_crowding",
+      "P9_crowding_plus_depletion",
+      "P10_crowding_plus_social_friction",
+      "P11_kin_crowding",
+      "P12_tolerated_aggregation",
+      "P15_repeated_nearby_seasons",
+      "P16_departure",
+      "P17_several_nearby_bands",
+      "P19_order_invariance",
+      "P20_step_mode_invariance",
+      "P21_long_horizon"
+    ],
+    "vacuous": {
+      "before": 0,
+      "after": 0
+    }
+  }
+}

@@ -1,0 +1,305 @@
+{
+  "years": 40,
+  "seeds": [
+    "s1",
+    "s2",
+    "s3",
+    "s4",
+    "s5"
+  ],
+  "scenarios": [
+    "map1",
+    "map2",
+    "site_B_dry_plains",
+    "site_D_aquatic",
+    "site_C_dry_plains",
+    "ordinary"
+  ],
+  "L1": {
+    "suppressedOpportunities": 191881,
+    "suppressedWithPartyStillAway": 880,
+    "suppressedWithPartyALREADYHOME": 191001,
+    "ofThoseWithAValidProposal": 164411,
+    "firstDivergence": [
+      {
+        "scenario": "map1",
+        "seed": "s1",
+        "day": 108,
+        "band": "band:dry-margin-foragers",
+        "ticksSinceLastExploration": 0,
+        "activeFrontierParty": false,
+        "eligible": true,
+        "canBeginPhysicalExploration": true
+      },
+      {
+        "scenario": "map2",
+        "seed": "s1",
+        "day": 102,
+        "band": "band:varied-dry-corridor-mid",
+        "ticksSinceLastExploration": 0,
+        "activeFrontierParty": false,
+        "eligible": true,
+        "canBeginPhysicalExploration": true
+      },
+      {
+        "scenario": "site_B_dry_plains",
+        "seed": "s1",
+        "day": 102,
+        "band": "band:custom:0",
+        "ticksSinceLastExploration": 0,
+        "activeFrontierParty": false,
+        "eligible": true,
+        "canBeginPhysicalExploration": true
+      },
+      {
+        "scenario": "site_D_aquatic",
+        "seed": "s1",
+        "day": 102,
+        "band": "band:custom:0",
+        "ticksSinceLastExploration": 0,
+        "activeFrontierParty": false,
+        "eligible": true,
+        "canBeginPhysicalExploration": true
+      },
+      {
+        "scenario": "site_C_dry_plains",
+        "seed": "s1",
+        "day": 102,
+        "band": "band:custom:0",
+        "ticksSinceLastExploration": 0,
+        "activeFrontierParty": false,
+        "eligible": true,
+        "canBeginPhysicalExploration": true
+      },
+      {
+        "scenario": "ordinary",
+        "seed": "s1",
+        "day": 102,
+        "band": "band:custom:0",
+        "ticksSinceLastExploration": 0,
+        "activeFrontierParty": false,
+        "eligible": true,
+        "canBeginPhysicalExploration": true
+      }
+    ],
+    "meanIdleCooldownTicksAtOpportunity": 5.989,
+    "idleSamples": 191001
+  },
+  "L2": {
+    "fallthroughOpportunities": 18242,
+    "distinctClaimChains": 200,
+    "repeatedChains": 147,
+    "longestRepeatRun": 1726,
+    "repeatsByFailure": {
+      "ROUTE_BUILD_FAILED": 17959,
+      "SAME_TARGET_CONFLICT": 83
+    },
+    "worstChains": [
+      {
+        "key": "site_B_dry_plains|s3|band:custom:0|distant_patch_verification|tile:16:34|ROUTE_BUILD_FAILED",
+        "repeats": 1726,
+        "firstDay": 3600,
+        "lastDay": 14400
+      },
+      {
+        "key": "site_B_dry_plains|s5|band:custom:0|distant_patch_verification|tile:16:34|ROUTE_BUILD_FAILED",
+        "repeats": 1726,
+        "firstDay": 3600,
+        "lastDay": 14400
+      },
+      {
+        "key": "site_D_aquatic|s2|band:custom:0|distant_patch_verification|tile:118:116|ROUTE_BUILD_FAILED",
+        "repeats": 1351,
+        "firstDay": 5310,
+        "lastDay": 14400
+      },
+      {
+        "key": "site_B_dry_plains|s1|band:custom:0|distant_patch_verification|tile:16:34|ROUTE_BUILD_FAILED",
+        "repeats": 794,
+        "firstDay": 3600,
+        "lastDay": 8820
+      },
+      {
+        "key": "site_B_dry_plains|s2|band:custom:0|distant_patch_verification|tile:16:34|ROUTE_BUILD_FAILED",
+        "repeats": 793,
+        "firstDay": 3600,
+        "lastDay": 10170
+      },
+      {
+        "key": "site_B_dry_plains|s4|band:custom:0|distant_patch_verification|tile:16:34|ROUTE_BUILD_FAILED",
+        "repeats": 780,
+        "firstDay": 3600,
+        "lastDay": 9360
+      },
+      {
+        "key": "map2|s3|band:varied-dry-corridor-mid|distant_patch_verification|tile:74:111|ROUTE_BUILD_FAILED",
+        "repeats": 537,
+        "firstDay": 11070,
+        "lastDay": 14400
+      },
+      {
+        "key": "site_D_aquatic|s5|band:custom:0|distant_patch_verification|tile:118:116|ROUTE_BUILD_FAILED",
+        "repeats": 495,
+        "firstDay": 9006,
+        "lastDay": 12780
+      },
+      {
+        "key": "site_D_aquatic|s4|band:custom:0|distant_patch_verification|tile:117:116|ROUTE_BUILD_FAILED",
+        "repeats": 460,
+        "firstDay": 4770,
+        "lastDay": 11160
+      },
+      {
+        "key": "site_B_dry_plains|s4|band:custom:0|distant_patch_verification|tile:22:34|ROUTE_BUILD_FAILED",
+        "repeats": 421,
+        "firstDay": 6576,
+        "lastDay": 14400
+      },
+      {
+        "key": "site_D_aquatic|s1|band:custom:0|distant_patch_verification|tile:117:116|ROUTE_BUILD_FAILED",
+        "repeats": 370,
+        "firstDay": 5940,
+        "lastDay": 8280
+      },
+      {
+        "key": "site_B_dry_plains|s2|band:custom:0|distant_patch_verification|tile:23:39|ROUTE_BUILD_FAILED",
+        "repeats": 345,
+        "firstDay": 10266,
+        "lastDay": 14220
+      }
+    ]
+  },
+  "L3": {
+    "recordsReturned": 15094,
+    "evictedAtFirstCompression": 3900,
+    "survivedFirstCompression": 3501,
+    "tilesRelearnedByALaterJourney": 1601,
+    "meanLifetimeDaysOfEvicted": 307.8167,
+    "lifetimeSamples": 3900
+  },
+  "L4": {
+    "probes": 0,
+    "changedAction": 0,
+    "note": "measured by the chain audit E6 probe; see chain-O0-*.json"
+  },
+  "verdicts": {
+    "L1": {
+      "occurs": true,
+      "magnitude": 191001,
+      "shareOfSuppressed": 0.9954,
+      "cost": "164411 opportunities where the band could physically have gone and was refused by a cooldown for a party already home"
+    },
+    "L2": {
+      "occurs": true,
+      "magnitude": 147,
+      "longestRepeatRun": 1726,
+      "cost": "18242 opportunities where the slot went unused with a valid proposal in hand"
+    },
+    "L3": {
+      "occurs": true,
+      "evictionRate": 0.2584,
+      "relearned": 1601
+    },
+    "L4": {
+      "note": "measured by the chain audit E6 probe; see chain-O0-*.json"
+    }
+  },
+  "byScenario": {
+    "map1": {
+      "opportunities": 60312,
+      "l1Idle": 56267,
+      "l1Away": 248,
+      "l1IdleWithValidProposal": 45242,
+      "l2Fallthrough": 1447,
+      "l2Repeats": 28,
+      "l2LongestRun": 308,
+      "l3Records": 4368,
+      "l3Evicted": 936,
+      "l3Relearned": 271,
+      "firstIdleDay": 108,
+      "firstRepeatDay": 1350,
+      "l1IdleShareOfSuppressed": 0.9956,
+      "l3EvictionRate": 0.2143
+    },
+    "map2": {
+      "opportunities": 108492,
+      "l1Idle": 100389,
+      "l1Away": 486,
+      "l1IdleWithValidProposal": 86905,
+      "l2Fallthrough": 4770,
+      "l2Repeats": 67,
+      "l2LongestRun": 537,
+      "l3Records": 8040,
+      "l3Evicted": 1684,
+      "l3Relearned": 617,
+      "firstIdleDay": 102,
+      "firstRepeatDay": 1350,
+      "l1IdleShareOfSuppressed": 0.9952,
+      "l3EvictionRate": 0.2095
+    },
+    "site_B_dry_plains": {
+      "opportunities": 12006,
+      "l1Idle": 3991,
+      "l1Away": 17,
+      "l1IdleWithValidProposal": 3531,
+      "l2Fallthrough": 7536,
+      "l2Repeats": 16,
+      "l2LongestRun": 1726,
+      "l3Records": 264,
+      "l3Evicted": 143,
+      "l3Relearned": 26,
+      "firstIdleDay": 102,
+      "firstRepeatDay": 3600,
+      "l1IdleShareOfSuppressed": 0.9958,
+      "l3EvictionRate": 0.5417
+    },
+    "site_D_aquatic": {
+      "opportunities": 12026,
+      "l1Idle": 7046,
+      "l1Away": 6,
+      "l1IdleWithValidProposal": 5620,
+      "l2Fallthrough": 4047,
+      "l2Repeats": 21,
+      "l2LongestRun": 1351,
+      "l3Records": 221,
+      "l3Evicted": 8,
+      "l3Relearned": 0,
+      "firstIdleDay": 102,
+      "firstRepeatDay": 5940,
+      "l1IdleShareOfSuppressed": 0.9991,
+      "l3EvictionRate": 0.0362
+    },
+    "site_C_dry_plains": {
+      "opportunities": 12147,
+      "l1Idle": 11935,
+      "l1Away": 59,
+      "l1IdleWithValidProposal": 11935,
+      "l2Fallthrough": 8,
+      "l2Repeats": 3,
+      "l2LongestRun": 2,
+      "l3Records": 1119,
+      "l3Evicted": 694,
+      "l3Relearned": 481,
+      "firstIdleDay": 102,
+      "firstRepeatDay": 14135,
+      "l1IdleShareOfSuppressed": 0.9951,
+      "l3EvictionRate": 0.6202
+    },
+    "ordinary": {
+      "opportunities": 12017,
+      "l1Idle": 11373,
+      "l1Away": 64,
+      "l1IdleWithValidProposal": 11178,
+      "l2Fallthrough": 434,
+      "l2Repeats": 12,
+      "l2LongestRun": 180,
+      "l3Records": 1082,
+      "l3Evicted": 435,
+      "l3Relearned": 206,
+      "firstIdleDay": 102,
+      "firstRepeatDay": 3600,
+      "l1IdleShareOfSuppressed": 0.9944,
+      "l3EvictionRate": 0.402
+    }
+  }
+}

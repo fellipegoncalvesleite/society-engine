@@ -1,0 +1,232 @@
+{
+ "ordinary": {
+  "verificationParties": [
+   239.8,
+   8.6
+  ],
+  "broadExplorationParties": [
+   53.4,
+   46.0
+  ],
+  "patchVerificationParties": [
+   63.8,
+   58.2
+  ],
+  "gatheringParties": [
+   74.4,
+   31.8
+  ],
+  "totalParties": [
+   658.8,
+   263.8
+  ],
+  "uniqueTilesVisited": [
+   169.4,
+   132.2
+  ],
+  "receipts": [
+   48.798,
+   37.7
+  ],
+  "meanSupport": [
+   0.479,
+   0.429
+  ],
+  "births": [
+   56.2,
+   48.0
+  ],
+  "deaths": [
+   81.2,
+   73.0
+  ],
+  "finalPopulation": [
+   5.4,
+   0.0
+  ]
+ },
+ "site_A_coast": {
+  "verificationParties": [
+   2877.2,
+   24.8
+  ],
+  "broadExplorationParties": [
+   45.4,
+   34.0
+  ],
+  "patchVerificationParties": [
+   100.8,
+   49.0
+  ],
+  "gatheringParties": [
+   68.8,
+   10.2
+  ],
+  "totalParties": [
+   3093.4,
+   119.8
+  ],
+  "uniqueTilesVisited": [
+   271.4,
+   152.8
+  ],
+  "receipts": [
+   152.206,
+   39.54
+  ],
+  "meanSupport": [
+   0.883,
+   0.248
+  ],
+  "births": [
+   67.4,
+   39.2
+  ],
+  "deaths": [
+   80.2,
+   62.4
+  ],
+  "finalPopulation": [
+   17.6,
+   3.6
+  ]
+ },
+ "isolated_marginal": {
+  "verificationParties": [
+   1213.0,
+   5.0
+  ],
+  "broadExplorationParties": [
+   54.8,
+   53.8
+  ],
+  "patchVerificationParties": [
+   188.2,
+   201.4
+  ],
+  "gatheringParties": [
+   28.0,
+   21.2
+  ],
+  "totalParties": [
+   1484.0,
+   281.4
+  ],
+  "uniqueTilesVisited": [
+   600.0,
+   499.4
+  ],
+  "receipts": [
+   85.768,
+   58.974
+  ],
+  "meanSupport": [
+   0.678,
+   0.592
+  ],
+  "births": [
+   65.0,
+   55.6
+  ],
+  "deaths": [
+   83.0,
+   79.2
+  ],
+  "finalPopulation": [
+   14.2,
+   6.8
+  ]
+ },
+ "site_D_aquatic": {
+  "verificationParties": [
+   217.0,
+   8.4
+  ],
+  "broadExplorationParties": [
+   13.2,
+   14.2
+  ],
+  "patchVerificationParties": [
+   20.4,
+   17.8
+  ],
+  "gatheringParties": [
+   29.2,
+   35.4
+  ],
+  "totalParties": [
+   280.6,
+   76.6
+  ],
+  "uniqueTilesVisited": [
+   73.0,
+   50.8
+  ],
+  "receipts": [
+   81.262,
+   69.124
+  ],
+  "meanSupport": [
+   0.613,
+   0.557
+  ],
+  "births": [
+   67.2,
+   63.2
+  ],
+  "deaths": [
+   89.0,
+   87.0
+  ],
+  "finalPopulation": [
+   10.4,
+   6.6
+  ]
+ },
+ "map1": {
+  "verificationParties": [
+   8269.6,
+   124.8
+  ],
+  "broadExplorationParties": [
+   367.0,
+   360.6
+  ],
+  "patchVerificationParties": [
+   944.0,
+   917.8
+  ],
+  "gatheringParties": [
+   839.4,
+   261.2
+  ],
+  "totalParties": [
+   10435.6,
+   1688.0
+  ],
+  "uniqueTilesVisited": [
+   1108.6,
+   998.6
+  ],
+  "receipts": [
+   1614.976,
+   1568.464
+  ],
+  "meanSupport": [
+   1.231,
+   1.217
+  ],
+  "births": [
+   738.6,
+   721.0
+  ],
+  "deaths": [
+   673.4,
+   661.8
+  ],
+  "finalPopulation": [
+   220.2,
+   210.6
+  ]
+ }
+}

@@ -1,0 +1,234 @@
+{
+  "audit": "fissionMotivationDistanceCoupling",
+  "checkpoint": "CORRECTION-18 §9.3/§13",
+  "prohibition": "§9.3 — distance must not be counted repeatedly across viability, motivation, destination ranking and daughter-colonization pressure",
+  "doubleCount": {
+    "role1_destinationRanking": "deriveKnownUnusedHabitat: score -= travelCost * 0.2",
+    "role2_splitMotivation": "deriveDaughterColonization: travelRiskPenalty = clamp01(travelCost * 0.6 + riskPenalty * 0.4); pressure -= travelRiskPenalty * 0.2",
+    "sameInput": "travelCost = clamp01(distance / 12), computed once and consumed in both roles",
+    "maximumMotivationSwing": 0.1,
+    "splitPressureThreshold": 0.64
+  },
+  "perMap": {
+    "map1": {
+      "meanWinnerDistance": {
+        "on": 2.33,
+        "off": 2.035
+      },
+      "meanTravelRiskPenalty": {
+        "on": 0.305,
+        "off": 0.298
+      },
+      "meanColonizationPressure": {
+        "on": 0.464,
+        "off": 0.457
+      },
+      "finalBands": {
+        "on": 6,
+        "off": 7
+      },
+      "blockedByDistanceAlone": {
+        "on": 14.333,
+        "off": 8.333
+      },
+      "winnersAreFartherWhenExploring": true,
+      "pressureIsLowerWhenExploring": false
+    },
+    "map2": {
+      "meanWinnerDistance": {
+        "on": 2.124,
+        "off": 2.202
+      },
+      "meanTravelRiskPenalty": {
+        "on": 0.293,
+        "off": 0.303
+      },
+      "meanColonizationPressure": {
+        "on": 0.476,
+        "off": 0.463
+      },
+      "finalBands": {
+        "on": 10,
+        "off": 10
+      },
+      "blockedByDistanceAlone": {
+        "on": 31.333,
+        "off": 30.333
+      },
+      "winnersAreFartherWhenExploring": false,
+      "pressureIsLowerWhenExploring": false
+    }
+  },
+  "rows": [
+    {
+      "map": "map1",
+      "seed": "c18:a",
+      "explorationEnabled": true,
+      "samples": 1033,
+      "meanWinnerDistance": 2.577,
+      "meanWinnerTravelCost": 0.208,
+      "meanTravelRiskPenalty": 0.313,
+      "meanColonizationPressure": 0.464,
+      "bandYearsWherePressureBlockedByDistanceAlone": 21,
+      "blockedShare": 0.02,
+      "finalBands": 6,
+      "finalPopulation": 180
+    },
+    {
+      "map": "map1",
+      "seed": "c18:a",
+      "explorationEnabled": false,
+      "samples": 1217,
+      "meanWinnerDistance": 1.961,
+      "meanWinnerTravelCost": 0.163,
+      "meanTravelRiskPenalty": 0.291,
+      "meanColonizationPressure": 0.449,
+      "bandYearsWherePressureBlockedByDistanceAlone": 2,
+      "blockedShare": 0.002,
+      "finalBands": 7,
+      "finalPopulation": 220
+    },
+    {
+      "map": "map1",
+      "seed": "c18:b",
+      "explorationEnabled": true,
+      "samples": 1136,
+      "meanWinnerDistance": 2.357,
+      "meanWinnerTravelCost": 0.196,
+      "meanTravelRiskPenalty": 0.306,
+      "meanColonizationPressure": 0.47,
+      "bandYearsWherePressureBlockedByDistanceAlone": 16,
+      "blockedShare": 0.014,
+      "finalBands": 7,
+      "finalPopulation": 188
+    },
+    {
+      "map": "map1",
+      "seed": "c18:b",
+      "explorationEnabled": false,
+      "samples": 1239,
+      "meanWinnerDistance": 1.89,
+      "meanWinnerTravelCost": 0.157,
+      "meanTravelRiskPenalty": 0.292,
+      "meanColonizationPressure": 0.468,
+      "bandYearsWherePressureBlockedByDistanceAlone": 9,
+      "blockedShare": 0.007,
+      "finalBands": 7,
+      "finalPopulation": 193
+    },
+    {
+      "map": "map1",
+      "seed": "c18:c",
+      "explorationEnabled": true,
+      "samples": 1000,
+      "meanWinnerDistance": 2.056,
+      "meanWinnerTravelCost": 0.17,
+      "meanTravelRiskPenalty": 0.295,
+      "meanColonizationPressure": 0.459,
+      "bandYearsWherePressureBlockedByDistanceAlone": 6,
+      "blockedShare": 0.006,
+      "finalBands": 5,
+      "finalPopulation": 180
+    },
+    {
+      "map": "map1",
+      "seed": "c18:c",
+      "explorationEnabled": false,
+      "samples": 1262,
+      "meanWinnerDistance": 2.254,
+      "meanWinnerTravelCost": 0.187,
+      "meanTravelRiskPenalty": 0.31,
+      "meanColonizationPressure": 0.453,
+      "bandYearsWherePressureBlockedByDistanceAlone": 14,
+      "blockedShare": 0.011,
+      "finalBands": 7,
+      "finalPopulation": 214
+    },
+    {
+      "map": "map2",
+      "seed": "c18:a",
+      "explorationEnabled": true,
+      "samples": 1841,
+      "meanWinnerDistance": 2.24,
+      "meanWinnerTravelCost": 0.187,
+      "meanTravelRiskPenalty": 0.3,
+      "meanColonizationPressure": 0.479,
+      "bandYearsWherePressureBlockedByDistanceAlone": 37,
+      "blockedShare": 0.02,
+      "finalBands": 10,
+      "finalPopulation": 185
+    },
+    {
+      "map": "map2",
+      "seed": "c18:a",
+      "explorationEnabled": false,
+      "samples": 1883,
+      "meanWinnerDistance": 2.133,
+      "meanWinnerTravelCost": 0.177,
+      "meanTravelRiskPenalty": 0.3,
+      "meanColonizationPressure": 0.463,
+      "bandYearsWherePressureBlockedByDistanceAlone": 33,
+      "blockedShare": 0.018,
+      "finalBands": 10,
+      "finalPopulation": 205
+    },
+    {
+      "map": "map2",
+      "seed": "c18:b",
+      "explorationEnabled": true,
+      "samples": 1863,
+      "meanWinnerDistance": 2.033,
+      "meanWinnerTravelCost": 0.169,
+      "meanTravelRiskPenalty": 0.287,
+      "meanColonizationPressure": 0.476,
+      "bandYearsWherePressureBlockedByDistanceAlone": 28,
+      "blockedShare": 0.015,
+      "finalBands": 10,
+      "finalPopulation": 184
+    },
+    {
+      "map": "map2",
+      "seed": "c18:b",
+      "explorationEnabled": false,
+      "samples": 1882,
+      "meanWinnerDistance": 2.13,
+      "meanWinnerTravelCost": 0.178,
+      "meanTravelRiskPenalty": 0.3,
+      "meanColonizationPressure": 0.463,
+      "bandYearsWherePressureBlockedByDistanceAlone": 35,
+      "blockedShare": 0.019,
+      "finalBands": 10,
+      "finalPopulation": 197
+    },
+    {
+      "map": "map2",
+      "seed": "c18:c",
+      "explorationEnabled": true,
+      "samples": 1891,
+      "meanWinnerDistance": 2.099,
+      "meanWinnerTravelCost": 0.175,
+      "meanTravelRiskPenalty": 0.293,
+      "meanColonizationPressure": 0.472,
+      "bandYearsWherePressureBlockedByDistanceAlone": 29,
+      "blockedShare": 0.015,
+      "finalBands": 10,
+      "finalPopulation": 192
+    },
+    {
+      "map": "map2",
+      "seed": "c18:c",
+      "explorationEnabled": false,
+      "samples": 1902,
+      "meanWinnerDistance": 2.343,
+      "meanWinnerTravelCost": 0.194,
+      "meanTravelRiskPenalty": 0.31,
+      "meanColonizationPressure": 0.463,
+      "bandYearsWherePressureBlockedByDistanceAlone": 23,
+      "blockedShare": 0.012,
+      "finalBands": 10,
+      "finalPopulation": 211
+    }
+  ],
+  "confirmed": false,
+  "verdict": "NOT_CONFIRMED_ON_THESE_ARMS"
+}

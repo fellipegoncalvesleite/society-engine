@@ -1,0 +1,40 @@
+{
+  "audit": "ROADMAP-ITEM-3-RELEASED-PLACE-PROBE",
+  "seed": "audit27:natural:map2:s1",
+  "yearsScanned": 200,
+  "accessSampledEveryDays": 90,
+  "releasedPlacesChecked": 448,
+  "incidentsFound": 1,
+  "incidents": [
+    {
+      "day": 44640,
+      "band": "band:varied-estuary:daughter:1:t412",
+      "tile": "tile:194:90",
+      "phase": "released_historical",
+      "activeEvidenceCount": 0,
+      "activeEvidenceWeight": 0.04,
+      "historicalEvidenceCount": 1,
+      "maxWeightBelowActiveThreshold": true,
+      "wholeRingStrippedDelta": {
+        "strangerCaution": 0.010000000000000009,
+        "sharedUsePressure": 0,
+        "rememberedRefusalAvoidance": 0.009999999999999981,
+        "total": 0.02
+      },
+      "placeStillTrackedWhenWholeRingStripped": true,
+      "recordsNamingThisTile": 1,
+      "recordsNamingOtherTiles": 7,
+      "onlyThisTilesRecordsStrippedDelta": 0.02,
+      "placeStillTrackedWhenOnlyThisTileStripped": true
+    }
+  ],
+  "interpretation": "AT LEAST ONE incident survives every artefact test and is a candidate PRODUCTION DEFECT: a place production calls released still moves behaviour through its own evidence",
+  "classification": {
+    "artefactConditions": [
+      "recordsNamingThisTile === 0 — the whole-ring strip changed a place whose own evidence is empty, so the movement came from the ring's BAND-LEVEL effects, not from this place's released records",
+      "placeStillTrackedWhenWholeRingStripped === false — the stripped derivation does not hold the place at all, so the 'delta' compares a tracked place against an absent one; CORRECTION-31 recorded this bounded-memory artefact",
+      "onlyThisTilesRecordsStrippedDelta === 0 — removing exactly this tile's own records changes nothing, which is precisely what release means"
+    ],
+    "allIncidentsArtefactual": false
+  }
+}

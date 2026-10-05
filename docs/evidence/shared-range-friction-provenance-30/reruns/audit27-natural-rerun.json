@@ -1,0 +1,962 @@
+{
+  "audit": "AUDIT-27 — CROWDING / SHARED RANGE / RANGE RELEASE NATURAL OCCURRENCE",
+  "productionInstrumentation": "NONE. Every quantity is a persisted band field or a read-only call to an exported production derivation, made outside the tick.",
+  "years": 20,
+  "scenarios": [
+    "map1",
+    "map2",
+    "ordinary"
+  ],
+  "seeds": [
+    "s1",
+    "s2"
+  ],
+  "seedPrefix": "audit27:natural",
+  "crowdingRadius": 4,
+  "totals": {
+    "seasonSamples": 480,
+    "bandSeasons": 2400,
+    "activeBandPairSeasons": 7360,
+    "sameTileResidencePairs": 0,
+    "nearResidencePairs": 28,
+    "overlappingPhysicalActivityPairs": 25,
+    "memoryOnlyOverlapPairs": 25,
+    "physicalOverlapBeyondCrowdingRadiusPairs": 4,
+    "kinOverlapPairs": 0,
+    "strangerOverlapPairs": 25,
+    "rangeFrictionEventsObserved": 61,
+    "accessMemoryStatesNonNone": 18417,
+    "accessMemoryBehaviorHookNonZero": 2400,
+    "crowdingPenaltyNonZeroBandSeasons": 51,
+    "rangeSaturationNonZeroBandSeasons": 2398,
+    "movesWithCrowdingReason": 0,
+    "movesTotal": 1547,
+    "crowdingReasonInstances": 0,
+    "pressurePersistedAfterDeparture": 55,
+    "terminalBandContributingToPressure": 0,
+    "doubleCountedBandSeasons": 40,
+    "ecologyRecoveryAfterReleaseCases": 1,
+    "sharedCatchmentContestedTileSeasons": 43,
+    "hiddenCrowdingNoPerceptionBandSeasons": 0
+  },
+  "accessStateCounts": {
+    "familiar_use": 12111,
+    "none": 294,
+    "expected_return": 6223,
+    "tolerated_shared_use": 83
+  },
+  "frictionTensionCounts": {
+    "watchful": 36,
+    "none": 17,
+    "mild": 1,
+    "moderate_placeholder": 7
+  },
+  "frictionRelationCounts": {
+    "stranger_or_unrecognized": 3,
+    "familiar_neighbor": 58
+  },
+  "runs": [
+    {
+      "scenario": "map1",
+      "seed": "s1",
+      "years": 20,
+      "counts": {
+        "seasonSamples": 80,
+        "bandSeasons": 400,
+        "activeBandPairSeasons": 800,
+        "sameTileResidencePairs": 0,
+        "nearResidencePairs": 0,
+        "overlappingPhysicalActivityPairs": 0,
+        "memoryOnlyOverlapPairs": 0,
+        "physicalOverlapBeyondCrowdingRadiusPairs": 0,
+        "kinOverlapPairs": 0,
+        "strangerOverlapPairs": 0,
+        "rangeFrictionEventsObserved": 0,
+        "accessMemoryStatesNonNone": 3087,
+        "accessMemoryBehaviorHookNonZero": 400,
+        "crowdingPenaltyNonZeroBandSeasons": 0,
+        "rangeSaturationNonZeroBandSeasons": 400,
+        "movesWithCrowdingReason": 0,
+        "movesTotal": 249,
+        "crowdingReasonInstances": 0,
+        "pressurePersistedAfterDeparture": 20,
+        "terminalBandContributingToPressure": 0,
+        "doubleCountedBandSeasons": 0,
+        "ecologyRecoveryAfterReleaseCases": 0,
+        "sharedCatchmentContestedTileSeasons": 0,
+        "hiddenCrowdingNoPerceptionBandSeasons": 0
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s2",
+      "years": 20,
+      "counts": {
+        "seasonSamples": 80,
+        "bandSeasons": 400,
+        "activeBandPairSeasons": 800,
+        "sameTileResidencePairs": 0,
+        "nearResidencePairs": 5,
+        "overlappingPhysicalActivityPairs": 5,
+        "memoryOnlyOverlapPairs": 0,
+        "physicalOverlapBeyondCrowdingRadiusPairs": 0,
+        "kinOverlapPairs": 0,
+        "strangerOverlapPairs": 5,
+        "rangeFrictionEventsObserved": 0,
+        "accessMemoryStatesNonNone": 3104,
+        "accessMemoryBehaviorHookNonZero": 400,
+        "crowdingPenaltyNonZeroBandSeasons": 7,
+        "rangeSaturationNonZeroBandSeasons": 400,
+        "movesWithCrowdingReason": 0,
+        "movesTotal": 276,
+        "crowdingReasonInstances": 0,
+        "pressurePersistedAfterDeparture": 8,
+        "terminalBandContributingToPressure": 0,
+        "doubleCountedBandSeasons": 3,
+        "ecologyRecoveryAfterReleaseCases": 0,
+        "sharedCatchmentContestedTileSeasons": 5,
+        "hiddenCrowdingNoPerceptionBandSeasons": 0
+      }
+    },
+    {
+      "scenario": "map2",
+      "seed": "s1",
+      "years": 20,
+      "counts": {
+        "seasonSamples": 80,
+        "bandSeasons": 720,
+        "activeBandPairSeasons": 2880,
+        "sameTileResidencePairs": 0,
+        "nearResidencePairs": 21,
+        "overlappingPhysicalActivityPairs": 19,
+        "memoryOnlyOverlapPairs": 25,
+        "physicalOverlapBeyondCrowdingRadiusPairs": 4,
+        "kinOverlapPairs": 0,
+        "strangerOverlapPairs": 19,
+        "rangeFrictionEventsObserved": 61,
+        "accessMemoryStatesNonNone": 5500,
+        "accessMemoryBehaviorHookNonZero": 720,
+        "crowdingPenaltyNonZeroBandSeasons": 41,
+        "rangeSaturationNonZeroBandSeasons": 719,
+        "movesWithCrowdingReason": 0,
+        "movesTotal": 431,
+        "crowdingReasonInstances": 0,
+        "pressurePersistedAfterDeparture": 16,
+        "terminalBandContributingToPressure": 0,
+        "doubleCountedBandSeasons": 34,
+        "ecologyRecoveryAfterReleaseCases": 0,
+        "sharedCatchmentContestedTileSeasons": 36,
+        "hiddenCrowdingNoPerceptionBandSeasons": 0
+      }
+    },
+    {
+      "scenario": "map2",
+      "seed": "s2",
+      "years": 20,
+      "counts": {
+        "seasonSamples": 80,
+        "bandSeasons": 720,
+        "activeBandPairSeasons": 2880,
+        "sameTileResidencePairs": 0,
+        "nearResidencePairs": 2,
+        "overlappingPhysicalActivityPairs": 1,
+        "memoryOnlyOverlapPairs": 0,
+        "physicalOverlapBeyondCrowdingRadiusPairs": 0,
+        "kinOverlapPairs": 0,
+        "strangerOverlapPairs": 1,
+        "rangeFrictionEventsObserved": 0,
+        "accessMemoryStatesNonNone": 5510,
+        "accessMemoryBehaviorHookNonZero": 720,
+        "crowdingPenaltyNonZeroBandSeasons": 3,
+        "rangeSaturationNonZeroBandSeasons": 719,
+        "movesWithCrowdingReason": 0,
+        "movesTotal": 470,
+        "crowdingReasonInstances": 0,
+        "pressurePersistedAfterDeparture": 11,
+        "terminalBandContributingToPressure": 0,
+        "doubleCountedBandSeasons": 3,
+        "ecologyRecoveryAfterReleaseCases": 1,
+        "sharedCatchmentContestedTileSeasons": 2,
+        "hiddenCrowdingNoPerceptionBandSeasons": 0
+      }
+    },
+    {
+      "scenario": "ordinary",
+      "seed": "s1",
+      "years": 20,
+      "counts": {
+        "seasonSamples": 80,
+        "bandSeasons": 80,
+        "activeBandPairSeasons": 0,
+        "sameTileResidencePairs": 0,
+        "nearResidencePairs": 0,
+        "overlappingPhysicalActivityPairs": 0,
+        "memoryOnlyOverlapPairs": 0,
+        "physicalOverlapBeyondCrowdingRadiusPairs": 0,
+        "kinOverlapPairs": 0,
+        "strangerOverlapPairs": 0,
+        "rangeFrictionEventsObserved": 0,
+        "accessMemoryStatesNonNone": 614,
+        "accessMemoryBehaviorHookNonZero": 80,
+        "crowdingPenaltyNonZeroBandSeasons": 0,
+        "rangeSaturationNonZeroBandSeasons": 80,
+        "movesWithCrowdingReason": 0,
+        "movesTotal": 54,
+        "crowdingReasonInstances": 0,
+        "pressurePersistedAfterDeparture": 0,
+        "terminalBandContributingToPressure": 0,
+        "doubleCountedBandSeasons": 0,
+        "ecologyRecoveryAfterReleaseCases": 0,
+        "sharedCatchmentContestedTileSeasons": 0,
+        "hiddenCrowdingNoPerceptionBandSeasons": 0
+      }
+    },
+    {
+      "scenario": "ordinary",
+      "seed": "s2",
+      "years": 20,
+      "counts": {
+        "seasonSamples": 80,
+        "bandSeasons": 80,
+        "activeBandPairSeasons": 0,
+        "sameTileResidencePairs": 0,
+        "nearResidencePairs": 0,
+        "overlappingPhysicalActivityPairs": 0,
+        "memoryOnlyOverlapPairs": 0,
+        "physicalOverlapBeyondCrowdingRadiusPairs": 0,
+        "kinOverlapPairs": 0,
+        "strangerOverlapPairs": 0,
+        "rangeFrictionEventsObserved": 0,
+        "accessMemoryStatesNonNone": 602,
+        "accessMemoryBehaviorHookNonZero": 80,
+        "crowdingPenaltyNonZeroBandSeasons": 0,
+        "rangeSaturationNonZeroBandSeasons": 80,
+        "movesWithCrowdingReason": 0,
+        "movesTotal": 67,
+        "crowdingReasonInstances": 0,
+        "pressurePersistedAfterDeparture": 0,
+        "terminalBandContributingToPressure": 0,
+        "doubleCountedBandSeasons": 0,
+        "ecologyRecoveryAfterReleaseCases": 0,
+        "sharedCatchmentContestedTileSeasons": 0,
+        "hiddenCrowdingNoPerceptionBandSeasons": 0
+      }
+    }
+  ],
+  "rawSamples": {
+    "memoryOnlyOverlap": [
+      {
+        "scenario": "map2",
+        "seed": "s1",
+        "tick": 38,
+        "bandA": "band:varied-dry-corridor-mid",
+        "bandB": "band:varied-dry-corridor-upper",
+        "residenceDistance": 5,
+        "rememberingBand": "band:varied-dry-corridor-upper"
+      },
+      {
+        "scenario": "map2",
+        "seed": "s1",
+        "tick": 48,
+        "bandA": "band:varied-dry-corridor-mid",
+        "bandB": "band:varied-dry-corridor-upper",
+        "residenceDistance": 5,
+        "rememberingBand": "band:varied-dry-corridor-mid"
+      },
+      {
+        "scenario": "map2",
+        "seed": "s1",
+        "tick": 49,
+        "bandA": "band:varied-dry-corridor-mid",
+        "bandB": "band:varied-dry-corridor-upper",
+        "residenceDistance": 6,
+        "rememberingBand": "band:varied-dry-corridor-upper"
+      },
+      {
+        "scenario": "map2",
+        "seed": "s1",
+        "tick": 50,
+        "bandA": "band:varied-dry-corridor-mid",
+        "bandB": "band:varied-dry-corridor-upper",
+        "residenceDistance": 8,
+        "rememberingBand": "band:varied-dry-corridor-upper"
+      },
+      {
+        "scenario": "map2",
+        "seed": "s1",
+        "tick": 51,
+        "bandA": "band:varied-dry-corridor-mid",
+        "bandB": "band:varied-dry-corridor-upper",
+        "residenceDistance": 9,
+        "rememberingBand": "band:varied-dry-corridor-upper"
+      },
+      {
+        "scenario": "map2",
+        "seed": "s1",
+        "tick": 52,
+        "bandA": "band:varied-dry-corridor-mid",
+        "bandB": "band:varied-dry-corridor-upper",
+        "residenceDistance": 8,
+        "rememberingBand": "band:varied-dry-corridor-mid"
+      },
+      {
+        "scenario": "map2",
+        "seed": "s1",
+        "tick": 53,
+        "bandA": "band:varied-dry-corridor-mid",
+        "bandB": "band:varied-dry-corridor-upper",
+        "residenceDistance": 8,
+        "rememberingBand": "band:varied-dry-corridor-mid"
+      },
+      {
+        "scenario": "map2",
+        "seed": "s1",
+        "tick": 54,
+        "bandA": "band:varied-dry-corridor-mid",
+        "bandB": "band:varied-dry-corridor-upper",
+        "residenceDistance": 8,
+        "rememberingBand": "band:varied-dry-corridor-mid"
+      },
+      {
+        "scenario": "map2",
+        "seed": "s1",
+        "tick": 55,
+        "bandA": "band:varied-dry-corridor-mid",
+        "bandB": "band:varied-dry-corridor-upper",
+        "residenceDistance": 8,
+        "rememberingBand": "band:varied-dry-corridor-mid"
+      },
+      {
+        "scenario": "map2",
+        "seed": "s1",
+        "tick": 56,
+        "bandA": "band:varied-dry-corridor-mid",
+        "bandB": "band:varied-dry-corridor-upper",
+        "residenceDistance": 9,
+        "rememberingBand": "band:varied-dry-corridor-mid"
+      },
+      {
+        "scenario": "map2",
+        "seed": "s1",
+        "tick": 57,
+        "bandA": "band:varied-dry-corridor-mid",
+        "bandB": "band:varied-dry-corridor-upper",
+        "residenceDistance": 9,
+        "rememberingBand": "band:varied-dry-corridor-mid"
+      },
+      {
+        "scenario": "map2",
+        "seed": "s1",
+        "tick": 58,
+        "bandA": "band:varied-dry-corridor-mid",
+        "bandB": "band:varied-dry-corridor-upper",
+        "residenceDistance": 8,
+        "rememberingBand": "band:varied-dry-corridor-mid"
+      },
+      {
+        "scenario": "map2",
+        "seed": "s1",
+        "tick": 59,
+        "bandA": "band:varied-dry-corridor-mid",
+        "bandB": "band:varied-dry-corridor-upper",
+        "residenceDistance": 8,
+        "rememberingBand": "band:varied-dry-corridor-mid"
+      },
+      {
+        "scenario": "map2",
+        "seed": "s1",
+        "tick": 60,
+        "bandA": "band:varied-dry-corridor-mid",
+        "bandB": "band:varied-dry-corridor-upper",
+        "residenceDistance": 9,
+        "rememberingBand": "band:varied-dry-corridor-mid"
+      },
+      {
+        "scenario": "map2",
+        "seed": "s1",
+        "tick": 61,
+        "bandA": "band:varied-dry-corridor-mid",
+        "bandB": "band:varied-dry-corridor-upper",
+        "residenceDistance": 10,
+        "rememberingBand": "band:varied-dry-corridor-upper"
+      },
+      {
+        "scenario": "map2",
+        "seed": "s1",
+        "tick": 62,
+        "bandA": "band:varied-dry-corridor-mid",
+        "bandB": "band:varied-dry-corridor-upper",
+        "residenceDistance": 8,
+        "rememberingBand": "band:varied-dry-corridor-upper"
+      },
+      {
+        "scenario": "map2",
+        "seed": "s1",
+        "tick": 63,
+        "bandA": "band:varied-dry-corridor-mid",
+        "bandB": "band:varied-dry-corridor-upper",
+        "residenceDistance": 6,
+        "rememberingBand": "band:varied-dry-corridor-upper"
+      },
+      {
+        "scenario": "map2",
+        "seed": "s1",
+        "tick": 64,
+        "bandA": "band:varied-dry-corridor-mid",
+        "bandB": "band:varied-dry-corridor-upper",
+        "residenceDistance": 5,
+        "rememberingBand": "band:varied-dry-corridor-mid"
+      },
+      {
+        "scenario": "map2",
+        "seed": "s1",
+        "tick": 68,
+        "bandA": "band:varied-dry-corridor-mid",
+        "bandB": "band:varied-dry-corridor-upper",
+        "residenceDistance": 5,
+        "rememberingBand": "band:varied-dry-corridor-mid"
+      },
+      {
+        "scenario": "map2",
+        "seed": "s1",
+        "tick": 69,
+        "bandA": "band:varied-dry-corridor-mid",
+        "bandB": "band:varied-dry-corridor-upper",
+        "residenceDistance": 5,
+        "rememberingBand": "band:varied-dry-corridor-mid"
+      },
+      {
+        "scenario": "map2",
+        "seed": "s1",
+        "tick": 72,
+        "bandA": "band:varied-dry-corridor-mid",
+        "bandB": "band:varied-dry-corridor-upper",
+        "residenceDistance": 5,
+        "rememberingBand": "band:varied-dry-corridor-mid"
+      },
+      {
+        "scenario": "map2",
+        "seed": "s1",
+        "tick": 73,
+        "bandA": "band:varied-dry-corridor-mid",
+        "bandB": "band:varied-dry-corridor-upper",
+        "residenceDistance": 7,
+        "rememberingBand": "band:varied-dry-corridor-upper"
+      },
+      {
+        "scenario": "map2",
+        "seed": "s1",
+        "tick": 74,
+        "bandA": "band:varied-dry-corridor-mid",
+        "bandB": "band:varied-dry-corridor-upper",
+        "residenceDistance": 7,
+        "rememberingBand": "band:varied-dry-corridor-upper"
+      },
+      {
+        "scenario": "map2",
+        "seed": "s1",
+        "tick": 75,
+        "bandA": "band:varied-dry-corridor-mid",
+        "bandB": "band:varied-dry-corridor-upper",
+        "residenceDistance": 6,
+        "rememberingBand": "band:varied-dry-corridor-upper"
+      }
+    ],
+    "pressureAfterDeparture": [
+      {
+        "scenario": "map1",
+        "seed": "s1",
+        "tick": 12,
+        "band": "band:lake-wetland-foragers",
+        "leftTile": "tile:104:58",
+        "seasonsGone": 4,
+        "recentUseIntensity": 0.08,
+        "foragingPressure": 0.16
+      },
+      {
+        "scenario": "map1",
+        "seed": "s1",
+        "tick": 13,
+        "band": "band:delta-coastal-foragers",
+        "leftTile": "tile:126:60",
+        "seasonsGone": 5,
+        "recentUseIntensity": 0.31,
+        "foragingPressure": 0.45
+      },
+      {
+        "scenario": "map1",
+        "seed": "s1",
+        "tick": 16,
+        "band": "band:river-valley-foragers",
+        "leftTile": "tile:124:65",
+        "seasonsGone": 4,
+        "recentUseIntensity": 0.26,
+        "foragingPressure": 0.34
+      },
+      {
+        "scenario": "map1",
+        "seed": "s1",
+        "tick": 20,
+        "band": "band:delta-coastal-foragers",
+        "leftTile": "tile:126:59",
+        "seasonsGone": 4,
+        "recentUseIntensity": 0.27,
+        "foragingPressure": 0.36
+      },
+      {
+        "scenario": "map1",
+        "seed": "s1",
+        "tick": 24,
+        "band": "band:delta-coastal-foragers",
+        "leftTile": "tile:128:59",
+        "seasonsGone": 4,
+        "recentUseIntensity": 0.26,
+        "foragingPressure": 0.34
+      },
+      {
+        "scenario": "map1",
+        "seed": "s1",
+        "tick": 27,
+        "band": "band:dry-margin-foragers",
+        "leftTile": "tile:114:47",
+        "seasonsGone": 7,
+        "recentUseIntensity": 0.08,
+        "foragingPressure": 0.26
+      },
+      {
+        "scenario": "map1",
+        "seed": "s1",
+        "tick": 28,
+        "band": "band:delta-coastal-foragers",
+        "leftTile": "tile:125:59",
+        "seasonsGone": 4,
+        "recentUseIntensity": 0.26,
+        "foragingPressure": 0.36
+      },
+      {
+        "scenario": "map1",
+        "seed": "s1",
+        "tick": 36,
+        "band": "band:delta-coastal-foragers",
+        "leftTile": "tile:128:60",
+        "seasonsGone": 4,
+        "recentUseIntensity": 0.26,
+        "foragingPressure": 0.33
+      },
+      {
+        "scenario": "map1",
+        "seed": "s1",
+        "tick": 42,
+        "band": "band:delta-coastal-foragers",
+        "leftTile": "tile:126:60",
+        "seasonsGone": 4,
+        "recentUseIntensity": 0.26,
+        "foragingPressure": 0.34
+      },
+      {
+        "scenario": "map1",
+        "seed": "s1",
+        "tick": 49,
+        "band": "band:lake-wetland-foragers",
+        "leftTile": "tile:104:58",
+        "seasonsGone": 5,
+        "recentUseIntensity": 0.09,
+        "foragingPressure": 0.52
+      },
+      {
+        "scenario": "map1",
+        "seed": "s1",
+        "tick": 52,
+        "band": "band:delta-coastal-foragers",
+        "leftTile": "tile:128:60",
+        "seasonsGone": 4,
+        "recentUseIntensity": 0.26,
+        "foragingPressure": 0.39
+      },
+      {
+        "scenario": "map1",
+        "seed": "s1",
+        "tick": 52,
+        "band": "band:river-valley-foragers",
+        "leftTile": "tile:126:66",
+        "seasonsGone": 4,
+        "recentUseIntensity": 0.27,
+        "foragingPressure": 0.34
+      },
+      {
+        "scenario": "map1",
+        "seed": "s1",
+        "tick": 53,
+        "band": "band:lake-wetland-foragers",
+        "leftTile": "tile:102:58",
+        "seasonsGone": 4,
+        "recentUseIntensity": 0.08,
+        "foragingPressure": 0.62
+      },
+      {
+        "scenario": "map1",
+        "seed": "s1",
+        "tick": 56,
+        "band": "band:river-valley-foragers",
+        "leftTile": "tile:122:66",
+        "seasonsGone": 4,
+        "recentUseIntensity": 0.26,
+        "foragingPressure": 0.37
+      },
+      {
+        "scenario": "map1",
+        "seed": "s1",
+        "tick": 60,
+        "band": "band:delta-coastal-foragers",
+        "leftTile": "tile:126:59",
+        "seasonsGone": 4,
+        "recentUseIntensity": 0.26,
+        "foragingPressure": 0.36
+      },
+      {
+        "scenario": "map1",
+        "seed": "s1",
+        "tick": 60,
+        "band": "band:lake-wetland-foragers",
+        "leftTile": "tile:101:57",
+        "seasonsGone": 4,
+        "recentUseIntensity": 0.09,
+        "foragingPressure": 0.21
+      },
+      {
+        "scenario": "map1",
+        "seed": "s1",
+        "tick": 64,
+        "band": "band:river-valley-foragers",
+        "leftTile": "tile:124:65",
+        "seasonsGone": 4,
+        "recentUseIntensity": 0.26,
+        "foragingPressure": 0.36
+      },
+      {
+        "scenario": "map1",
+        "seed": "s1",
+        "tick": 68,
+        "band": "band:delta-coastal-foragers",
+        "leftTile": "tile:128:59",
+        "seasonsGone": 4,
+        "recentUseIntensity": 0.26,
+        "foragingPressure": 0.37
+      },
+      {
+        "scenario": "map1",
+        "seed": "s1",
+        "tick": 68,
+        "band": "band:river-valley-foragers",
+        "leftTile": "tile:124:67",
+        "seasonsGone": 4,
+        "recentUseIntensity": 0.26,
+        "foragingPressure": 0.36
+      },
+      {
+        "scenario": "map1",
+        "seed": "s1",
+        "tick": 73,
+        "band": "band:river-valley-foragers",
+        "leftTile": "tile:127:67",
+        "seasonsGone": 5,
+        "recentUseIntensity": 0.31,
+        "foragingPressure": 0.44
+      },
+      {
+        "scenario": "map1",
+        "seed": "s2",
+        "tick": 20,
+        "band": "band:dry-margin-foragers",
+        "leftTile": "tile:112:43",
+        "seasonsGone": 5,
+        "recentUseIntensity": 0.08,
+        "foragingPressure": 0.21
+      },
+      {
+        "scenario": "map1",
+        "seed": "s2",
+        "tick": 24,
+        "band": "band:lake-wetland-foragers",
+        "leftTile": "tile:101:57",
+        "seasonsGone": 5,
+        "recentUseIntensity": 0.09,
+        "foragingPressure": 0.37
+      },
+      {
+        "scenario": "map1",
+        "seed": "s2",
+        "tick": 45,
+        "band": "band:lake-wetland-foragers",
+        "leftTile": "tile:100:57",
+        "seasonsGone": 5,
+        "recentUseIntensity": 0.09,
+        "foragingPressure": 0.19
+      },
+      {
+        "scenario": "map1",
+        "seed": "s2",
+        "tick": 50,
+        "band": "band:dry-margin-foragers",
+        "leftTile": "tile:114:44",
+        "seasonsGone": 4,
+        "recentUseIntensity": 0.08,
+        "foragingPressure": 0.18
+      }
+    ],
+    "terminalPressure": [],
+    "doubleCount": [
+      {
+        "scenario": "map1",
+        "seed": "s2",
+        "tick": 17,
+        "band": "band:delta-coastal-foragers",
+        "nearbyBandPressure": 0.03,
+        "crowdingPenalty": 0.01,
+        "rangeSaturationNearbyCrowding": 0.03,
+        "saturationPressure": 0.09
+      },
+      {
+        "scenario": "map1",
+        "seed": "s2",
+        "tick": 55,
+        "band": "band:delta-coastal-foragers",
+        "nearbyBandPressure": 0.03,
+        "crowdingPenalty": 0.01,
+        "rangeSaturationNearbyCrowding": 0.03,
+        "saturationPressure": 0.16
+      },
+      {
+        "scenario": "map1",
+        "seed": "s2",
+        "tick": 55,
+        "band": "band:river-valley-foragers",
+        "nearbyBandPressure": 0.03,
+        "crowdingPenalty": 0.01,
+        "rangeSaturationNearbyCrowding": 0.03,
+        "saturationPressure": 0.18
+      },
+      {
+        "scenario": "map2",
+        "seed": "s1",
+        "tick": 31,
+        "band": "band:varied-dry-corridor-upper",
+        "nearbyBandPressure": 0.03,
+        "crowdingPenalty": 0.02,
+        "rangeSaturationNearbyCrowding": 0.03,
+        "saturationPressure": 0.47
+      },
+      {
+        "scenario": "map2",
+        "seed": "s1",
+        "tick": 32,
+        "band": "band:varied-dry-corridor-mid",
+        "nearbyBandPressure": 0.03,
+        "crowdingPenalty": 0.02,
+        "rangeSaturationNearbyCrowding": 0.03,
+        "saturationPressure": 0.55
+      },
+      {
+        "scenario": "map2",
+        "seed": "s1",
+        "tick": 32,
+        "band": "band:varied-dry-corridor-upper",
+        "nearbyBandPressure": 0.03,
+        "crowdingPenalty": 0.02,
+        "rangeSaturationNearbyCrowding": 0.03,
+        "saturationPressure": 0.5
+      },
+      {
+        "scenario": "map2",
+        "seed": "s1",
+        "tick": 34,
+        "band": "band:varied-dry-corridor-mid",
+        "nearbyBandPressure": 0.05,
+        "crowdingPenalty": 0.03,
+        "rangeSaturationNearbyCrowding": 0.05,
+        "saturationPressure": 0.48
+      },
+      {
+        "scenario": "map2",
+        "seed": "s1",
+        "tick": 34,
+        "band": "band:varied-dry-corridor-upper",
+        "nearbyBandPressure": 0.03,
+        "crowdingPenalty": 0.02,
+        "rangeSaturationNearbyCrowding": 0.06,
+        "saturationPressure": 0.47
+      },
+      {
+        "scenario": "map2",
+        "seed": "s1",
+        "tick": 35,
+        "band": "band:varied-dry-corridor-mid",
+        "nearbyBandPressure": 0.11,
+        "crowdingPenalty": 0.07,
+        "rangeSaturationNearbyCrowding": 0.11,
+        "saturationPressure": 0.48
+      },
+      {
+        "scenario": "map2",
+        "seed": "s1",
+        "tick": 35,
+        "band": "band:varied-dry-corridor-upper",
+        "nearbyBandPressure": 0.06,
+        "crowdingPenalty": 0.04,
+        "rangeSaturationNearbyCrowding": 0.12,
+        "saturationPressure": 0.56
+      },
+      {
+        "scenario": "map2",
+        "seed": "s1",
+        "tick": 36,
+        "band": "band:varied-dry-corridor-mid",
+        "nearbyBandPressure": 0.05,
+        "crowdingPenalty": 0.03,
+        "rangeSaturationNearbyCrowding": 0.05,
+        "saturationPressure": 0.49
+      },
+      {
+        "scenario": "map2",
+        "seed": "s1",
+        "tick": 36,
+        "band": "band:varied-dry-corridor-upper",
+        "nearbyBandPressure": 0.03,
+        "crowdingPenalty": 0.02,
+        "rangeSaturationNearbyCrowding": 0.05,
+        "saturationPressure": 0.5
+      },
+      {
+        "scenario": "map2",
+        "seed": "s1",
+        "tick": 37,
+        "band": "band:varied-dry-corridor-mid",
+        "nearbyBandPressure": 0.11,
+        "crowdingPenalty": 0.07,
+        "rangeSaturationNearbyCrowding": 0.11,
+        "saturationPressure": 0.48
+      },
+      {
+        "scenario": "map2",
+        "seed": "s1",
+        "tick": 37,
+        "band": "band:varied-dry-corridor-upper",
+        "nearbyBandPressure": 0.05,
+        "crowdingPenalty": 0.03,
+        "rangeSaturationNearbyCrowding": 0.11,
+        "saturationPressure": 0.5
+      },
+      {
+        "scenario": "map2",
+        "seed": "s1",
+        "tick": 42,
+        "band": "band:varied-dry-corridor-mid",
+        "nearbyBandPressure": 0.05,
+        "crowdingPenalty": 0.03,
+        "rangeSaturationNearbyCrowding": 0.05,
+        "saturationPressure": 0.49
+      },
+      {
+        "scenario": "map2",
+        "seed": "s1",
+        "tick": 44,
+        "band": "band:varied-dry-corridor-upper",
+        "nearbyBandPressure": 0.12,
+        "crowdingPenalty": 0.08,
+        "rangeSaturationNearbyCrowding": 0.12,
+        "saturationPressure": 0.57
+      },
+      {
+        "scenario": "map2",
+        "seed": "s1",
+        "tick": 45,
+        "band": "band:varied-dry-corridor-mid",
+        "nearbyBandPressure": 0.02,
+        "crowdingPenalty": 0.01,
+        "rangeSaturationNearbyCrowding": 0.1,
+        "saturationPressure": 0.53
+      },
+      {
+        "scenario": "map2",
+        "seed": "s1",
+        "tick": 45,
+        "band": "band:varied-dry-corridor-upper",
+        "nearbyBandPressure": 0.03,
+        "crowdingPenalty": 0.02,
+        "rangeSaturationNearbyCrowding": 0.11,
+        "saturationPressure": 0.48
+      },
+      {
+        "scenario": "map2",
+        "seed": "s1",
+        "tick": 46,
+        "band": "band:varied-dry-corridor-mid",
+        "nearbyBandPressure": 0.05,
+        "crowdingPenalty": 0.03,
+        "rangeSaturationNearbyCrowding": 0.05,
+        "saturationPressure": 0.46
+      },
+      {
+        "scenario": "map2",
+        "seed": "s1",
+        "tick": 46,
+        "band": "band:varied-dry-corridor-upper",
+        "nearbyBandPressure": 0.11,
+        "crowdingPenalty": 0.07,
+        "rangeSaturationNearbyCrowding": 0.05,
+        "saturationPressure": 0.4
+      },
+      {
+        "scenario": "map2",
+        "seed": "s1",
+        "tick": 47,
+        "band": "band:varied-dry-corridor-mid",
+        "nearbyBandPressure": 0.02,
+        "crowdingPenalty": 0.01,
+        "rangeSaturationNearbyCrowding": 0.02,
+        "saturationPressure": 0.48
+      },
+      {
+        "scenario": "map2",
+        "seed": "s1",
+        "tick": 47,
+        "band": "band:varied-dry-corridor-upper",
+        "nearbyBandPressure": 0.05,
+        "crowdingPenalty": 0.03,
+        "rangeSaturationNearbyCrowding": 0.03,
+        "saturationPressure": 0.41
+      },
+      {
+        "scenario": "map2",
+        "seed": "s1",
+        "tick": 65,
+        "band": "band:varied-dry-corridor-upper",
+        "nearbyBandPressure": 0.05,
+        "crowdingPenalty": 0.03,
+        "rangeSaturationNearbyCrowding": 0.02,
+        "saturationPressure": 0.44
+      },
+      {
+        "scenario": "map2",
+        "seed": "s1",
+        "tick": 66,
+        "band": "band:varied-dry-corridor-mid",
+        "nearbyBandPressure": 0.02,
+        "crowdingPenalty": 0.01,
+        "rangeSaturationNearbyCrowding": 0.02,
+        "saturationPressure": 0.51
+      }
+    ],
+    "ecologyRecovery": [
+      {
+        "scenario": "map2",
+        "seed": "s2",
+        "tick": 2,
+        "band": "band:varied-dry-corridor-mid",
+        "leftTile": "tile:76:111",
+        "seasonsGone": 1
+      }
+    ],
+    "hiddenCrowding": []
+  }
+}

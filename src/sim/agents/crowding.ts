@@ -8,6 +8,7 @@ import {
   getSalientMemorySummary,
   type TickContextCache,
 } from "./contextCache";
+import { getExpeditionPhysicalPeople, isPhysicallyAwayPhase } from "./bandMobility";
 import type { BandId, TileId } from "../core/types";
 import { getTile, getTileAtCoord } from "../world/generate";
 import type { Tile, WorldState } from "../world/types";
@@ -45,6 +46,134 @@ export function getNearbyBandPressure(
   cache?.nearbyBandPressureByBandTileKey.set(cacheKey, pressure);
 
   return pressure;
+}
+
+// CORRECTION-34 — WHERE A BAND'S BODIES ACTUALLY ARE.
+//
+// Physical crowding used to scatter `demography.population` from `band.position` and nothing
+// else, so a band with a party three days' walk away projected those people at HOME (ghost
+// bodies) and projected nothing where the party was actually standing (missing bodies). Measured
+// at daily resolution on map2:s1 over 3 years: 69 party-days, of which **34 (49.3%) were beyond
+// CROWDING_RADIUS from their own residence** — bodies that existed nowhere.
+//
+// This is the one authority for that question. It REPORTS canonical expedition state: the
+// residential remainder is the population minus everyone physically away, and every away party is
+// represented exactly once at its own `positionTileId`. Whether the sources sum to the whole
+// population therefore depends on that canonical state being VALID — it is not a property this
+// function establishes on its own. Validity is maintained upstream by
+// `reconcileExpeditionCommitment`, and this function never silently resizes a party to make the
+// arithmetic work. See the note on the clamp inside `getBandPhysicalPresence`.
+//
+// PHASE SEMANTICS ARE PRODUCTION'S, NOT THE NAMES'. `prepared` means "labor committed at camp,
+// NOT yet departed" (types.ts:933), so a prepared party is still physically AT HOME and is NOT
+// subtracted here — even though `isExpeditionAway` counts it as away for LABOUR. The two
+// questions are different and are answered differently. `completed`, `aborted` and `lost` are
+// terminal: they contribute no body anywhere, so a lost party leaves no immortal presence.
+//
+// Party SIZE carries through the existing population weight, so a 2-worker party scatters roughly
+// 1/15 of a 30-person band's weight and mostly falls under the 0.02 contribution floor beyond
+// distance 1. No new radius and no new constant is introduced for scale.
+// CORRECTION-34D — the phase test and the headcount derivation both moved to `bandMobility`, the
+// leaf that already owns "who is committed away", so presence and conservation cannot drift apart.
+// The set that used to live here is gone rather than kept in parallel.
+
+export interface PhysicalPresenceSource {
+  readonly tileId: TileId;
+  /**
+   * People physically standing here: the residential remainder, or one away party's BODIES.
+   * CORRECTION-34D — bodies, not workers. A party member who supplies no labour still stands here.
+   */
+  readonly people: number;
+  readonly kind: "residential_remainder" | "away_party";
+  /** Present only for `away_party`, so a consumer can trace the body back to its expedition. */
+  readonly expeditionId?: string;
+}
+
+/**
+ * Every place this band currently has bodies, with the people at each.
+ *
+ * Reads only the band's own record — no world scan, no cache, bounded by the active-expedition
+ * cap.
+ *
+ * `sum(people)` equals `demography.population` **for valid canonical expedition state**, i.e.
+ * whenever `sum(physically away party PEOPLE) <= population`. CORRECTION-34D: that is
+ * `partyWorkers + nonWorkingPartyPeople` over the physically-away phases, NOT `partyWorkers` —
+ * labour and bodies are different quantities and only bodies are conserved here. `prepared`
+ * parties are excluded because their people are standing at the residence.
+ *
+ * The precondition is maintained upstream by `reconcileExpeditionCommitment`, which runs daily; it
+ * is NOT established here. A band assembled directly by a test or a future caller that never ran a
+ * day can still be overcommitted, and this function will report that faithfully rather than
+ * disguise it. Assert with `getBandCommitmentAccounting(band).conserved`.
+ */
+export function getBandPhysicalPresence(band: Band): readonly PhysicalPresenceSource[] {
+  const population = band.demography?.population ?? band.size ?? 0;
+  const sources: PhysicalPresenceSource[] = [];
+  let awayPeople = 0;
+
+  for (const expedition of band.expeditions ?? []) {
+    if (!isPhysicallyAwayPhase(expedition.phase)) {
+      continue;
+    }
+
+    // CORRECTION-34D — BODIES, NOT LABOUR. This used to read `partyWorkers`, which is the party's
+    // productive labour; a member who had stopped supplying labour therefore vanished from the map
+    // while still standing at the target. Presence counts people.
+    const people = getExpeditionPhysicalPeople(expedition);
+
+    if (people <= 0 || expedition.positionTileId === undefined) {
+      continue;
+    }
+
+    awayPeople += people;
+    sources.push({
+      tileId: expedition.positionTileId,
+      people,
+      kind: "away_party",
+      expeditionId: expedition.id,
+    });
+  }
+
+  // CORRECTION-34A §6 — WHAT THIS FUNCTION DOES AND DOES NOT GUARANTEE.
+  //
+  // This read model is NOT self-conserving and does not claim to be. It reports what the
+  // expedition records say, and the sum below equals `population` only when the canonical
+  // expedition state handed to it is VALID — that is, when
+  // `sum(physically away party PEOPLE) <= population` (CORRECTION-34D: bodies, not labour).
+  //
+  // Validity is maintained UPSTREAM by `reconcileExpeditionCommitment` (expedition.ts), which runs
+  // at the head of the daily expedition action. CORRECTION-34D split what it does, and the old
+  // wording here — that it "shrinks or loses any party the band can no longer staff" — is no
+  // longer true of ordinary demography: a band that can no longer STAFF a party converts its
+  // workers into non-working members WITHOUT MOVING ANY BODY, so presence is untouched. Only a
+  // record describing more PEOPLE than the band has is retired, and that is a defensive repair for
+  // invalid state, not a demographic response. That covers every band-day produced by the daily
+  // kernel, which is the only way production advances a world. It does NOT cover a band object
+  // assembled directly by a test, fixture or future caller that never ran a day — such a band can
+  // still be overcommitted, and this function will faithfully render that overcommitment rather
+  // than disguise it.
+  //
+  // The clamp below therefore keeps the residential remainder non-negative and nothing more. It
+  // deliberately does NOT shrink the away sources: proportionally shrinking an already-launched
+  // party inside the read model would hide an invalid upstream state rather than conserve people,
+  // and §6 forbids exactly that. Callers that need the guarantee must assert
+  // `getBandCommitmentAccounting(band).conserved`, which is the predicate production maintains.
+  const residentialRemainder = Math.max(0, population - Math.min(awayPeople, population));
+
+  return [
+    { tileId: band.position, people: residentialRemainder, kind: "residential_remainder" },
+    ...sources,
+  ];
+}
+
+/** The people this presence set represents. Equals `demography.population` when no party is away. */
+export function physicalPresencePeopleTotal(sources: readonly PhysicalPresenceSource[]): number {
+  return sources.reduce((total, source) => total + source.people, 0);
+}
+
+/** The existing population→weight transform, applied to ONE presence source rather than the band. */
+function presenceWeight(people: number): number {
+  return Math.min(1.6, people / 36);
 }
 
 // Direct per-tile scan (the pre-2J.2B path), retained for cache-less unit calls.
@@ -129,22 +258,31 @@ function buildPressureResult(
 // Deterministic per-tick crowding field (2J.2B).
 //
 // Each band scatters its crowding influence into nearby tiles ONCE per cache,
-// from the fixed band snapshot:
-//   - proximity channel: tiles within CROWDING_RADIUS of the band's position
-//   - memory channel: tiles within distance 2 of the band's salient return /
-//     high-attachment places (the remembered-area overlap, reproduced exactly)
+// from the fixed band snapshot, through ONE channel:
+//   - proximity: tiles within CROWDING_RADIUS of the band's CURRENT position
 // Per tile it stores each contributor's pre-clamp base weight (kin factor NOT yet
 // applied), the kin-factor=1 crowding sum/count, and the sorted contributor ids.
 // A query for a deciding band then reads its tile entry and applies self-exclusion
 // + kin (0.72x) corrections in O(local kin), instead of iterating nearby bands.
 //
+// CORRECTION-28 — there is no memory channel, deliberately. This field used to
+// ALSO scatter into the radius-2 ball around each band's salient return /
+// high-attachment places, independent of where that band currently was, and add
+// `memoryOverlap * 0.24` to the weight. AUDIT-27 measured the consequence: a band
+// 35 tiles away still produced crowding, a contributor identity and downstream
+// saturation at a place it merely remembered, and memory-only overlap outnumbered
+// real physical overlap 27 to 25 across 7,360 pair-seasons. Physical crowding is
+// now created ONLY by current physical proximity. Remembered range keeps its own
+// authorities — placeMemory, familiarCountry, socialRangeRecognition and
+// protoAccessMemory — and none of them is a physical crowding source.
+//
 // Drift vs. the per-query scan is bounded and intended: (1) tiny float-add order
 // differences in the crowding sum (the field accumulates kf=1 in sorted order and
 // applies kin/self as deltas, rather than per-band inline), mostly absorbed by the
 // round2; (2) in the decision loop the field reflects the fixed pre-decision
-// snapshot rather than mid-loop moved positions. basePreclamp and memoryOverlap are
-// reproduced exactly, and nearbyBandCount / confidence stay exact (debug
-// pressureBandIds are bounded).
+// snapshot rather than mid-loop moved positions. basePreclamp is reproduced
+// exactly, and nearbyBandCount / confidence stay exact (debug pressureBandIds are
+// bounded).
 const MAX_DEBUG_PRESSURE_IDS = 32;
 
 interface CrowdingFieldTile {
@@ -189,47 +327,37 @@ function buildCrowdingField(world: WorldState, cache: TickContextCache): Crowdin
       }
     }
 
-    const originTile = getTile(world, band.position);
+    // CORRECTION-34 — scatter from EVERY place this band has bodies, not only from its
+    // residence: the residential remainder from `band.position`, and each physically-away party
+    // from its own `positionTileId`. The band's total physical weight is unchanged when nobody is
+    // away and is redistributed — never duplicated — when somebody is, for valid canonical
+    // expedition state (maintained upstream by `reconcileExpeditionCommitment`, not here).
+    const presence = getBandPhysicalPresence(band);
+    const sources: { readonly tile: Tile; readonly weight: number }[] = [];
 
-    if (originTile === undefined) {
+    for (const source of presence) {
+      const sourceTile = getTile(world, source.tileId);
+
+      if (sourceTile === undefined || source.people <= 0) {
+        continue;
+      }
+
+      sources.push({ tile: sourceTile, weight: presenceWeight(source.people) });
+    }
+
+    if (sources.length === 0) {
       continue;
     }
 
-    const populationWeight = Math.min(1.6, (band.demography?.population ?? band.size) / 36);
-
-    // Memory channel: max remembered-area value per tile within distance 2 of a
-    // qualifying salient place (matches getRememberedAreaOverlap exactly).
-    const memOverlapByTile = new Map<TileId, number>();
-
-    for (const memory of getSalientPlaceMemories(band, cache)) {
-      if (!(memory.isReturnPlace || memory.attachment > 0.5)) {
-        continue;
-      }
-
-      const placeTile = getTile(world, memory.tileId);
-
-      if (placeTile === undefined) {
-        continue;
-      }
-
-      const value = clamp01(memory.attachment * 0.46 + (memory.isReturnPlace ? 0.22 : 0));
-
-      scatterBall(world, placeTile.coord.x, placeTile.coord.y, 2, (reachedTileId) => {
-        const previous = memOverlapByTile.get(reachedTileId);
-
-        if (previous === undefined || value > previous) {
-          memOverlapByTile.set(reachedTileId, value);
-        }
-      });
-    }
-
-    // Footprint = proximity ball (distance <= CROWDING_RADIUS) + memory tiles.
+    // Footprint = the union of each source's proximity ball (distance <= CROWDING_RADIUS).
+    // CORRECTION-28: the band no longer scatters into the country it merely
+    // remembers, so a band that has walked away stops crowding the place it
+    // still values.
     const footprint = new Set<TileId>();
-    scatterBall(world, originTile.coord.x, originTile.coord.y, CROWDING_RADIUS, (reachedTileId) => {
-      footprint.add(reachedTileId);
-    });
-    for (const memoryTileId of memOverlapByTile.keys()) {
-      footprint.add(memoryTileId);
+    for (const source of sources) {
+      scatterBall(world, source.tile.coord.x, source.tile.coord.y, CROWDING_RADIUS, (reachedTileId) => {
+        footprint.add(reachedTileId);
+      });
     }
 
     for (const tileId of footprint) {
@@ -239,20 +367,29 @@ function buildCrowdingField(world: WorldState, cache: TickContextCache): Crowdin
         continue;
       }
 
-      const distance = getGridDistance(originTile, tile);
-      const memoryOverlap = memOverlapByTile.get(tileId) ?? 0;
+      // One band, one weight per tile — summed across its own presence sources, because two
+      // groups of the same band standing near one tile really are more bodies near that tile.
+      let basePreclamp = 0;
 
-      if (distance > CROWDING_RADIUS && memoryOverlap <= 0) {
-        continue;
+      for (const source of sources) {
+        const distance = getGridDistance(source.tile, tile);
+
+        if (distance > CROWDING_RADIUS) {
+          continue;
+        }
+
+        const distanceWeight = distance <= CROWDING_RADIUS
+          ? Math.max(0, (CROWDING_RADIUS + 1 - distance) / (CROWDING_RADIUS + 1))
+          : 0;
+        const samePatchWeight =
+          distance === 0 ? 1 : distance === 1 ? 0.74 : distance === 2 ? 0.48 : 0;
+
+        basePreclamp += (distanceWeight * 0.58 + samePatchWeight * 0.34) * source.weight;
       }
 
-      const distanceWeight = distance <= CROWDING_RADIUS
-        ? Math.max(0, (CROWDING_RADIUS + 1 - distance) / (CROWDING_RADIUS + 1))
-        : 0;
-      const samePatchWeight =
-        distance === 0 ? 1 : distance === 1 ? 0.74 : distance === 2 ? 0.48 : 0;
-      const basePreclamp =
-        (distanceWeight * 0.58 + samePatchWeight * 0.34 + memoryOverlap * 0.24) * populationWeight;
+      if (basePreclamp <= 0) {
+        continue;
+      }
 
       let entry = byTile.get(tileId);
 
@@ -434,7 +571,7 @@ export function getDaughterDispersalPressure(
   const earlyDispersalUrgency = getEarlyDispersalUrgency(world, band);
   const kinCoreCrowding = clamp01(parentCoreOverlap * 0.62 + nearby.parentOverlap * 0.28 + nearby.daughterOverlap * 0.18);
   const kinTolerance = kinSafety;
-  const safeFrontierPull = tile === undefined ? 0 : getSafeFrontierPull(world, band, tile, nearby);
+  const safeFrontierPull = tile === undefined ? 0 : getSafeFrontierPull(world, band, tile);
   const localUsePressure = getLocalUsePressureValue(band.usePressure[tileId]);
   // CAUSAL-REPAIR-1: founders are no longer exempt from dispersal pressure.
   // A founding lineage in a saturating basin previously read 0 here forever
@@ -562,11 +699,18 @@ function getEarlyDispersalUrgency(world: WorldState, band: Band): number {
   return clamp01(1 - ageTicks / 80);
 }
 
+// CORRECTION-32 — this no longer subtracts `nearby.weightedCrowding * 0.22`.
+//
+// `safeFrontierPull` is scored DIRECTLY at +0.62 in scoreDecision, on the same move and
+// exploration candidates whose `crowdingPenalty` already charges that tile's crowding. The
+// subtraction was therefore a second (and, through daughterDispersalPressure, a third) charge
+// of one physical fact on one candidate. What the pull is FOR — unknown-neighbour ratio,
+// corridor value, band-known suitability — is untouched, and no fission, kin or dispersal rule
+// is redesigned here (that remains out of scope).
 function getSafeFrontierPull(
   world: WorldState,
   band: Band,
   tile: Tile,
-  nearby: NearbyBandPressure,
 ): number {
   if (tile.isAquatic || tile.terrainKind === "mountains" || tile.movementCost > 2.45) {
     return 0;
@@ -595,8 +739,7 @@ function getSafeFrontierPull(
   return clamp01(
     unknownNeighborRatio * 0.34 +
       corridorValue +
-      knownSuitability * 0.28 -
-      nearby.weightedCrowding * 0.22,
+      knownSuitability * 0.28,
   );
 }
 
@@ -632,49 +775,41 @@ function computeCrowdingContribDescriptor(
   otherBand: Band,
   cache: TickContextCache | undefined,
 ): CrowdingContribDescriptor {
-  const otherTile = getTile(world, otherBand.position);
+  // CORRECTION-34 — the same presence sources the field uses, so the cache-less scan path and
+  // the cached field path stay byte-identical (the parity CORRECTION-28 audits).
+  let basePreclamp = 0;
 
-  if (otherTile === undefined) {
-    return SKIPPED_CROWDING_CONTRIB;
+  for (const source of getBandPhysicalPresence(otherBand)) {
+    if (source.people <= 0) {
+      continue;
+    }
+
+    const sourceTile = getTile(world, source.tileId);
+
+    if (sourceTile === undefined) {
+      continue;
+    }
+
+    const distance = getGridDistance(tile, sourceTile);
+
+    if (distance > CROWDING_RADIUS) {
+      continue;
+    }
+
+    const distanceWeight = distance <= CROWDING_RADIUS
+      ? Math.max(0, (CROWDING_RADIUS + 1 - distance) / (CROWDING_RADIUS + 1))
+      : 0;
+    const samePatchWeight =
+      distance === 0 ? 1 : distance === 1 ? 0.74 : distance === 2 ? 0.48 : 0;
+
+    basePreclamp += (distanceWeight * 0.58 + samePatchWeight * 0.34) * presenceWeight(source.people);
   }
 
-  const distance = getGridDistance(tile, otherTile);
-  const memoryOverlap = getRememberedAreaOverlap(world, otherBand, tile, cache);
-
-  if (distance > CROWDING_RADIUS && memoryOverlap <= 0) {
+  if (basePreclamp <= 0) {
     return SKIPPED_CROWDING_CONTRIB;
   }
-
-  const distanceWeight = distance <= CROWDING_RADIUS
-    ? Math.max(0, (CROWDING_RADIUS + 1 - distance) / (CROWDING_RADIUS + 1))
-    : 0;
-  const samePatchWeight =
-    distance === 0 ? 1 : distance === 1 ? 0.74 : distance === 2 ? 0.48 : 0;
-  const populationWeight = Math.min(1.6, (otherBand.demography?.population ?? otherBand.size) / 36);
-  const basePreclamp =
-    (distanceWeight * 0.58 + samePatchWeight * 0.34 + memoryOverlap * 0.24) * populationWeight;
 
   return { skip: false, basePreclamp };
-}
-
-function getRememberedAreaOverlap(
-  world: WorldState,
-  band: Band,
-  tile: Tile,
-  cache: TickContextCache | undefined,
-): number {
-  return getSalientPlaceMemories(band, cache)
-    .filter((memory) => memory.isReturnPlace || memory.attachment > 0.5)
-    .map((memory) => {
-      const memoryTile = getTile(world, memory.tileId);
-
-      if (memoryTile === undefined || getGridDistance(memoryTile, tile) > 2) {
-        return 0;
-      }
-
-      return clamp01(memory.attachment * 0.46 + (memory.isReturnPlace ? 0.22 : 0));
-    })
-    .sort((left, right) => right - left)[0] ?? 0;
 }
 
 function isKinOverlap(band: Band, otherBand: Band): boolean {

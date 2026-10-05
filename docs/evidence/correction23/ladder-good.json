@@ -1,0 +1,882 @@
+{
+  "site": "tile:136:64",
+  "map": "map2",
+  "years": 150,
+  "seeds": [
+    "s1",
+    "s2",
+    "s3",
+    "s4",
+    "s5",
+    "s6",
+    "s7",
+    "s8",
+    "s9",
+    "s10"
+  ],
+  "label": "good",
+  "summary": {
+    "E2": {
+      "seeds": 10,
+      "survival": 1,
+      "medianFinalPopulation": 40,
+      "meanFinalPopulation": 40.1,
+      "medianExtinctionYear": null,
+      "totalVerificationAttempts": 11243,
+      "meanSupport": 0.09,
+      "totalReceipts": 47.84
+    }
+  },
+  "rows": [
+    {
+      "arm": "E2",
+      "seed": "s1",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 40,
+      "finalBands": 1,
+      "peakPopulation": 40,
+      "peakBands": 1,
+      "meanSupport": 0.09,
+      "births": 1,
+      "deaths": 0,
+      "physicalFoodReceipts": 4.26,
+      "firstHardshipYear": 1,
+      "firstShallowOpportunityYear": 1,
+      "firstVerificationYear": 1,
+      "firstVerificationQuestion": "resource_presence",
+      "firstVerificationOutcome": "confirmed",
+      "verificationAttempts": 1606,
+      "outcomeCounts": {
+        "confirmed": 1606,
+        "negative": 0,
+        "inconclusive": 0,
+        "lost": 0
+      },
+      "laterMovementAfterVerification": 137,
+      "laterResourceActionAfterVerification": 0,
+      "trajectory": [
+        {
+          "year": 1,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 2,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 3,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 4,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 5,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 25,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 50,
+          "population": 35,
+          "bands": 1
+        },
+        {
+          "year": 75,
+          "population": 36,
+          "bands": 1
+        },
+        {
+          "year": 100,
+          "population": 38,
+          "bands": 1
+        },
+        {
+          "year": 125,
+          "population": 39,
+          "bands": 1
+        },
+        {
+          "year": 150,
+          "population": 40,
+          "bands": 1
+        }
+      ]
+    },
+    {
+      "arm": "E2",
+      "seed": "s2",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 39,
+      "finalBands": 1,
+      "peakPopulation": 39,
+      "peakBands": 1,
+      "meanSupport": 0.09,
+      "births": 1,
+      "deaths": 0,
+      "physicalFoodReceipts": 4.22,
+      "firstHardshipYear": 1,
+      "firstShallowOpportunityYear": 1,
+      "firstVerificationYear": 1,
+      "firstVerificationQuestion": "resource_presence",
+      "firstVerificationOutcome": "confirmed",
+      "verificationAttempts": 490,
+      "outcomeCounts": {
+        "confirmed": 490,
+        "negative": 0,
+        "inconclusive": 0,
+        "lost": 0
+      },
+      "laterMovementAfterVerification": 127,
+      "laterResourceActionAfterVerification": 0,
+      "trajectory": [
+        {
+          "year": 1,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 2,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 3,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 4,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 5,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 25,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 50,
+          "population": 35,
+          "bands": 1
+        },
+        {
+          "year": 75,
+          "population": 36,
+          "bands": 1
+        },
+        {
+          "year": 100,
+          "population": 37,
+          "bands": 1
+        },
+        {
+          "year": 125,
+          "population": 38,
+          "bands": 1
+        },
+        {
+          "year": 150,
+          "population": 39,
+          "bands": 1
+        }
+      ]
+    },
+    {
+      "arm": "E2",
+      "seed": "s3",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 40,
+      "finalBands": 1,
+      "peakPopulation": 40,
+      "peakBands": 1,
+      "meanSupport": 0.09,
+      "births": 1,
+      "deaths": 0,
+      "physicalFoodReceipts": 4.43,
+      "firstHardshipYear": 1,
+      "firstShallowOpportunityYear": 1,
+      "firstVerificationYear": 1,
+      "firstVerificationQuestion": "resource_presence",
+      "firstVerificationOutcome": "confirmed",
+      "verificationAttempts": 1077,
+      "outcomeCounts": {
+        "confirmed": 1077,
+        "negative": 0,
+        "inconclusive": 0,
+        "lost": 0
+      },
+      "laterMovementAfterVerification": 139,
+      "laterResourceActionAfterVerification": 0,
+      "trajectory": [
+        {
+          "year": 1,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 2,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 3,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 4,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 5,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 25,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 50,
+          "population": 35,
+          "bands": 1
+        },
+        {
+          "year": 75,
+          "population": 37,
+          "bands": 1
+        },
+        {
+          "year": 100,
+          "population": 38,
+          "bands": 1
+        },
+        {
+          "year": 125,
+          "population": 39,
+          "bands": 1
+        },
+        {
+          "year": 150,
+          "population": 40,
+          "bands": 1
+        }
+      ]
+    },
+    {
+      "arm": "E2",
+      "seed": "s4",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 40,
+      "finalBands": 1,
+      "peakPopulation": 40,
+      "peakBands": 1,
+      "meanSupport": 0.09,
+      "births": 1,
+      "deaths": 0,
+      "physicalFoodReceipts": 4.57,
+      "firstHardshipYear": 1,
+      "firstShallowOpportunityYear": 1,
+      "firstVerificationYear": 1,
+      "firstVerificationQuestion": "resource_presence",
+      "firstVerificationOutcome": "confirmed",
+      "verificationAttempts": 1080,
+      "outcomeCounts": {
+        "confirmed": 1080,
+        "negative": 0,
+        "inconclusive": 0,
+        "lost": 0
+      },
+      "laterMovementAfterVerification": 136,
+      "laterResourceActionAfterVerification": 0,
+      "trajectory": [
+        {
+          "year": 1,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 2,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 3,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 4,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 5,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 25,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 50,
+          "population": 35,
+          "bands": 1
+        },
+        {
+          "year": 75,
+          "population": 36,
+          "bands": 1
+        },
+        {
+          "year": 100,
+          "population": 38,
+          "bands": 1
+        },
+        {
+          "year": 125,
+          "population": 39,
+          "bands": 1
+        },
+        {
+          "year": 150,
+          "population": 40,
+          "bands": 1
+        }
+      ]
+    },
+    {
+      "arm": "E2",
+      "seed": "s5",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 40,
+      "finalBands": 1,
+      "peakPopulation": 40,
+      "peakBands": 1,
+      "meanSupport": 0.09,
+      "births": 1,
+      "deaths": 1,
+      "physicalFoodReceipts": 4.3,
+      "firstHardshipYear": 1,
+      "firstShallowOpportunityYear": 1,
+      "firstVerificationYear": 1,
+      "firstVerificationQuestion": "resource_presence",
+      "firstVerificationOutcome": "confirmed",
+      "verificationAttempts": 856,
+      "outcomeCounts": {
+        "confirmed": 856,
+        "negative": 0,
+        "inconclusive": 0,
+        "lost": 0
+      },
+      "laterMovementAfterVerification": 126,
+      "laterResourceActionAfterVerification": 0,
+      "trajectory": [
+        {
+          "year": 1,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 2,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 3,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 4,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 5,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 25,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 50,
+          "population": 35,
+          "bands": 1
+        },
+        {
+          "year": 75,
+          "population": 36,
+          "bands": 1
+        },
+        {
+          "year": 100,
+          "population": 37,
+          "bands": 1
+        },
+        {
+          "year": 125,
+          "population": 39,
+          "bands": 1
+        },
+        {
+          "year": 150,
+          "population": 40,
+          "bands": 1
+        }
+      ]
+    },
+    {
+      "arm": "E2",
+      "seed": "s6",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 41,
+      "finalBands": 1,
+      "peakPopulation": 41,
+      "peakBands": 1,
+      "meanSupport": 0.1,
+      "births": 1,
+      "deaths": 0,
+      "physicalFoodReceipts": 5.83,
+      "firstHardshipYear": 1,
+      "firstShallowOpportunityYear": 1,
+      "firstVerificationYear": 1,
+      "firstVerificationQuestion": "resource_presence",
+      "firstVerificationOutcome": "confirmed",
+      "verificationAttempts": 1514,
+      "outcomeCounts": {
+        "confirmed": 1514,
+        "negative": 0,
+        "inconclusive": 0,
+        "lost": 0
+      },
+      "laterMovementAfterVerification": 133,
+      "laterResourceActionAfterVerification": 0,
+      "trajectory": [
+        {
+          "year": 1,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 2,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 3,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 4,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 5,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 25,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 50,
+          "population": 36,
+          "bands": 1
+        },
+        {
+          "year": 75,
+          "population": 37,
+          "bands": 1
+        },
+        {
+          "year": 100,
+          "population": 38,
+          "bands": 1
+        },
+        {
+          "year": 125,
+          "population": 39,
+          "bands": 1
+        },
+        {
+          "year": 150,
+          "population": 41,
+          "bands": 1
+        }
+      ]
+    },
+    {
+      "arm": "E2",
+      "seed": "s7",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 40,
+      "finalBands": 1,
+      "peakPopulation": 40,
+      "peakBands": 1,
+      "meanSupport": 0.09,
+      "births": 1,
+      "deaths": 0,
+      "physicalFoodReceipts": 5.05,
+      "firstHardshipYear": 1,
+      "firstShallowOpportunityYear": 1,
+      "firstVerificationYear": 1,
+      "firstVerificationQuestion": "resource_presence",
+      "firstVerificationOutcome": "confirmed",
+      "verificationAttempts": 1690,
+      "outcomeCounts": {
+        "confirmed": 1690,
+        "negative": 0,
+        "inconclusive": 0,
+        "lost": 0
+      },
+      "laterMovementAfterVerification": 125,
+      "laterResourceActionAfterVerification": 0,
+      "trajectory": [
+        {
+          "year": 1,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 2,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 3,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 4,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 5,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 25,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 50,
+          "population": 35,
+          "bands": 1
+        },
+        {
+          "year": 75,
+          "population": 36,
+          "bands": 1
+        },
+        {
+          "year": 100,
+          "population": 37,
+          "bands": 1
+        },
+        {
+          "year": 125,
+          "population": 39,
+          "bands": 1
+        },
+        {
+          "year": 150,
+          "population": 40,
+          "bands": 1
+        }
+      ]
+    },
+    {
+      "arm": "E2",
+      "seed": "s8",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 40,
+      "finalBands": 1,
+      "peakPopulation": 40,
+      "peakBands": 1,
+      "meanSupport": 0.09,
+      "births": 1,
+      "deaths": 1,
+      "physicalFoodReceipts": 6.55,
+      "firstHardshipYear": 1,
+      "firstShallowOpportunityYear": 1,
+      "firstVerificationYear": 1,
+      "firstVerificationQuestion": "resource_presence",
+      "firstVerificationOutcome": "confirmed",
+      "verificationAttempts": 1547,
+      "outcomeCounts": {
+        "confirmed": 1547,
+        "negative": 0,
+        "inconclusive": 0,
+        "lost": 0
+      },
+      "laterMovementAfterVerification": 134,
+      "laterResourceActionAfterVerification": 0,
+      "trajectory": [
+        {
+          "year": 1,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 2,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 3,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 4,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 5,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 25,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 50,
+          "population": 36,
+          "bands": 1
+        },
+        {
+          "year": 75,
+          "population": 37,
+          "bands": 1
+        },
+        {
+          "year": 100,
+          "population": 38,
+          "bands": 1
+        },
+        {
+          "year": 125,
+          "population": 39,
+          "bands": 1
+        },
+        {
+          "year": 150,
+          "population": 40,
+          "bands": 1
+        }
+      ]
+    },
+    {
+      "arm": "E2",
+      "seed": "s9",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 41,
+      "finalBands": 1,
+      "peakPopulation": 41,
+      "peakBands": 1,
+      "meanSupport": 0.09,
+      "births": 1,
+      "deaths": 0,
+      "physicalFoodReceipts": 4.25,
+      "firstHardshipYear": 1,
+      "firstShallowOpportunityYear": 1,
+      "firstVerificationYear": 1,
+      "firstVerificationQuestion": "resource_presence",
+      "firstVerificationOutcome": "confirmed",
+      "verificationAttempts": 676,
+      "outcomeCounts": {
+        "confirmed": 676,
+        "negative": 0,
+        "inconclusive": 0,
+        "lost": 0
+      },
+      "laterMovementAfterVerification": 135,
+      "laterResourceActionAfterVerification": 0,
+      "trajectory": [
+        {
+          "year": 1,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 2,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 3,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 4,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 5,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 25,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 50,
+          "population": 35,
+          "bands": 1
+        },
+        {
+          "year": 75,
+          "population": 37,
+          "bands": 1
+        },
+        {
+          "year": 100,
+          "population": 38,
+          "bands": 1
+        },
+        {
+          "year": 125,
+          "population": 39,
+          "bands": 1
+        },
+        {
+          "year": 150,
+          "population": 41,
+          "bands": 1
+        }
+      ]
+    },
+    {
+      "arm": "E2",
+      "seed": "s10",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 40,
+      "finalBands": 1,
+      "peakPopulation": 40,
+      "peakBands": 1,
+      "meanSupport": 0.09,
+      "births": 1,
+      "deaths": 0,
+      "physicalFoodReceipts": 4.38,
+      "firstHardshipYear": 1,
+      "firstShallowOpportunityYear": 1,
+      "firstVerificationYear": 1,
+      "firstVerificationQuestion": "resource_presence",
+      "firstVerificationOutcome": "confirmed",
+      "verificationAttempts": 707,
+      "outcomeCounts": {
+        "confirmed": 707,
+        "negative": 0,
+        "inconclusive": 0,
+        "lost": 0
+      },
+      "laterMovementAfterVerification": 130,
+      "laterResourceActionAfterVerification": 0,
+      "trajectory": [
+        {
+          "year": 1,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 2,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 3,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 4,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 5,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 25,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 50,
+          "population": 35,
+          "bands": 1
+        },
+        {
+          "year": 75,
+          "population": 36,
+          "bands": 1
+        },
+        {
+          "year": 100,
+          "population": 37,
+          "bands": 1
+        },
+        {
+          "year": 125,
+          "population": 38,
+          "bands": 1
+        },
+        {
+          "year": 150,
+          "population": 40,
+          "bands": 1
+        }
+      ]
+    }
+  ]
+}

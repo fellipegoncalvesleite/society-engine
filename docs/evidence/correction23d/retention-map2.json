@@ -1,0 +1,68 @@
+{
+  "map": "map2",
+  "years": 120,
+  "seed": "c23d:retention",
+  "bandDays": 389520,
+  "launches": 16632,
+  "distinctPairs": 1541,
+  "pairsAttemptedMoreThanOnce": 1072,
+  "maxAttemptsOnOnePair": 248,
+  "medianAttemptsPerPair": 3,
+  "evidenceCapPressureBandDayShare": 75.3,
+  "retryEligibilityReasons": {
+    "never_asked": 1541,
+    "evidence_row_evicted": 3008,
+    "hardship_moved": 410,
+    "season_changed_not_new": 7611,
+    "season_genuinely_new": 2828,
+    "route_moved": 268,
+    "inconclusive_interval": 608,
+    "unclassified": 358
+  },
+  "inventory": [
+    {
+      "structure": "Band.frontierVerificationAttempts",
+      "key": "append-ordered list of (tile, question, tick, season, outcome)",
+      "cap": 12,
+      "eviction": "oldest-first ring (slice(-12))",
+      "authority": "UI / chronological history ONLY since CORRECTION-23B",
+      "readers": "placeEvidenceProjection (display)",
+      "evictionCanReopen": false,
+      "repeatsConsumeCapacity": true,
+      "growsWith": "attempts (bounded by the ring)"
+    },
+    {
+      "structure": "Band.verificationEvidence",
+      "key": "(tileId, question), UPSERTED",
+      "cap": 48,
+      "eviction": "oldest lastTick evicted once 48 distinct pairs exist",
+      "authority": "AUTHORITATIVE for domain readers and, before 23D, for retry",
+      "readers": "isWaterAccessFeasible, deriveDirectWaterAccess, taskCampRefusedByEvidence, resourceTestEligible, mayAskAgain",
+      "evictionCanReopen": true,
+      "repeatsConsumeCapacity": false,
+      "growsWith": "distinct attempted (place, question) pairs — capped at 48"
+    },
+    {
+      "structure": "KnownTileRecord (knowledge.observedTiles)",
+      "key": "tileId",
+      "cap": "none in this subsystem — inherited mandatory-retention debt",
+      "eviction": "not evicted by verification; memoryCompression governs it",
+      "authority": "AUTHORITATIVE place knowledge",
+      "readers": "the whole decision layer",
+      "evictionCanReopen": true,
+      "repeatsConsumeCapacity": false,
+      "growsWith": "known places"
+    },
+    {
+      "structure": "expedition active-task guard",
+      "key": "band + taskKind",
+      "cap": 1,
+      "eviction": "n/a — cleared on terminal phase",
+      "authority": "concurrency only",
+      "readers": "maybeLaunchFrontierVerification",
+      "evictionCanReopen": false,
+      "repeatsConsumeCapacity": false,
+      "growsWith": "nothing"
+    }
+  ]
+}

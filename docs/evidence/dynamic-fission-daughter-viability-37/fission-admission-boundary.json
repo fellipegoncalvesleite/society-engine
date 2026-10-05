@@ -1,0 +1,259 @@
+{
+  "generatedAt": "2026-08-11T22:55:19.615Z",
+  "seed": "audit27:natural:s1",
+  "warmDays": 2100,
+  "parentBandId": "band:varied-river-mid",
+  "successorId": "band:fa:successor",
+  "annualDay": 2160,
+  "summary": {
+    "total": 5,
+    "passed": 5,
+    "failed": 0,
+    "vacuous": 0
+  },
+  "fixtures": [
+    {
+      "id": "F1_annual_demography_still_reaches_a_provisional_group",
+      "claim": "the annual bodily step is still evaluated on a provisional successor — the gate withholds daughter creation, not biology, so the group can still change and still fail",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "populationBefore": 60,
+        "populationAfter": 60,
+        "growthAccumulator": [
+          0.185,
+          0.4103
+        ],
+        "mortalityAccumulator": [
+          0.0424,
+          0.0424
+        ],
+        "cohortsBefore": {
+          "w": 30,
+          "d": 20,
+          "e": 10
+        },
+        "cohortsAfter": {
+          "w": 32,
+          "d": 19,
+          "e": 9
+        },
+        "splitPressure": [
+          0.95,
+          0.85
+        ],
+        "gateValuesProductionUsed": [
+          {
+            "band": "band:fa:successor",
+            "population": 60,
+            "splitPressure": 0.85,
+            "threshold": 0.64,
+            "minimumSplitPopulation": 46,
+            "cooldownElapsed": true,
+            "deferredReason": null
+          },
+          {
+            "band": "band:varied-river-mid",
+            "population": 22,
+            "splitPressure": 0.83,
+            "threshold": 0.64,
+            "minimumSplitPopulation": 46,
+            "cooldownElapsed": true,
+            "deferredReason": "split_deferred_low_population"
+          }
+        ],
+        "note": "a band skipped at the top of the loop would move on NONE of these"
+      }
+    },
+    {
+      "id": "F2_a_provisional_successor_creates_no_legacy_daughter",
+      "claim": "with split pressure above the production threshold and the cooldown clear, a live provisional successor produces no daughter id, no fission event and no daughter-band consequence",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "splitPressureArmedAt": 0.95,
+        "threshold": "module-private",
+        "newBandIdsAnywhere": [],
+        "daughtersOfTheSuccessor": [],
+        "fissionEventsOnSuccessor": 0,
+        "daughterBandIdsOnSuccessor": [],
+        "provisionalAtTheInstantTheAuthorityRan": true,
+        "phaseAtTheInstantTheAuthorityRan": "travelling",
+        "successorStillProvisional": true,
+        "successorPhase": "travelling",
+        "fissionEligible": false,
+        "gateValuesProductionUsed": [
+          {
+            "band": "band:fa:successor",
+            "population": 60,
+            "splitPressure": 0.85,
+            "threshold": 0.64,
+            "minimumSplitPopulation": 46,
+            "cooldownElapsed": true,
+            "deferredReason": null
+          },
+          {
+            "band": "band:varied-river-mid",
+            "population": 22,
+            "splitPressure": 0.83,
+            "threshold": 0.64,
+            "minimumSplitPopulation": 46,
+            "cooldownElapsed": true,
+            "deferredReason": "split_deferred_low_population"
+          }
+        ]
+      }
+    },
+    {
+      "id": "F3_an_established_band_reaches_the_natural_proposal_path",
+      "claim": "the identical arming on an ordinary established band opens a production proposal while producing no legacy daughter or completed fission event",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "parentId": "band:varied-river-mid",
+        "splitPressureArmedAt": 0.95,
+        "newBandIds": [],
+        "daughtersOfTheParent": [],
+        "attemptPhase": "proposed",
+        "proposalAuthority": "annual_demography",
+        "parentFissionEvents": 0,
+        "gateValuesProductionUsed": [
+          {
+            "band": "band:fa:successor",
+            "population": 12,
+            "splitPressure": 0.72,
+            "threshold": 0.64,
+            "minimumSplitPopulation": 46,
+            "cooldownElapsed": true,
+            "deferredReason": "split_deferred_low_population"
+          },
+          {
+            "band": "band:varied-river-mid",
+            "population": 60,
+            "splitPressure": 0.97,
+            "threshold": 0.64,
+            "minimumSplitPopulation": 46,
+            "cooldownElapsed": true,
+            "deferredReason": null
+          }
+        ],
+        "note": "this is the positive control that makes F2 a lifecycle refusal rather than a global switch-off"
+      }
+    },
+    {
+      "id": "F4_a_parent_mid_attempt_cannot_receive_a_second_attempt",
+      "claim": "an established band holding a live pre-departure attempt retains that exact attempt and creates neither a second proposal nor a legacy daughter",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "attemptPhase": "departure_planned",
+        "differsFromF3ByOnly": "the presence of a live fissionAttempt",
+        "newBandIds": [],
+        "daughtersOfTheParent": [],
+        "f3OpenedProposal": true,
+        "hasCurrentAttemptAfter": true,
+        "gateValuesProductionUsed": [
+          {
+            "band": "band:fa:successor",
+            "population": 12,
+            "splitPressure": 0.72,
+            "threshold": 0.64,
+            "minimumSplitPopulation": 46,
+            "cooldownElapsed": true,
+            "deferredReason": "split_deferred_low_population"
+          },
+          {
+            "band": "band:varied-river-mid",
+            "population": 60,
+            "splitPressure": 0.97,
+            "threshold": 0.64,
+            "minimumSplitPopulation": 46,
+            "cooldownElapsed": true,
+            "deferredReason": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "F5_the_arming_is_provably_above_the_natural_proposal_threshold",
+      "claim": "the split pressure used for the provisional arm is the same value that opens a proposal on an established band on the same day, so F2 measures the lifecycle gate and nothing else",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "armedSplitPressure": 0.95,
+        "establishedOpenedProposal": true,
+        "provisionalOpenedProposal": false,
+        "provisionalCreatedDaughter": false,
+        "identicalExceptFor": "which band the arming was applied to",
+        "observedGateValues": {
+          "provisional": [
+            {
+              "band": "band:fa:successor",
+              "population": 60,
+              "splitPressure": 0.85,
+              "threshold": 0.64,
+              "minimumSplitPopulation": 46,
+              "cooldownElapsed": true,
+              "deferredReason": null
+            },
+            {
+              "band": "band:varied-river-mid",
+              "population": 22,
+              "splitPressure": 0.83,
+              "threshold": 0.64,
+              "minimumSplitPopulation": 46,
+              "cooldownElapsed": true,
+              "deferredReason": "split_deferred_low_population"
+            }
+          ],
+          "provisional:provisionalAtCallTime": true,
+          "provisional:phaseAtCallTime": "travelling",
+          "established": [
+            {
+              "band": "band:fa:successor",
+              "population": 12,
+              "splitPressure": 0.72,
+              "threshold": 0.64,
+              "minimumSplitPopulation": 46,
+              "cooldownElapsed": true,
+              "deferredReason": "split_deferred_low_population"
+            },
+            {
+              "band": "band:varied-river-mid",
+              "population": 60,
+              "splitPressure": 0.97,
+              "threshold": 0.64,
+              "minimumSplitPopulation": 46,
+              "cooldownElapsed": true,
+              "deferredReason": null
+            }
+          ],
+          "established:provisionalAtCallTime": true,
+          "established:phaseAtCallTime": "travelling",
+          "mid-attempt": [
+            {
+              "band": "band:fa:successor",
+              "population": 12,
+              "splitPressure": 0.72,
+              "threshold": 0.64,
+              "minimumSplitPopulation": 46,
+              "cooldownElapsed": true,
+              "deferredReason": "split_deferred_low_population"
+            },
+            {
+              "band": "band:varied-river-mid",
+              "population": 60,
+              "splitPressure": 0.97,
+              "threshold": 0.64,
+              "minimumSplitPopulation": 46,
+              "cooldownElapsed": true,
+              "deferredReason": null
+            }
+          ],
+          "mid-attempt:provisionalAtCallTime": true,
+          "mid-attempt:phaseAtCallTime": "travelling"
+        }
+      }
+    }
+  ]
+}

@@ -48,6 +48,80 @@ This document is intended to replace repeated repository-wide rediscovery with a
 - historical invariants;
 - future attachment points.
 
+**ROADMAP ITEM 4 — POST-RETURN CONTINUATION RESOLVABILITY CORRECTION (2026-08-12) — PROGRESS / PHYSICAL CUTOVER AND ITEM 5 UNSTARTED.** Branch `checkpoint/dynamic-fission-provisional-successor-38`, correcting accepted `65627a5`. The exact later dead end was reproduced before editing: an observed-memory commitment A had no locally admissible progress, yet three living people remained for 90 registered days in `continuing_after_failed_return` under the same commitment and position with `blockedStepDays = 90`. Architectures A–E were compared. Selected A+B+D is the smallest truthful change: five retained local refusals, a complete strictly post-A target-local operation failure, or current labour/burden incapacity can supersede A and reopen existing `unresolved_after_failed_return`; A plus its typed physical reason remains in bounded history and no longer authorizes motion; every B course is a new pure Band+day current-survivor decision with a new target/day-sensitive id and an empty operation ledger. Timer expiry was rejected because it supplies no physical fact, hidden-world route selection and ordinary relocation remain forbidden, and no new phase or generalized stabilization was added. Rich history is capped at 8 and contradicted exact-memory target ids at 72. Corrected F12 now proves the complete multi-day blocked A -> typed failure -> unresolved interval -> fresh observed B -> contiguous movement -> strictly post-B operation -> `established_after_failed_return` course; the independent reached-ground arm proves a complete failed A window and establishment refusal before fresh B. The positive path has no added delay. Physical reunion after A failure and before B still reintegrates with conservation; current and reopened states both zero-terminalize. Failed-return fixtures are 31/31 and source mutations 11/11, zero vacuous, byte-identical restoration; disabling reconsideration reproduces living limbo for 40 days (`blockedStepDays = 37`). Both TypeScript projects/build, kernel 15/15, affected Item-4 suites and inherited mutations, graph 221/764, import boundary 87, daily/seasonal and four-way modes, fresh-process determinism and season order are green. The reader-boundary inventory remains honestly INCOMPLETE at 5/12. `performAtomicDeparture` and `createDaughterBand` each still have only a definition in `src` (zero callers). The next dependency remains separately authorized physical cutover: reconcile the legacy `fissionEvents` cooldown authority and decide natural readiness/departure seasonal ordering. Do not connect it or begin Item 5 here. Historical checkpoint entries below describe their then-current states.
+
+**ROADMAP ITEM 4 — FAILED-RETURN RESOLUTION: FRESH SURVIVOR COMMITMENT AND DISTINCT INDEPENDENT CONTINUATION (2026-08-11) — PROGRESS / NATURAL DEPARTURE STILL DISCONNECTED / ITEM 4 ACTIVE.** Branch `checkpoint/dynamic-fission-provisional-successor-38`, starting at accepted `1df00d2`. Source inspection confirmed the living dead end exactly: the bounded `returning` action truthfully expired into event-bounded `unresolved_after_failed_return`, and that phase could only physically reintegrate or terminalize at zero bodies. Architectures A–F were compared. Reusing the founder commitment was rejected because it binds the departed cohort, transfer and pre-return destination; replaying `returning` was rejected because the group knows no new parent location; ordinary residential movement was rejected because it bypasses quarantine; generalizing `stabilized` was rejected because its `provesNeverEnteredReturnPath` proof is load-bearing. The selected A+C+D/F route creates a separate `PostReturnContinuationCommitment` for the current aggregate survivor cohort, then requires later operation and finishes at the historically distinct terminal `established_after_failed_return`. The pure decision takes a `Band` and day, never `WorldState`; it uses two real post-failure subsistence days, current cohorts/burden, the occupied tile and observed memory only. It knows nothing about the parent's location, health or terminality. If current ground works, the commitment names it; otherwise it may name one deterministic observed-memory tile, after which only `provisionalTravel` may move the group in contiguous, passability-constrained steps while provisional subsistence and quarantine remain active. The commitment resets the qualifying operation ledger, so old outbound evidence and even pre-commitment post-failure evidence cannot establish the group. Completion requires a demand-complete window starting strictly after the commitment, physical arrival, real food take/depletion, water/support/worker/burden requirements, direct consumed-departure provenance, the permanent `return_path_entered` fact and atomic release initialization. It writes a distinct bounded event/deep-history/lineage/Chronicle/identity fact and current camp without moving bodies or position; ordinary `stabilized` remains unavailable after return. Registry order is explicit: physical reunion runs before the new decision on the same unresolved day; a commitment already made changes course and no remote merger is available. Controlled suite 25/25 and source mutations 6/6 pass, all non-vacuous with byte-identical restoration; every affected inherited audit, both TypeScript projects/build, graph 221/764, import boundary 87, deterministic replay, two-way/four-way step modes and season ordering are green. `performAtomicDeparture` and `createDaughterBand` each have only their definition in `src` (zero callers). Item 4 is not frozen: physical cutover still must update the legacy `fissionEvents` cooldown authority and reconcile daily readiness cadence with the seasonal departure-ordering seam. Do not connect it or begin Item 5 here. Historical checkpoint entries below describe their then-current states.
+
+**ROADMAP ITEM 4 — POSITIVE SUCCESSOR STABILIZATION AUTHORITY (2026-08-11) — PROGRESS / CONTROLLED-ONLY / NATURAL DEPARTURE STILL DISCONNECTED.** Branch `checkpoint/dynamic-fission-provisional-successor-38`, starting this subpass at `bf0823d`. A dedicated `successorStabilization` world adapter consumes a separate conjunctive `SuccessorIndependentOperationEvidence` proof (architectures A+C): direct commitment/consumed-permit/immutable-departure provenance; a closed post-departure operation window with real demand, worker-days, support, resource take/depletion and water experience; surviving population and workers; tolerable embodied mortality; and a monotonic `ProvisionalSeparationCourse` proving no return path was ever entered. The bounded lifecycle `history` ring is diagnostic only and cannot prove that eternal negative. The kernel now names all four required claims and timeout remains incapable of requesting success. Release is atomic with transition: it initializes `currentCamp` at the successor's physically reached location, completed lineage, honest deep history, shared bounded stabilization records and established-reader projection without changing location/population, manufacturing viability, residential anchors, proto-camps or legacy fission events. Departure history and stabilization history remain distinct, so no record claims teleportation or pre-departure completion. The production action is inert in ordinary runs because `performAtomicDeparture` still has zero natural callers; `createDaughterBand` remains unchanged and unreachable. Controlled canonical preparation -> seam departure -> honest travel -> establishment -> real operation -> stabilization passes 27/27 fixtures; six required source mutations fail their named probes and restore production byte-identically. `unresolved_after_failed_return` is deliberately untouched and is the exact next separately authorized Item-4 dependency; physical cutover follows later; Item 5 is unstarted. Historical checkpoint entries below describe their own then-current states and are not current authority.
+
+**ROADMAP ITEM 4 — ATOMIC DEPARTURE GATE CORRECTION: THE EXECUTED DESTINATION IS THE ACCEPTED DESTINATION (2026-08-10) — PROGRESS. Supervisor correction on the pushed `5cc2532`; the gate is RETAINED and not reverted. THE STATUS IS UNCHANGED IN THE REQUIRED WORDS: `commitment authority exists` != `natural fission uses it` != `atomic departure requires it` != `stabilization exists`. Natural callers remain 0; production stabilization writers remain 0; `createDaughterBand` untouched; Item 5 unstarted.** **THE DEFECT: ONE LOAD-BEARING TERM WAS COMPARED AGAINST ITSELF.** The gate built `terms.targetTileId = prepared.commitment.targetTileId`, so `commitmentTermsMatchDeparture` proved the commitment's destination matched its OWN destination, and `authorizationPermitsDeparture` — whose permit is opened FROM that commitment — proved the same thing a second time. **Both were VACUOUS on that field.** Meanwhile the successor's lifecycle received `attempt.targetTileId`, and `provisionalTravel.travelDestination` reads exactly that field to choose every step. So this state was representable AND WOULD HAVE DEPARTED: commitment A, permit A, prepared record A, parent fresh, cohort intact, `attempt.targetTileId` changed to B — the gate compares A against A, passes, and the founders walk to B under a permit for A. **`accepted destination != executed destination`, which is verbatim the defect class this checkpoint family exists to remove.** **ARCHITECTURES COMPARED.** (A) the attempt stays the execution authority and the gate proves attempt == commitment == permit; (B) the prepared terms become the execution authority; (C) remove the duplicate mutable target. **C WAS REJECTED ON INSPECTION RATHER THAN PREFERENCE**: `attempt.targetTileId` is load-bearing BEFORE preparation — it is what `prepareFissionDeparture` reads to ask the cohort what it is accepting — and the parent's terminal `departed` record legitimately carries the destination as provenance, so the field cannot be removed and dropping the READ would only change which copy wins silently. **B ALONE WAS REJECTED FOR THE SAME REASON THE BRIEF NAMES**: silently ignoring a divergent attempt target makes an edit that looks like a retarget do nothing, which is the mirror of silently retargeting. **A AND B ARE THEREFORE BOTH TAKEN, and the comparison is what makes them compatible**: the gate proves `attempt.targetTileId === commitment.targetTileId === authorization.targetTileId` before any body moves, refusing `attempt_names_a_different_destination_than_the_commitment` (named apart from the general terms mismatch because it implies a different next action — supersede and accept again); and BECAUSE that equality is now proven, the executed destination written to the successor's lifecycle and to the parent's terminal record is sourced from the ACCEPTED terms. **No value moves; what moves is which record is the authority.** `terms.targetTileId` is now `attempt.targetTileId`, so the two existing predicates stop being self-comparisons and would fail if the commitment or the permit named anywhere else. `attempt_names_no_destination` covers the absent case. **THE DESTINATION CHANGE PATH IS THE EXISTING ONE AND NOTHING WAS INVENTED**: `supersedePreparedDeparture(..., "destination_changed", ...)` ends the permit `superseded_by_revised_terms`, the historical acceptance of A survives untouched, and the terminal permit then authorizes NEITHER A NOR B — going somewhere else requires agreeing again. **A1-P: 19 fixtures, 0 failing, 0 vacuous** (three new: D2 the destination-mismatch refusal, D3 the single executed-destination authority, D4 supersession), with **FIVE negative controls** in a restored copy (sha256 identical before and after). **D2 IS NON-VACUOUS BY CONSTRUCTION: the identical world with the target left alone DEPARTS in the same run**, so the only difference between departing and refusing is the destination — measured, accepted `tile:108:54`, execution `tile:108:55`, both tiles genuinely well known to the band (5 and 4 visits), refused by name, world byte-identical, permit still `live`, commitment not rewritten. **THE FIFTH CONTROL RESTORES BOTH HALVES OF THE DEFECT, AND THE FIRST FORM OF IT DID NOT.** Restoring only the self-comparison showed a departure that should have been refused but reported `departed toward tile:108:54 under a commitment for tile:108:54` — because the correction had also moved the successor's target source, so the mutant did not reproduce the founders walking anywhere wrong. With the `attempt.targetTileId` read restored as well it reports **`departed toward tile:108:55 under a commitment for tile:108:54`**, which is the actual pre-correction behaviour. **This is recorded as an instrument error caught in this pass's own control.** **§9 STATIC TARGET-WRITER MAP, READ FROM SOURCE: no production route can create `live permit for A + execution target B`.** The only production writers of a fission attempt are `prepareFissionDeparture` (three sites, all spreading `...attempt`) and the seam; none writes `targetTileId` independently, and the seam's two writes now both read `acceptedDestination`. `openDepartureAuthorization` copies the commitment's target, which is correct derivation rather than a second authority. The reachable route is a CALLER holding the world — which is exactly what a future natural writer will be, and why the fixture exists. PASSED, all personally executed: tsc both projects, build, graph **221/764 0 dup 0 dangling UNCHANGED**, import boundary **87 back-edges UNCHANGED**, step-mode `fullCanonicalStateMatch: true` / `firstDivergence: null` on BOTH maps, four-way `ALL_FOUR_STEP_MODES_IDENTICAL`, season-order `PASS`, `deterministic=true`, gated departure 19/19, preparation 16/16, commitment 25/25, residual 20/20, allocation 7/7, kernel 14/14, seam 18/18, lifecycle semantics 13/13, field transfer 12/12, cleanup 12/12, admission 5/5, travel 10/10, reachability 12/12, reintegration 9/9, quarantine 9/9, two-day 10/10, choice measurement 11/11, subsistence 39/39, lifecycle exit 10/10, reader admission 6 claims holding — **all 0 vacuous**. **CANONICAL STATE IS UNCHANGED BY THIS CORRECTION** — no field added or removed, which is why step-mode is byte-identical. **THE TIMEOUT FINDING REMAINS OPEN AND IS NOT SOLVED HERE**: `resolveTimeout` still has ZERO production callers and the provisional resolver reads `provisionalSuccessor` only, so `departure_ready -> abandoned` is declared and driven by nothing; a future natural path may NOT create `departure_ready` attempts that can sit there indefinitely holding a live permit. **`unresolved_after_failed_return` IS UNTOUCHED AND STILL BLOCKS AN ITEM-4 FREEZE. THIS CORRECTION DOES NOT CLOSE ITEM 4.** **NOT BUILT AND NOT CLAIMED: no natural proposal, commitment or preparation writer; no cutover from `createDaughterBand`; no stabilization; no failed-return resolution.**
+
+**ROADMAP ITEM 4 — ATOMIC DEPARTURE GATE: PREPARED TERMS, TRUSTED FRESHNESS, ONE-USE PERMIT (2026-08-10) — PROGRESS. THE STATUS, IN THE REQUIRED WORDS: `commitment authority exists` != `natural fission uses it` != `atomic departure requires it` != `stabilization exists` — and the THIRD of those is now TRUE while the second and fourth remain FALSE. `performAtomicDeparture` no longer decides who leaves; it executes an already-assessed, positively accepted, still-fresh, permitted departure. Natural callers remain 0; production stabilization writers remain 0; `createDaughterBand` untouched; Item 5 unstarted.** Branch `checkpoint/dynamic-fission-provisional-successor-38`, continuing `4848d45`. **THE BYPASS, READ FROM PRODUCTION.** The seam read `attempt.requestedFounders`, allocated a cohort, ran the residual authority on a CALLER-SUPPLIED context, took its revision, RE-ALLOCATED and only then moved bodies. So there were two answers to *who exactly is leaving* — one a founder cohort had accepted and one the transfer code produced while the transfer was under way — and two moments at which the parent-side terms could change; and the only thing between a hand-built `departure_ready` record and eleven people walking out of a camp was a phase string. **THE EXACT PREPARED ALLOCATION IS NOW THE PHYSICAL TRANSFER.** `prepared.allocation` is READ, never re-derived from a headcount, and a parent that can no longer supply those three cohort lines is REFUSED (`prepared_cohort_is_no_longer_present_in_the_parent`) rather than trimmed — trimming is the silent re-fit under a smaller name. **`allocation_refused` AND `residual_authority_blocked_the_departure` ARE REMOVED FROM THE SEAM'S REFUSAL UNION**, because it no longer allocates or assesses and a refusal member that cannot be produced is a claim about behaviour that does not exist. **THE FRESHNESS PROBLEM WAS THE CALLER, NOT THE CLOCK.** A fingerprint built from numbers the caller reports can be satisfied by re-sending them: prepare on day D with reading X, let the parent lose four working adults, send X again on day D+5, and a departure assessed against a vanished parent reads current. **THE FIELD IS REMOVED RATHER THAN VALIDATED.** New `fissionResidualMeasurement.ts` derives the WHOLE `ParentResidualInput` from the band — `bandMobility` for away bodies and walkers, `seasonalSurvival` for nutrition, `acuteRisk`/`bodyCampLogistics` for embodied condition, `pressureState` for ecological position — and BOTH the preparation writer and the seam call it and nothing else, so there is ONE answer to *what is the parent's condition now*. **IT TAKES A BAND AND NO WORLD** (CORRECTION-33's rule: an invariant that reads less cannot be dodged), and where a canonical authority publishes several adverse terms it takes their MAXIMUM rather than a blend, so **no new coefficient enters the model through the back door**. The one input that is not a fact about the parent — `minimumFounderRequest`, a caller policy that cannot go stale — is stored on the prepared record as `residualPolicy`, which is what keeps the fingerprint exhaustive over `keyof ParentResidualInput` at BOTH ends instead of only at the writing end. **STALE REFUSES AND NEVER RE-FITS**, and the seam does NOT supersede the permit itself: §10 requires a refusal to return the ORIGINAL world, so recording the supersession stays with the caller through `supersedePreparedDeparture`. The consequence is stated rather than hidden — a stale record keeps a `live` permit until someone acts on it, and that permit authorizes nothing because the gate re-derives freshness on every attempt. **TERMS, HISTORY AND CURRENT FEASIBILITY ARE DECIDED SEPARATELY**: accepted terms (parent, lineage, target, exact cohort) through the existing `commitmentTermsMatchDeparture` / `authorizationPermitsDeparture`; historical decision evidence (motive, familiarity, willingness at decision time) NEVER revalidated, because a later change of mood does not unmake the acceptance; current feasibility revalidated through the fingerprint AND a separate cohort-executability check. **THE PERMIT IS SPENT IN THE SAME VALUE THAT MOVES THE BODIES** — `endDepartureAuthorization` is computed before construction and written into the one `nextWorld` the function ever returns, so there is no state in which a permit reads `consumed_by_departure` and nobody moved, or the reverse. **THE SUCCESSOR CARRIES FIVE FIELDS OF CONSUMED PROVENANCE, NOT THE PREPARED RECORD**: `commitmentId`, the decision day, the departure day, the exact represented cohort and the literal `consumed_by_departure`. Copying the whole record would hand a group that has just departed a live permit to depart again — the very defect this gate closes, recreated by the provenance meant to describe it. **A1-P: 16 fixtures, 0 failing, 0 vacuous**, with FOUR negative controls in a restored copy (sha256 `e15b222b…138c99` before and after): removing the gate breaks A (the seam throws instead of refusing, which breaks A's *refused by name, world untouched* claim exactly as a departure would); trusting the stored fingerprint breaks G; swapping the two cohort lines — so the sum still matches and only the WRONG GROUP leaves — breaks B; and not consuming the permit breaks F. **CHOOSING THOSE PROBES TOOK THREE ATTEMPTS AND THAT IS RECORDED**: the freshness control first used the COHORT arm and then the NUTRITION arm, and both were caught by SECOND barriers (cohort executability; the successor-may-not-be-less-hungry refusal), so the control held for a reason that was not the one under test until it was moved to the away-bodies arm. **FIXTURE I IS THE DISCRIMINATING HALF OF FRESHNESS**: renaming the band, recording a trip and recording a decision leave the terms fresh, while a newly PREPARED party correctly makes them stale — without that last row, three DEPARTEDs would be consistent with a fingerprint that measures nothing. **FIXTURE J PROVES ATOMICITY WITH A REAL MECHANISM** — a 4-digit shorthand colour `hexToHsl` cannot parse, so the transfer policy refuses AFTER the gate; colour is not a residual input, so the terms stay fresh and the refusal is genuinely late: permit still `live`, no successor, parent untouched. **§9 FINDING, REPORTED RATHER THAN REPAIRED: NO PRODUCTION ADAPTER RESOLVES THE PARENT ATTEMPT'S TIMEOUT AT ALL.** `resolveTimeout` has ZERO callers anywhere in `src/`, and `resolveProvisionalLifecycles` reads `provisionalSuccessor` only — so `departure_ready -> abandoned` is declared in the contract table and driven by nothing. Fixture L proves the two barriers are INDEPENDENT: explicit abandonment withdraws the permit while keeping the commitment, and a timeout that ended the phase WITHOUT touching the permit is still refused on the phase. **§17 STATIC BYPASS AUDIT: exactly ONE production writer requests `departed` (`fissionDepartureSeam.ts`), exactly ONE creates a `provisionalSuccessor` record (the same line), and every other write of that field is an update by a provisional lifecycle authority.** `createDaughterBand` is the only other band creator and is UNCHANGED — named as remaining debt, not as acceptance. **FOURTEEN INHERITED SUITES WERE STALE, NOT BROKEN** — every one hand-built a `departure_ready` attempt, which is precisely the bypass this pass closes; they now go through `scripts/lib/preparedDeparture.mjs`, the canonical chain in one place. **FIVE OF THEM WERE CHOOSING DESTINATIONS THE BAND HAD BARELY SEEN** and the founder cohort declined by name (`destination_barely_known`) — a real decision, so the fixtures ask for a departure a group would take rather than the gate being relaxed. **TWO INHERITED CLAIMS WERE STALE AND ARE CORRECTED RATHER THAN LEFT STANDING**: the reader-admission audit sampled PAST the successor's resolution, counting a reintegrated group's zeroed cohorts and terminal viability as an ordinary system having claimed it; and its `no_free_movement` claim asserted the position must never change "because travel does not exist yet" — travel exists, so the claim is now that every tile occupied was recorded by the travel authority's own trail. PASSED, all personally executed: tsc both projects, build, graph **221/764 0 dup 0 dangling UNCHANGED**, step-mode `fullCanonicalStateMatch: true` / `firstDivergence: null` on BOTH maps, four-way `ALL_FOUR_STEP_MODES_IDENTICAL`, season-order `PASS`, `deterministic=true`, gated departure 16/16, preparation 16/16, founder commitment 25/25, parent residual 20/20, founder allocation 7/7, kernel 14/14, departure seam 18/18, lifecycle semantics 13/13, field transfer 12/12, cleanup 12/12, admission 5/5, travel 10/10, reachability 12/12, reintegration 9/9, quarantine 9/9, two-day 10/10, choice measurement 11/11, subsistence 39/39, lifecycle exit 10/10, reader admission 6 claims holding — **all 0 vacuous**. **IMPORT BACK-EDGES MOVED 86 -> 87 AND THAT IS ATTRIBUTED RATHER THAN CLAIMED UNCHANGED**: measured by removing the line and re-measuring, the +1 is the single `import type { ParentResidualPolicy }` that `types.ts` now carries, erased at runtime, no runtime cycle, the same class as the previous pass's 85 -> 86. **CANONICAL STATE GAINED TWO FIELDS** (`PreparedFissionDeparture.residualPolicy`, required; `FissionLifecycleRecord.departureProvenance`, optional and successor-only) and step-mode is byte-identical because nothing natural writes either. **OPEN ITEM-4 DEBT UNCHANGED AND STILL BLOCKING: `unresolved_after_failed_return` can persist indefinitely for a well-fed group, and ITEM 4 MAY NOT FREEZE UNTIL IT IS RESOLVED.** **A LATER STABILIZATION MAY NOT INFER "NEVER RETURNED" FROM `history.includes("returning") === false`** — the lifecycle history is BOUNDED at 12 and can silently forget the event; an eternal claim needs an authority that cannot. Recorded as a later Item-4 requirement, deliberately not solved here. **NOT BUILT AND NOT CLAIMED: no natural proposal, commitment or preparation writer; no cutover from `createDaughterBand`; no stabilization; no failed-return resolution; no long-horizon or performance certification for the gate.**
+
+**ROADMAP ITEM 4 — CANONICAL PRE-DEPARTURE PREPARATION AUTHORITY (2026-08-10) — PROGRESS. THE STATUS, IN THE REQUIRED WORDS: `commitment authority exists` != `natural fission uses it` != `atomic departure requires it yet` != `stabilization exists`. A CANONICAL PREPARATION PATH NOW EXISTS AND NOTHING NATURAL CALLS IT. `performAtomicDeparture` IS BEHAVIOURALLY UNCHANGED and still gates on phase alone, so a hand-built `departure_ready` record can STILL reach it with no commitment behind it — that gap is real, stated, and belongs to the next slice. Production stabilization writers remain 0; `createDaughterBand` untouched; Item 5 unstarted.** Branch `checkpoint/dynamic-fission-provisional-successor-38`, continuing `4a4a25c`. **THE ORDERING DEFECT, READ FROM PRODUCTION.** Every ingredient of a truthful departure existed and every one was computed INSIDE `performAtomicDeparture`: it requires `departure_ready`, allocates founders from the parent's CURRENT cohorts, runs the residual authority, takes its downward revision, RE-ALLOCATES on the revised count, and only then moves bodies. **So the exact allocation a commitment must bind to did not exist until the transfer was already under way** — a commitment taken earlier could only have meant "we accept whichever cohort the transfer code later decides to produce", which is not something people can agree to. That is why three passes could build the commitment, the truthful parent-side consequence and the one-use permit and wire none of them. **NEW `fissionDeparturePreparation.ts` OWNS THE CHAIN IN CAUSAL ORDER**: candidate allocation -> residual assessment of THAT allocation -> explicit downward revision -> FINAL endorsed allocation -> parent-separation consequence OF THAT FINAL ALLOCATION -> commitment decision on THOSE terms -> a one-use permit for THOSE terms -> `departure_planned -> departure_ready`. Each step consumes the previous step's OUTPUT and **no authority is duplicated** — allocation stays `allocateFounderCohorts`'s, viability `assessParentResidualWithRevision`'s, the consequence `deriveParentSeparationConsequence`'s, the decision `assessFounderCohortCommitment`'s. **THE CONSEQUENCE IS RE-DERIVED AGAINST THE ENDORSED ALLOCATION**, because after a revision the candidate's figure describes a departure that will not happen, and binding a commitment to the cost of a different split is the same defect class as binding it to a different cohort. **CANONICAL STORAGE: ONE NESTED `PreparedFissionDeparture` ON THE PARENT ATTEMPT, NOT FIVE OPTIONAL FIELDS.** Architecture A (scattered optional fields) was rejected because five independents admit thirty-one partial states, and the one that matters — commitment A paired with allocation B — is exactly the defect this family exists to prevent; one record written and cleared atomically by one writer makes that pairing unconstructible rather than discouraged. **THE EXACT ALLOCATION IS CANONICAL, NOT A HEADCOUNT**: the record stores the three cohort lines that were assessed and accepted, because a count cannot say whether eight founders are 5 adults + 2 dependents + 1 elder or some other composition — **measured, a request of 12 was revised to 11 and the committed composition is `{7,3,1}` where the requested one was `{8,3,1}`**, so a headcount-only record would have authorized different people. **FRESHNESS IS A VALIDATED SNAPSHOT OVER THE WHOLE CLOSED INPUT.** Preparation and departure are separated by up to `DEPARTURE_READY_MAX_DAYS` and every load-bearing input moves on its own cadence — cohorts at the annual demographic step, away bodies daily, nutrition and acute condition seasonally — so `departure_ready` demonstrably persists across change and the same-action option is refuted rather than preferred against. Re-deciding at the seam was rejected for putting the residual authority back inside the path this family is moving it out of. The fingerprint is built from a **`Record<keyof ParentResidualInput, ...>`**, the `fissionFieldTransferPolicy` precedent, so a new residual input fails to compile rather than being silently omitted — **a freshness check that can forget a field is worse than none, because it looks like protection**. **STALE MEANS SUPERSEDED, NEVER SILENTLY RE-FITTED.** **THE KERNEL NOW REQUIRES A COMPLETED PREPARATION**: `departure_ready` demanded only elapsed time, so a phase named for a settled plan could be entered by a record that had settled nothing; it now takes `preparedDepartureProven`, required with no default, the same construction and reason as `physicalCoLocationProven` — the kernel holds no world, so it checks that the caller claims to have checked, and this module is the only one that can honestly claim it. **COMMITMENT EVIDENCE IS PERSISTED AS SEVEN ROUNDED NUMBERS** because reason ids are threshold-crossed labels and every quantity behind them moves as the band lives, so after the parent changes a reader would hold the conclusion with no way to check it; bounded, replaced wholesale, does not grow. **ABANDONMENT IS DECIDED PER FACT**: the commitment survives untouched, the permit ends `withdrawn_before_departure` so it authorizes nothing and cannot be re-ended, and the allocation stays as terminal provenance — liveness lives entirely in the permit's status. **A1-P: 16 fixtures, 0 failing, 0 vacuous**, with FOUR negative controls in restored copies (both modules verified byte-identical by sha256): binding to the requested allocation fails B/C; a writer that overrides the band's own held evidence fails E; a constant freshness fingerprint fails L; removing the kernel prerequisite fails O. **ONE INSTRUMENT ERROR IS RECORDED: B and C first hard-coded one large request, the residual authority simply permitted it, and both reported VACUOUS** — an honest empty test rather than a false pass; the request size is now SEARCHED, and the sweep is published. **A SECOND: the first control for E used `if (false)` on the refusal branch, which made the writer dereference an undefined commitment and error the audit before reaching E**, proving nothing; replaced with a mutation that expresses the actual defect. **THE INHERITED KERNEL SUITE WAS STALE, NOT BROKEN** — K2/K4/K5/K9 walked to `departure_ready` without declaring the new prerequisite and were refused exactly as an undeclared caller should be; the helper was updated to declare it and the suite is 14/14, with fixture O asserting an UNDECLARED caller is still refused. PASSED, all personally executed: tsc both projects, build, graph **221/764 0 dup 0 dangling UNCHANGED**, step-mode `fullCanonicalStateMatch: true` / `firstDivergence: null` on BOTH maps, season-order `PASS`, dynamic-snapshot parity `PASS`, founder commitment 25/25, parent residual 20/20, founder allocation 7/7, kernel 14/14, departure seam 18/18, lifecycle semantics 13/13, cleanup 12/12, admission 5/5, travel 10/10, reintegration 9/9, lifecycle exit 10/10, reachability 12/12, quarantine 9/9, two-day 10/10, choice measurement 11/11, field transfer 12/12, subsistence 39/39 — all 0 vacuous. **IMPORT BOUNDARY BACK-EDGES MOVED 85 -> 86 AND THAT IS REPORTED RATHER THAN CLAIMED UNCHANGED**: attributed exactly by removing them and re-measuring, the +1 is the two `import type` lines `types.ts` now carries for the prepared record's component types — erased at runtime, no cycle, the same class as CORRECTION-26's 84 -> 85. **CANONICAL STATE GAINED ONE OPTIONAL FIELD** (`FissionLifecycleRecord.preparedDeparture`), and step-mode is byte-identical because nothing natural writes it. **OPEN ITEM-4 DEBT UNCHANGED AND STILL BLOCKING: `unresolved_after_failed_return` can persist indefinitely for a well-fed group, and ITEM 4 MAY NOT FREEZE UNTIL IT IS RESOLVED.** **NOT BUILT AND NOT CLAIMED: no departure gate — `performAtomicDeparture` neither consumes the permit nor reads the prepared terms; no natural proposal or commitment writer; no cutover from `createDaughterBand`; no stabilization; no failed-return resolution; no successor provenance transfer.**
+
+**ROADMAP ITEM 4 — UNKNOWN CONSEQUENCE AND PRE/POST-DEPARTURE AUTHORITY SEMANTICS (2026-08-09) — PROGRESS. Supervisor correction on the pushed `57f5e9f`; the truthful residual-cost correction is RETAINED and not reverted. THE STATUS IS UNCHANGED IN THE REQUIRED WORDS: `commitment authority exists` != `natural fission uses it` != `atomic departure requires it yet` != `stabilization exists`. Nothing calls it; `performAtomicDeparture` is UNCHANGED and gates on phase alone; production stabilization writers remain 0; `createDaughterBand` untouched; canonical state UNCHANGED; Item 5 unstarted.** **DEFECT A — NOBODY LOOKED BECAME IT COSTS NOTHING.** The decision read `consequence?.splitCausedDamage ?? 0` directly beneath its own documentation saying an absent consequence means the residual authority has not run. Those two cannot both be true: `?? 0` resolves an unasked question into the most permissive answer the model holds. **AND IT SUBSTITUTED A VALUE THE MEASURING AUTHORITY CANNOT PRODUCE — measured across founder counts 2..12 on a real parent, the smallest damage the residual authority ever emits is 0.07, because every non-empty allocation removes camp labour. There is no free departure, so `0` was not a conservative default; it was outside the authority's own range.** **THE REPAIR IS STRUCTURAL, following CORRECTION-34E's required-with-no-default pattern**: `parentSeparationConsequence` is REQUIRED, so TypeScript refuses to construct the decision without it, and `assessFounderCohortCommitment` additionally refuses at runtime with the named `parent_separation_consequence_not_measured` for the untyped callers TypeScript never sees. **A malformed magnitude — NaN, infinity, negative, above one — is REFUSED rather than clamped**, because the clamp was the laundering step CORRECTION-34F named: it turns an impossible value into a plausible one. **THE PUBLISHED EVIDENCE ALSO STOPPED LYING**: `splitCausedDamage` and `willingness` are `number | "not_measured"`, so a report can never show `0` for a quantity nobody measured. Option B (optional field plus refusal) was rejected as the primary mechanism because it leaves the type inviting the omission; it is retained as the runtime half only. **DEFECT B — ONE RECORD CLAIMED TWO JOBS AND COULD ONLY DO ONE.** `ended_by_return` was UNREACHABLE, and the contradiction is arithmetic: endings act only on a `live` record and `consumed_by_departure` is terminal, so `live -> consumed -> ended_by_return` is refused, leaving only `live -> ended_by_return` — a return by a group that never left. **FOUR ARCHITECTURES WERE COMPARED AND THE PRE-DEPARTURE PERMIT SELECTED.** `FounderCohortAuthorization` becomes **`FounderDepartureAuthorization`**, answering exactly one question — MAY THIS COMMITMENT MOVE THESE BODIES, ONCE — with `live` / `superseded_by_revised_terms` / `withdrawn_before_departure` / `consumed_by_departure` and no return cause at all. **A continuing separation-standing authority was rejected because it duplicates the successor lifecycle**: `returning`, `unresolved_after_failed_return` and `reintegrated` ALREADY record, physically, whether a group has abandoned its separation, and a parallel social ledger would be a second answer to a settled question. Two bounded facts was rejected for the same reason. **A RETURN THEREFORE EDITS NOTHING HERE** — by then the permit is spent — and the fact it used to claim is read off the successor's own phases. **THE HISTORICAL COMMITMENT IS EXPLICITLY NOT A STABILIZATION GATE, and fixture T states why: it says the same thing about a group that departed, gave up and walked home.** The contract a future stabilization must satisfy is published in the module: a positive commitment exists by `commitmentId`, AND its permit reached `consumed_by_departure`, AND the successor's own lifecycle never entered a return, AND its lived physical evidence supports establishment — the first three representable today, the fourth NOT BUILT. **A1-Y: 25 fixtures, 0 failing, 0 vacuous**, with **SIX negative controls** in restored copies (production verified byte-identical by sha256): restoring optional-plus-`?? 0` fails X; reason-count-as-cost fails O; additive readiness fails D; a permit that skips the liveness check fails Q/R/S/T/U; a re-endable terminal permit fails S/T/U; and **re-advertising `ended_by_return` fails Y AND T**, two fixtures catching one regression from different directions. **Fixture Y derives status reachability from production itself** — every declared status is produced by opening a permit or by a declared end cause, and every declared cause produces one — so a future dead enum member fails rather than being documented. PASSED, all personally executed: tsc both projects, build, graph **221/764 0 dup 0 dangling UNCHANGED**, import boundary **85 back-edges UNCHANGED**, step-mode `fullCanonicalStateMatch: true` / `firstDivergence: null` on BOTH maps, season-order `PASS`, parent residual 20/20, founder allocation 7/7, kernel 14/14, departure seam 18/18, lifecycle semantics 13/13, cleanup 12/12, admission 5/5, travel 10/10, reintegration 9/9, lifecycle exit 10/10, reachability 12/12, quarantine 9/9, two-day 10/10, choice measurement 11/11, field transfer 12/12, subsistence 39/39 — all 0 vacuous. **`types.ts` IS UNCHANGED — no canonical field was added; the permit remains pure and type-level until a writer exists, so no serialization or determinism surface moved.** **OPEN ITEM-4 DEBT UNCHANGED AND STILL BLOCKING: `unresolved_after_failed_return` can persist indefinitely for a well-fed group, and ITEM 4 MAY NOT FREEZE UNTIL IT IS RESOLVED.** **NOT BUILT AND NOT CLAIMED: no departure gate; the residual assessment still runs inside the seam; no natural proposal or commitment writer; no stabilization; no failed-return resolution; no canonical placement of the permit.**
+
+**ROADMAP ITEM 4 — FOUNDER-COMMITMENT CAUSAL INPUTS AND LIVE AUTHORIZATION SEMANTICS (2026-08-09) — PROGRESS. Supervisor correction on the pushed `a79795d`; the commitment foundation is RETAINED and not reverted. THE STATUS IS UNCHANGED IN THE REQUIRED WORDS: `commitment authority exists` != `natural fission uses it` != `atomic departure requires it yet` != `stabilization exists`. Nothing calls it; `performAtomicDeparture` is UNCHANGED and still gates on phase alone; production stabilization writers remain 0; `createDaughterBand` is untouched; natural cutover unstarted; Item 5 unstarted.** **DEFECT 1 — THE COMMITMENT WAS COUNTING EXPLANATIONS AND CALLING IT COST.** `residualCost = residualReasonIds.length / 4` was described as what the separation costs those who stay. The residual authority's own `ParentResidualReasonLedger` refutes it: `reasonIds` is assembled as `[...opposing, ...supporting]` across SIX ledgers, so the counted list contains supporting evidence, prior fragility, uncertainty and revision provenance. **MEASURED ON A REAL ASSESSMENT: the three SUPPORTING reasons alone — no nutritional deficit, no embodied hardship, labour retained beyond commitments — would have produced a cost of 0.75 out of 1.0. Three pieces of good news about the parent, charged as harm.** **THE REPAIR CONSUMES A MEASURED MAGNITUDE FROM THE AUTHORITY THAT OWNS THE QUESTION**: new `ParentSeparationConsequence` + `deriveParentSeparationConsequence` published by `fissionParentResidualViability.ts`, carrying `splitCausedDamage` (bounded 0..1, before→after movements only) plus split-caused reason ids as PROVENANCE ONLY. **THREE REPRESENTATIONS WERE COMPARED AND TWO REJECTED WITH REASONS:** a projection recombined from split-caused reason STRENGTHS would be a second definition of a quantity that already has one, in a second module — the duplicate-authority defect this family exists to remove; and the `verdict`/`blockKind` pair was rejected because **the verdict compares damage against a `tolerance` NARROWED BY `priorFragility`**, so consuming it would smuggle pre-existing hardship back in through the back door, and a boolean cannot answer a question of degree. The commitment module recomputes nothing — no camp labour damage, no dependency worsening, no mobility loss, no tolerance, no parent viability — and the input is a narrow measured struct rather than the assessment object, so it cannot reach `tolerance` or the ledgers even by accident. **DEFECT 2 — THE HISTORY/AUTHORITY SEPARATION WAS OVERSTATED AND IS NOW REAL.** `commitmentAuthorizesDeparture` compared parent, lineage, cohort and target; a historical fact that once matched those terms matches them forever, so nothing could express withdrawn, superseded, consumed or ended. It is renamed **`commitmentTermsMatchDeparture`** for what it proves, and a separate **`FounderCohortAuthorization`** record referencing `commitmentId` now carries current authority: `live` / `superseded_by_revised_terms` / `withdrawn_before_departure` / `consumed_by_departure` / `ended_by_return`, with a **REQUIRED named end cause** (the kernel's `requestTransition` lesson — a thing that needs nothing gets nothing, and the absence reads as permission). **Ending an already-terminal authorization is REFUSED and there is no reopen function**, which makes two invariants structural: a spent authorization cannot authorize a second physical departure, and time or survival after a failed return cannot reactivate a separation nobody re-accepted. Two architectures were rejected: a mutable status ON the event forces the choice between editing history and an authority that outlives the separation; and lifecycle-derived validity cannot distinguish withdrawn from superseded and would put the departure seam back to reading the enum for a fact it does not carry — the `committed` defect wearing the opposite mask. **THE FOUR FACTS STAY FOUR** (attempt logistics phase / immutable event / live authorization / successor phase) and fixture V fails if a status is ever added to the event. The owner is named as the parent's own attempt record and **attachment is deliberately deferred**: nothing writes a commitment yet, so adding the field now would put an unwritten field into canonical state and a serialization surface into a pass that changes no behaviour. **A THIRD CHANGE, FORCED BY THE FIRST AND REPORTED RATHER THAN BURIED: fixture D was passing BECAUSE of the false cost.** With the truthful magnitude, a group at maximum split pressure whose mortality risk and movement caution are both at maximum ACCEPTED a separation at willingness 0.5023 — because `readiness = familiarity*0.5 + capacity*0.5` made the two SUBSTITUTES, so perfect knowledge of the country compensated for being unable to walk, and disposition alone tipped it over the threshold. `readiness = familiarity x capacity` — conjunctive, because acting on a motive needs somewhere to go AND the ability to go there. Zero capacity is now structurally zero willingness. **No constant was moved to achieve it; two were removed.** §10's required property is preserved for a true reason instead of a false one. **A1-V: 22 fixtures, 0 failing, 0 vacuous**, with FOUR negative controls in restored copies (production verified byte-identical by sha256 afterwards): reason-count-as-cost fails O; additive readiness fails D; an authorization that stops checking liveness fails Q/R/S/T/U; a re-endable terminal authorization fails S/U. **One instrument error in this pass's own fixtures is recorded: M's first form varied fragility at damage 0.27, which the fragile arm's narrowed tolerance (0.23) refused — the revision search then shrank the request and the two arms stopped describing the same departure, giving the fragile parent a HIGHER willingness (0.8903 vs 0.8693). That is verbatim the PR10/PR11 trap on this same authority; the fixture's own no-revision assertion caught it and the departure was moved inside both tolerances rather than the assertion relaxed.** PASSED: tsc both projects, build, graph **221/764 0 dup 0 dangling UNCHANGED**, import boundary **85 back-edges UNCHANGED** (the new edge is type-only), step-mode `fullCanonicalStateMatch: true` / `firstDivergence: null` on BOTH maps, season-order `PASS`, parent residual 20/20, founder allocation 7/7, kernel 14/14, departure seam 18/18, lifecycle semantics 13/13, cleanup 12/12, field transfer 12/12, admission 5/5, travel 10/10, choice measurement 11/11, reachability 12/12, reintegration 9/9, quarantine 9/9, two-day 10/10, subsistence 39/39, lifecycle exit 10/10 — all 0 vacuous. **CANONICAL STATE IS UNCHANGED** — no new stored field, so no determinism or serialization surface moved. **OPEN ITEM-4 DEBT UNCHANGED AND STILL BLOCKING: `unresolved_after_failed_return` can persist indefinitely for a well-fed group, and ITEM 4 MAY NOT FREEZE UNTIL IT IS RESOLVED.** **NOT BUILT AND NOT CLAIMED: no departure gate; the residual assessment still runs inside the seam so the endorsed allocation does not exist early enough to bind to; no natural proposal or commitment writer; no `ended_by_return` writer (representable, not wired); no stabilization; no failed-return resolution.**
+
+**ROADMAP ITEM 4 — POSITIVE FOUNDER-COMMITMENT FOUNDATION (2026-08-09) — PROGRESS. THE STATUS, IN THE REQUIRED WORDS: Roadmap Item 3 accepted and frozen; ROADMAP ITEM 4 ACTIVE. A COMMITMENT AUTHORITY NOW EXISTS — AND THAT IS NOT THE SAME AS ANY OF THE THINGS IT WILL LATER SUPPORT. `commitment authority exists` != `natural fission uses it` != `atomic departure requires it yet` != `stabilization exists`. Nothing calls it; `performAtomicDeparture` is UNCHANGED and still gates on phase alone; production stabilization writers remain 0; natural Item-4 cutover remains unstarted; Roadmap Item 5 remains unstarted.** Branch `checkpoint/dynamic-fission-provisional-successor-38`. **THE LIFECYCLE WAS CALLING A LOGISTICS PHASE `committed` AND NOTHING WROTE IT.** The string appeared nowhere in `src/` outside the kernel's own contract table; its declared `fissionProposal` adapter does not exist; `requestTransition` never inspects `history`; and the departure seam asks only whether an attempt IS `departure_ready`, so a record constructed directly at that phase — with an empty or nonsensical history — departs with its full complement of people. Bodies could leave with no event recording that leaving was chosen. **The phase is renamed `departure_planned`**, which is what it actually proves: a founder configuration and a band-known destination have been named. `COMMITMENT_MAX_DAYS` becomes `DEPARTURE_PLANNED_MAX_DAYS`; no bound, timeout target or physical behaviour moved. **NEW `fissionCommitment.ts` IS A POSITIVE EVENT, NOT ANOTHER PHASE NAME**, because a phase can say a commitment happened and cannot say WHICH founders accepted WHAT. It is pure and takes a BAND AND NO WORLD — the `provisionalReturnDecision` shape — so anti-omniscience is structural: it reads the band's own split pressure, its own `observedTiles` record of the destination, its own embodied burden, and its identity-derived `bandTendency` disposition capped at `TENDENCY_INFLUENCE_CAP`. **THE ACTOR IS THE REPRESENTED FOUNDER COHORT AS ONE AGGREGATE, AND THE WORDING IS LOAD-BEARING: there are no individual persons in canonical state — a cohort is three integers — so nothing here claims individual consent, a household negotiation, a leader's approval or a vote.** Fixture K protects that contract structurally by asserting the binding stays three cohort integers, so adding a person list fails rather than quietly upgrading the claim. **THE BINDING IS THE ENDORSED ALLOCATION AND DELIBERATELY NOT `requestedFounders`**: the residual authority may revise a request DOWNWARD and the seam re-allocates on the revised count, so a commitment bound to the request would authorize a departure by different people in different proportions. All six `FounderAllocation` fields were classified first — three cohort lines identity-bearing, `allocatedFounders` and `parentRemainder` derivable, `remainderDrawOrder` and `exact` diagnostic. **HISTORY AND AUTHORITY ARE SEPARATED SO NEITHER LATER FORCES THE OTHER:** the commitment record is immutable, and `commitmentAuthorizesDeparture` DERIVES whether it still authorizes a given departure rather than storing a mutable status — so a future RETURN can end the authority without erasing the fact that the acceptance happened. **THIS PASS'S OWN FIXTURES CAUGHT A REAL DEFECT IN ITS OWN AUTHORITY.** The first willingness model summed its terms — `motive*0.5 + familiarity*0.25 + capacity*0.25 - cost*0.3` — so familiarity and capacity alone reached the entire threshold and a healthy group in well-known country ACCEPTED a separation at split pressure 0.05, measured willingness 0.5993. That is authorization wearing a decision's name. The repair is causal rather than a moved threshold: **motive is a precondition, not a contributor**, so readiness (a known destination and an unhurt body) now SCALES motive — zero motive is structurally zero willingness however healthy the group. **A1-K: 11 fixtures, 0 failing, 0 vacuous**, with TWO negative controls run in scratch copies: accepting every feasible proposal fails B/C/D, and removing the cohort binding fails E. PASSED: tsc both projects, build, graph **221/764 0 dup 0 dangling UNCHANGED**, import boundary **85 back-edges UNCHANGED**, step-mode `fullCanonicalStateMatch: true` / `firstDivergence: null` on BOTH maps, season-order `PASS`, kernel 14/14, band-lifecycle semantics 13/13, departure seam 18/18, founder allocation 7/7, parent residual 20/20, cleanup C1-C12 12/12, field transfer 12/12, admission 5/5, travel V1-V10 10/10, choice measurement 11/11, reachability 12/12, reintegration 9/9, quarantine 9/9, two-day 10/10, subsistence lifecycle 39/39, lifecycle exit 10/10 — all 0 vacuous. **OPEN ITEM-4 LIFECYCLE DEBT, RECORDED RATHER THAN DEFERRED: `unresolved_after_failed_return` can persist indefinitely for a well-fed group** — it cannot move itself, so its only exits are the parent walking onto its tile or starvation. **ITEM 4 MAY NOT FREEZE WITH THAT DEBT UNRESOLVED**; it belongs to a later bounded Item-4 pass and must not be pushed into Item 5 or Item 6. **NOT BUILT AND NOT CLAIMED: no departure gate on the commitment; the residual assessment still runs inside the seam so the endorsed allocation does not exist until departure is already under way; no natural proposal or commitment writer; no naturally reachable commitment; no stabilization; no failed-return resolution; `createDaughterBand` untouched.**
+
+**ROADMAP ITEM 4 — CLEAN THE WIP BACK TO TRUTHFUL PHYSICAL EVIDENCE (2026-08-08) — PROGRESS. THE STATUS, IN THE REQUIRED WORDS: Roadmap Item 3 accepted and frozen; ROADMAP ITEM 4 ACTIVE; NO REAL POSITIVE COMMITMENT EXISTS, SO NO PRODUCTION STABILIZATION WRITER EXISTS; natural Item-4 cutover remains unstarted; Roadmap Item 5 remains unstarted; PUSHED AS 32a668850739207b1a202f360f9321080e8b9189 AND INDEPENDENTLY AUDITED.** Branch `checkpoint/dynamic-fission-provisional-successor-38`, continuing from the separate WIP review snapshot `be490f9b565119545938348b10cc9bf720310ebf`; the exact cleanup commit is reported outside its own tree. **THE PREVIOUS WIP'S POSITIVE-EVIDENCE RULES WERE OUTCOME AUTHORITY DISGUISED AS MEASUREMENT AND ARE REMOVED.** `REQUIRED_SELF_PROVISIONED_INTERVALS`, `REQUIRED_PROVISIONING_PLACES`, `STABILIZATION_REQUIRED_SIGNALS`, their three overclaiming evidence IDs, `requiredHeld`, and the only production `stabilizeGroup` call are gone. The kernel may still describe the future legal `establishing -> stabilized` edge, but its writer is explicitly reserved for a future positive-commitment authority and source audit C1 proves no production caller can request it. **THE RETAINED STATE IS PHYSICAL HISTORY ONLY:** `FissionLifecycleRecord.operationHistory` contains `SubsistenceAssessmentWindow` / `OpenSubsistenceAssessmentWindow`, `hadAnyOwnPhysicalTake`, `tileIdsWithAnyPhysicalTake`, and lifetime/recent equivalents named only for what real support and depletion prove. Its roughly ten-day window for stable composition follows algebraically from the `1/9` seasonal-demand measurement unit; closing a window proves NO lifecycle outcome. Phase membership no longer manufactures an attempt: `attemptStartedDay`, `attemptEpisodes`, `ATTEMPT_CREDIT_PHASES`, `isAttemptActivePhase`, `closeIndependenceAttempt`, and the old cycle ledger are removed. The unwritten `receivedParentSupport` field and vacuous gate are removed; the boundary comment reserves distinct lifetime-history versus current-committed-attempt facts only if a real support writer later exists. **ESTABLISHING IS NON-MOBILE AGAIN:** the two-barren-day relocation constant/function and its causal claim are retired; only outbound travel and physical return move a provisional body until truthful tested-place memory exists. **FAILED RETURN NOW HAS ITS OWN TRUTHFUL STATE:** `returning --timeout--> unresolved_after_failed_return`, a structurally event-bounded living condition rather than a temporally bounded action. Time alone may not manufacture a commitment, stabilization, reintegration, death or attempt #2. The separated successor remains alive and owns its bodies and location; provisional subsistence continues real plant extraction/depletion, demand, water and hunger consequences; annual demography continues; zero population still terminalizes as `provisional_extinguished`; and legitimate later co-location can still physically reintegrate it. **C1-C12: 12/12 PASS, 0 FAILING, 0 VACUOUS; V4 PASS; V9 PASS.** Typechecks, build, travel/return/reintegration/lifecycle/two-day/quarantine/departure/kernel/band-lifecycle/admission audits, step-mode invariance on both maps, season-order invariance, subsistence lifecycle and choice-measurement audits all pass. No tracked frozen evidence changed. **POSITIVE COMMITMENT AND STABILIZATION SEMANTICS REMAIN OPEN BY DESIGN.**
+
+**ROADMAP ITEM 4 — TRAVEL SUBSISTENCE, EMBODIED RETURN AND EVIDENCE-BASED RESOLUTION (2026-08-05) — PROGRESS. THE STATUS, IN THE REQUIRED WORDS: Roadmap Item 3 accepted and frozen; ROADMAP ITEM 4 ACTIVE — A WALKING GROUP NOW EATS WHAT IT FINDS, DECIDES FROM WHAT IT HAS LIVED, AND CAN BECOME AN ORDINARY BAND OR FAIL. The departure seam is still a production writer that **nothing calls**; `createDaughterBand`'s behaviour is unchanged; **the reader migration is INCOMPLETE at 5/12 with seven pending and named**; no history or read-model projection exists for any of it; Roadmap Item 5 not started. DO NOT MERGE / NOT PUSHED.** Branch `checkpoint/dynamic-fission-provisional-successor-38`, remote still `87859eb`. **THE HUNGER RELIEF WAS NOT A MISSING FLOOR, AND THAT IS THE FINDING.** Traced link by link on a real departure: the departure resets `seasonalSupport` — CORRECTLY, eight seasons of streaks belong to a camp this group never was — the group then walks onto ground it has **never observed**, `deriveCarryingCapacity` **REFUSES without an observed record of the band's own position**, `updateSeasonalSupportState` returns its absent previous value, and `deriveCanonicalNutritionState(undefined)` returns every stress term at 0, which five separate readers consume as comfort. **The group was not measured as unhungry; it was NEVER ASKED** — and `L6` is the confirmation from the other side, because the food LEDGER was reporting `rawSupportRatio: 0` and `foodStress: 1` against real demand the whole time. A hunger floor would have put a tuned number where the missing thing is a measurement. **THE SUCCESSOR NOW DEPARTS MEASURED.** `seasonalSupport` is reclassified `FOUNDER_CARRIED_EMBODIED_BURDEN / computed`: the support RATIO is INTENSIVE — a camp supported at 0.4 of its demand was supporting these eleven at 0.4 too — and chronicity is embodied, so the samples travel re-identified while every derived quantity is REBUILT by the one writer. **The seam REFUSES a departure that would leave the successor unmeasured, or better off on ANY of four nutrition terms, compared term by term.** **`recordSupportInterval` IS EXTRACTED FROM `updateSeasonalSupportState`** so there is ONE writer of derived support state and two sample producers describing genuinely different physical arrangements. **NEW `provisionalTravelSubsistence.ts` GIVES A WALKING GROUP A DAY:** workers split between covering ground and looking for food; food taken at the tile the group stands on through the CANONICAL `resolvePlantFoodHarvest`, bounded by the patch's real availability and persisting its real depletion; **no transport loss, because the group is standing on the source**; water read off the standing tile's own `waterAccess` — a physical execution constraint of the same class as passability — with carried water ONLY through `deriveCarriedWaterRelief`, which grants nothing to a group that never learned to carry water; and an INTERVAL of its own, because a residential band is measured once a season and a column on the move has no season. **FOUR ARCHITECTURES COMPARED; DEBITED CARRIED PROVISIONS WAS REJECTED ON INSPECTION RATHER THAN PREFERENCE — THERE IS NO SUCH STOCK**, `consumeProvisions` only increments a counter and CORRECTION-34B recorded that no residential store is decremented at launch. **THE TRADEOFF IS PLURAL, NOT OPTIMAL:** `gatherShare = 0.2 + need x 0.6 x groundIsGiving`, so a starving group on bare country **presses on hungry** and a group that finds a patch **stops, takes what is there and exhausts it** — both observed in the daily ledger — and slowing to gather genuinely lengthens the journey (arrival moved from day 4 to day 10). **L5 IS CLOSED: `acuteRisk.ts` NOW MERGES TWO BOUNDED RINGS** — union BY EPISODE ID, because the founders left carrying the parent's episodes and appending would give one injury two recoveries; nothing about an episode is touched; **the active effect is REDERIVED from the merged ring**; and at the cap **an episode still in recovery outranks one that is only remembered**, with everything dropped counted. **`REINTEGRATION_FIELD_TREATMENTS` classifies every embodied and derived field once, in code.** **NEW `provisionalReturnDecision.ts` IS THE SINGLE WRITER OF THE TRANSITION INTO `returning` AND TAKES A BAND AND A DAY AND NO WORLD**, so it cannot read the parent, the destination or the future — `C21` proves it by moving the parent and collapsing it to one person and measuring NO CHANGE AT ALL. Five named causes, each with its own bound rather than one score. **NEW `provisionalEstablishment.ts` REQUIRES SEVEN NAMED LIVED-EVIDENCE SIGNALS AND EVERY ONE MUST HOLD** — a smoke run stabilized a group with no food and no water on "still has working adults", "not badly hurt" and "has been here a while", which describes a group that has not died yet rather than one that is operating. **The support floor a group must clear to STAY is the same number that would send it HOME**, so it can never be both. Stabilization grants exactly one thing — admission to the ordinary systems — and no viability, storage, camp or receipt. **BOUNDEDNESS: three smoke findings fixed.** The causal trigger could circle the return/establish loop forever without touching the timed bound (now bound on both paths, counted at one edge each); at the bound the group was **frozen in `returning`**, where `stabilized` is unreachable, so its only exit was starvation (it now gets ONE final transition into trying to live where it stands); and a stranded group could not be found by its parent, so `establishing -> reintegrated` is now permitted, still requiring a physical event AND proven co-location. **MEASURED END TO END ON A REAL WORLD over 3,600 days: departed, travelled, arrived, tried, gave up, walked home, found nobody, tried again, spent its attempts, settled where it stood — AND DID NOT STABILIZE, because that ground gives nothing.** **FIXTURES: 38/38, 0 FAILING, 0 VACUOUS**, in five groups (nutrition/subsistence, burden/reintegration, return causality, stabilization, boundedness), each with an asserted non-vacuity predicate. **FOUR OF THIS PASS'S OWN FIXTURES CAUGHT REAL DEFECTS IN ITS OWN CODE:** R5 caught the merged sample being APPENDED, which let a parent at 0.14 read 0.01 after absorbing a group at 0.99 because a ninth sample shifted the eight-slot window; E6 caught the cycle ledger reading four against a bound of three, because the settle-here transition was being counted as another attempt; N3/N4 caught `Math.floor` allocating ZERO gatherers to a group of four, so a small comfortable group walked past every patch it stood on; and N6/S32 reported a production defect that was **entirely the instrument's** — the fixture had never applied the policy's structural resets, so its hand-built successor kept the donor's viability, storage, camp and trips. PASSED: tsc both projects, build, graph **221/764 0 dup 0 dangling UNCHANGED**, import boundary **85 back-edges UNCHANGED**, step-mode invariance `fullCanonicalStateMatch: true` / `firstDivergence: null` on BOTH maps **with three new daily actions registered**, season-order `PASS`, living-ecology food pipeline `PASS`, mobility authority `PASS`, catchment invariants `PASS`, D1-D18 18/18, K1-K14 14/14, LP/O 13/13, T1-T12 12/12, Q1-Q9 9/9, E1-E7+A1-A3 10/10, V1-V10 10/10, R1-R9 9/9, two-day 10/10 — all 0 vacuous. **NOT BUILT AND NOT CLAIMED: fauna and aquatic travel extraction (a travelling group gathers plants only); any history, Chronicle, band-event or UI surface for departure, travel, return cause, evidence acquisition or stabilization; the selected-band panel projection carries NO lifecycle field at all; the reader migration is INCOMPLETE; no natural proposal causality or cutover — NOTHING CALLS THE DEPARTURE SEAM, so there is no natural-occurrence evidence for any of this; no natural horizons; no performance or serialization measurement.** See docs/evidence/dynamic-fission-daughter-viability-37/TRAVEL_SUBSISTENCE_DECISION.md.
+
+**ROADMAP ITEM 4 — PHYSICAL TRAVEL AND RETURN VERTICAL (2026-08-04) — PROGRESS. THE STATUS, IN THE REQUIRED WORDS: Roadmap Item 3 accepted and frozen; ROADMAP ITEM 4 ACTIVE — TIMER-ONLY REINTEGRATION IS REMOVED, THE SUCCESSOR PHYSICALLY WALKS, AND REINTEGRATION HAPPENS ONLY WHERE THE TWO GROUPS MEET. **PROVISIONAL ESTABLISHMENT IS ARRIVAL-BOUNDARY ONLY AND EVIDENCE-BASED STABILIZATION IS NOT BUILT**; the departure seam is still a production writer that **nothing calls**; `createDaughterBand`'s behaviour is unchanged; Roadmap Item 5 not started. DO NOT MERGE / NOT PUSHED.** Branch `checkpoint/dynamic-fission-provisional-successor-38`, remote still `87859eb`. **THE MANDATORY FIRST CORRECTION: A CLOCK CAN NO LONGER DECIDE THAT A GROUP GOT HOME.** `returning` timed out into `reintegrated`, whose contract says the provisional entity is removed exactly once — and nothing removed it, so a group that had gone nowhere became an ordinary band by elapsed time. **Every phase now declares whether elapsed time alone may put the lifecycle into it**, `reintegrated` / `stabilized` / `departed` / `provisional_extinguished` require a PHYSICAL EVENT, and `requestTransition` takes a **REQUIRED `cause`** — a default would have restored the defect for any caller that forgot, which is exactly how it survived: it needed nothing, so it got nothing, and the absence read as permission. **`reintegrated` additionally demands `physicalCoLocationProven`**; `resolveTimeout` now routes through the same guards instead of around them (its old form called the phase-entry helper directly and bypassed every check in the module); and **`assertSingleOwnership` refuses any contract whose `onTimeout` points at a physical-event phase**, so the defect cannot be re-entered by editing the table. **§4 — WHAT BECOMES OF LIVING PEOPLE WHO TRIED TO GO HOME AND COULD NOT:** the return attempt is abandoned and the group **tries to live where it is standing** (`returning.onTimeout -> establishing`, a TRIAL rather than an outcome — `stabilized` still demands lived evidence). Alternatives rejected with reasons: a distinct `stranded` phase needs its own bounded exit and is the same question one name later; re-deciding on unchanged evidence is not a decision; `failed_early` would put a false cause in the record; death on expiry is the same defect in the other direction. **The churn is bounded, not the group**: `MAX_RETURN_ESTABLISH_CYCLES = 3`, after which the resolver stops advancing phases and REPORTS the group as unresolved — every remaining exit is physical (reach the parent, demonstrate establishment, or die). **Measured over 1,200 days on the same world that previously reproduced `reintegrated` at day 359: `travelling -> returning -> establishing(1) -> failed_early -> returning -> establishing(2)`, and the group NEVER becomes an ordinary established band.** **§5 ALIAS SAFETY — the five deliberately shared references are deep-frozen on both bands and the world is advanced 400 days; an in-place write throws in module strict mode and NONE does.** `socialPressure` moved while frozen, which is positive evidence: the only way to achieve that is to REPLACE the object. **STAGE A — THE GROUP PHYSICALLY WALKS.** New `provisionalTravel.ts` is the ONE writer permitted to move a provisional body: bounded local next-step planning plus a retained breadcrumb trail, chosen over a precomputed route (a passability search over ground nobody has walked is omniscience wearing the word "pathfinding") and over known-corridor-plus-correction (a newborn group holds the two corridors the degrading transfer gave it). **Exactly one world-truth read reaches a decision and it is a PHYSICAL EXECUTION CONSTRAINT: `isBandPassableDestination` may REFUSE a step** — people cannot walk into open water whether or not they knew it was there, and a refused step is recorded as a contradiction rather than as knowledge of what lies beyond. Pace comes from the CANONICAL `deriveTravelPace(band, "whole_band_residential_move")` — a provisional group is not a selected party of chosen walkers, it is EVERYBODY moving as a column — with injury read from `acuteRisk.activeEffect.movementCautionBump`, so a hurt column rests more days between steps. **MEASURED: the group walked 5 tiles, every step contiguous, arrived on day 4, and arrival produced `establishing` and never `stabilized`.** V1-V10 **10/10, 0 vacuous**, including a control holding the same band in a non-travel phase for sixty days of ordinary daily actions and seasonal processing: it moves EXACTLY NOWHERE, so the positions above are the travel authority's and nothing else's. **STAGE B — REINTEGRATION IS A PLACE, NOT A LABEL.** New `provisionalReintegration.ts` requires the successor to stand on the SAME TILE as a living, non-terminal parent — not near it, not on the tile it departed from — because anything looser is reintegration at a distance, the teleport this item exists to remove wearing the opposite direction. **Cohorts are ADDED LINE BY LINE and `recomputeDemographicCounts` is not called**, because the fixed-ratio re-derivation is what manufactured dependents on the way out and would do identical damage on the way back: **12+7=19 working adults, 8+3=11 dependents, 3+1=4 elders, world population 235 -> 235.** The entity is then **removed exactly once** — terminal, zero bodies, record retained so the journey stays readable — and a SECOND reintegration is refused. **THE PARENT-UNAVAILABLE CASE IS THE HONEST ONE:** the travellers walk to the tile they LEFT FROM, the last place they actually saw their parent; if it has moved they arrive and find nobody, and they are **not reintegrated, not retargeted at a position they have no channel to observe, and not made to disappear** — they keep their people and stay provisional. R1-R9 **9/9, 0 vacuous**. **A FINDING THIS PASS'S OWN AUDIT PRODUCED AND DID NOT FIX: TRAVEL MAKES A GROUP LESS HUNGRY.** It has no camp to work from and no route-foraging authority exists, so it walks on nothing — and its hunger FALLS TO ZERO, because `seasonalSupport` is correctly reset by the transfer policy and `deriveCanonicalNutritionState` reads ABSENT AS NO STRESS. **The reset that prevents an unearned INHERITANCE produces an unearned IMPROVEMENT** — the same shape as the `cause` field this pass made required, an absence read as permission — and it is an L2 violation in a place L2 was not previously looked for. Not repaired: the honest fix is a real travel-subsistence authority, and a hunger floor would be a tuned number standing in for a mechanism. **A SECOND FINDING, in this pass's own earlier invariant:** `auditFissionLineageOwnership` flagged a correctly completed reintegration as `departed_attempt_without_a_successor`, because it was written when a split could only be UNDER WAY and never FINISHED; corrected to ask whether a successor ever existed rather than whether one is current. **TWO INSTRUMENT ERRORS ARE RECORDED:** `returning.permittedNext` never listed `establishing`, so the re-routed timeout was `transition_not_permitted` and the group STUCK in `returning` forever — the immortality failure wearing the opposite mask, and the exit audit passed for the wrong reason until it was caught; and the alias fixture first treated a content change under a freeze as a FAILURE and reported `socialPressure` unsafe when it had simply been recomputed. **THE K-SUITE WAS STALE, NOT BROKEN:** it predates `cause` and was refused exactly as an undeclared caller should be; updated to declare causes, with `E7` asserting that an undeclared caller is STILL refused so nothing hides behind the default. PASSED: tsc both projects, build, graph **221/764 0 dup 0 dangling UNCHANGED**, import boundary **85 back-edges UNCHANGED**, step-mode invariance `fullCanonicalStateMatch: true` on BOTH maps **with a new daily action registered**, season-order PASS, D1-D18 18/18, K1-K14 14/14, LP/O 13/13, PR1-PR20 20/20, T1-T12 12/12, Q1-Q9 9/9, E1-E7+A1-A3 10/10, V1-V10 10/10, R1-R9 9/9, two-day 10/10 — **all 0 vacuous**. **NOT BUILT AND NOT CLAIMED: no travel subsistence (route foraging or a debited carried stock); no evidence-based stabilization; no natural return TRIGGER (the return is driven by the bounded lifecycle, not yet by the group's own evidence); no natural proposal causality or cutover — NOTHING CALLS THE DEPARTURE SEAM, so there is no natural-occurrence evidence for any of this; no F1-F26 or G1-G10; no natural horizons; no Item 3 regression suites; no performance or serialization measurement.** See docs/evidence/dynamic-fission-daughter-viability-37/.
+
+**ROADMAP ITEM 4 — PROVISIONAL QUARANTINE CONTRACT (2026-08-04) — PROGRESS. THE STATUS, IN THE REQUIRED WORDS: Roadmap Item 3 accepted and frozen; ROADMAP ITEM 4 ACTIVE — THE EXHAUSTIVE FIELD-TRANSFER POLICY EXISTS AND THE QUARANTINE CONTRACT IS CLOSED. TRAVEL NOT STARTED; the successor remains quarantined and inert; **NOT AN IMPLEMENTATION CANDIDATE**; the departure seam is a production writer that **nothing calls**; `createDaughterBand` remains the only path ordinary ecology can reach and its BEHAVIOUR is unchanged; Roadmap Item 5 not started. DO NOT MERGE / NOT PUSHED.** Branch `checkpoint/dynamic-fission-provisional-successor-38`, remote still `87859eb`. **THE MEASUREMENT THAT FORCED THIS PASS: a per-field probe of a REAL departure found 86 OF THE 125 POPULATED `Band` FIELDS WERE STILL THE PARENT'S OWN OBJECT.** Not similar values — the same objects, by reference: the parent's COMPLETE `knowledge`, `placeMemory`, `travelCorridors` and `crossingMemories` (the legacy daughter inherits 13-15%, degraded and source-tagged); every field the legacy path deliberately DEGRADES (`exploitationSkill`, `adaptiveHuman`, `practicalAdaptation`, `animalPatternKnowledge`, `frontierIntent`); `verificationEvidence` and `frontierVerificationAttempts`, which CORRECTION-23B states in so many words a daughter must not inherit; `carryingCapacity`, `populationDemand`, `perCapitaReturn`, `rangeSaturation`, `seasonalSupport` and `returnTrend`, all DERIVED FROM THE PARENT'S 34 PEOPLE while the group holds 11; `residentialAnchor`, `anchorMemories`, `seasonalRound` and `campMovement`, a camp and an annual round the group does not have; the parent's whole biography and social world; and **the parent's own COLOUR**, making the two halves indistinguishable at the exact moment a viewer most needs to tell them apart. **ENUMERATING THOSE 86 WOULD HAVE FIXED 86 FIELDS AND LEFT THE EIGHTY-SEVENTH TO WHOEVER ADDS THE NEXT `Band` FIELD**, which is why the answer is a table rather than a longer list of overrides. **NEW `src/sim/agents/fissionFieldTransferPolicy.ts` CLASSIFIES ALL 133 `keyof Band` INTO TWELVE CLASSES, EXACTLY ONCE EACH** (FORBIDDEN_TO_COPY 40, INVALIDATE_UNTIL_LATER_PHASE 33, RESET_ACTIVE_COMMITMENT 16, DEGRADED_OR_PARTIAL_INHERITANCE 13, REBUILD_READ_MODEL 8, SHARED_HISTORICAL_FACT 7, NEW_SUCCESSOR_IDENTITY 4, FOUNDER_CARRIED_EMBODIED_BURDEN 3, RECOMPUTE_FROM_SUCCESSOR_TRUTH 3, CURRENT_LINEAGE_PROVENANCE 2, EXACT_COHORT_TRANSFER 2, LEGACY_COMPATIBILITY_GATED 2), enforced THREE independent ways: the `Record<keyof Band, ...>` annotation fails to compile on an unclassified field — **and it fired on its first compile, catching `position`, which the author had genuinely missed**; `fissionFieldTransferAudit.mjs` re-derives `keyof Band` from `types.ts` INDEPENDENTLY of the compiler so weakening the annotation still fails the run; and the constructed successor is checked field by field on a real departure, where a violation **REFUSES THE DEPARTURE** rather than warning. **STRUCTURAL RESETS COME FROM THE CLASSIFICATION, NOT FROM A LIST IN THE SEAM** — a field classified absent/empty/zero is reset by virtue of being classified, with no edit to `fissionDepartureSeam.ts` at all. **RESULT: 86 -> 5, WITH 0 POLICY VIOLATIONS**, and all five remaining are `SHARED_HISTORICAL_FACT` (`health`, `subsistenceModes`, `deathMemory`, `biomeAdaptation`) plus the single PUBLISHED `carried_pending_recompute` (`socialPressure`); `deathMemory` is shared BY REFERENCE DELIBERATELY, so L6's one-death-may-not-become-two holds structurally. Measured on the successor: **observed tiles 58 -> 15, place memory 42 -> 5, corridors 9 -> 2, resource patches 48 -> 12, technologies 3 -> 1, storage 0.16 -> 0, residential anchor present -> none, carrying capacity present -> none, hunger 0.62 -> 0.62 (no L2 relief), `acuteRisk.bandId` parent -> the successor's own.** Knowledge transfers partially **through the SAME canonical inheritors the legacy daughter path uses** — re-implementing the degradation would be a second answer to a question that already has one. **EMBODIED BURDEN MAY NEVER IMPROVE BY TRAVELLING and `health` is compared TERM BY TERM**, so a burden cannot be softened on one axis while another rises to hide it in an average; `acuteRisk` is retained (L5) but RE-IDENTIFIED, because the parent's object stamps every episode the successor holds with another band's id. **ONE POLICY, TWO CONSUMERS: `demography.ts` now DERIVES its registry from the table.** The derived set is a superset of the retained 67-field literal by exactly two fields, and that difference is **PROVABLY INERT** rather than believed to be: the guard fires only when `parentValue !== undefined && daughter[field] === parentValue`, and `createDaughterBand` writes `undefined` to both explicitly, so the second condition can hold only when the first is false. **33 FIELDS OF LEGACY DEBT ARE PUBLISHED AND DELIBERATELY NOT REPAIRED** — including `residentialAnchor`, `currentCampTileId`, `carryingCapacity`, `seasonalRound` and **`expeditions`: `demography.ts` contains ZERO occurrences of that word, so a legacy daughter holds the parent's away-party records BY REFERENCE**, a shared-body condition of the class CORRECTION-34 removed elsewhere, reachable because CORRECTION-34D measured 18 band-days at 20 years where an active party crosses an annual boundary. **Its natural frequency is NOT MEASURED and the method is LEXICAL and says so.** **THE QUARANTINE CONTRACT IS CLOSED WITH THE CONTROL INSIDE THE EXPERIMENT** — a with-minus-without counterfactual over two worlds identical but for the successor's `provisionalSuccessor` record, the only thing every gate reads, advanced over the same days. **11 FIELDS BLOCKED BY THE GATE, EACH A POSITIVE CONTROL** (decisions, expeditions, knownTiles, moveEvents, position, protoCamp, receipts, status, storageCapacity, trips, viability); the ONLY field moving in the quarantined arm and not the released one is `provisionalPhase`, written by the resolver. **A QUARANTINE IS NOT A FREEZER: the ANNUAL DEMOGRAPHIC STEP RUNS ON THE GROUP WHILE IT IS STILL QUARANTINED** (measured at day offset 60), its cohorts move and its hunger rises — a group nothing can harm is a group that cannot fail, which is defect 5 restored under a new name. **PHASE-COMPLETE CLASSIFICATION MEASURED OVER ALL SEVEN PHASES, AND `establishing` AND `failed_early` READ `isProvisionalGroupInTransit: false`** — the measured justification for the canonical rule that gating on transit would have readmitted them through the same doors. **A FINDING THIS PASS'S OWN AUDIT PRODUCED AND DID NOT FIX: A GROUP CAN LEAVE QUARANTINE ON A TIMER, INTO ORDINARY STATUS.** Advanced past the return bound the successor runs `travelling` -> (timeout) `returning` -> (timeout) `reintegrated`, whose contract states the provisional entity is REMOVED exactly once — **and nothing removes it**, because the return and reintegration writers do not exist. Reproduced: quarantine ends after 359 days, the band stays in the world holding 11 people, stops being provisional, and resumes ordinary behaviour with its people never having gone anywhere or come back. **This is the exact mirror of the property the kernel is proud of** — `establishing` routes its timeout to `failed_early` precisely so a timer alone can never STABILIZE, while `returning` routes its timeout to a terminal phase with no writer, so a timer alone DOES reintegrate. NOT repaired because reintegration is the return vertical, which this pass is forbidden to begin. **FIXTURES: T1-T12 12/12 and Q1-Q9 9/9, 0 failing, 0 vacuous**, with T10 a negative control that re-introduces each historical defect (the parent's camp, its deliberations, its social world, the legacy free storage, the 14% hunger relief, curing an injury, a perfect knowledge copy, the parent's colour) into an otherwise valid successor and CATCHES ALL EIGHT — so the zero is a real zero and not an insensitive instrument. **THREE INSTRUMENT ERRORS IN THIS PASS'S OWN AUDITS ARE RECORDED:** the quarantine was first measured over days the group was NOT quarantined and reported a leak that did not exist (the lifecycle had resolved mid-window and ordinary behaviour resuming was the gates WORKING); an off-by-one tested the gate before each step and recorded the diff after it, counting the single day the quarantine ended; and a HORIZON ARTEFACT put the annual demographic step ONE DAY AFTER the window closed, so the bodily-process claim rested on hunger alone until the warm-up was shifted — the same class CORRECTION-34D and -34A both recorded. **A FOURTH ERROR WAS IN A FIXTURE:** `fissionDepartureSeamAudit`'s synthetic world had no `tiles` map and its parent no knowledge stores, so the seam's canonical inheritors crashed; **the fixture was completed rather than the seam weakened**, and its `#111` band colour is 4-digit shorthand `hexToHsl` cannot parse, so `deriveDaughterColor`'s non-hex guard returned the parent's colour verbatim and the transfer policy refused the departure — **the guard was right.** PASSED: tsc both projects, build, graph **221/764 0 dup 0 dangling UNCHANGED**, import boundary **85 back-edges UNCHANGED**, step-mode invariance `fullCanonicalStateMatch: true` on BOTH maps, season-order invariance, D1-D18 18/18, K1-K14 14/14, LP/O 13/13, PR1-PR20 20/20, T1-T10 two-day 10/10, boundary audit 0 structural violations — all 0 vacuous. **NOT RUN AND NOT CLAIMED: no travel; no natural-occurrence evidence for anything here because nothing calls the seam; the legacy debt's natural frequency is unmeasured; `socialPressure` still holds the parent's derived value and is published rather than hidden; reintegration is unbuilt.** See docs/evidence/dynamic-fission-daughter-viability-37/FIELD_TRANSFER_POLICY.md.
+
+**ROADMAP ITEM 4 — IMPLEMENTATION-38 CONTINUATION (2026-08-03) — PROGRESS. THE STATUS, IN THE REQUIRED WORDS: Roadmap Item 3 accepted and frozen; ROADMAP ITEM 4 ACTIVE — ATOMIC DEPARTURE IMPLEMENTED LOCALLY AND ORDINARY-BAND ADMISSION REMOVED FROM ALL LIVE PROVISIONAL PHASES. **THE EARLIER 'DEPARTURE VERTICAL SLICE CLOSED LOCALLY' CLAIM REMAINS WITHDRAWN** — a successor being alive at the end of a season proves only that ordinary viability did not delete it, and a measured day-by-day admission audit found it is still admitted by the ordinary decision loop, same-day subsistence trips, residential movement and proto-camp formation. TRAVEL NOT AUTHORIZED; **NOT AN IMPLEMENTATION CANDIDATE**. The departure seam is a production writer that **nothing calls**; the legacy `createDaughterBand` path remains the only one ordinary ecology can reach and is unchanged; Roadmap Item 5 not started. DO NOT MERGE / NOT PUSHED.** Branch `checkpoint/dynamic-fission-provisional-successor-38`, local HEAD `42951ea`, remote still `87859eb`, **three commits ahead and deliberately unpushed**. **THE HEADLINE IS WHAT IS STILL MISSING: `createDaughterBand` IS UNTOUCHED, BOTH NEW AUTHORITIES HAVE ZERO PRODUCTION CALLERS, AND ALL SIX MEASURED DEFECTS ARE STILL LIVE IN PRODUCTION.** **`e01d979` added `fissionFounderAllocation.ts`** — cohorts ALLOCATED from the parent's actual composition and conserved by construction, closing L1's mechanism in a leaf. **`b342e89` adds `fissionParentResidualViability.ts`, the authority `AUTHORITY_MAP.md` recorded as not existing at all.** **THE INTERRUPTED ATTEMPT AT IT DID NOT COMPILE** (`TS2739` — the type had begun separating split-caused strain from prior fragility and the body had not), **and the model underneath it was wrong in a way that is measured rather than argued: it summed every adverse quantity into one `residualStrain` against one threshold, so a hungry, sick, badly placed parent of 10 working adults scored 0.92 against a 0.62 threshold and 0.674 of that 0.92 — SEVENTY-THREE PER CENT — was hardship the departure did not cause and could not change. Lowering the caller's minimum founder request from 18 to 2 moved the score NOT AT ALL**, because every dominant term was invariant to the founder count; the revision search evaluated candidates and every one failed for a reason no candidate could address. That makes hardship a veto, and `RESEARCH_CONSTRAINTS.md` §3 records local resource decline as one of the recurring ATTESTED CAUSES of fission — so it refused precisely the splits the literature calls most ordinary. **FIVE MODELS COMPARED (absolute residual / split-caused only / hybrid / bounded revision / two-ledger publication); THE HYBRID WAS SELECTED AND THE TWO-LEDGER PUBLICATION ADOPTED WITH IT**, the latter taken straight from `SPLIT_POLICY_MATRIX.md` §1's existing ruling that two claims of different kinds must not share one number. **Split-caused-only was rejected for a structural reason worth keeping: `allocateFounderCohorts` is PROPORTIONAL, so a proportional split of a doomed band deteriorates it very little by construction, and that model would have approved nearly every split of nearly every desperate band — exactly "allow a split merely because both groups are equally bad".** **THE SELECTED MODEL: hard physical blocks are ABSOLUTE tests on the residual, invariant to prior condition; `splitCausedDamage` reads ONLY before→after movements, so nutrition, embodied condition and ecological position contribute ZERO — and that is DERIVED, not preferred, because L2 states a split does not reduce hunger, the parent does not move so its tile is unchanged, and crediting a smaller band with better ground would be the unearned improvement the matrix forbids; `priorFragility` is read at BEFORE levels only, so it structurally cannot contain anything the split did, and it narrows a `tolerance` rather than joining the score.** **TWO PROPERTIES THEN HOLD BY SHAPE RATHER THAN BY TUNING, WHICH IS WHY THEY ARE GUARANTEES: a departure that changes nothing scores EXACTLY 0 against a tolerance floored at 0.18, so pre-existing hardship can NEVER produce a refusal on its own (PR19 asserts it at fragility 1.0); and tolerance shrinks as fragility rises, so the SAME departure a fed parent absorbs is refused for a starving one.** PR9/PR10/PR11 prove both by holding one variable each — PR9→PR10 holds fragility IDENTICAL at 0.38 and varies only the departure; PR10→PR11 holds split damage IDENTICAL and varies only the hunger. **`labourShareAtCamp` after the split is published as EVIDENCE and charged NOWHERE** — charging both the level and the loss would be one physical fact counted twice under two names, the CORRECTION-32 defect — and the residual correlation between the two damage terms is stated in the module rather than hidden. **FIXTURES PR1-PR20: 20 PASSING, 0 FAILING, 0 VACUOUS**, non-vacuity asserted per fixture with the harness relabelling and failing; **18 of 19 reason ids emitted, and the one that is not is recorded NOT CONSTRUCTED, DELIBERATELY rather than given a fabricated fixture to light the enum.** **PR18 IS STRUCTURAL, NOT STATISTICAL** — the input is a closed struct, so a polluted input carrying a world object, world population, hidden target richness, other bands' positions, split pressure and a seed produces a BYTE-IDENTICAL assessment. **FOUR INSTRUMENT ERRORS IN THIS PASS'S OWN FIXTURES ARE RECORDED:** PR5 asserted a parent of 4/30/16 could not split at any size and **the authority was right and the fixture was wrong** (it found a workable request at 10); PR10 and PR11 compared `limiting` across arms when a successful revision makes `limiting` describe the REVISED request, so they were comparing two different departures; PR16's first sweep contained one verdict and tested no boundary; and the unreachable-refusal inspection read reason ids from a field the helper never populated, reporting three ids unemitted that were being emitted — it is now MEASURED from the production assessments themselves. **AND PR16, ONCE REBUILT, FOUND A DEFECT IN THIS PASS'S OWN AUTHORITY: it published `round2` quantities while deciding on full precision, so in the narrow band where both round to the same figure a reader recomputing the verdict from the published evidence DISAGREED with it — measured at `mobilityCapabilityAfter = 0.8`, published damage 0.39, published tolerance 0.39, published comparison says refuse, verdict said permit. That is CORRECTION-35's label-leads-its-own-quantity class exactly, and it was FIXED IN THE AUTHORITY rather than in the test.** **`42951ea` COUNTS THE DIRECTION D READER SURFACE FOR THE FIRST TIME** — `ARCHITECTURE_DECISION.md` named "auditing every reader" as Direction D's large cost and never measured it: **160 band-enumeration sites across 41 files, 144 with no lifecycle filter within reach, plus 104 status-branch sites; 17 subsystems classified — 7 allowed unchanged, 5 allowed with a provisional interpretation, 4 blocked, 1 deferred.** Three judgements cut against the obvious and are argued from physics: **presence is allowed UNCHANGED** because hiding a provisional group's bodies would recreate the ghosts CORRECTION-34 removed; **encounters are BLOCKED for the parent/successor pair only**, because at departure the two stand on the same tile and CORRECTION-29's proximity gate would invent stranger friction out of the split itself; **catchment is DEFERRED** because the footprint is still residence-anchored — Item 3's largest carried-forward seam, closed by nothing here. **The method is LEXICAL and says so: it reports sites needing a decision, not defects, and it cannot see a reader handed an already-filtered array.** PASSED: tsc both projects (**the inherited tree did not compile**), build, graph **221/764 0 dup 0 dangling UNCHANGED**, import boundary **85 back-edges UNCHANGED**, founder allocation fixtures re-run unchanged. **NO FROZEN EVIDENCE FILE CHANGED** — every new output is a new file inside this checkpoint's own directory and both new audits take an explicit `--out`. **NOT RUN, AND NOT CLAIMED: no natural-occurrence evidence exists for either authority because nothing calls them; no F1-F26 or G1-G10; no natural horizons; no Item 3 regression suites; no performance or serialization measurement; no determinism arm beyond fixture-level repeat.** **WHY THE LIFECYCLE WAS NOT STARTED RATHER THAN BEGUN AND LEFT OPEN:** the measured surface is 13 phases, 144 enumeration sites each needing a decision, 36 mandatory fixtures, three natural horizons on three scenarios and the full Item 3 regression. It is atomic — an attempt state nothing resolves, or a provisional band every reader treats as ordinary, is the half-state §18 forbids, and `ARCHITECTURE_DECISION.md` §4 already argued it would be **worse than the measured defect because it would look finished.** See docs/evidence/dynamic-fission-daughter-viability-37/PARENT_RESIDUAL_DECISION.md.
+
+**ROADMAP ITEM 4 — DYNAMIC FISSION / DAUGHTER VIABILITY / SUCCESSOR GROUPS (2026-08-03) — PROGRESS — AUDIT AND ARCHITECTURE COMPLETE, IMPLEMENTATION NOT STARTED / ROADMAP ITEM 4 REMAINS ACTIVE / ITEM 5 NOT STARTED / DO NOT MERGE.** New branch `checkpoint/dynamic-fission-daughter-viability-37` from the Item 3 final freeze audit head `ef76971`. **AUDIT ONLY — `git diff ef76971..HEAD -- src/` IS EMPTY**; no production file, constant or schema changed. **THE BEFORE-AUDIT MEASURED FISSION OVER 200 SIMULATED YEARS ON TWO SEEDS AND FOUND TWO NATURAL FISSIONS, BOTH EXHIBITING SIX DEFECTS.** **HEADLINE, WRITTEN FROM THE MEASUREMENT: CURRENT FISSION CREATES A PERMANENT DAUGHTER SEVEN TILES AWAY IN A SINGLE DAY, WITH NO JOURNEY, NO ESTABLISHMENT AND NO POSSIBILITY OF FAILURE — AND THE SPLIT MANUFACTURES DEPENDENTS WHILE DESTROYING WORKING ADULTS AND ELDERS ON BOTH SIDES.** (1) **INSTANTANEOUS** — a complete permanent daughter exists within one simulated day of the annual demographic step; no fission-specific attempt, provisional or establishment state exists anywhere in `Band`. (2) **THE DAUGHTER TELEPORTS** — constructed with `position: target.tileId`; both natural daughters appeared **5 and 7 tiles** from their parent, 0 co-resident, with no movement authority consulted, no route built and no travel consumed. (3) **THE SPLIT MANUFACTURES DEPENDENTS — the finding most likely to be missed.** Parent-after and daughter BOTH pass through `recomputeDemographicCounts`, which RE-DERIVES cohorts from population at fixed ratios (dependents 35%, elders 10%, remainder working adults), so whatever composition the parent actually had is discarded on both sides. **Cohorts are conserved in 0 OF 2 fissions on ALL THREE counts, and the direction is systematic: dependents +4 and +3, working adults -1 and -2, elders -2 and -1.** Every daughter carries the identical textbook structure — dependent share 0.3333, elder share 0.1111 — regardless of the parent it came from. A band that has just aged badly splits into two groups BOTH of which look healthy. (4) **VIABILITY IS ONE INEQUALITY** — `daughterPopulation >= DAUGHTER_MIN_POPULATION` and nothing else; there is no parent residual viability test and no successor viability test of any kind. (5) **FAILURE IS IMPOSSIBLE** — 2 of 2 daughters are ordinary bands immediately and permanently; there is no return, reintegration or failed establishment. (6) **THE EVENT'S CONSERVATION FLAG IS A RESTATEMENT** — `BandFissionEvent.worldPopulationAfterFission` is ASSIGNED `worldPopulationBeforeFission`, so `fissionPopulationConserved` cannot be false; **both events reported `true`, including the one in which world population actually went 197 -> 198 and a person was created** (pair sum 51 from 50). **WHAT IS ALREADY CORRECT IS NAMED AND MUST BE PRESERVED:** founder availability genuinely excludes physically-away and prepared-commitment people and BLOCKS rather than borrowing (CORRECTION-34C/-34D); destination selection genuinely reads only `band.knowledge.observedTiles` at confidence >= 0.34 with no hidden richness; knowledge inheritance is genuinely partial and degraded (**13.4% and 14.8%** of the parent's observed tiles, 0 clones, clone guard over a registered non-cloneable field list); and support, receipts, trips and expeditions are all reset at birth. **RESEARCH CONSTRAINTS PUBLISHED, EVERY CLAIM CLASSIFIED** as supported mechanism / plausible interpretation / contested theory / implementation abstraction / deliberate simplification. Fission-fusion is ordinary and multi-causal; **there is NO universal band size and NO universal threshold**; a departing group is constrained by COMPOSITION rather than headcount; departures fail and end in REINTEGRATION rather than death; knowledge bounds destination. **SEVEN ENCODINGS ARE EXPLICITLY FORBIDDEN**, including Dunbar's number, one optimal band size, one inevitable fission threshold and any male/female founder ratio — this simulator has NO sex composition at all and inventing one remains a separate demographic prerequisite. **FOUR ARCHITECTURES COMPARED; DIRECTION D SELECTED:** a reversible ATTEMPT on the parent that holds no bodies, resolving at a SINGLE departure event into a PROVISIONAL SUCCESSOR that must travel, establish, and then either stabilize or return. **Direction C — the smallest diff, a bounded extension of `createDaughterBand` — was REJECTED because it cannot fix defects 1, 2 or 5**: creation stays instantaneous, the daughter still appears at the target, and "post-creation stabilization" on an already-ordinary band is a label rather than a state, which is the decorative state §3.2 forbids. **Direction D was chosen because it is the smallest architecture that is causally truthful about all six defects, NOT because it changes the fewest files.** Departure is named as the ONE conservation seam, and the cohort lines of that invariant are **currently false in 0 of 2 natural fissions**. **THE IMPLEMENTATION IS NOT STARTED, AND THAT IS THIS CHECKPOINT'S FINDING RATHER THAN A SHORTFALL HIDDEN INSIDE IT.** Direction D is one coherent change — attempt state, provisional-successor lifecycle, cohort ALLOCATION replacing re-derivation, physical departure transition, establishment window with resolution, and the audit of every reader that would see a provisional band — and this repository requires 26 controlled fixtures with non-vacuity predicates, three natural horizons on multiple seeds, four-way and fresh-process determinism over a span containing a real attempt, and the full Item 3 regression before a production change of that size is credible. **Shipping half would leave exactly the half-state `CLAUDE.md` §18 forbids** — an attempt state nothing resolves, or a provisional band every other system already treats as ordinary — and either would be WORSE than the measured defect because it would look finished. **NATURAL FREQUENCY IS FEASIBLE: 2 fissions in 400 simulated band-years across two seeds**, so ordinary ecology and demography do reach the system without injection and a natural arm for the implementation is available. **ONE INSTRUMENT ERROR IN THIS CHECKPOINT'S OWN PROBE IS RECORDED:** `daughterHasProvisionalState` first asked whether ANY band key matched `/provisional|attempt|establish/i` and reported `true` for every daughter — a false positive on pre-existing unrelated keys (`attempts`, `attempted`, `careAttempted`, `attemptIndex`, `attemptSeasons`), none of which concerns fission. **Uncorrected it would have claimed the very provisional state whose ABSENCE is this audit's central finding.** Corrected to test the named fission-specific fields and RE-RUN rather than patched in place. **REALISM SCORES THE CURRENT SYSTEM, because that is what exists: 14 ✅, 6 🟨, 3 ⬜, 11 ❌ — and the eleven ❌ ARE the case for Item 4.** A daughter that teleports seven tiles, a split that manufactures four dependents from nothing, and a conservation flag that reports success while creating a person are CONTRADICTED, not partial, and are published as such rather than softened. **ACCEPTED EVIDENCE VERIFIED IDENTICAL by sha256 over all 635 files before and after; no overwrite incident; every Item 3 branch unmodified; main untouched at `0a43083a`.** **ROADMAP ITEM 5 WAS NOT STARTED AND WAS NOT PREPARED.** See docs/evidence/dynamic-fission-daughter-viability-37/FINDINGS.md and ARCHITECTURE_DECISION.md.
+
+**ROADMAP ITEM 3 FINAL FREEZE AUDIT (2026-08-03) — FINAL FREEZE CANDIDATE / AWAITING BROWSER GPT ACCEPTANCE / ITEM 3 NOT DECLARED FROZEN BY THIS EXECUTOR / ITEM 4 NOT STARTED / DO NOT MERGE.** New branch `checkpoint/shared-range-item-3-final-freeze-36` from the accepted CORRECTION-35 tip `706166892d40189fc56ac7458b9e90a8ffdbddd7`. **AUDIT ONLY — `git diff 7061668..HEAD -- src/` IS EMPTY**; no production file, constant or schema changed. **BOTH BLOCKERS THE PREVIOUS FINAL AUDIT LEFT STANDING ARE CERTIFIED CLOSED FROM PRODUCTION'S OWN READERS, NOT FROM CORRECTION-35'S REPORT.** **FREEZE CERTIFICATION A1-A8 / B1-B4: 12 claims, 0 failing, 0 vacuous, 0 not-constructed.** **BLOCKER 1 CLOSED:** `A3` shows a zero-weight record is retained, counted as history and moves EXACTLY nothing while the same construction moves behaviour when fresh, so the inertness is a measured drop rather than an empty patch; `A2` shows every cooling row still moves behaviour; `A4` shows the counts partition the evidence production actually represents (this tile's records inside `FRICTION_RECENT_WINDOW_TICKS = 48`, capped at six); and **`A5` certifies the separation that makes the whole repair work — a record between 0 and `SOCIAL_EVIDENCE_ACTIVE_MIN_WEIGHT = 0.05` counts as ACTIVE and contributes NOTHING to `confidence`, because that threshold keeps its distinct CORRECTION-31 job**. **NATURALLY, THE ITEM 3 AUDIT'S OWN RELEASED-PLACE CHECK NOW READS 197 RELEASED PLACES AT 200 YEARS ON THE SHARED-RANGE SEED AND 305 ON THE INCIDENT SEED, WITH 0 STILL MOVING BEHAVIOUR** — on the parent tree that same check found one. **BLOCKER 2 CLOSED:** `B1` varies `Band.territorialPressure` across `0 / 0.12 / 0.8` over eighteen band-measurements and nine quantities (mobility pressure, net move pressure, selected action, target, selected score, deliberation breadth, candidate set, every reason's reported pressure, reason types) and **nothing moves**; `B2` shows the field **enters no arithmetic or conditional expression anywhere**, its seven surviving sites being four record copies or declarations, two constant writers and one daughter writer; `B3` shows zero social evidence gives exactly zero social pressure while fresh friction and real physical crowding both still fire; `B4` shows no reason names territory and no reported pressure varies with the field. **A THIRD INERT TERRITORIAL NAME WAS FOUND BY THIS AUDIT AND IS RECORDED, NOT PATCHED:** `rules/types.ts:1291` declares a `Reason<"territorial_pressure">` with **ZERO PRODUCERS** anywhere in `src/`. It cannot be emitted, so it is **not a blocker**, but the repository now holds THREE territorial names with no lived writer between them and a future territoriality system must claim each deliberately. **CONTROLLED: I1-I16 16/16 0 failing 0 vacuous 0 not-constructed; CORRECTION-35 L1-L12 12/12 with `L3` honestly NOT_CONSTRUCTED, T1-T12 12/12, C1-C8 8/8 — all 0 failing, 0 vacuous, and the not-constructed count reported in its OWN field rather than folded into a `vacuous: 0`.** **NATURAL, DAILY, 20 / 50 / 200 YEARS ON THE SHARED-RANGE SEED AND 200 YEARS ON THE INCIDENT SEED: 64,800 / 162,000 / 627,479 / 628,919 band-days, 48 / 144 / 467 / 244 encounters, 43 / 117 / 739 / 553 friction records, access expectations 15/3/0 -> 29/6/0 -> 420/386/197 -> 378/260/305, 961 / 2,784 / 8,296 / 8,765 active party-days, 86 / 320 / 1,099 / 1,211 target-work days, and ADVERSE TOTAL 0 ON ALL FOUR** across presence sums, ghosts, bodies-nowhere, labour bound, target-work labour, invalid labour, negative catchment effort, receipts-before-return, duplicate receipts, support-without-source and released-acting-as-current. **THE TWO SEEDS DISAGREE AND BOTH ARE REPORTED** — 467 against 244 encounters over the same 200 years from identical machinery, which is the divergent-history property Item 3 wanted. **DETERMINISM IN FOUR ARMS SO THAT NO IDENTITY IS AN IDENTITY ABOUT NOTHING: four-way `ALL_FOUR_MODES_IDENTICAL_WITH_ITEM_3_BEHAVIOUR_PRESENT` on BOTH the expedition arm and the shared-range arm (the latter containing 48 encounters, 16 friction records, 3 active parties and 26 exploitation outcomes IN THE COMPARED SPAN), fresh-process identical on both, and a NEW supplementary audit comparing the DERIVED lifecycle fields themselves across all four modes over a 200-year trajectory containing 420 active, 388 cooling and 198 RELEASED place-samples.** **AN ACTIVE PARTY WAS OBSERVED ACROSS AN ANNUAL DEMOGRAPHIC BOUNDARY ON 180 OF 200 BOUNDARIES, SAMPLED DAILY** — the sampling cadence matters, and CORRECTION-34A and -34D both record that a season-boundary sample reports zero here as an artefact. **FROZEN REGRESSION: AUDIT-27 11/11 with every accepted verdict reproduced (C5 still `PHYSICAL_RELEASES_PERCEPTION_DOES_NOT`), CORRECTION-28 12 fixtures with field/scan parity 0 mismatches, -29 12, -30 15, -31 22, -32 21/21 0 vacuous plus zero controls 6/6 0 violating, -33 20/20 0 adverse, -34 presence 0 adverse at 50 y, -34A closure 12 / 0 unexpected / 5 deferred, R1-R12 12/12, L1-L12 12/12, H1-H14 14/14, T1-T14 14/14, Z0-Z12 13/13, person conservation 9 / 0, numeric chain `RECONCILED`, tsc both, build, graph 221/764 0 dup 0 dangling, import boundary 85 back-edges UNCHANGED, season-order `PASS`, step-mode `PASS`, four-way step-mode identical, catchment invariants, food pipeline, mobility authority, socialCausality.** **NO ACCEPTED EVIDENCE FILE CHANGED, AND THAT IS PROVEN RATHER THAN ASSERTED: sha256 over ALL 607 FILES under `docs/evidence/` excluding this checkpoint's own directory, taken before the regression began and again after every suite had run — IDENTICAL. NO TEMPORARY OVERWRITE INCIDENT OCCURRED**, because output flags were enumerated with a parser-aware extractor that also reports each script's hardcoded `docs/evidence` defaults, written precisely because CORRECTION-35 recorded an incident caused by a single-line pattern missing multi-line `arg(` declarations. **ONE INSTRUMENT ERROR IN THIS AUDIT'S OWN PROBES IS RECORDED:** `B2`'s first form asked whether a file mentions `band.territorialPressure` outside a comment and flagged `bandDecision.ts:5225`, which is the inert `DecisionContextSnapshot` record copy — **a false UNEXPECTED is as damaging as a false pass**, so the check was rebuilt to distinguish a property copy from an arithmetic use. Separately, the new lifecycle-determinism audit **reported VACUOUS before it reported a pass**: its first form compared end states, and a place cools, releases and drops out of bounded access memory long before a run ends, so the end state read `none` everywhere while the lifecycle had run repeatedly; rebuilt to hash the whole trajectory and extended to 200 years so that RELEASE ITSELF is inside the compared span. **PERFORMANCE AND BOUNDED STATE: 0.91 / 0.99 / 1.02 ms per simulated day at 20 / 50 / 200 years — FLAT — with every store at or below its production cap at every horizon.** **REALISM: 37 lines — 24 ✅, 5 🟨, 8 ⬜, 0 ❌.** The five 🟨 are honest and none is a blocker: crowding never decides an action by itself, `0.96` is an authority rather than a calibrated magnitude, the release correction is contract-driven rather than frequent (the corrected interval is occupied 0 times at one seed over 200 years and twice at the other), only reported hearsay reaches that interval because direct decay is too coarse, and **NO OUTCOME IMPROVEMENT IS CLAIMED ANYWHERE IN ITEM 3**. **THE SIX CARRIED-FORWARD SEAMS ARE COPIED VERBATIM** from the single carry-forward block in `docs/HANDOFF.md` into the manifest, the findings and the handoff, and each is classified: the residence-anchored shared-use substrate (current limitation + future dependency, and the largest thing Item 3 does not do); activity-party crowding and expedition overlap (future dependency); no visibility/route/barrier rule (accepted abstraction); no physical-trace authority (later-roadmap dependency); `SocialPressureProfile.territorialPressure` (current limitation, inert, NOT a blocker); and no UI surfacing the lifecycle (current limitation). **FREEZING ITEM 3 CLOSES NONE OF THEM.** **THE SAME-DAY CURRENT-PRESENCE DEFERRAL AND THE PUBLIC DAY/SEASON SIMPLIFICATION ARE BOTH PRESERVED EXACTLY.** **ROADMAP ITEM 4 REMAINS UNSTARTED** — `createDaughterBand` untouched, `I13` and `C8` assert the boundary. **NOT RUN: no 500-year horizon, no `simBenchmark` fingerprint comparison, no population/survival/fitness comparison, no third seed, no UI test; `expeditionLifecycleAudit` was not rerun and nothing here claims it.** **main is untouched at `0a43083a` and is the merge base.** See docs/evidence/shared-range-item-3-final-freeze-36/FREEZE_MANIFEST.md and ITEM_3_FINAL_FINDINGS.md.
+
+**CORRECTION-35 (2026-08-03) — RELEASED-EVIDENCE FIELD CONSISTENCY AND ORPHAN TERRITORIAL PRESSURE AUTHORITY. CANDIDATE COMPLETE — AWAITING BROWSER GPT AUDIT / ROADMAP ITEM 3 REMAINS ACTIVE AND IS NOT FROZEN / ITEM 4 NOT STARTED / DO NOT MERGE.** Branch `checkpoint/shared-range-release-territorial-authority-35` from the Item 3 final-integration candidate freeze head `742b567`. **PRODUCTION BEHAVIOUR CHANGED — SIX FILES.** Two defects the Item 3 final audit named and did not fix.
+
+**PART A — THE ITEM 3 BLOCKER IS CLOSED.** `types.ts` said in two places that a `released_historical` record "no longer moves anything". Every social contribution in `accessNorms.ts` scales by `entry.weight` (`strongestFrictionRelation`, `bestContactTolerance`, `tensionFromFriction`, the tolerance and refusal terms, `eventPressure`), so a record stops moving behaviour at weight **ZERO** — but the labels were derived from `weight >= SOCIAL_EVIDENCE_ACTIVE_MIN_WEIGHT = 0.05`. Everything in the open interval `0 < weight < 0.05` was published as fully historical while still changing behaviour. **THE FIX — the smallest correction the Item 3 audit itself named:** `contributingEvidence = friction.filter(e => e.weight > 0)` drives `activeEvidenceCount`, `historicalEvidenceCount` and `socialEvidencePhase`, while a separately named `confidenceEvidence` keeps the `0.05` set and feeds `confidence` UNCHANGED — that threshold's real CORRECTION-31 job (retained records must not prop up the confidence that has to fall before `staleness` retires the memory) is untouched, and no constant moved. `weight > 0` is EXACT, not an epsilon, because `weighSocialEvidence` returns `round2(...)`. **THE INCIDENT IS TWICE THE PUBLISHED SIZE, AND THAT IS A CORRECTION TO THE ITEM 3 RECORD:** re-measured on the parent tree at the same seed, day, band and tile across ALL SIX access scalars instead of three — `strangerCaution` 0.01, `rememberedRefusalAvoidance` 0.01, **`kinTolerance` 0.02**, others 0, **total 0.04** against the published `<= 0.02`. The original three reproduce to the digit, which is what confirms it is the same incident; `kinTolerance` is the LARGEST single component and the original probe never read it. A superseding addendum is appended and **the original evidence is NOT rewritten** — its `PROGRESS` verdict was correct and doubling the magnitude strengthens its argument. **PART A CHANGED NO BEHAVIOUR, MEASURED CROSS-TREE:** parent `742b567` versus the lifecycle-only commit `e5e3143` produce IDENTICAL digests for access behaviour (all six scalars plus confidence, **72 place-rows, every one carrying a non-zero scalar**), decisions, candidates, pressure state and every reason's reported pressure. **THE BLOCKER IS CLOSED BY THE INSTRUMENT THAT FOUND IT:** `itemThreeReleasedPlaceProbe.mjs`, unmodified, reports **0 incidents** — "no released place moved behaviour in the scanned window". Its denominator moves with the world (448 released samples on the parent, 305 here) because Part B changes the 200-year trajectory, so **the 1 -> 0 is NOT a like-for-like comparison and is not offered as one**; `L1`/`L2` are the like-for-like proof.
+
+**PART B — AN ORPHAN SPAWN CONSTANT WAS GIVING EVERY BAND A TERRITORIAL MOTIVE.** `Band.territorialPressure` is written TWICE, EVER: `0.12` at spawn and `clamp01(parent * 0.72 + 0.04)` at daughter creation. No lived process writes it — not crowding, not encounters, not friction, not access expectation. It nevertheless reached behaviour through **THREE** readers: `pressure.ts` (x0.08 into `mobilityPressure`), `rules/mobilityIntent.ts` (x0.12 into intent scoring) and `rules/bandDecision.ts` (x0.14 into the `pressure` a stay reason reports about itself). **THE BRIEF NAMED TWO; THE INVENTORY FOUND THE THIRD, AND IT IS THE ONE THAT SCORES MOVEMENT INTENTS.** **Option A selected:** all three readers removed, the field RETAINED in state for schema, history and the UI projection, and no lived writer invented — cultural or institutional territoriality is a later roadmap item and must arrive with its own writer. Options B (delete the field), C (give it a writer now) and D (fold its weight into crowding) were rejected with reasons; `CROWDING_DECISION_COST_WEIGHT` is UNTOUCHED. **REPRODUCED BEFORE REMOVAL:** varying ONLY the field across `0 / 0.12 / 0.8` moves **18 of 18** band-measurements on the parent (mobilityPressure 18, candidates 18, netMovePressure 15, reason pressures 15, selected score 12), **18 of 18** on the lifecycle-only commit — confirming the two parts are genuinely separable — and **0 of 18** on the tip. **THE ATTRIBUTION CHANNEL IS GENUINELY MEASURED, NOT DECLARED UNREADABLE:** read at `reason.pressure` on a 180-day world where bands still STAY, `low_mobility_pressure` runs **0.1523 -> 0.1691 -> 0.2643** on the parent and is CONSTANT at 0.1523 on the tip; 3 of 3 observable bands moved before, 0 of 3 after. **ZERO-DIVERGENCE CONTROL, and it is what actually proves no reader survives:** at a long warm-up the two trees hold GENUINELY DIFFERENT WORLDS (the term was live for all 3600 days on the parent and `netMovePressure` reads accumulated band state), so a residual of 0.01 on 2 of 18 measurements is the production change and not a surviving reader. Warmed **0 days** with every band's field pinned to 0, parent, lifecycle-only and tip produce the **IDENTICAL DIGEST** — removal is exactly equivalent to holding the field at zero. **A SECOND ORPHAN IS RECORDED AND DELIBERATELY NOT REMOVED:** `SocialPressureProfile.territorialPressure` is a DIFFERENT field (`0.08` at spawn against `0.12` on `Band`) with **ZERO READERS ANYWHERE IN THE REPOSITORY**; it has never reached behaviour, so it is not a blocker, and it is documented in `types.ts` so a future system cannot wire it up by accident.
+
+**NATURAL OCCURRENCE, SAMPLED DAILY FOR THE STORED FIELD AND PER-TICK FOR THE DERIVED MEMORY:** 64,800 / 162,000 band-days at 20 / 50 years show **ONE distinct territorial value (0.12)**, **0 changes outside daughter creation**, **0 bands whose pressure moves when the field is varied**. Part A's corrected interval is occupied **0 times** in 5,586 / 14,226 / 55,592 place-samples at the shared-range seed and **2 of 55,714** at the incident seed over 200 years, with **0 contradictions at every horizon on every seed**. **THE REPAIR IS JUSTIFIED BY THE CONTRACT, NOT BY FREQUENCY, AND SAYS SO.** **FIXTURES: L1-L12 12/12, T1-T12 12/12, C1-C8 8/8 — 0 FAILING, 0 VACUOUS**, with `L3` honestly `NOT_CONSTRUCTED` (no integer age lands exactly on 0.05 on either curve). **`L7` RECORDS A STRUCTURAL FACT: direct evidence cannot naturally occupy the sub-0.05 positive interval** — its decay is too coarse — so the measured incident came through REPORTED HEARSAY, discounted by hop count and the report's own freshness. The interval is corrected for both channels; only one reaches it naturally. PASSED: tsc (both), build, graph 221/764 0 dup 0 dangling, **import boundary 85 back-edges UNCHANGED**, season-order `PASS`, step-mode `PASS` with `fullCanonicalStateMatch: true` / `firstDivergence: null`, four-way `ALL_FOUR_STEP_MODES_IDENTICAL`, fresh-process identical, catchment invariants, food pipeline `PASS`, mobility authority `PASS`, socialCausality; **Item 3 I1-I16 16/16 0 vacuous, natural integration ADVERSE 0 at 20/50/200 y and on the shared-range seed**; AUDIT-27 11/11, -28 12/12 with field/scan parity 0 mismatches, -29 12/12, -30 15/15, -31 22/22, -32 21/21 plus zero controls 6/6 0 violating, -33 20/20 0 adverse, -34 presence 0 adverse, -34A closure 12 / 0 unexpected, person conservation 9 / 0, R1-R12 12/12, L1-L12 12/12, H1-H14 14/14, T1-T14 14/14, Z0-Z12 13/13, numeric chain `RECONCILED`. **PERFORMANCE AND BOUNDED STATE: 0.807 / 0.796 ms per simulated day at 20 / 50 years, 73.41 -> 74.48 MB, every store at or below its cap, 0 person-conservation failures, 0 duplicate receipts, 0 stale terminal presence entries.** **EIGHT INSTRUMENT ERRORS IN THIS CHECKPOINT'S OWN PROBES ARE RECORDED, FOUR OF THEM INHERITED:** the cross-tree probe omitted `kinTolerance` and `familiarTolerance` (the first is the largest component of the very incident under audit); candidate identity was read as `c.actionType`/`c.targetTileId`, which `AlternativeConsidered` does not have, so the digest compared SCORES ONLY; the attribution figure was read as `primaryReason.detail.pressure`, which does not exist, so `T9` was comparing three `-1` sentinels with each other AND was sampling a world too old to contain a stay reason; and `d.score` is not a field on `Decision`, so `JSON.stringify` dropped the key and every "score unchanged" claim compared two absent values — with that fixed, the parent's territorial arm shows `score` moving on 12 further measurements. The natural audit also reported 16 contradictions that were its own (it ignored production's `FRICTION_RECENT_WINDOW_TICKS = 48` window and its 6-record cap; corrected, 0 at every horizon), a stale background output was briefly read as a result (`>` creates the log file at launch, so "log exists" is not "run finished"), and the shared-catchment anchor test first moved `band.position` when the footprint is anchored on `band.residentialAnchor.catchmentTileIds`. **A FROZEN-EVIDENCE INCIDENT IS REPORTED, NOT HIDDEN:** three audits wrote into frozen directories because the flag sweep used a single-line `arg("out"` pattern and those scripts declare `--out` across MULTIPLE LINES; **four files restored with `git checkout` BEFORE ANY COMMIT**, `git status` and `git diff` over `docs/evidence/` verified empty, every affected audit rerun with EVERY flag redirected, and **no frozen-evidence commit exists**. **TWO DEVIATIONS STATED RATHER THAN BURIED:** `P8_P18_terminal_records_occupy_nothing` is VACUOUS on BOTH trees (inherited from CORRECTION-34 and named there too), and `P9_concurrent_parties` is VACUOUS at 20 y on the corrected tree while non-vacuous on the parent at the same horizon — **coverage is RESTORED at 50 y and 100 y**, so it is a horizon artefact of a changed world, reported with the parent comparison. **LIMITS: no outcome improvement is claimed or measured; no constant was re-tuned; no lived territorial writer exists; no UI surfaces the lifecycle; `sharedCatchment.ts` is UNCHANGED and its residence-anchored footprint remains an OPEN future dependency, published in `shared-catchment-boundary.json` so freezing Item 3 cannot be read as resolving it.** **ROADMAP ITEM 4 REMAINS UNSTARTED — `createDaughterBand` is untouched. ITEM 3 IS NOT DECLARED FROZEN HERE; that is the supervisor's decision.** See docs/evidence/shared-range-release-territorial-authority-35/FINDINGS.md.
+
+**ROADMAP ITEM 3 FINAL INTEGRATION AUDIT (2026-08-03) — PROGRESS — CANDIDATE FOR CLOSURE, NOT FROZEN / ROADMAP ITEM 3 REMAINS ACTIVE / ITEM 4 NOT STARTED / DO NOT MERGE.** New branch `checkpoint/shared-range-item-3-final-freeze` from the accepted CORRECTION-34F tip `df349eb`. **AUDIT ONLY — `git diff df349eb..HEAD -- src/` IS EMPTY; no production file, constant or behaviour changed.** **THE INTEGRATED CHAIN CLOSES.** I1-I16 exercise crowding -> encounter -> friction -> access expectation -> release -> decision pressure -> residential extraction -> expedition presence -> productive labour -> target work end to end on controlled worlds, each stage read through the canonical production authority: **16 fixtures, 0 failing, 0 vacuous, 0 not-constructed**, with non-vacuity ASSERTED per fixture. **EVERY ITEM ON THE FORBIDDEN LIST IS ABSENT EXCEPT ONE:** no duplicate pressure (I5 — zero evidence gives exactly zero social pressure; CORRECTION-32's >=3-charges 0 and max-2-paths bounds hold), no hidden global census (I2/I12 — 6 and 15 remote records of FIVE kinds, active/extinct/absorbed/dispersed/with-parties, leave the focal crowding, access and social readings BYTE-IDENTICAL), no ghost bodies (0 in 628,560 band-days), no teleported bodies (I14 — aging keeps 6 bodies while labour falls 6 -> 3), no residential labour at a distance (0 target-work labour mismatches over 200 y), no task camp treated as residential movement (I7 — residence 26 + away 4 = population 30, and NO social consequence invented), no double-counted population (0 presence-sum mismatches), no invalid labour creating work (I15), **no support before return (I10 — band receipts UNCHANGED on the work day while the patch moved 0.2198 -> 1.0)**, and no fission behaviour implemented early (I13). **THE SOCIAL LIFECYCLE IS MEASURED, NOT ASSERTED:** two adjacent bands warmed 16 seasons give 24 encounters, contact count 25 and 8 friction records; with the observer held at the tile its own records name, the contribution runs **0.31 -> 0.24 -> 0.18 -> 0.14 -> 0.09 -> 0.05 -> 0 over six seasons, phase `cooling` -> `released_historical`, with ALL 8 records, the contact memories and the encounter records RETAINED** — release is behavioural, never deletion. Physical release is immediate at season 1. **I4 IS THE ANTI-OMNISCIENCE PROOF: deleting the other band from the world entirely leaves the expectation at 0.31, unchanged — it is read off the observer's own held records, not off a live census.** **I16 REACTIVATION HAPPENS ONLY THROUGH FRESH EVIDENCE** — 1 new event id at reactivation, 8 by the end; a released belief cannot be revived, only re-earned. **ONE BLOCKER, AND IT IS THE REASON THIS IS PROGRESS: A PLACE PRODUCTION LABELS `released_historical` CAN STILL MOVE BEHAVIOUR.** `types.ts:2522` states `historicalEvidenceCount` holds records that "no longer move anything", but `socialEvidencePhase` flips to `released_historical` when every record is below `SOCIAL_EVIDENCE_ACTIVE_MIN_WEIGHT = 0.05` while contributions scale CONTINUOUSLY by weight and reach zero only at the release horizon. **Measured: band `band:varied-estuary:daughter:1:t412`, tile `tile:194:90`, day 44,640 — phase `released_historical`, `activeEvidenceCount` 0, `activeEvidenceWeight` 0.04, `historicalEvidenceCount` 1, and stripping ONLY that tile's own record moves `strangerCaution` +0.01 and `rememberedRefusalAvoidance` +0.01.** It survives all three artefact tests (the tile has its own record; the place is still tracked when the ring is stripped; stripping just this tile still moves the numbers). **Frequency 1 of 448 released samples over 200 y on one seed, 0 of 193 on the other; magnitude <= 0.02; nothing revives and the curve does reach exactly zero.** **THE LABEL LEADS ITS OWN QUANTITY.** **SMALLEST CORRECTION, NAMED AND NOT APPLIED: derive `released_historical` only when the max surviving weight is EXACTLY 0 and keep `0 < w < 0.05` labelled `cooling` — a DERIVED READ-MODEL FIELD ONLY, no behaviour change, no constant moved.** The alternative (flooring sub-threshold weights so behaviour matches the label) changes production and needs its own before/after; it is larger and NOT recommended. **NO ACCEPTED CORRECTION IS INVALIDATED** — CORRECTION-31's lifecycle, its 22 fixtures and its natural results are unaffected and were rerun unchanged. **NATURAL INTEGRATED 20 y / 50 y / 200 y on map2 seed `audit27:natural:s1`: 64,800 / 162,000 / 628,560 band-days, 48 / 144 / 373 new encounters, 43 / 117 / 587 new friction records, 63 / 176 / 466 band-seasons with foreign crowding, access expectations 15/3/0 -> 29/6/0 -> 245 active / 192 cooling / 193 released, 961 / 2,790 / 8,626 active party-days, 263 / 886 / 2,519 task-camp days, 86 / 321 / 1,108 target-work days, and ADVERSE TOTAL 0 AT ALL THREE HORIZONS** across conservation, labour bound, presence sums, ghosts, bodies-nowhere, target-work labour, invalid labour, negative catchment effort, receipts-before-return, duplicate receipts, support-without-source and released-acting-as-current. **EVERY ZERO IS A NULL OBSERVATION; THE CONTROLLED FIXTURES ARE THE PROOF.** **A SECOND SEED IS REPORTED BECAUSE IT DISAGREES: `audit27:natural:map2:s1` — the seed the whole CORRECTION-34 family used — produces rich expeditions and ZERO encounters and friction across 200 years.** Two seeds on one map generate entirely different social worlds from identical machinery, which IS the divergent-history property Item 3 wanted, and it is why the canonical natural arm uses the shared-range seed; the §B1 incident was found on that second seed. **DETERMINISM IN TWO ARMS, because a four-way identity over a span containing none of the behaviour under audit is an identity claim about nothing: expedition seed 2,520 d (6 exploitation outcomes) and shared-range seed 5,040 d (26 exploitation outcomes, 3 active parties, 16 friction records, 48 encounters) — ALL FOUR MODES IDENTICAL, DAILY REPEAT IDENTICAL AND FRESH-PROCESS IDENTICAL ON BOTH**, over a canonical projection that includes every party's phase/workers/non-working/position/work-days, the outcome ring, the friction ring by event id, encounter counts and contact identities. **FROZEN REGRESSIONS: 17 suites, 222 fixtures, 0 failing, every output flag enumerated from each script's own parser and redirected, and 21 of 21 comparable outputs BYTE-IDENTICAL to the CORRECTION-34F run.** One inherited vacuous fixture is named rather than counted as a pass (CORRECTION-34 `P8_P18_terminal_records_occupy_nothing`). **NO FROZEN EVIDENCE CHANGED and main is untouched at `0a43083a`.** **THREE INSTRUMENT ERRORS IN THIS AUDIT'S OWN PROBES ARE RECORDED:** the lifecycle cluster first measured at the observer's warm-up position and let the observer wander, so the place dropped out of bounded access memory and "release" was proven on a pair that had never been active (4 vacuous, 2 failing — corrected by measuring at the tile the records name and pinning the observer); I16 counted records on a ring capped at 8, where a fresh episode silently replaces an old one, and would have reported "reactivated without new evidence" purely because 8 stayed 8 (corrected to compare event-id sets); and the released-state check first flagged any non-zero `activeEvidenceWeight`, which fired once and was WRONG — production was right, because a released place whose strongest record reads 0.03 is exactly what release looks like. **Only after that correction did the REAL §B1 case survive.** **PERFORMANCE AND BOUNDED STATE: per-simulated-day cost is FLAT from 20 to 200 years (0.90 -> 0.92 ms), state 73.38 -> 74.34 MB between the 20 and 50 year horizons, and every Item 3 store sits at or below its production cap over 200 years — presence sources 3, active parties 2, trip records 24, outcome records 6, friction records 8, access places 8, crowding contributors per tile 2.** **REALISM: 25 lines — 18 ✅, 5 🟨, 2 ⬜, 0 ❌.** The 🟨s are honest: crowding never decides an action by itself in these worlds (`crowdingFlippedSelection` 0 in both CORRECTION-32 arms); release is right in quantity and wrong in label (§B1); reactivation exists only as fresh evidence; and no UI surfaces the lifecycle. **LIMITATIONS ARE CLASSIFIED, NOT BLANKET-EXCUSED: 1 BLOCKER, 7 accepted abstractions, 7 current limitations, 3 future dependencies** — including the still-open AUDIT-27 seams (`sharedCatchment`'s footprint is still residence-anchored so real trips and expedition routes compete for nothing; `territorialPressure` still has readers and no writer; no visibility/route/barrier rule; no physical-trace authority). **ROADMAP ITEM 3 REMAINS ACTIVE. ROADMAP ITEM 4 WAS NOT STARTED** — no dynamic fission, no daughter viability, no successor-group selection, no prepared-party cancellation, and no founder-policy change. The CORRECTION-34A same-day current-presence deferral is preserved exactly, and the public Day/Season simplification remains deferred and unimplemented. See docs/evidence/shared-range-item-3-final-freeze/ITEM_3_FINAL_FINDINGS.md.
+
+**CORRECTION-34F (2026-08-03) — ZERO-LABOUR TARGET-WORK CONTRACT CLOSURE.** Same branch, continuing `e7d8de4`. **PRODUCTION BEHAVIOUR CHANGED — ONE FILE, ONE VALIDATION.** **CORRECTION-34E'S CENTRAL REPAIR STANDS AND IS NOT REOPENED** — expedition target work reads the labour physically present in that party, residential workers no longer decide distant work, and T1-T14 / the caller matrix / the numeric chain / the after-arm proof / the same-day digest were all rerun and are **byte-identical**. **BUT 34E MADE THE COUNT REQUIRED WITHOUT CONSTRAINING ITS VALUE.** Its own §3 presented "required, no default" as making the invariant structural; it made the PRESENCE of a labour count structural, not its DOMAIN. The validation accepted zero (`productiveWorkers < 0` throws, so `0` passes) and the builder then laundered the value through `Math.max(0, Math.round(...))`. The builder's doc line "a party of zero workers works none" was FALSE of the code beneath it: the physically-present outcome test is `estimatedPeopleCount >= 2 ? "partial_success" : "target_found"` so zero reads `target_found`; `baseReturnValue = estimatedPeopleCount * 0.035 + yieldConfidence * 0.22 + presenceConfidence * 0.08` keeps its CONFIDENCE TERMS when the labour term is zero; and that value becomes the `requestedAmount` `resolvePhysicalFoodHarvest` REMOVES FROM STOCK. **REPRODUCED ON REAL PRODUCTION BEFORE ANY CHANGE AND COMMITTED AS ITS OWN BEFORE-ARM COMMIT (`7d4dda3`): zero workers ACCEPTED, classified `target_found`, and REMOVED 0.0047 OF PHYSICAL STOCK; a verification party of NOBODY READ THE TARGET; `0.4` people were silently rounded to `0` (and still removed stock) and `1.6` to `2` — a person and a half became two people.** NaN, both infinities and -1 were already rejected. **THE FIX — Option A, strict positive integer at the exported boundary:** `Number.isInteger(w) && w >= 1`, and the value is then **passed through UNALTERED** because the `Math.max(0, Math.round(...))` WAS the laundering step — it turned an impossible count into a plausible one and let a caller's mistake reach the world's stock. Option B (accept zero and build a canonical no-work record) was REJECTED for adding an outcome and a state to describe something no party can be, and for converting a broken caller into a silent no-op; Option C (caller-side validation only) was REJECTED as the primary mechanism because it leaves the exported authority untruthful for a future caller, though its SUBSTANCE is kept as evidence; Option D (clamp to 1) was REJECTED because silently inventing a worker is the same error as silently rounding one. **THE BOUND IS ONE, NOT `EXPEDITION_MIN_PARTY_WORKERS`, AND THE REASON IS STATED TWICE OVER:** one person can physically do a day's work, so a PHYSICAL resolver must not encode the two-worker POLICY about what is worth sending and when a party turns for home — that policy already lives in `expedition.ts` (the launch gate `partyWorkers < 2 -> return band`, with an integer-valued `deriveDepartableWorkers`, plus `reconcileExpeditionLabor`) — and structurally `expedition.ts` imports `intraSeasonTrips.ts` and NEVER the reverse, so reaching for the constant would CLOSE A DEPENDENCY CYCLE to share a number belonging to the other module. **The honest consequence is stated rather than hidden: the resolver alone would accept a party of one; canonical production never hands it one.** **§7 CANONICAL CALL-ORDER PROOF, MEASURED NOT ASSERTED — no caller needed repairing.** `expeditionDailyAction` reconciles FIRST, then launches, then advances; driving the real reconciler on constructed states shows an unstaffable OPERATING party leaves the operating phase (labour 6 -> 3, **bodies kept at 6**, phase -> `returning`), an unstaffable PREPARED party becomes `aborted`, and a healthy operating party is untouched at 5. Target work is reachable ONLY from `phase === "operating"`. Every write to `partyWorkers` in `src/sim` is enumerated and the only ones producing 0 also set a terminal phase. **FIXTURES Z0-Z12: 13/13, 0 failing, 0 vacuous**, with non-vacuity ASSERTED — the suite leans on a control proving the SAME target with a valid five-worker party removes real stock, so every "nothing removed" verdict is a refusal and not an empty patch, and Z2 carries the mirror control that a VALID party verifying the same target DOES read it and removes nothing. **AFTER: zero exploitation REJECTED, zero verification CANNOT INSPECT THE TARGET, fractional people REJECTED NOT ROUNDED, and `casesRemovingStockWithoutAValidPositiveIntegerParty` 3 -> 0; one, two and five workers UNCHANGED (1 person / 0.0086 removed, 2, 5), verify-only with a valid party still reads and still removes nothing, and the same-day path never enters the contract.** **NATURAL 20 y / 50 y CALL DOMAIN: 94 / 225 operating party-days reaching target work, 0 zero-labour, 0 fractional, 0 non-finite, 0 below the expedition minimum, observed labour range 2..7 — AND THE PROOF IS STRUCTURAL RATHER THAN STATISTICAL: after this change an invalid count THROWS, and both runs completed, so canonical production made no invalid call anywhere in 20 or 50 simulated years.** **NATURAL OCCURRENCE OF THE DEFECT IS THEREFORE ZERO: this closes an EXPORTED CONTRACT, not an observed misbehaviour, and the before-arm measurement is what shows the hole was real.** **THE CHANGE IS INERT FOR EVERY VALID PARTY, AND THAT IS MEASURED AGAINST THE 34E TREE RATHER THAN AGAINST COMMITTED FILES:** 34E's T1-T14, caller matrix, numeric chain and after-arm proof are IDENTICAL FILES; 34E's natural target-work 20 y and 50 y are BYTE-IDENTICAL; the same-day preservation digest is the SAME sha256 (`ac71f4f4...3911`, 2,034 records, 729 days); and 34 presence fixtures / 34A closure / person conservation / R1-R12 / L1-L12 / H1-H14 / numeric resource chain / four-way, plus **AUDIT-27, -28, -29, -30, -31, -32, -32A (both) and -33, are ALL byte-identical modulo `generatedAt`** — including every second output flag (`--timeline-out`, `--timelines`, `--parity-out`, `--chain-out`, `--cascade-out`, the six presence outputs and CORRECTION-33's six). PASSED: tsc (both), build, graph 221/764 0 dup 0 dangling, **import boundary 85 back-edges UNCHANGED**, season-order, step-mode `fullCanonicalStateMatch: true` / `firstDivergence: null` on both maps, four-way `ALL_FOUR_STEP_MODES_IDENTICAL`, catchment invariants, food pipeline `PASS`, mobility authority `PASS`, socialCausality, daily lifecycle `PASS`. **NO FROZEN-EVIDENCE INCIDENT** — `git diff --name-only e7d8de4..HEAD -- docs/evidence/ ':(exclude)...authority-34/**'` returns nothing. **NO INSTRUMENT ERROR WAS FOUND IN THIS PASS**; the probe carries forward 34E's two corrections deliberately (stock keyed by `physicalFoodHarvest.sourceId`, `estimatedReturnValue` labelled as the post-harvest return), and because a REJECTED case returns no record and therefore no source id, the probe resolves a valid party first and reuses that id so a rejection is still scored against the same patch. **LIMITS STATED: no claim that a party of one is a sensible expedition** (the resolver permits it, policy forbids sending it, and none occurs naturally); **no claim that ordinary play was hitting this**; the harvest equation and its confidence terms are UNTOUCHED; no outcome or performance claim; no 200 y matrix. **ROADMAP ITEM 4 REMAINS UNSTARTED**, no minimum-party policy was modified, and the CORRECTION-34A same-day current-presence deferral is preserved exactly. See docs/evidence/shared-use-physical-presence-authority-34/ZERO_LABOR_TARGET_WORK_CONTRACT.md.
+
+**CORRECTION-34E (2026-08-03) — EXPEDITION TARGET-WORK LABOUR PROVENANCE.** Same branch, continuing `c8df1ea`. **PRODUCTION BEHAVIOUR CHANGED — TWO FILES.** **CORRECTION-34D'S OWN AUTHORITY LEDGER CLAIMED TARGET WORK AND DID NOT HAVE IT** — it listed `getExpeditionProductiveWorkers` as the authority for "composition, pace, carrying, **target work**", but nothing in 34D touched target work; the claim is CORRECTED, not quietly amended. `resolveExpeditionTargetWork` handed the WHOLE BAND to `buildTripRecord`, which sized the working group with `estimateTaskGroupPeople(band)` — residential working adults MINUS committed party workers, capped by a task share and **floored at one**. So a working group standing days from camp was a share of the people who stayed home. **REPRODUCED THROUGH REAL PRODUCTION BEFORE ANY CHANGE, one world, one band, one harvestable patch, one IDENTICAL five-worker party, varying only the adults at home: `estimatedPeopleCount` 1 vs 6, stock removed 0.0086 vs 0.0354 — a 4.1x difference in distant depletion decided by people who never left camp — with the patch going 0.2198 -> 0.4094 in one arm and 0.2198 -> 1.0 (EXHAUSTED) in the other; and in the other direction the party was INERT at its own target, 2 and 5 workers both reading 2.** `estimatedPeopleCount` is one variable feeding the request (`* 0.035`), the outcome classification, the fauna pressure, the shadow record and the record field, and the request becomes the `requestedAmount` that REMOVES STOCK FROM THE WORLD. **THE FIX — Option A at the seam that already knows the party.** `resolveExpeditionTargetWork` takes a **REQUIRED** `options.partyWorkers` with **no default** (a default would silently restore the defect for any caller that forgot, so its absence makes the invariant structural), passes it as `partyWork.productiveWorkers`, and `buildTripRecord` branches once: party labour for an expedition, `estimateTaskGroupPeople` for a same-day trip. `expedition.ts` supplies `getExpeditionProductiveWorkers` at BOTH call sites — exploitation AND verification, because who looks is still the party even when the take is suppressed. **NO floor of one on the party branch** (the residential floor exists so a band always fields someone at home; importing it would let a party with zero working members still request a person's work). No synthetic band, no post-hoc cargo scaling, no second harvest equation, and the `* 0.035` equation is UNTOUCHED — the AUTHORITY was fixed, the STRENGTH deliberately not tuned. **AFTER, same inputs: 5 people and 0.0354 removed with 1 OR 25 adults at home; party labour now live at 2 -> 0.0226 (patch to 0.718) and 5 -> 0.0354 (patch to 1.0) with the residence identical.** **FIXTURES T1-T14: 14/14, 0 failing, 0 vacuous, 0 not-constructed — and `0 vacuous` is MEASURED, not declared**: every fixture asserts a non-vacuity predicate and the harness relabels it `VACUOUS:` and fails the run when the predicate is false (the inherited script hardcoded `vacuous: 0`). T4 — 5 workers + 2 non-working produce IDENTICAL target work and identical worker-derived carrying while consuming 7 body-days against 5 and carrying the extra pace burden. T5 — a reconciled party (bodies 6 -> 6, workers 6 -> 3, NOBODY MOVED) moves its target work with the LABOUR: people 6 -> 3, depletion 0.0354 -> 0.0296. T6 — a party of five with an EMPTY residence reads five, not the floor of one. T12 — two concurrent parties read neither each other, nor their sum (8), nor the residence (12). **T7 IS PROVEN IN TWO HALVES because one tree cannot answer it:** single-tree positive control (9 bands, cohorts 10..19, all 216 same-day group sizes inside their own band's cohort, largest cohort still fielding the largest group) PLUS a cross-tree digest — the same script at `c8df1ea` and here digests **2,034 same-day trip records over 729 days to the SAME sha256**. **The cross-tree comparison stops at the first expedition target-work day BY DESIGN and says so:** past that point the trees legitimately differ, VERIFICATION PARTIES INCLUDED (labour feeds a verification record's outcome classification and therefore the observation it carries home), so a whole-world identity claim there would be measuring an intended change and calling it a regression. **NUMERIC CHAIN measured on a FAUNA target chosen because availability (0.7983) does NOT cap the take, so the request is DIRECTLY OBSERVABLE rather than inferred: 5 workers -> `estimatedPeopleCount` 5 -> requested 0.0455 -> removal = depletion 0.0455 -> transport 0.0044 -> processing 0.0066 -> usable support 0.0346 -> carry ceiling 0.6 -> carried 0.0346 -> abandoned 0 -> 7 BODIES consuming 0.0056 provision units/day.** Units kept apart; `usableSupport` and `cargo.harvestUnits` are NOT equated; full material conservation is NOT claimed for provisions. **TWO NON-CLAIMS IN THE CHAIN ARE STATED: abandonment reads 0 and is NOT demonstrated here** (one work-day's take is two orders of magnitude below the ceiling; abandonment comes from cargo accumulated across work-days, which CORRECTION-34B already measured at 0.648 -> 0.6 + 0.048, and nothing was fabricated to make it non-zero); **and the pre-harvest request is not carried on the returned record at all** — `resolvePhysicalFoodHarvest` OVERWRITES `resourceReturn.estimatedReturnValue` with the usable support, so that field is the RETURN, recoverable as the request only when availability did not cap the take, which the chain reports explicitly. **NATURAL 20 y / 50 y, sampled DAILY: 87 / 213 expedition target work-days, 0 / 0 work-days where the record's people differ from the party's workers, 0 verify-only depletion events, 0 stock-conservation failures, 0 support exceeding removal, 0 person-conservation failures, 0 duplicate receipts — and 87/87 and 213/213 work-days where a RESIDENCE-DERIVED COUNT WOULD HAVE DIFFERED.** **UNLIKE CORRECTION-34D THIS CHANGE IS NOT INERT IN ORDINARY PLAY**: the repair fires on every natural target-work day. Two qualifications: physical people-days EQUAL productive worker-days at both horizons, so the non-working-member half of the split still never opens by itself (T4 is its proof, not the sweep); and 0 natural work-days have an empty residence, so T6's floor case claims NO natural credit. **FIVE INSTRUMENT ERRORS IN THIS PASS'S OWN PROBES ARE RECORDED:** (1) **the before/after probe's stock reading MEASURED NOTHING** — it keyed the world's stores by `targetTileId` when `plantPatchState` is keyed by PATCH id, so `stockChangedAtTarget` read `false` in EVERY ARM OF BOTH TREES while `depletionApplied` showed real removal; corrected to key on `physicalFoodHarvest.sourceId` and **both arms were regenerated**, the superseded pair preserved in git at `12716a6`/`d36bc87`, and only after the correction does the before arm show the patch going to 1.0; (2) `requestedAmount` was actually the post-harvest RETURN and is renamed everywhere; (3) the natural probe read only `pendingReturnRecord` and missed verification days on `pendingKnowledgeRecord`, reporting 0 work-days where they existed; (4) T14's first form was VACUOUS at 630 days (`IDENTICAL_BUT_NO_TARGET_WORK_OBSERVED` — the four modes agreed about a behaviour that never happened, because the first exploitation lands after day 720) and was rebuilt at 2,520 days where 6 exploitation outcomes and 2 delivered harvests exist; (5) `summary.vacuous: 0` was hardcoded. **REGRESSIONS WERE COMPARED RERUN-TO-RERUN, NOT RERUN-TO-COMMITTED-FILE**, because several committed files predate CORRECTION-28..-32 and legitimately differ from any current run: every frozen suite was run on `c8df1ea` through a temporary detached worktree (removed afterwards) and on this tree with identical arguments. **VERDICTS IDENTICAL IN ALL NINE SUITES — AUDIT-27 11/11, -28 12/12, -29 12/12, -30 15/15, -31 22/22, -32 21/21, -32A 6/6 + 7/7, -33 20/20.** Five are byte-identical modulo `generatedAt`; four (AUDIT-27, its release timelines, CORRECTION-31's lifecycle timelines, CORRECTION-32) show small numeric drift with NO verdict change — the expected downstream consequence of a distant party removing a different amount of stock — and **CORRECTION-32's headline invariant holds on BOTH trees (max crowding paths on any candidate 2, candidates with >=3 charges 0).** PASSED with every output flag redirected: tsc (both), build, graph 221/764 0 dup 0 dangling, **import boundary 85 back-edges UNCHANGED**, season-order `PASS`, step-mode `PASS` with `fullCanonicalStateMatch: true` / `firstDivergence: null`, four-way `ALL_FOUR_STEP_MODES_IDENTICAL`, catchment invariants `PASS`, food pipeline `PASS`, mobility authority `PASS`, socialCausality, 34 presence fixtures 10 / 0 adverse (1 vacuous, unchanged), 34A closure 12 / 0 unexpected, person conservation 9 / 0 unexpected, R1-R12 12/12, L1-L12 12/12, H1-H14 14/14, numeric resource chain `RECONCILED`. **NO FROZEN-EVIDENCE INCIDENT OCCURRED IN THIS PASS** — `git diff --name-only c8df1ea..HEAD -- docs/evidence/ ':(exclude)...authority-34/**'` returns nothing and no working-tree change exists outside the checkpoint directory. **34D'S ARTIFACTS WERE DELIBERATELY NOT REGENERATED** so its report stays checkable against its own evidence; where 34E moves those numbers the movement is recorded in `target-work-regression-delta.json` instead of overwriting history. **STATE: no new stored field, so the movement is the changed world trajectory — 76,898,193 -> 76,945,569 B at 20 y and 78,015,181 -> 77,949,576 B at 50 y (both directions), every cap unchanged (presence sources 3, trips 24, outcomes 6, active parties 2, stale terminal 0, conservation failures 0, duplicate receipts 0).** **NO PERFORMANCE CLAIM IS MADE:** wall-clock moved 1.52/1.49 -> 0.85/0.86 ms per simulated day with no timing arm built and a shared machine, exactly as 34D reported in the other direction. **LIMITS STATED: no outcome improvement is claimed** (active party-days move 854 -> 866 at 20 y, reported not sold); the harvest equation's magnitude is untested; nothing is claimed about who WITHIN a party works — skill, age and injury inside a party need the future individual/household layer; no 200 y matrix. **ROADMAP ITEM 4 REMAINS UNSTARTED and the CORRECTION-34A same-day current-presence deferral is preserved exactly.** See docs/evidence/shared-use-physical-presence-authority-34/EXPEDITION_TARGET_WORK_LABOR_PROVENANCE.md.
+
+**CORRECTION-34D (2026-08-02) — EXPEDITION PHYSICAL HEADCOUNT vs PRODUCTIVE PARTY LABOUR.** Same branch, continuing `e9b9655`. **PRODUCTION BEHAVIOUR CHANGED — ELEVEN FILES.** **SUPERVISING REVIEW FOUND A REAL CONFLATION AND IT WAS REPRODUCED BEFORE ANY CHANGE.** CORRECTION-34C stopped cohort aging teleporting a body home, but one field still answered two incompatible questions: `partyWorkers` was the physical headcount for presence/conservation/fission AND the productive labour for work/pace/carrying/provisioning. Measured at `e9b9655` on 34C's own accepted state (population 20, workingAdults 5, elders 7, dependents 8, one operating party of 6) **through production's own daily reconciliation**: **`PARTY HEADCOUNT STILL ACTS AS IMPOSSIBLE LABOR`** — a band of FIVE working adults ran a party supplying SIX, with composition total 6, carry ceiling **0.72** (capacity-for-six) and a six-person pace composition. **THE FIX — Option B + Option C.** New optional `ExpeditionRecord.nonWorkingPartyPeople`; physical headcount is DERIVED as `partyWorkers + nonWorkingPartyPeople`, so **`0 <= productive <= physical` is STRUCTURAL and no clamp can hide it** (this is why B beat A — two independent stored counts must be kept ordered by convention). Both derivations live once in `bandMobility`, the leaf that already owns "who is committed away". **Option C names the allocation rule production was already performing without saying so: RESIDENCE-FIRST.** A falling working-adult cohort is charged to residential adults while enough exist; only when the residence is exhausted does an away party convert workers into non-working members, at their own tile, with nobody moving. §7's counterexample is the test: workingAdults 20 -> 19 with a party of 6 touches the party **not at all**, and the model does NOT claim to know who aged. **`reconcileExpeditionCommitment` is now TWO bounds on two quantities**: a LABOUR bound (ordinary, non-defensive) and a BODY bound (defensive only). **AFTER, same input: away headcount 6 -> 6, residence 14 -> 14, workers 6 -> 5, composition {1,4,1} -> {1,4,0} (high emptied first), carry 0.72 -> 0.6, pace 2.092 -> 1.969 tiles/day (factor 0.9917 -> 0.9333), provisions 0.0048/day UNCHANGED because all six still eat, catchment draw 10.3 unchanged, population 20 throughout, `laborBounded` false -> true.** **CONSUMPTION IS CHARGED ON BODIES** (provisions, budget, task-camp setup, campless shuttle, acuteRisk share); **CARRYING AND WORK ON PRODUCTIVE WORKERS** — §6's comparison selected ZERO PRODUCTIVE CARRYING over a partial share or an explicit burden, because both alternatives need per-person physiology this architecture has no state for; **PACE ON BOTH**, with non-working members charged the EXISTING limited-walker penalty (no new constant, no elder/child model). **§8 PREPARED IS NO LONGER CALLED DISTANT:** fission used `deriveCommittedMobilityPools`, which counts `prepared` parties standing in the camp. It now uses physically-away people PLUS a separately named prepared-commitment rule; H8 shows the residence physically reads **60, not 12**, with the same founding outcome for a different and stated reason. Cancelling a prepared party to free founders is Roadmap Item 4 and nothing here cancels a party as a side effect of a demographic step. **§7 CATCHMENT HONESTY:** the aged-away elder subtrahend was INFERRED as `max(0, committedAway - workingAdults)`; it is now READ from the record. **§9 THE L10 CORRECTION:** 34C accepted `phase: operating, outcomeReason: null, partyWorkers 6 -> 3` as an explicit outcome. It was neither — three people were deleted with no named cause and the remainder was left describing a journey in progress. Now a physically-away party whose LABOUR falls below the minimum turns for home under **`party_labor_unsupported` keeping every body** (34C declared it `lost`, inventing a death out of an accounting change at home), and a record describing more people than the band has is **retired whole under `invalid_state_repaired`**, which `bandEvents` refuses to narrate at all. **FIXTURES H1-H14: 14/14, 0 failing, 0 vacuous.** **CORRECTION-34B's R1-R12 were re-pointed at the LABOUR trigger** — they set `population === workingAdults`, which now describes the corrupt-state case, so six were measuring the defensive path by accident; **R4 is REVERSED, not rephrased**. **L1-L12 pass 12/12 with L10 corrected and L12 carrying a note that it never proved what its name claims** — it counted expedition records 1,260 days into a natural world, where a 24-day party cannot still be walking at an annual boundary. **H12 constructs that case properly, but only after its FIRST FORM WAS CAUGHT OVERCLAIMING: it injected ten days before the boundary and asserted only that parties existed at injection and resolved later; a direct measurement of the phase ON the demography day read 0 still walking, because an `operating` party one tile out is terminal within about five days. Rebuilt as an `outbound` party on an 8-tile route injected TWO DAYS before the boundary, with the assertion reading the measured phase: 9 parties still walking the day before demography AND on the demography day, identical canonical state across all four step modes. The earlier PASS is withdrawn.** L12's own verdict is narrowed to `STEP_MODE_IDENTICAL_NO_ACTIVE_PARTY_CLAIM`. **NATURAL 20 y / 50 y: 0 adverse on every counter** — 64,800 / 162,000 band-days, 854 / 2,011 active party-days, and **physical people-days EQUAL productive worker-days (2,059 / 4,842)**, so the split never opens by itself and the sweep proves the change is INERT in ordinary play and NOTHING about the reduction path; H1-H14 are the proof. **A PRIOR NATURAL RESULT IS CORRECTED: 34C's `0 annual boundaries crossed by active parties` is WRONG** — sampled daily on the season transition into spring it is **18 band-days at 20 y and 50 at 50 y, on 7 of 20 world boundaries**; the prior zero is the season-boundary sampling artefact CORRECTION-34A already identified once. **THREE INSTRUMENT ERRORS IN THIS PASS'S OWN PROBES ARE RECORDED:** the H4/H10 return fixtures hand-built a `completed` record that stayed in `band.expeditions` with stale composition and failed their own invariant (production drops terminal parties from the list); H12 first reported DIVERGENT on its own arithmetic (`1080/7 = 154.29` gave the weekly arm a fractional step count); and the presence audit's six-year default overwrote six files whose committed data was a twenty-year run — restored and re-run at 20 y, after which **five of them differ from the pre-run committed version by their `generatedAt` line and are NOT byte-restored**, `performance.json` IS byte-identical to `e9b9655`, and `controlled-fixtures.json` intentionally moved from 6 y to 20 y, which PROMOTES `P9_concurrent_parties` out of vacuous. **A FROZEN-EVIDENCE INCIDENT IS REPORTED, NOT HIDDEN:** `socialAccessUnrelatedRiskFixturesAudit` has SIX output flags and the first rerun redirected only `--out`, writing five files into CORRECTION-33's frozen directory; restored with `git checkout` BEFORE ANY COMMIT and re-run with every flag redirected. Each restored file is verified **byte-identical to both `e9b9655` and `HEAD`**, and no frozen-evidence commit exists. PASSED with outputs redirected: tsc (both), build, graph 221/764 0 dup 0 dangling, **import boundary 85 back-edges UNCHANGED** (the new `crowding -> bandMobility` and `acuteRisk -> bandMobility` edges add no cycle — `bandMobility` is a leaf), season-order `PASS`, step-mode `PASS` with `fullCanonicalStateMatch: true` / `firstDivergence: null`, four-way `ALL_FOUR_STEP_MODES_IDENTICAL`, catchment invariants, food pipeline `PASS`, mobility authority `PASS`, socialCausality, daily lifecycle `PASS`, numeric resource chain `RECONCILED`, presence 10 fixtures / 0 adverse, closure 12 / 0 unexpected, person conservation 9 / 0 unexpected, **AUDIT-27 11/11, -28 12/12, -29 12/12, -30 15/15, -31 22/22, -32 21/21, -32A 7/7, -33 20/20 — all 0 vacuous, frozen directories verified CLEAN.** **STATE COST MEASURED AND BOUNDED: +1,224 B at 20 y and +1,332 B at 50 y**, entirely the new `partyPeople` field on the 6-record outcome ring (54 records across 9 bands); every cap unchanged (presence sources per band 3, trips 24, outcomes 6, stale terminal 0, person-conservation failures 0, duplicate receipts 0). **NO PERFORMANCE CLAIM IS MADE:** wall-clock moved 0.86/0.82 -> 1.52/1.49 ms per simulated day, but no before/after timing arm was built and the machine was under sustained load, so it is reported and NOT interpreted in either direction. **LIMITS STATED:** the pace burden and the zero carrying share are bounded choices, NOT measured magnitudes; the residence-first rule is an accounting convention and locating a cohort transition, injury or death inside a party needs the future individual/household layer; withholding prepared people from founding is a policy, not a physical necessity; no performance re-measurement and no 200 y matrix. **ROADMAP ITEM 4 REMAINS UNSTARTED. The same-day formal deferral is preserved exactly.** See docs/evidence/shared-use-physical-presence-authority-34/PARTY_HEADCOUNT_LABOR_AUTHORITY.md.
+
+**CORRECTION-34C (2026-08-02) — AWAY-BODY, DEMOGRAPHIC COHORT AND FISSION OWNERSHIP.** Same branch, continuing `c207d8a`. **PRODUCTION BEHAVIOUR CHANGED — three files.** **SUPERVISING REVIEW FOUND A PHYSICAL-CAUSALITY DEFECT AND IT WAS REPRODUCED BEFORE ANY CHANGE.** CORRECTION-34B made the party's internal authorities agree, but the reconciler bounded the party by `demography.workingAdults` — a LABOUR CLASSIFICATION that falls when `demography.ts:2532-2537` does `adults -= adultsAged; elders += adultsAged;` with population untouched. So a cohort reclassification became permission to delete a body from a distant party. Measured at `c207d8a`: **`COHORT AGING TELEPORTS AWAY BODY`** — residential 14 -> 15, away 6 -> 5, `partyWorkers` 6 -> 5, `physicalEventJustifyingLocationChange: null`. After the repair the same input leaves residential **14**, away **6**, workers **6**, population 20 throughout. **A PRECISION CORRECTION TO THE FINDING IS RECORDED: its illustrative numbers (workingAdults 10 -> 9 with a party of 6) do NOT trigger the reconciler at all** — it fires only when committed > workforce and 6 <= 9 — so that case is reported as a TRUE NEGATIVE. The mechanism is real; the triggering case is a workforce already declined to the party size, which is exactly the CORRECTION-34A scenario. **T2: the model CANNOT locate a death** — deaths are an aggregate net-rate quantity with no location field and demography/viability/renewal contain zero expedition references, so resizing a party on a population fall was an assumption, not a derivation. **T3: fission could found a daughter from people who were not at camp** — `getDaughterPopulation` read TOTAL population and `createDaughterBand` had zero expedition references. **THE FIX — Option A, minimal, three changes.** (1) `reconcileExpeditionCommitment` bounds on **`population` (bodies)**, not `workingAdults`. (2) `createDaughterBand` caps the daughter at `min(getDaughterPopulation(total), population - awayPartyPeople)` and BLOCKS below `DAUGHTER_MIN_POPULATION`, drawing the away headcount from `bandMobility` — the same leaf authority `deriveAvailableMobilityPools` and the catchment effort term already use. (3) `getBandForagingDraw` removes the aged-away overflow from **elders**, closing a residual the first two exposed: an away adult who ages would otherwise sit in `elders` contributing 0.85 of LOCAL extraction effort from an expedition tile. **OWNERSHIP IS NOW EXPLICIT: physical headcount <- population; productive labour <- `getResidentialWorkingAdults` clamped at 0; cohort identity <- demography, classification only; mobility-role composition <- bandMobility, capability only.** `getBandCommitmentAccounting.conserved` now tests **bodies**, and `awayHeadcountExceedsWorkingAdults` is reported separately because it is **LEGITIMATE** — an away adult who ages leaves the band with more people committed than it has working adults, and nobody moved. **THE RECONCILER IS NOW A DEFENSIVE REPAIR for corrupt/legacy state**: it cannot fire on ordinary demography and claims no physical mechanism; party-local loss requires a party-local physical outcome. **FIXTURES L1-L12: 12/12, 0 vacuous, 0 failing** — including **L7 fission BLOCKED rather than borrowing away bodies** (population 60 with 48 away: uncapped draw 20 against 12 physically at camp) and **L12 identical across all four step modes across an annual boundary with expedition records present**. **CORRECTION-34B's R1-R12 were re-pointed at the population trigger** (they encoded the obsolete `workingAdults` one) and pass **12/12** with `PARTIAL RECONCILIATION CONSISTENT`; everything they establish about partial reduction is unchanged, only the circumstance that causes one is narrower. **NATURAL 20 y / 50 y: 0 annual boundaries crossed by active parties, 0 cohort transitions or deaths or fissions while a party was active, all 302 / 720 headcount changes are PHYSICAL RETURNS, 0 attributable to reconciliation, 0 away-body changes without a physical event, 0 population and 0 cohort conservation failures.** Parties last at most 24 days against ANNUAL demography, so overlap does not occur naturally — **a zero here is NOT proof; the controlled fixtures are, and they were built regardless of natural frequency**. **TWO MORE INSTRUMENT ERRORS IN THIS PASS'S OWN PROBES ARE RECORDED:** the natural probe classified every ordinary physical return as a reconciliation (302 false "unexplained" at 20 y) because a terminal party is pruned from `band.expeditions` into `recentExpeditionOutcomes` and only the first store was consulted; and L10 first asserted `phase === "lost"` when a 6->3 reduction correctly stays above the minimum. PASSED with outputs redirected: tsc (both), build, graph 221/764 0 dup 0 dangling, **import boundary 85 back-edges unchanged**, season-order `PASS`, step-mode `PASS`, four-way `ALL_FOUR_STEP_MODES_IDENTICAL`, catchment invariants, food pipeline `PASS`, mobility authority `PASS`, socialCausality, daily lifecycle `PASS`, numeric resource chain `RECONCILED`, 34/34A presence and closure fixtures, **AUDIT-27 11/11, -28 12/12, -29 12/12, -30 15/15, -31 22/22, -32 21/21 (0 vacuous, 0 blocking), -32A 6/6 — frozen directories verified CLEAN.** **ROADMAP ITEM 4 REMAINS UNSTARTED** — this set only the ownership boundary; who leaves, daughter viability and successor groups are Item 4. Party age cohorts and locating a death inside a party need the future individual/household layer. **The same-day formal deferral is preserved exactly.** See docs/evidence/shared-use-physical-presence-authority-34/AWAY_BODY_DEMOGRAPHIC_OWNERSHIP.md.
+
+**CORRECTION-34B (2026-08-02) — PARTIAL EXPEDITION RECONCILIATION CONSISTENCY AND NUMERIC RESOURCE PROOF.** Same branch, continuing `fd868d6`. **PRODUCTION BEHAVIOUR CHANGED — three files.** **SUPERVISING REVIEW FOUND A REAL DEFECT IN CORRECTION-34A AND IT WAS REPRODUCED BEFORE ANY CHANGE.** `reconcileExpeditionCommitment` reduced `partyWorkers` and left every quantity DERIVED from it stale. Controlled construction (six workers, composition total six, workforce falling to five, party staying above the minimum) measured **`PARTIAL RECONCILIATION SPLIT AUTHORITY`** at `fd868d6`: `partyCompositionTotal` stayed **6** while workers read 5; `partyCompositionTotal(deriveCommittedMobilityPools)` stayed **6** while `getCommittedExpeditionWorkers` read **5**; `carryCapacityUnits` stayed at capacity-for-six (**0.72**) against **0.6** justified; the pace factor kept the six-person composition (**0.9917**); and **residential effort adults read −1** — the catchment believed more adults were away than the band had. The existing P10 fixture missed it because it drove the party below `EXPEDITION_MIN_PARTY_WORKERS` and lost the whole party, so the partial path was never exercised. **A CLAMP HID IT IN THE OUTPUT:** the catchment draw read 32.085 in both arms because `Math.max(0, workingAdults - committed)` clamps −1 to 0, which is why the audit reports `effortAdults` separately rather than trusting the draw. **THE FIX — Option B, ONE authority.** Workers, composition, carry ceiling and cargo now move together. **Removal order is high → typical → limited**, under the rule that *reconciliation may never IMPROVE a party's capability*: `derivePartyPaceFactor = 1 + (high*0.15 − limited*0.20)/total`, so dropping `limited` members would make a party that just lost people move FASTER. Measured pace **0.9917 → 0.96**. **Cargo above the reduced ceiling is abandoned to `lostUnits` with `harvest + lost` invariant (0.648 → 0.6 + 0.048)**, and capacity is wrapped in `Math.min` so it can never rise. No container, pack or basket is granted — the ceiling stays bare bodily carrying scaled by learned practice. **Option C (demography/fission owning away-worker accounting) is recorded as ARCHITECTURALLY SUPERIOR AND DEFERRED, not refuted**; Option D was rejected because turning a party for home requires knowledge the band has no channel to obtain. **PHASE-APPROPRIATE TERMINATION: one new outcome reason `commitment_unsupported`, for `prepared` parties only**, because every existing reason describes something that happened on a journey and a prepared party has none — its people are at camp and must not be declared lost. Away parties below the minimum remain `lost`. **AFTER: `PARTIAL RECONCILIATION CONSISTENT`, zero failing checks.** **FIXTURES R1-R12: 12/12, 0 vacuous, 0 failing.** **NUMERIC RESOURCE CHAIN RECONCILED** on one real completed expedition: `takenAtTarget_usableSupport 0.0083`, `cargo.harvestUnits 0.0757` (a DIFFERENT quantity in different units), capacity 0.6, `carried 0.0757`, provisions 0.038, `afterProvisions 0.0377`, `deliveredFraction 1`, **delivered 0.0083 = receipt usableSupport**. **PROVISIONS ARE CLASSIFIED AS A TRIP-LOCAL ACCOUNTING ABSTRACTION AND FULL MATERIAL CONSERVATION IS EXPLICITLY NOT CLAIMED FOR THEM** — no residential store is decremented at launch and `consumeProvisions` only increments a counter; the cargo chain is what conserves. **NATURAL OCCURRENCE IS AN EXPLICIT NULL: 64,800 band-days at 20 y and 162,000 at 50 y, EVERY ONE a no-op reconciliation — 0 partial reductions, 0 cancellations, 0 composition/capacity/catchment mismatches, 0 conservation failures, 0 duplicate receipts.** Partial reconciliation never occurs naturally in this world, so the natural sweep proves nothing about partial-reduction correctness and **the controlled fixtures are the proof** — exactly the trap review warned about. **DOCUMENTATION CONTRADICTION REMOVED:** `crowding.ts` no longer says both "it CONSERVES PEOPLE" and "this read model is NOT self-conserving"; it now says one thing in all three places, and the JSDoc no longer claims unconditionally that `sum(people)` equals `population`. **THREE INSTRUMENT ERRORS IN THIS PASS'S OWN PROBES ARE RECORDED:** the R5 fixture gave two four-worker parties a six-worker ceiling; the numeric chain first conflated `cargo.harvestUnits` with `physicalFoodHarvest.usableSupport`; and it then sampled PEAK cargo when cargo is not monotonic (a party can abandon load on the way home) — the correct sample is the last away-phase day. PASSED with outputs redirected: tsc (both), build, graph 221/764 0 dup 0 dangling, **import boundary 85 back-edges unchanged**, season-order `PASS`, step-mode `PASS`, four-way step-mode `ALL_FOUR_STEP_MODES_IDENTICAL`, catchment invariants, food pipeline `PASS`, mobility authority `PASS`, socialCausality, daily lifecycle `PASS`, all CORRECTION-34A closure fixtures, **AUDIT-27 11/11, -28 12/12, -29 12/12, -30 15/15, -31 22/22, -32 21/21 (0 vacuous, 0 blocking), -32A 6/6 (0 violating) — frozen directories verified CLEAN.** **The formal same-day scope reduction is preserved exactly; same-day current presence is NOT implemented.** See docs/evidence/shared-use-physical-presence-authority-34/PARTIAL_RECONCILIATION_AUDIT.md.
+
+**CORRECTION-34A EVIDENCE CLOSURE (2026-08-02) — SUPERVISOR SCOPE AMENDMENT APPLIED.** Same-day party CURRENT-PRESENCE implementation is formally removed from CORRECTION-34's acceptance requirements: production has **no within-day consumer** able to read such a ledger without a new daily shared-use authority (`runDailyActions` builds no `TickContextCache`; every `buildTickContextCache` site is inside `runSeasonalCompatibilityTick`; `intraSeasonTrips.ts` and `expedition.ts` reference crowding **zero times**; a same-day party never exists at a boundary). Same-day trips remain physically real through labor, route, target, depletion, result and return; **no dead ledger was introduced and crowding was NOT moved to a daily cadence**; the seam is preserved in roadmap and handoff. **THREE-STAGE PROOF (daily, map2:s1, 6 y, 202 party-days): ghosted-at-home / represented-nowhere / at-own-position — BEFORE `5ebb5e98` 505 / 505 / 0; INTERMEDIATE `4042210` 0 / 0 / 505; AFTER 0 / 0 / 505** (identical to intermediate because 34A did not touch the presence authority). **Catchment claim 446,633.3 → 446,128.3, reduction EXACTLY 505 across exactly 202 band-days** — the reduction equals the away-worker-days because the working-adult weight is 1.0, and every other band-day is byte-identical, which shows the change is scoped to away workers and is not a global recalibration. **Reconciliation arm: BEFORE represents 2 of 2 (conserved only by being blind to parties); INTERMEDIATE represents 6 of 2, `conserved: false`; AFTER represents 2 of 2, party `lost`, `conserved: true`.** **PERFORMANCE / BOUNDEDNESS: 20 y 6,208 ms / 0.86 ms per simulated day / 73.33 MB; 50 y 14,844 ms / 0.82 ms / 74.40 MB — state grows 1.07 MB between the horizons and per-day cost is flat.** Caps all hold: max presence sources per band **3** (= 1 residential + `EXPEDITION_ACTIVE_CAP`), max contributors per tile **2**, trip records **24**, outcome records **6**, **stale terminal presence 0, person-conservation failures 0, duplicate receipts 0** at both horizons. **CLOSURE FIXTURES: 12, 0 unexpected, 0 not-constructed, 5 DEFERRED_BY_FORMAL_SCOPE_REDUCTION** — P11 monotone/bounded, P13 both parties contribute with each band conserved, P21 no unit appears twice, P23 bodies leave immediately while memory is separate, P24 physical presence alone creates no encounter, P26 presence is order-independent by construction, P28 bounded with no ghosts or leaks. P15–P19 are **deferred, not vacuous passes**, each carrying four proofs (no consumer; completed records create no presence; no dead ledger; future architecture named). **AN INSTRUMENT ERROR IN THIS PASS'S OWN PROBE IS RECORDED: the first closure run reported 1,420 duplicate receipts at 20 y and 3,136 at 50 y — the probe accumulated receipt keys ACROSS days over a retained 24-slot ring, so it was counting retention, not duplication; corrected to test uniqueness within one band's ring at one instant, the result is 0 at both horizons.** **`getBandPhysicalPresence` DOCUMENTATION CORRECTED: it is NOT self-conserving** — its sum equals `population` only for valid canonical expedition state, maintained upstream by the daily reconciliation for every band-day the daily kernel produces, but **not** for a band assembled directly by a test or future caller, which is rendered as overcommitted rather than disguised. PASSED on rerun with every output redirected: tsc (both), build, graph 221/764 0 dup 0 dangling, **import boundary 85 back-edges unchanged**, season-order `PASS`, step-mode BOTH maps `fullCanonicalStateMatch: true` / `firstDivergence: null`, catchment invariants, food pipeline `PASS`, mobility authority `PASS`, socialCausality, repaired daily lifecycle `PASS`, **AUDIT-27 11/11 (0 vacuous), CORRECTION-28 12/12, -29 12/12, -30 15/15, -31 22/22, -32 21/21 (0 vacuous, 0 blocking), -32A 6/6 (0 failed, 0 violating) — all unchanged, frozen directories verified CLEAN.** See docs/evidence/shared-use-physical-presence-authority-34/FINDINGS.md.
+
+**CORRECTION-34A (2026-08-02) — DAILY TASK-PARTY PRESENCE, CATCHMENT ACCOUNTING AND EVIDENCE CLOSURE. CORRECTION-34 IS FORMALLY NARROWED; SAME-DAY PARTY PRESENCE IS DEFERRED WITH A DOCUMENTED SEAM. ROADMAP ITEM 3 STAYS OPEN / DO NOT MERGE.** Same branch, continuing `4042210`. **PRODUCTION BEHAVIOUR CHANGED — three files.**
+
+**(1) §6 — person conservation is structural, and the defect was not at launch.** The launch authority is sound *at the launch instant*: `deriveDepartableWorkers` = `min(getResidentialWorkingAdults(band) - 2, floor(workingAdults/3))`, and `attachExpedition` caps concurrent parties at `EXPEDITION_ACTIVE_CAP`. What it cannot bound is the future — **`demography.ts`, `viability.ts` and `demographicRenewal.ts` contain ZERO occurrences of "expedition"**, and `partyWorkers` is write-once — so an annual demographic step or fission transfer landing while a party is away can drop the workforce below what is committed. That is the only reachable route to `sum(away) > population`, and it is *not* an invalid launch, so §6 Option A is refuted as a general proof and Option B is irrelevant. New `reconcileExpeditionCommitment(band)` shrinks the newest commitment first (array order is launch order, `attachExpedition` appends) and declares `lost` below `EXPEDITION_MIN_PARTY_WORKERS = 2`. It runs at the head of `expeditionDailyAction`, which fires **every day**, so the whole repair stays inside `expedition.ts` with **no new import edge**. New `getBandCommitmentAccounting(band)` exports the invariant so audits assert the production predicate, and returns physical population, working adults, committed labour and dependents **separately** — §6 requires they not be interchangeable.
+
+**(2) §9 — the catchment comment was the confession.** `getBandForagingDraw` divides a contested *physical* catchment, so it is an extraction-effort term; its comment said it "Matches the adult-equivalent demand formula in `carryingCapacity.derivePopulationDemand`". Reading full `demo.workingAdults`, a band with 3 of 9 adults away claimed the residential catchment as though all 9 foraged locally **while those 3 removed stock at a different tile through `resolveExpeditionTargetWork`** — one worker, two extractions. The consumption side was *not* double-counted (provisions come from the party's carried cargo, not a band store), so the repair is confined to effort. **Option C selected**: effort counts adults physically at camp via `partyCompositionTotal(deriveCommittedMobilityPools(band))` — the same authority `deriveAvailableMobilityPools` uses, so "who is at camp" cannot diverge between readers — and `derivePopulationDemand` is untouched. **The 0.65/0.85 weights are deliberately NOT retuned**: the authority changed, the strength did not, following CORRECTION-32's pattern. Fixture P22 on identical demography: catchment claim **127.02 → 109.62**, consumption demand **25 → 25** (`EFFORT_FALLS_DEMAND_HOLDS`).
+
+**(3) §11 — the inherited `expeditionLifecycleAudit` FAIL is repaired and was an instrument artifact.** It stepped seasonally; a lifecycle fits inside a season (24 of 90 days), so three phases were structurally invisible and the FAIL propagated through CORRECTION-23G/H/J, -24A, -26 and -32 undiagnosed. Two arms, same world and seed: **daily (canonical, 14,400 samples) — operating 130, returning 488, task-camp 375, concurrent parties TRUE; seasonal (160 samples) — 0, 0, 0, FALSE.** Verdict **PASS, 0 failed checks**. Added `operatingObservedNonVacuously` / `returningObservedNonVacuously` / `taskCampObservedNonVacuously` so these can never again pass on zero observations, plus `personConserved` on every sampled band-day (**0 violations**). Both outputs default to writing nothing.
+
+**§5 reproduced exactly, no totals changed: 202 party-days, 123 beyond the residential radius, 0 ghosted, 0 missing**, task camps 27, operating 16 / returning 89. **Natural daily map2:s1 — 20 y: 854 party-days, 502 (58.8%) beyond `CROWDING_RADIUS`, 211 task-camp days, 0 conservation failures / 0 ghosted / 0 missing. 50 y: 2,011, 1,209 (60.1%), 521, 0/0/0. Both horizons 0 adverse.** **9 controlled fixtures, 0 vacuous, 0 unexpected** — P10 constructs the overcommit (before: represents 6 holding 2, `conserved: false`; after: lost, represents 2, `conserved: true`); P7/P8 supply the `aborted`/`lost` cases 40 y of map1 never reaches.
+
+**§7 SAME-DAY PRESENCE IS DEFERRED, NOT FAILED, AND THE REASON IS STRUCTURAL. There is no within-day consumer of physical presence in production.** `runDailyActions` builds no `TickContextCache`; every `buildTickContextCache` site is inside `runSeasonalCompatibilityTick`; `intraSeasonTrips.ts` and `expedition.ts` reference `crowding`/`nearbyBand`/`TickContextCache` **zero times**; and a same-day party never exists at a boundary because it is created, acts and returns inside one synchronous `applyTripDay`. A day-scoped ledger would be **empty at every instant the only consumer runs** — the decorative-state anti-pattern §3.2/§18.1 forbid. Making it live requires moving the shared-use substrate to a daily cadence, which §4 excludes. Same-day trips remain physically real; **`recentIntraSeasonTrips` may never answer "who is standing there now"** (it is a receipt, a bounded 24-slot ring RECOVERY-12 already proved too lossy for calories, retained for seasons not days, and CORRECTION-30 already deleted a reader that treated it as activity evidence). **This also bounds the `4042210` repair, stated not hidden: its 505 worker-days were measured by a DAILY probe while production reads presence only at boundaries.** Full seam — missing consumer, why history is not presence, the exact future authority, roadmap entry — in `SAME_DAY_PRESENCE_SEAM.md`.
+
+PASSED: tsc (both), build, graph 221/764 0 dup 0 dangling, **import boundary 85 back-edges unchanged**, season-order, step-mode BOTH maps with `fullCanonicalStateMatch: true` / `firstDivergence: null`, catchment invariants, food pipeline `PASS`, mobility authority, socialCausality, **AUDIT-27 11/11, -28 12/12, -29 12/12, -30 15/15, -31 22/22, -32 21/21 (0 vacuous, 0 blocking), -32A 6/6 (0 violating) — all reproduced UNCHANGED, outputs redirected, frozen directories verified clean.** NOT DONE: no before/intermediate fixture arms, no performance/state-size measurement, no 200 y matrix; P11/P13/P19/P23/P24/P26/P27/P28 not built. See docs/evidence/shared-use-physical-presence-authority-34/FINDINGS.md.
+
+**CORRECTION-34 (2026-08-02) — SHARED RANGE: RESIDENTIAL AND AWAY-PARTY PHYSICAL-PRESENCE AUTHORITY. PROGRESS — NOT ACCEPTED / DO NOT MERGE.** Branch `checkpoint/shared-use-physical-presence-authority-34` from the accepted CORRECTION-33 tip `5ebb5e9887e36341f69350d4d3cff85f9493457c`. **CORRECTION-33 is CLOSED and FROZEN at `5ebb5e98`.** All earlier tips frozen; main untouched at 0a43083a. **PRODUCTION BEHAVIOUR CHANGED.** **AWAY WORKERS EXISTED TWICE AND NOWHERE.** `buildCrowdingField` scattered `demography.population` from `band.position` and nothing scattered from `expedition.positionTileId`, so a party three days' walk away was projected AT HOME (ghost bodies) and was absent where it actually stood (missing bodies). Daily, map2:s1 over 6 years: **202 party-days, 123 (60.9%) beyond CROWDING_RADIUS from home, 505 away-worker-days represented NOWHERE and the same 505 ghosted at home**; naturally 452 away-worker-seasons at 20 y. **THE FIX — Option D, ONE production file (`src/sim/agents/crowding.ts`).** New `getBandPhysicalPresence(band)` returns the residential remainder at `band.position` plus one bounded body group per physically-away party at its own `positionTileId`; both the cached field and the cache-less scan iterate it, so **field/scan parity holds (P8)**. People are conserved exactly (**0 failures, every band-day**); party scale uses the existing population weight so a 2-worker party reads 0.02 where a 30-person band reads ~0.8. Phase truth not phase names: `prepared` is still AT HOME and measures **0 days**; terminal phases hold no body; a band never reads its own party as foreign (**0 cases**). **AFTER: 505 worker-days at their own position, 0 nowhere, 0 ghosted, with expedition behaviour identical (same 202 party-days, same phase split).** **WHY PROGRESS AND NOT PASS:** the §19 evidence package is materially incomplete — **no natural-occurrence 20y/50y, no resource-accounting (P21), no performance, no before-after.json**; fixtures P6/P7/P11/P13/P19/P20/P21/P23/P24/P26 were not built and P8/P9/P18 are VACUOUS; **same-day party presence is DEFERRED** (Option E named as the seam); and **the catchment double-draw is MEASURED BUT UNREPAIRED** — `getBandForagingDraw` still uses full `demography.workingAdults`, so away workers keep drawing the residential catchment while also provisioned and harvesting away (226 band-seasons). §11.7 forbids rewriting the catchment without a food-pipeline proof, so away workers remain duplicated ECOLOGICALLY though no longer PHYSICALLY. **TWO INSTRUMENT FINDINGS.** (1) This pass's own first probe sampled SEASONALLY and measured **0** parties beyond the radius and **0** task-camp days; daily sampling measures 60.9% and 27 — physical presence is a daily fact and a season-boundary sample hides it entirely. (2) **The inherited `expeditionLifecycleAudit` failure is an INSTRUMENT ARTIFACT, not a production defect**: it steps `stepSim(world, 1, "seasonal")`, so `operating`, `returning` and `taskCamp` are structurally invisible to it while a daily probe on the same world sees 16/89/27. It still reports FAIL and is **diagnosed, not repaired**. PASSED: tsc (both), build, graph 221/764, import boundary 85 unchanged, season-order, step-mode with `fullCanonicalStateMatch` and `firstDivergence: null`, catchment invariants, food pipeline, mobility authority, socialCausality, CORRECTION-28 12/12 including field/scan parity. **NO FURTHER ITEM-3 WORK IS AUTHORIZED until this checkpoint's evidence is completed or its scope is formally reduced.** See docs/evidence/shared-use-physical-presence-authority-34/FINDINGS.md.
+
+**CORRECTION-33 (2026-08-02) — SHARED RANGE: GLOBAL BAND-COUNT SOCIAL OMNISCIENCE. PASS / ROADMAP ITEM 3 STAYS ACTIVE / DO NOT MERGE.** Branch `checkpoint/social-access-unrelated-risk-provenance-33` from the accepted CORRECTION-32 tip `d11854153e76c2435bce9d53ffde49317e5e8f90`. **CORRECTION-32 is CLOSED and FROZEN at `d1185415`.** CORRECTION-31 frozen at 3e2c1215; -30 at 1c6a3ed8; -29 at a15d0a78; -28 at c5eb58a; AUDIT-27 at b352c31; main untouched at 0a43083a. **PRODUCTION BEHAVIOUR CHANGED.** **A BAND WAS READING THE SIMULATOR'S POPULATION.** `dryMargin.getSocialAccessRisk` computed `unrelatedRisk = Object.values(world.bands).length > 8 && knownContactCount === 0 ? 0.08 : 0` — the band became more cautious about a particular WATER PLACE because the simulator held a ninth band record, including **extinct, absorbed and dispersed records** and bands it had never seen, never been told about and that had never been near that water. It was also an INVERSION: having no known contacts is evidence of ISOLATION at least as much as of danger. It reached movement through `getFallbackRank` (x1.8), water-source ordering (x0.18), seasonal mode (x0.14), river prospect (x0.16/x0.08), stay/move/scout, `scoreDecision` (-0.36), `getBadSiteStuckResidencePenalty` (x0.08) and prospect `socialCost` (-0.70). **THE FIX — Option A, ONE production file (`src/sim/agents/dryMargin.ts`), the term REMOVED and the `world` parameter removed with it.** `getSocialAccessRisk` was the only reader of `world.bands` in that module, so dropping the parameter makes the invariant STRUCTURAL, not merely tested. **No new constant, module, store, type or import edge; the base `0.28`, the access-memory coefficient `0.26` and known-contact relief `0.08` are UNTOUCHED.** Options B (derive regional awareness from band-known evidence), C (reports), D (physical traces — CORRECTION-30 proved none exist), E (a second baseline) and F were all REJECTED with reasons. **HEADLINE, observer band object BYTE-IDENTICAL and only the record count varied: 8 -> 9 records moved `socialAccessRisk` 0.29 -> 0.37 and `fallbackRank` 11 -> 12 before; both stay 0.29 / 11 after.** **NATURALLY the term was not an edge case: it fired in 1,310 of 2,240 band-seasons (58.5%) at 20 years and 3,230 of 5,600 at 50, EVERY ONE with zero social evidence, across 18 bands** — the default map2 world holds a CONSTANT 9 records for 80 seasons, so it was permanently armed for uninformed bands. **map1 never held more than 8 records, so both its seeds are IDENTICAL on every key; map2 mean socialAccessRisk 0.3855 -> 0.3059 and 0.3446 -> 0.2853**, with moves 450->444 / 401->369 at 20 y. `unexplainedDivergences: 0`. **NO OUTCOME IMPROVEMENT IS CLAIMED.** **FIXTURES P1-P20: 20 fixtures, 0 vacuous, 0 adverse after / 11 adverse before**, with 8 unchanged passes reported as preservation rather than credit. Legitimate behaviour PROVEN preserved: active place evidence still raises risk (P6), released history stays inactive with records retained (P7), an old contact manufactures no danger (P8), evidence moves risk at constant population (P10), active evidence still reaches the candidate score (P16) — isolated as ACTIVE-vs-RELEASED at the same tile so known-contact relief cancels exactly. **P9 (report-supported caution) is NOT_CONSTRUCTED, not a pass** — a report needs a third relaying band and inventing a report topic to preserve a coefficient is forbidden. **FOUR INSTRUMENT ERRORS IN THIS PASS'S OWN PROBES ARE RECORDED**: cloning the observer to make remote records made every clone inherit its catchment; a neighbouring reference tile acquired evidence of its own and made a live path look inert; a distant reference tile was unknown in the earlier phase and fabricated a 0.33 rise; and P4/P5 initially compared counts that did not straddle 8. **`depletionSum` read 0 on both arms and is reported as NOT MEASURED, not as zero.** **ADJACENT FINDINGS RECORDED, NOT FIXED:** `contactMemories` + `knowledge.knownBands` can count one band twice; base `0.28` calibration undocumented; known-contact relief saturation; report-only access coverage; future regional-social-awareness architecture; `territorialPressure`'s missing writer. PASSED: tsc (both), build, graph 221/764 0 dup 0 dangling, import boundary (85, unchanged), season-order invariance, step-mode invariance with `fullCanonicalStateMatch` and `firstDivergence: null`, catchment invariants, food pipeline, mobility authority, socialCausalityAudit; AUDIT-27 11/11, CORRECTION-28 12/12, -29 12/12, -30 15/15, -31 22/22, CORRECTION-32 attribution 9/9 self-consistency with 150 clean pairs and 0 contaminated, CORRECTION-32 zero controls 6/6, CORRECTION-32A social access 7/7 — all unchanged, every output flag redirected (including `--timeline-out` and `--timelines`), frozen directories verified clean. NOT RUN: no 200 y matrix, no performance measurement. **ROADMAP ITEM 3 REMAINS OPEN.** See docs/evidence/social-access-unrelated-risk-provenance-33/FINDINGS.md.
+
+**CORRECTION-32A (2026-08-02) — EVIDENCE REPAIR. CORRECTION-32 IS `PROGRESS`, NOT ACCEPTED, NOT FROZEN.** CORRECTION-32 remained PROGRESS after its first report because its whole-candidate counterfactual attribution was CONTAMINATED: `crowdingDecisionAttributionAudit.mjs` paired the full and zero-crowding candidates by `${actionType}:${targetTileId}`, a key an M0.8 corridor-relocation candidate can share with an ordinary known move, so `new Map(...)` kept only the last and two DIFFERENT candidates' scores were subtracted and published as crowding influence. `-4.02` is literally `0.96 - 4.98`; a SOLO band with no neighbours reported `-3.39`. Every impossible residual in both arms sits on a colliding key, 1:1. **WITHDRAWN:** every `totalCrowdingInfluence`, every `residualThroughNestedComposites` (the metric is REMOVED, not recomputed), the headline "candidates with >=3 crowding paths **49 -> 0**" and its natural restatements **56 -> 0** / **144 -> 0**, "max paths **4 -> 2**", and the claim that P1 was a zero-crowding control. **STILL VALID:** the physical-layer readings, the pressure-state observations, the natural-occurrence counts and the behavioural comparison — none was produced by the broken pairing. **CORRECTED MEASUREMENTS** (fixed candidate, every non-crowding field byte-identical, any unprovable pair rejected; 150/152 candidates, 0 rejected, 0 contaminated, 9/9 self-consistency assertions passing on BOTH arms): max separately-named DIRECT charges on one candidate **3 -> 1**; candidates carrying >=3 direct charges **1 -> 0**; direct `nearbyBandPressure` influence **2.02 -> 0**; candidates charged through range saturation **32 -> 0** and daughter-kin **42 -> 0**; max fixed-candidate partition total **0.42 -> 0.24**. **ZERO CONTROLS Z1-Z6: 67 candidates, 6 fixtures, 0 violating, 0 vacuous — IN BOTH ARMS**, so they are preservation evidence, not repair credit; Z5 holds foodStress 1.0 / waterStress 0.6 / mobilityPressure 0.95 / own-use rangeSaturation 0.49 with crowding at exactly 0 and none is classified as crowding. **SOCIAL ACCESS S1-S7, the proof CORRECTION-32 shipped without:** S1 physical proximity with zero friction records **RAISES caution +0.05 before -> 0 after**; S2 legitimate place evidence with contact count held identical **0 before -> +0.10 after**; S3 release 0.05 -> 0.10 -> 0.04 with `activeEvidenceWeight` 0.85 -> 0, phase `released_historical`, and 1 friction record + 1 contact memory + 18 encounter records RETAINED. S5 (second-hand) is `NOT_CONSTRUCTED`, not a pass. **P1-P21 rerun with corrected pairing: 21/21, 0 vacuous, the SAME four verdicts flip, 0 blocking self-consistency failures, 3 of 138 candidates rejected for two STATED reasons** (production does not stamp `isSideCountryProbe` on `AlternativeConsidered`; `getBadSiteStuckResidencePenalty` is module-private and its external score addition cannot be split). **PRODUCTION IMPLEMENTATION SUPPORTED — NO PRODUCTION FILE CHANGED IN 32A** (`git diff --name-only fdf0431..HEAD` is scripts, docs and evidence only). **TWO REPORTING CORRECTIONS: the diff touches SEVEN production files, not six** (`crowding.ts`, `dryMargin.ts`, `pressure.ts`, `socialContext.ts`, `types.ts`, `bandDecision.ts`, `decisionScoring.ts`), **and it DOES add one new exported constant `CROWDING_DECISION_COST_WEIGHT = 0.96`** even though it adds no new constant FILE — "no new constant file" and "no new constant" are different claims and the earlier report blurred them. **INCIDENT, reported not hidden: two frozen evidence files were overwritten during the regression rerun** (`crowding-shared-range-authority-27/release-timelines.json` and `shared-range-release-lifecycle-31/lifecycle-timelines.json`) because those two audits have a SECOND default output flag (`--timeline-out`, `--timelines`) that `--out` does not cover — the same trap the previous pass recorded. Restored with `git checkout` and both audits rerun with every output redirected; frozen directories verified clean. **NOT CLAIMED:** that 0.96 is the right magnitude (the AUTHORITY was fixed, the STRENGTH deliberately not tuned), and no outcome improvement. **CORRECTION-32 MUST NOT BE DESCRIBED AS FROZEN OR ACCEPTED UNTIL THE SUPERVISOR ACCEPTS IT, AND ROADMAP ITEM 3 IS NOT COMPLETE.** See docs/evidence/crowding-decision-pressure-authority-32/INSTRUMENT_CORRECTION.md.
+
 ### Freshness block
 
 ```text
@@ -68,6 +142,1732 @@ Other cited commits — all CONFIRMED present in `git log --all`:
   736214f39728767b77b4e7989dc33c7b16642239.
 
 Last updated:
+  2026-08-11 (ROADMAP ITEM 4 — FAILED-RETURN RESOLUTION / FRESH SURVIVOR COMMITMENT / DISTINCT
+  POST-RETURN ESTABLISHMENT — PROGRESS. Starting from accepted 1df00d2, the living
+  unresolved_after_failed_return dead end now has a truthful human exit: a pure Band-only decision
+  binds the current survivor cohort to current or observed country, followed by a fresh physical
+  operation window and the distinct physical-event terminal established_after_failed_return.
+  Founder commitment and pre-return evidence stay historical; return_path_entered stays permanent;
+  ordinary stabilization stays never-return-only. Reintegration wins same-day competition while the
+  group is unresolved, zero-pop extinction is unchanged, and a terminal parent creates neither
+  knowledge nor a dead end. Completion initializes lineage, deep history, event, Chronicle, identity
+  and camp surfaces atomically without moving bodies. New fixtures 25/25 and mutations 6/6 pass with
+  zero vacuity and byte-identical restoration; inherited gates, build, graph/import, deterministic
+  replay, step modes and season order pass. Natural performAtomicDeparture callers remain 0 and
+  createDaughterBand callers remain 0. Physical cutover/cooldown/cadence and Item 5 remain unstarted.)
+
+Previously updated:
+  2026-08-10 (ROADMAP ITEM 4 — NATURAL PRE-DEPARTURE REACHABILITY + PARENT ATTEMPT DEADLINE
+  AUTHORITY + LEGACY CUTOVER PREPARATION — PROGRESS / ITEM 4 ACTIVE / NO NATURAL PHYSICAL
+  DEPARTURE / STABILIZATION WRITERS 0 / unresolved_after_failed_return UNTOUCHED / ITEM 5
+  UNSTARTED. Recovered the exact remote checkpoint 22da95c into a new clean worktree, leaving the
+  old dirty ordinary-exploration checkout untouched. Architecture A+C keeps annual demography as
+  the old causal evidence producer and gives a dedicated adapter ownership of bounded proposal and
+  lifecycle progression. Natural progression is one phase per day: proposed on D, planned no
+  earlier than D+1, canonical preparation no earlier than D+2. An untouched seed reaches proposed
+  naturally on day 43,920 without a daughter, event or body transfer and later records a real
+  founder decline; a controlled warmed condition reaches departure_ready through the real
+  allocation, parent-residual, positive-commitment and one-use-permit authorities. A daily parent
+  deadline action runs before progression, delegates to the kernel timeout decision and existing
+  abandonment path, and withdraws a live permit on ready expiry. `createDaughterBand` is
+  byte-identical with zero production calls; `prepareFissionDeparture` has one natural caller;
+  `performAtomicDeparture` has zero natural callers. No natural provisional successor exists.
+  A–M 13/13 and seven mutation controls 7/7, all with zero vacuous fixtures and byte-identical
+  mutant restoration; full regression, determinism, step-mode, graph/import and build gates pass.
+  The exact next dependency is physical cutover, separately authorized; stabilization and the
+  unresolved failed-return debt remain later Item-4 work.)
+
+Previously updated:
+  2026-08-10 (ROADMAP ITEM 4 — ATOMIC DEPARTURE GATE CORRECTION: THE EXECUTED DESTINATION IS THE
+  ACCEPTED DESTINATION — PROGRESS / SUPERVISOR CORRECTION ON 5cc2532, THE GATE IS RETAINED / ITEM 4
+  ACTIVE / NATURAL CALLERS STILL 0 / STABILIZATION WRITERS STILL 0 / createDaughterBand UNTOUCHED /
+  ITEM 5 UNSTARTED. The gate built `terms.targetTileId` FROM the commitment, so the commitment proved
+  its destination matched its own and the permit — opened from that commitment — proved it again;
+  both checks were vacuous on that field. Meanwhile the successor's lifecycle received
+  `attempt.targetTileId`, which is the field `provisionalTravel` reads to choose every step. So a
+  departure could execute a destination the founder cohort never accepted. The gate now proves
+  attempt == commitment == permit before any body moves, refusing by its own name; and because that
+  equality is proven, the executed destination written to the successor and to the parent's terminal
+  record is sourced from the ACCEPTED terms — no value moves, the AUTHORITY moves. Removing the
+  duplicate field was rejected on inspection: preparation reads it to ask the cohort what it is
+  accepting, and the terminal record legitimately carries it as provenance. 19 fixtures 0 vacuous;
+  D2 is non-vacuous because the identical world with the target left alone departs in the same run.
+  An instrument error is recorded: the fifth negative control's first form restored only the
+  self-comparison and did not reproduce the founders walking anywhere wrong. Canonical state
+  unchanged. The timeout finding and `unresolved_after_failed_return` both remain open; this
+  correction does NOT close Item 4.)
+
+Previously updated:
+  2026-08-10 (ROADMAP ITEM 4 — ATOMIC DEPARTURE GATE — PROGRESS / ITEM 4 ACTIVE / THE PHYSICAL
+  DEPARTURE NOW REQUIRES A PREPARED, ACCEPTED, FRESH AND PERMITTED SET OF TERMS / NATURAL CALLERS
+  STILL 0 / STABILIZATION WRITERS STILL 0 / createDaughterBand UNTOUCHED / ITEM 5 UNSTARTED.
+  `performAtomicDeparture` used to read a founder count off the attempt, allocate, run the residual
+  authority on a CALLER-SUPPLIED context, revise, re-allocate and only then move bodies — two answers
+  to who is leaving, and a phase string as the only gate. It now executes `prepared.allocation`
+  exactly, refuses a parent that can no longer supply those three cohort lines, and spends the
+  one-use permit in the same value that moves the bodies. The residual context field is REMOVED from
+  both public requests rather than validated: new `fissionResidualMeasurement.ts` derives the whole
+  closed input from the band (no world), so the stale-context attack has nowhere to be expressed, and
+  `minimumFounderRequest` — the one input that is policy rather than a fact about the parent — is
+  stored on the prepared record so the fingerprint stays exhaustive at both ends. Stale refuses and
+  never re-fits; the seam does not supersede the permit itself, because a refusal must return the
+  original world. The successor carries five fields of consumed provenance and NO permit. 16 fixtures
+  0 vacuous with four negative controls; choosing the freshness control's probe took three attempts
+  because two independent later barriers kept catching the mutant, and that is recorded. FINDING:
+  no production adapter resolves the parent attempt's timeout at all — `resolveTimeout` has zero
+  callers — so `departure_ready -> abandoned` is declared and driven by nothing. Fourteen inherited
+  suites were STALE, NOT BROKEN and now run the canonical chain. Import back-edges 86 -> 87,
+  attributed exactly to one type-only import. OPEN ITEM-4 DEBT unchanged:
+  `unresolved_after_failed_return` still blocks an Item 4 freeze.)
+
+Previously updated:
+  2026-08-10 (ROADMAP ITEM 4 — CANONICAL PRE-DEPARTURE PREPARATION AUTHORITY — PROGRESS / ITEM 4
+  ACTIVE / A CANONICAL PREPARATION PATH EXISTS AND NOTHING NATURAL CALLS IT / performAtomicDeparture
+  BEHAVIOURALLY UNCHANGED AND STILL GATES ON PHASE ALONE / STABILIZATION WRITERS STILL 0 /
+  createDaughterBand UNTOUCHED / ITEM 5 UNSTARTED. Every ingredient of a truthful departure was
+  computed INSIDE the departure seam, so the exact allocation a commitment must bind to did not
+  exist until the transfer was already under way. New `fissionDeparturePreparation.ts` runs the
+  chain in causal order — candidate allocation, residual assessment, explicit downward revision,
+  FINAL endorsed allocation, the consequence of THAT allocation, the commitment decision on THOSE
+  terms, a one-use permit, then `departure_ready` — duplicating no authority. It writes ONE nested
+  canonical `PreparedFissionDeparture` on the parent attempt rather than five optional fields, so
+  commitment A paired with allocation B is unconstructible. The exact three cohort lines are stored,
+  not a headcount: measured, a request of 12 was revised to 11 and the committed composition {7,3,1}
+  differs from the requested {8,3,1}. Freshness is a fingerprint over the WHOLE closed residual
+  input, built from a Record<keyof ...> so a new input fails to compile rather than being silently
+  omitted. The kernel now requires `preparedDepartureProven` for `departure_ready`, the same
+  construction as `physicalCoLocationProven`. 16 fixtures 0 vacuous, four negative controls, two
+  instrument errors recorded. Import back-edges moved 85 -> 86, attributed exactly to two type-only
+  imports in types.ts. OPEN ITEM-4 DEBT unchanged: `unresolved_after_failed_return` still blocks an
+  Item 4 freeze.)
+
+Previously updated:
+  2026-08-09 (ROADMAP ITEM 4 — UNKNOWN CONSEQUENCE AND PRE/POST-DEPARTURE AUTHORITY SEMANTICS —
+  PROGRESS / SUPERVISOR CORRECTION ON 57f5e9f, THE RESIDUAL-COST CORRECTION IS RETAINED / ITEM 4
+  ACTIVE / NOTHING CALLS THE AUTHORITY / ATOMIC DEPARTURE UNCHANGED / STABILIZATION WRITERS STILL 0 /
+  CANONICAL STATE UNCHANGED / ITEM 5 UNSTARTED. The decision read an absent parent-separation
+  consequence as `?? 0` while documenting that absent means unmeasured — and 0 is a value the
+  residual authority never emits, since the smallest damage measured across founder counts 2..12 is
+  0.07 and every non-empty allocation removes camp labour. The consequence is now REQUIRED with no
+  default, refused by name at runtime for untyped callers, malformed magnitudes refused rather than
+  clamped, and the published evidence carries `"not_measured"` instead of a number nobody measured.
+  Separately, `ended_by_return` was unreachable — endings act only on a live record and
+  `consumed_by_departure` is terminal — so the authorization is now a PRE-DEPARTURE PERMIT
+  (`FounderDepartureAuthorization`) answering one question: may this commitment move these bodies,
+  once. A return edits nothing; it is a successor-lifecycle fact that `returning`,
+  `unresolved_after_failed_return` and `reintegrated` already record physically. The historical
+  commitment is explicitly NOT a stabilization gate, and what stabilization must inspect instead is
+  published in the module. 25 fixtures 0 vacuous, six negative controls, types.ts unchanged. OPEN
+  ITEM-4 DEBT unchanged: `unresolved_after_failed_return` still blocks an Item 4 freeze.)
+
+Previously updated:
+  2026-08-09 (ROADMAP ITEM 4 — FOUNDER-COMMITMENT CAUSAL INPUTS AND LIVE AUTHORIZATION SEMANTICS —
+  PROGRESS / SUPERVISOR CORRECTION ON a79795d, FOUNDATION RETAINED / ITEM 4 ACTIVE / NOTHING CALLS
+  THE AUTHORITY / ATOMIC DEPARTURE UNCHANGED / STABILIZATION WRITERS STILL 0 / ITEM 5 UNSTARTED.
+  The commitment derived its separation cost from `reasonIds.length / 4`, but that list is
+  `[...opposing, ...supporting]` across six ledgers — so supporting evidence, prior fragility and
+  uncertainty were all charged as harm, and three SUPPORTING reasons alone measured 0.75 of 1.0. It
+  now consumes a bounded measured `ParentSeparationConsequence.splitCausedDamage` published by the
+  residual authority; the verdict was rejected as a source because its tolerance is narrowed by
+  prior fragility. Separately, `commitmentAuthorizesDeparture` was only ever a terms comparison, so
+  the claimed history/authority separation did not exist: it is renamed
+  `commitmentTermsMatchDeparture` and a distinct `FounderCohortAuthorization` record now carries
+  live / superseded / withdrawn / consumed / ended-by-return with a required end cause, refuses to
+  re-end a terminal record, and offers no reopen — so no implicit recommitment is possible. A third
+  change was forced by the first and is reported rather than buried: fixture D had been passing
+  because of the false cost, and readiness is now conjunctive (familiarity x capacity) so a group
+  that cannot travel cannot be talked into it by desperation. 22 fixtures 0 vacuous, four negative
+  controls, canonical state unchanged. OPEN ITEM-4 DEBT unchanged: `unresolved_after_failed_return`
+  still blocks an Item 4 freeze.)
+
+Previously updated:
+  2026-08-09 (ROADMAP ITEM 4 — POSITIVE FOUNDER-COMMITMENT FOUNDATION — PROGRESS / ITEM 4 ACTIVE /
+  NOTHING CALLS THE NEW AUTHORITY / ATOMIC DEPARTURE UNCHANGED / STABILIZATION WRITERS STILL 0 /
+  NATURAL CUTOVER UNSTARTED / ITEM 5 UNSTARTED. The lifecycle phase `committed` had no production
+  writer, no existing adapter and no path check at the departure seam; it is renamed
+  `departure_planned` for what it actually proves. New pure `fissionCommitment.ts` records a POSITIVE
+  acceptance by the REPRESENTED FOUNDER COHORT AS ONE AGGREGATE — never individual consent, because
+  canonical state has no persons — bound to the ENDORSED allocation rather than the request count,
+  since the residual authority may revise a request downward and the seam re-allocates. It takes a
+  band and no world, so anti-omniscience is structural. The immutable event is separated from a
+  DERIVED authorization so a later RETURN can end the authority without erasing the history. This
+  pass's own fixtures caught its first willingness model accepting a separation at split pressure
+  0.05, because familiarity and capacity summed to the whole threshold; motive is now a precondition
+  that readiness scales. 11 fixtures 0 vacuous, two negative controls. OPEN ITEM-4 DEBT:
+  `unresolved_after_failed_return` can persist indefinitely for a well-fed group, and Item 4 may not
+  freeze until that is resolved.)
+
+Previously updated:
+  2026-08-08 (ROADMAP ITEM 4 — CLEAN THE WIP BACK TO TRUTHFUL PHYSICAL EVIDENCE — PROGRESS /
+  ITEM 4 ACTIVE / NO POSITIVE COMMITMENT AUTHORITY / NATURAL CUTOVER UNSTARTED / ITEM 5 UNSTARTED /
+  PUSHED AS 32a668850739207b1a202f360f9321080e8b9189 AND INDEPENDENTLY AUDITED. Branch checkpoint/dynamic-fission-provisional-successor-38 from WIP review snapshot
+  be490f9b565119545938348b10cc9bf720310ebf. Production has no caller for `establishing ->
+  stabilized`; `operationHistory` and its approximately ten-day assessment windows retain only
+  truthful physical-take/demand/depletion history with zero lifecycle authority. Phase-created
+  attempts, unwritten parent support, cycle credit and two-barren-day establishment relocation are
+  removed. A failed return now enters event-bounded `unresolved_after_failed_return`, remains alive
+  under subsistence, bodily consequences, demography and zero-population extinction, and may still
+  reintegrate through legitimate physical co-location. C1-C12 12/12, V4 PASS, V9 PASS, mandatory
+  regressions green, no frozen-evidence churn. The cleanup commit is 32a668850739207b1a202f360f9321080e8b9189.)
+
+Previously updated:
+  2026-08-05 (ROADMAP ITEM 4 — TRAVEL SUBSISTENCE, EMBODIED RETURN AND EVIDENCE-BASED RESOLUTION —
+  PROGRESS / ITEM 4 REMAINS ACTIVE / ITEM 5 NOT STARTED / DO NOT MERGE / NOT PUSHED. Branch
+  checkpoint/dynamic-fission-provisional-successor-38. The hunger relief was not a missing floor: a
+  group walking on ground it has never observed can never close a support interval, so
+  `deriveCanonicalNutritionState(undefined)` answered a question nobody had asked. The successor now
+  departs MEASURED and the seam refuses a departure that would leave it unmeasured or less hungry
+  than the camp it left; a new subsistence authority gives it a day of real gathering, real depletion
+  and real water; a new return authority takes a band and a day and no world; a new establishment
+  authority requires seven named lived-evidence signals, every one of which must hold; and the
+  acute-risk ring merges by episode id with the effect rederived. 38/38 fixtures, 0 vacuous.
+  See docs/evidence/dynamic-fission-daughter-viability-37/TRAVEL_SUBSISTENCE_DECISION.md.)
+
+Previously updated:
+  2026-08-04 (ROADMAP ITEM 4 — PHYSICAL TRAVEL AND RETURN VERTICAL — PROGRESS / ITEM 4 REMAINS ACTIVE /
+  ITEM 5 NOT STARTED / STABILIZATION NOT BEGUN / DO NOT MERGE / NOT PUSHED. Branch
+  checkpoint/dynamic-fission-provisional-successor-38. TIMER-ONLY REINTEGRATION IS REMOVED: every phase
+  now declares whether elapsed time alone may enter it, `reintegrated` and `stabilized` require a
+  physical event, `requestTransition` takes a REQUIRED `cause` (a default would have restored the
+  defect for any caller that forgot — which is exactly how it survived), `reintegrated` additionally
+  demands proven co-location, `resolveTimeout` routes through the same guards instead of around them,
+  and the contract table itself refuses any timeout pointing at a physical-event phase. A failed
+  return now abandons the attempt and the group tries to live where it stands, with the CHURN bounded
+  at 3 cycles and the end of it REPORTED — after which every exit is physical. The successor
+  physically walks: bounded local next-step planning plus a retained trail, one world-truth read
+  (passability may REFUSE a step), pace through the canonical whole-band column authority. Measured: 5
+  contiguous tiles, arrived day 4, arrival produces `establishing` and never `stabilized`.
+  Reintegration requires the SAME TILE as a living parent, adds cohorts line by line (12+7=19, 8+3=11,
+  3+1=4, world population 235 -> 235) and removes the entity exactly once; a parent that has moved
+  prevents it, and the travellers are not retargeted at a position they cannot observe. FINDING,
+  published not fixed: travel makes a group LESS hungry, because the correctly reset `seasonalSupport`
+  reads as no stress — an absence taken for contentment. See
+  docs/evidence/dynamic-fission-daughter-viability-37/.)
+
+Previously updated:
+  2026-08-04 (ROADMAP ITEM 4 — PROVISIONAL QUARANTINE CONTRACT — PROGRESS / ITEM 4 REMAINS ACTIVE /
+  ITEM 5 NOT STARTED / TRAVEL NOT STARTED / DO NOT MERGE / NOT PUSHED. Branch
+  checkpoint/dynamic-fission-provisional-successor-38. A per-field probe of a REAL departure found
+  86 of the 125 populated Band fields were still THE PARENT'S OWN OBJECT — its complete knowledge and
+  place memory, every field the legacy path deliberately degrades, its camp and catchment, its whole
+  biography and social world, and its own colour. New fissionFieldTransferPolicy.ts classifies all
+  133 keyof Band into twelve classes exactly once each, enforced by the type system (which fired on
+  its first compile and caught `position`), by an audit that re-derives keyof Band from types.ts
+  independently of the compiler, and by a runtime check that REFUSES a departure rather than warning.
+  Structural resets are driven by the classification, so a newly classified field is reset with no
+  edit to the seam. Result 86 -> 5 with 0 violations; knowledge transfers partially through the SAME
+  canonical inheritors the legacy daughter uses (observed tiles 58 -> 15, place memory 42 -> 5).
+  demography.ts now DERIVES its clone registry from the table, and 33 fields of legacy debt are
+  published rather than repaired — including `expeditions`, which demography.ts never mentions, so a
+  legacy daughter holds the parent's away-party records by reference. The quarantine contract is
+  closed with a with-minus-without counterfactual: 11 fields blocked, each a positive control, while
+  the ANNUAL DEMOGRAPHIC STEP still runs on the quarantined group. FINDING, published not fixed: a
+  group can leave quarantine ON A TIMER into ordinary status, because `returning` times out to the
+  terminal `reintegrated` and the reintegration writer does not exist. See
+  docs/evidence/dynamic-fission-daughter-viability-37/FIELD_TRANSFER_POLICY.md.)
+
+Previously updated:
+  2026-08-03 (ROADMAP ITEM 4 — DYNAMIC FISSION / DAUGHTER VIABILITY / SUCCESSOR GROUPS — PROGRESS:
+  AUDIT AND ARCHITECTURE COMPLETE, IMPLEMENTATION NOT STARTED / ROADMAP ITEM 4 REMAINS ACTIVE /
+  ITEM 5 NOT STARTED / DO NOT MERGE. Audit-only branch
+  checkpoint/dynamic-fission-daughter-viability-37 from the Item 3 final freeze audit head ef76971;
+  `git diff -- src/` is EMPTY. Measured over 200 simulated years on two seeds: current fission
+  creates a permanent daughter 5-7 tiles away in a single day, with no journey, no establishment and
+  no possibility of failure — and the split MANUFACTURES DEPENDENTS (+4 and +3) while destroying
+  working adults and elders on both sides, because both parent and daughter are passed through
+  recomputeDemographicCounts and their cohorts re-derived at fixed ratios. Cohorts conserved in 0 of
+  2 on all three counts; one of the two fissions created a person while the event's own flag
+  reported conservation true. Direction D selected: a reversible attempt that holds no bodies,
+  resolving at one departure event into a provisional successor that must travel, establish, and
+  then stabilize or return. Item 3 remains frozen and untouched; accepted evidence verified
+  identical over 635 files. See docs/evidence/dynamic-fission-daughter-viability-37/FINDINGS.md and
+  ARCHITECTURE_DECISION.md.)
+
+Previously updated:
+  2026-08-03 (ROADMAP ITEM 3 FINAL FREEZE AUDIT — FINAL FREEZE CANDIDATE, AWAITING BROWSER GPT
+  ACCEPTANCE / ITEM 3 IS NOT DECLARED FROZEN BY THE EXECUTOR / ITEM 4 NOT STARTED / DO NOT MERGE.
+  Audit-only branch checkpoint/shared-range-item-3-final-freeze-36 from the accepted CORRECTION-35
+  tip 706166892d40189fc56ac7458b9e90a8ffdbddd7; `git diff -- src/` is EMPTY. Both blockers the
+  previous final audit left standing are certified closed from production's own readers rather than
+  from CORRECTION-35's report: freeze certification 12 claims 0 failing 0 vacuous, I1-I16 16/16,
+  L/T/C 32/32 with L3 honestly NOT_CONSTRUCTED, adverse total 0 at 20/50/200 years on two disagreeing
+  seeds, 197 and 305 released places checked naturally with 0 still moving behaviour, four-way and
+  fresh-process determinism identical in arms that actually contain encounters, friction, an active
+  expedition, target work and the release lifecycle, and all 607 accepted evidence files verified
+  byte-identical by sha256 before and after the regression. A THIRD inert territorial name — a
+  producer-less Reason<"territorial_pressure"> — was found by this audit and recorded, not patched.
+  See docs/evidence/shared-range-item-3-final-freeze-36/FREEZE_MANIFEST.md and
+  ITEM_3_FINAL_FINDINGS.md.)
+
+Previously updated:
+  2026-08-03 (CORRECTION-35 — RELEASED-EVIDENCE FIELD CONSISTENCY AND ORPHAN TERRITORIAL PRESSURE
+  AUTHORITY. CANDIDATE COMPLETE — AWAITING BROWSER GPT AUDIT / ROADMAP ITEM 3 REMAINS ACTIVE AND IS
+  NOT FROZEN / ITEM 4 NOT STARTED / DO NOT MERGE. Branch
+  checkpoint/shared-range-release-territorial-authority-35 from the Item 3 candidate freeze head
+  742b567. PRODUCTION BEHAVIOUR CHANGED — six files. Part A closes the Item 3 blocker by deriving
+  the three social-evidence lifecycle fields from weight > 0 rather than the 0.05 confidence
+  threshold, leaving confidence and every behaviour scalar byte-identical cross-tree; the incident's
+  true magnitude is 0.04, not <= 0.02, because kinTolerance moves 0.02 and the original probe read
+  only three of six scalars. Part B removes THREE behavioural readers of the orphan
+  Band.territorialPressure — the brief named two — reproduced first at 18 of 18 band-measurements
+  and confirmed inert by a zero-divergence control. See the CORRECTION-35 block in §1,
+  docs/evidence/shared-range-release-territorial-authority-35/FINDINGS.md and the superseding
+  addendum docs/evidence/shared-range-item-3-final-freeze/ITEM_3_INCIDENT_CORRECTION.md.)
+
+Previously updated:
+  2026-08-03 (ROADMAP ITEM 3 FINAL INTEGRATION AUDIT — PROGRESS, CANDIDATE FOR CLOSURE, NOT FROZEN.
+  New AUDIT-ONLY branch checkpoint/shared-range-item-3-final-freeze from the accepted CORRECTION-34F
+  tip df349eb; no src/ file changed. The integrated chain closes and I1-I16 pass 16/16 with 0 vacuous,
+  but ONE blocker prevents an unqualified freeze: a place labelled `released_historical` can still
+  move behaviour by <= 0.02, because the label flips at the 0.05 activity threshold while the
+  contribution scales continuously to zero. See the ROADMAP ITEM 3 block in §1 and
+  docs/evidence/shared-range-item-3-final-freeze/ITEM_3_FINAL_FINDINGS.md.)
+
+Previously updated:
+  2026-08-03 (CORRECTION-34F — THE TARGET-WORK LABOUR COUNT MUST NOW BE A POSITIVE INTEGER; ZERO,
+  FRACTIONAL AND NON-FINITE LABOUR CAN NO LONGER PRODUCE AN OBSERVATION, A PHYSICAL REQUEST, STOCK
+  REMOVAL, CARGO OR SUPPORT. Same branch checkpoint/shared-use-physical-presence-authority-34,
+  continuing e7d8de4. One production file, one validation; inert for every valid party. See the
+  CORRECTION-34F block in §1 and
+  docs/evidence/shared-use-physical-presence-authority-34/ZERO_LABOR_TARGET_WORK_CONTRACT.md.)
+
+Previously updated:
+  2026-08-03 (CORRECTION-34E — EXPEDITION TARGET WORK NOW USES THE PRODUCTIVE LABOUR PHYSICALLY PRESENT
+  IN THAT PARTY. Same branch checkpoint/shared-use-physical-presence-authority-34, continuing c8df1ea.
+  Two production files (intraSeasonTrips.ts, expedition.ts) plus comment-only corrections in
+  crowding.ts. See the CORRECTION-34E block in §1 and
+  docs/evidence/shared-use-physical-presence-authority-34/EXPEDITION_TARGET_WORK_LABOR_PROVENANCE.md.)
+
+Previously updated:
+  2026-08-02 (CORRECTION-34D — EXPEDITION PHYSICAL HEADCOUNT IS NOW DISTINCT FROM PRODUCTIVE PARTY
+  LABOUR. Same branch checkpoint/shared-use-physical-presence-authority-34, continuing e9b9655. Eleven
+  production files. See the CORRECTION-34D block in §1 and
+  docs/evidence/shared-use-physical-presence-authority-34/PARTY_HEADCOUNT_LABOR_AUTHORITY.md.)
+
+Previously updated:
+  2026-08-02 (CORRECTION-32A EVIDENCE REPAIR — CORRECTION-32 IS **PROGRESS, NOT ACCEPTED, NOT FROZEN**.
+  Its first report claimed the verdict below on a CONTAMINATED instrument; see the CORRECTION-32A block above.
+  SUPERSEDED FIRST REPORT: PASS — CURRENT PHYSICAL CROWDING NOW HAS ONE EXPLICIT BOUNDED DECISION AUTHORITY / DISTINCT ECOLOGICAL,
+  SOCIAL, TARGET-SITE AND KIN EFFECTS REMAIN SEPARATE / DUPLICATE SCORE AND PRESSURE CHARGES ARE REMOVED /
+  ROADMAP ITEM 3 STAYS ACTIVE / DO NOT MERGE. Branch checkpoint/crowding-decision-pressure-authority-32 from
+  the accepted CORRECTION-31 tip 3e2c1215b4ccef2beb799b3a7882247f6cd186cd. **CORRECTION-31 is CLOSED and
+  FROZEN at 3e2c1215.** CORRECTION-30 frozen at 1c6a3ed8; CORRECTION-29 frozen at a15d0a78; CORRECTION-28
+  frozen at c5eb58a; AUDIT-27 frozen at b352c31; main untouched at 0a43083. **PRODUCTION BEHAVIOUR CHANGED.**
+
+  **CORRECTION-32 ADDRESSES DECISION AUTHORITY ONLY. ROADMAP ITEM 3 REMAINS OPEN.**
+
+  **ONE PHYSICAL FACT WAS BEING CHARGED UP TO SIX TIMES, AND IT WAS MEASURED, NOT ARGUED.** The instrument is
+  CORRECTION-31's with-minus-without counterfactual applied to the decision score: `getNearbyBandPressure`
+  reads `cache.nearbyBandPressureByBandTileKey` FIRST, so the audit swaps that one Map for a Map-like
+  answering "nobody nearby" and **real production code** — `deriveBandPressureState`, `getCrowdingPenalty`,
+  `applyRangeSaturationContext` (saturation AND carrying capacity), `getDaughterDispersalPressure` and the
+  whole candidate scorer — re-derives with the crowding input at zero. **No formula is re-implemented.**
+  TOTAL = score(full) - score(zeroed); DIRECT = one field group substituted into the exported pure
+  `scoreDecision` (exact, it is linear); RESIDUAL = TOTAL - sum(DIRECT), reported per candidate.
+
+  **THE DEFECTS.** (1) `nearbyBandPressure * 0.24` and `crowdingPenalty * 0.72` are **the same scalar with
+  and without the terrain transform**, so the raw term DILUTED exactly the capacity conditioning §12.9
+  requires. (2) The same pair again inside `expectedFutureValue` (`0.14 + 0.08`) and (3) a third time inside
+  `getBadSiteStuckResidencePenalty` (`0.16 + 0.14`). (4) `rangeSaturation` carried it a fourth time — both as
+  `nearby.weightedCrowding * 0.34` AND through `populationPressure`, which is a distance-weighted sum over
+  **every** band in radius including self. (5) `riskPressure += crowdingPenalty * 0.08` made proximity raise a
+  **danger** signal that `demography.ts:401/1780` and `viability.ts:248` read, with no social evidence at all.
+  (6) `placeAttachmentPull -= crowdingPenalty * 0.22` charged the STAY candidate a second time and propagated
+  a third through `netMovePressure -= attachment * 0.48`. (7) `getSafeFrontierPull` subtracted
+  `weightedCrowding * 0.22` and is scored at **+0.62** on the same candidate. (8) The move-side
+  `perCapitaReturn` inferred a per-capita return loss from bodies. (9) **The exploration candidate was charged
+  the RESIDENCE's crowding** — six paths with contradictory signs netting **-0.01**, so no explanation of that
+  decision could be written. (10) Separately, `dryMargin.getSocialAccessRisk` built social danger from
+  `nearbyBandCount / 5 + salientUsers / 4` — bodies, plus **other bands' remembered places with no distance
+  gate at all**, the CORRECTION-28/29 defect surviving in a module neither checkpoint touched.
+
+  **THE FIX — Option D on an Option-B quantity. Six files, +142 -44. NO new module, store, type or constant
+  file, and no new import edge.** `weightedCrowding` stays EVIDENCE (UI, kin, explanation, transform input);
+  `crowdingPenalty` becomes the ONE decision-facing cost at **`CROWDING_DECISION_COST_WEIGHT = 0.96`, which is
+  the `0.24 + 0.72` it replaces**, so the maximally constrained tile (dryAmplifier 1, buffer 0) charges
+  EXACTLY what it did before and only the over-charge on spacious well-watered ground is removed. An unknown
+  destination costs **0**. The residence's crowding reaches non-stay candidates once through
+  `mobilityPressure -> netMovePressure` (which is 0 on stay, so it LIFTS alternatives) and the exploration
+  option once through `crowdingExploreBoost`. A new DERIVED
+  `RangeSaturationState.saturationPressureExcludingCrowding` partitions the overlap **at the decision seam
+  only** — every ecological and social reader keeps the full `saturationPressure`. `riskPressure`,
+  `placeAttachmentPull` and `safeFrontierPull` lose their crowding terms; `socialAccessRisk` is re-sourced to
+  the band's OWN `protoAccessMemory.places[tileId]`, the authority CORRECTION-30 gave provenance and
+  CORRECTION-31 gave a lifecycle. **Options A, C, E and F were rejected on evidence**, E because its own
+  admission test fails: the paths do not have distinct inputs.
+
+  **HEADLINE: candidates carrying >=3 separately-named crowding charges 49 -> 0** (113 measured candidates),
+  and naturally **56 -> 0 at 20 years, 144 -> 0 at 50**; max paths on any candidate **4 -> 2**; band-seasons
+  where crowding raised `riskPressure` **3 -> 0** and **7 -> 0**; where it reduced `placeAttachmentPull`
+  **11 -> 0** and **22 -> 0**; direct `nearbyBandPressure` contribution **0.97 -> 0**, `rangeSaturation`
+  overlap **0.09 -> 0**, daughter-derived **0.54 -> 0**. **THE PHYSICAL CROWDING LAYER IS IDENTICAL AT 20
+  YEARS ON ALL SIX OF ITS KEYS** — 2,400 living band-seasons, 20 crowded band-seasons, weightedCrowding sum
+  0.74 / max 0.07, crowdingPenalty sum 0.52 / max 0.06.
+
+  **FIXTURES P1-P21, 21/21 WITH 0 VACUOUS IN BOTH ARMS.** Four verdicts flip (P2 MULTIPLE_CROWDING_PATHS ->
+  SINGLE_BOUNDED_AUTHORITY; P13 SATURATION_STILL_CARRIES_CROWDING_INTO_SCORE ->
+  OVERLAP_PARTITIONED_OUT_OF_DECISION; P14 EXPLORATION_RESPONSE_MULTIPLIED -> EXPLORATION_RESPONSE_BOUNDED;
+  P18 A_FAMILY_DUPLICATES -> NO_FAMILY_DUPLICATES). **The other 17 are UNCHANGED PASSES IN BOTH ARMS and are
+  preservation evidence, not repair credit** — terrain capacity (P6, transform ratio 0.40 rich vs 0.667 dry,
+  unchanged), depletion independence (P7/P8/P9), social independence (P10), kin (P11, weightedCrowding 0.15
+  non-kin vs 0.11 kin = the 0.72x discount, still consuming space), tolerated aggregation (P12, contactCount
+  36 / trust 0.98 alongside crowding), departure (P16), monotonicity (P17), order and step-mode invariance
+  (P19/P20), long horizon (P21).
+
+  **NO IMPROVEMENT IS CLAIMED.** `crowdedSeasonsWhereCrowdingFlippedSelection` is **0 in BOTH arms** at 20 and
+  50 years — crowding never decides an action by itself in these worlds, consistent with AUDIT-27's
+  `crowdingReasonInstances = 0` across 1,547 moves. Of four 20-year runs, **map1:s2 is byte-identical across
+  all 80 seasons** and **map1:s1 has no physical divergence at all** (moves 265 -> 265); map2 diverges
+  physically at tick 17 / 23. **75 of 84 final-state keys identical**; the nine that move are population
+  (224->226, 226->227, 21->20), residential moves (448->450, 395->401, 53->57) and mean support ratio. Living
+  bands, total bands, absorbed, extinct, dispersed, fissions, trips, depletion sum, depleted tiles, contact
+  memories and friction records are identical in EVERY run.
+
+  **LIMITS, STATED NOT BURIED.** (1) The retained daughter-dispersal crowding path
+  (`daughterDispersalPressure` -> `daughterDispersalExploreBoost` +0.70) is documented, permitted by §12.13,
+  and measures **0** naturally because fissions are 0 and AUDIT-27 measured kinOverlapPairs = 0; P11 exercises
+  it with a **synthetic** lineage link and claims no natural credit. (2)
+  `rangeSaturation.perCapitaReturnEstimate` still carries crowding into the STAY candidate — ecology
+  authority, out of scope. (3) `crowdingExploreBoost` reads 0 in the aggregate detector ONLY because its
+  product falls below `scoreDecision`'s own round2; P14 shows it is live. (4) **A NEW anti-omniscience defect
+  was found and deliberately NOT repaired**: `getSocialAccessRisk`'s `unrelatedRisk` reads
+  `Object.values(world.bands).length`, a world-truth band count a band cannot know. (5) Three instrument
+  errors in this pass's own probes were caught and recorded — drifted fixtures measuring zero crowding, a
+  residence-vs-target mismatch inflating the daughter path 0.95 -> 2.11, and a `+x`-only far-land search that
+  made P21's "departed" phase measure a band that never left. (6) A mistyped `--timeline` flag overwrote
+  AUDIT-27's frozen `release-timelines.json` once; restored with `git checkout` and rerun correctly.
+  (7) **CORRECTION-31's lifecycle TIMELINES and AUDIT-27's release timeline diverge**, and the reason is a
+  changed world, not a lifecycle regression: bands drift to different distances and AUDIT-27's instrument
+  selects a different episode (`overlapSeason 6 -> 16`). Both checkpoints' FIXTURE VERDICTS are unchanged.
+
+  **A REPOSITORY CONSTRAINT WORTH REMEMBERING:** `getTileIdsWithinKnownMoveRadius` caps ordinary known-move
+  candidates at Manhattan distance **<= 2**, while `CROWDING_RADIUS = 4`. A destination is therefore always
+  deep inside the residence's own crowding ball, and residence-versus-target separation is expressible only in
+  a narrow band of geometries — the ones fixtures P3-P5 assert distances for.
+
+  PASSED: tsc (both), build, graph 221/764 0 dup 0 dangling, import boundary (back edges 85, unchanged),
+  season-order invariance, step-mode invariance BOTH maps with fullCanonicalStateMatch and firstDivergence
+  null, catchment invariants, food pipeline, mobility authority, socialCausalityAudit **byte-identical between
+  arms**, AUDIT-27 11/11 / CORRECTION-28 12/12 / CORRECTION-29 12/12 / CORRECTION-30 15/15 / CORRECTION-31
+  22/22 **all unchanged between arms**.
+  NOT RUN: no 200 y matrix, no performance measurement, no decision-by-decision trace of the map2 divergence.
+  INHERITED FAILURE, not rerun and not claimed fixed: `expeditionLifecycleAudit`.
+
+  **TIME-CONTROL-1 IS DEFERRED.** The public simulator may later expose only **Day** and **Season**. Both must
+  remain BATCH SIZES over the same daily causal kernel — Season means "simulate 90 daily days faster", never
+  "use simplified seasonal behaviour". No alternate seasonal behaviour is authorized. `StepMode` and all four
+  internal modes (daily 1, weekly 7, monthly 30, seasonal 90) are RETAINED unchanged by CORRECTION-32, and all
+  four route through `advanceWorldByDays -> runDailyActions -> seasonal boundary processing`, so they are
+  batch sizes already and not separate behavioural models.
+  See docs/evidence/crowding-decision-pressure-authority-32/FINDINGS.md.)
+
+Previously updated:
+  2026-08-02 (SHARED RANGE — RANGE-FRICTION AND ACCESS-EXPECTATION LIFECYCLE CORRECTION-31:
+  PASS — PHYSICAL DEPARTURE AND EVIDENCE LOSS NOW RELEASE ACTIVE RANGE FRICTION / HISTORICAL CONTACT
+  AND PLACE MEMORY REMAIN / RETURN REACTIVATES ONLY THROUGH FRESH EVIDENCE / ROADMAP ITEM 3 STAYS
+  ACTIVE / DO NOT MERGE. Branch checkpoint/shared-range-release-lifecycle-31 from the accepted
+  CORRECTION-30 tip 1c6a3ed8d0a8360c8fe4648a83387a2bd4fa30b4. **CORRECTION-30 is CLOSED and FROZEN
+  at 1c6a3ed8.** CORRECTION-29 frozen at a15d0a78; CORRECTION-28 frozen at c5eb58a; AUDIT-27 frozen
+  at b352c31; main untouched at 0a43083. **PRODUCTION BEHAVIOUR CHANGED.**
+
+  **CORRECTION-31 ADDRESSES LIFECYCLE ONLY. ROADMAP ITEM 3 REMAINS OPEN.**
+
+  **THREE DEFECTS.** (a) Every one of the six functions turning a friction record into pressure read
+  ONLY fields stamped at creation; NONE read `event.tick`. The single age test was binary — twelve
+  simulated years at full strength, then a cliff. (b) `confidence` counted `friction.length`, and
+  `staleness` can only fire below confidence 0.36, so retained records propped up the confidence
+  that would have retired them; with `placeImportance` rising as the observer kept using its own
+  place, the classification could cross into `avoided_shared_use` AFTER the other band left
+  (AUDIT-27 C5, reproduced fresh before any change). (c) `deriveReportLinkedEvents` stamped every
+  record with the CURRENT tick and `makeEventId` embedded it, so each pass minted a NEW record —
+  permanently age 0, keeping a friction record alive for up to REPORT_MAX_AGE_TICKS = 160 (FORTY
+  SIMULATED YEARS) at constant strength, with the report's own decaying freshness never consulted.
+
+  **THE FIX — four files, NO new store, NO constant changed.** `ProtoAccessMemory` STORES NOTHING
+  (recomputed every tick), so the lifecycle is expressed as how evidence is WEIGHTED: full inside the
+  current annual round (3 ticks), then a straight decline to zero at 8 ticks (kin/tolerated), 12
+  (neutral), 16 (tense), and 16 x 0.7 x hop-factor x the report's own freshness (hearsay).
+  `confidence` counts only ACTIVE evidence. Report events carry `report.tickReceived` (a STABLE id,
+  so the ring refreshes one record) and are deduped by ORIGINAL EPISODE. `reportedKnowledge.ts:648`
+  no longer republishes report-derived or released friction. Option B (a stored pair/place state
+  machine) and Option E (a shorter constant) were REJECTED; of Option D's contradiction channels only
+  `revisited_without_presence` is representable, so **fixture P5 is deliberately NOT constructed**.
+
+  **HEADLINE:** social release **season 18 -> season 8** with physical release at season 0 in BOTH
+  arms; revisiting and finding nobody **NEVER_RELEASES -> CONTRADICTION_ACCELERATES_S6_VS_S8**;
+  report-only belief **DOES_NOT_FADE -> FADES**; five relayed copies **TREATED_AS_2_INDEPENDENT ->
+  ONE_EPISODE_ONE_RECORD**. **NATURAL 20 y:** stale escalations **3 -> 0**, friction contribution to
+  access **27.13 -> 6.74 (-75%)**, active band-seasons **12 -> 4** while retained-but-INERT **13 ->
+  21**, report-linked records **33 -> 3**, direct records **28 -> 28**. **PHYSICAL LAYER IDENTICAL ON
+  ALL 17 KEYS AT 20 AND 50 YEARS.**
+
+  **LIMITS.** AUDIT-27's C5 is byte-identical and does NOT flip — it counts RETAINED RECORDS, which
+  this design keeps, so it cannot express the repair. P2 shows saturation but NOT longer persistence,
+  because `recentOverlapCount` saturates at 9. Three instrument errors in this pass's own probes were
+  found and repaired. `presentWithoutOthersSeasons` is the one accumulator added, bounded at 8.
+  Cooling is time-based, not season-aware.
+
+  PASSED: tsc (both), build, graph 221/764, import boundary (85, unchanged), season-order invariance,
+  step-mode invariance BOTH maps with fullCanonicalStateMatch, catchment invariants, food pipeline,
+  mobility authority, socialCausalityAudit byte-identical between arms, P1-P22 both arms 0 vacuous,
+  AUDIT-27 11/11 / CORRECTION-28 12/12 / CORRECTION-29 12/12 / CORRECTION-30 15/15 unchanged.
+  NOT RUN: no 200 y matrix, no performance measurement.
+  See docs/evidence/shared-range-release-lifecycle-31/FINDINGS.md.)
+
+Previously updated:
+  2026-08-02 (SHARED RANGE — RANGE-FRICTION OBSERVATION PROVENANCE CORRECTION-30:
+  PASS — PRIVATE OTHER-BAND POSITION AND ACTIVITY STATE NO LONGER CREATE OBSERVER RANGE FRICTION /
+  LEGITIMATE DIRECT AND REPORTED EVIDENCE REMAIN / ROADMAP ITEM 3 STAYS ACTIVE / DO NOT MERGE.
+  Branch checkpoint/shared-range-friction-provenance-30 from the accepted CORRECTION-29 tip
+  a15d0a78a3a7ef57b87b22226190d6729ba9b9d7. **CORRECTION-29 is CLOSED and FROZEN at a15d0a78.**
+  CORRECTION-28 frozen at c5eb58a; AUDIT-27 frozen at b352c31; local and remote main untouched at
+  0a43083. **PRODUCTION BEHAVIOUR CHANGED** — no fingerprint parity is claimed or possible.
+
+  **CORRECTION-30 REPAIRS ONLY OBSERVER PROVENANCE FOR RANGE FRICTION. ROADMAP ITEM 3 REMAINS
+  OPEN** and must not be marked complete.
+
+  **THE MODULE CONTAINED NO DISTANCE COMPUTATION OF ANY KIND.** `rangeFriction.ts` had no
+  `getGridDistance` import and no `distance` identifier in 800 lines, so its only condition was
+  "is this tile one I remember?" — and on that basis it read another band's PRIVATE state three
+  separate ways. (1) `other.position` became an `observed` `residential_presence` at ANY distance;
+  candidates came from proximity OR kinship OR any `contactMemories` entry, the last two with no
+  distance limit at all. (2) `other.recentIntraSeasonTrips` became
+  `inferred_from_recent_activity` carrying a `linkedActivityTripId` and an activity kind read off
+  the other band's private `taskGroupType` / `objective` / `cause` / `movementType` /
+  `resourceClassId` / `pathTiles`, over a **12-tick window — twelve seasons, THREE SIMULATED
+  YEARS**. (3) `countRecentTripsInRange` read the SAME private trip list a THIRD time to inflate
+  `recentOverlapCount` on the RESIDENTIAL notice — the value driving `repeated_outsider_use` (>=3)
+  and `moderate_placeholder` tension (>=4). Leaving any one of the three would have been the
+  half-state §18 forbids.
+
+  **THE RECORDS ARE NOT INERT, AND THE MODULE HEADER SAID THEY WERE.** Through
+  `accessNorms.ts:426` they set `strangerCaution` / `sharedUsePressure` /
+  `rememberedRefusalAvoidance` -> `ProtoAccessBehaviorEffectState` -> **`pressure.ts:161-166`,
+  five real decision inputs**. Separately `innerFission.ts:145` turns them into social tension and
+  `reportedKnowledge.ts:648` republishes the top three as outgoing `outsider_use_warning` reports.
+  The header's claim was true of DIRECT readers only and is corrected in this commit.
+
+  **ONE PRODUCTION FILE, `src/sim/agents/rangeFriction.ts` (+71 -112).** A contemporary direct
+  notice now requires the other band to be in the observer's CURRENT physical proximity set
+  (`cache.nearbyBandsByBandId`, `DEFAULT_NEARBY_RADIUS = 4`) — **the same canonical authority
+  CORRECTION-28 kept for physical crowding and CORRECTION-29 for encounter candidacy. No new
+  constant, no new type, no new module, no new import.** All three private-trip reads are deleted
+  with `classifyTripActivity`, `makeTripId`, `compareTrips` and `RANGE_FRICTION_TRIP_WINDOW_TICKS`;
+  `recentOverlapCount` is re-sourced to the observer's OWN friction ring (bounded at 1 + the
+  8-slot ring); `linkedActivityTripId` is removed from the internal `PairNotice` shape so it
+  cannot be produced from a private record again, while the field stays on `RangeFrictionEvent` in
+  types.ts as the vocabulary for a future witnessed-activity channel. `deriveReportLinkedEvents`
+  and `deriveCandidateBands` are UNTOUCHED — the candidate list is a selection set, not an
+  evidence claim, and nearby bands are added first so the 12-slot cap can never crowd one out.
+
+  **OPTION D (BUILD PHYSICAL TRACES NOW) WAS REJECTED ON INSPECTION, NOT PREFERENCE.** The
+  repository has NO trace authority of any kind: no tracks, no trails as world features, no camp
+  remains (`TemporaryTaskPartyRecord` asserts `noCamp: true`), no trace freshness, no cross-band
+  smoke (`fireSignals.ts` resolves one band's own deliberate signal to its own camp), and no
+  band/person cue in `landscapeVisibility.ts` — its `LandscapeVisibilityCueKind` union is entirely
+  terrain. Deferred to the Persistent Human Landscape pass; **no witness, trace, smoke, visibility
+  or exact activity knowledge was fabricated.** Option B (a generic observer-evidence interface)
+  was rejected as premature (two live cases, one duplicate, one placeholder), and Options E1/E2
+  were rejected because trip records carry a tick and a day but **no band's position is stored per
+  day**, so co-presence at the time of the trip is unrecoverable.
+
+  **HEADLINE, identical fixture in both arms.** Two bands **42 TILES APART**, no encounter, no
+  report, with the OTHER band's newest **real production** trip record retargeted at a tile the
+  observer remembers: before, **1 `inferred_from_recent_activity` record with a
+  `linkedActivityTripId`** claiming `crossing_or_route_use`; after, **0** — and the trip record
+  itself survives in BOTH arms. The hidden-residence fixture goes **2 records (one of them
+  `observed`, `recentOverlapCount` 6) -> 0**. An adjacent pair (P3) and an encountered pair (P4)
+  still produce friction in both arms, and reports stay `reported_secondhand` (P5, P11).
+
+  **NATURAL, same maps, seeds (`audit27:natural`), scenarios and 20-year duration as AUDIT-27 /
+  CORRECTION-28 / CORRECTION-29, 2,400 living band-seasons per arm:** friction records created
+  **148 -> 61 (-58.8%)**; `inferred_from_recent_activity` **84 -> 0**; `linkedActivityTripId`
+  **84 -> 0**; report-linked **33 -> 33**; reported awareness **35,776 -> 35,776**; unique
+  observer/other pairs 2 -> 2. **THE PHYSICAL LAYER IS IDENTICAL ON ALL 17 CHECKED KEYS** —
+  crowding 2.51, catchment 26,515 / 43, reachable support 114,381.8, depletion 3,419.5131 over
+  41,278 tiles, trips 57,600, moves 1,547, population 817, bands 30, survival 6/6, fissions 0.
+  **AUDIT-27's own unmodified natural instrument moves EXACTLY ONE of 24 aggregates**
+  (`rangeFrictionEventsObserved` 148 -> 61 — the same two numbers this pass's independent
+  instrument produced), with `crowdingPenaltyNonZeroBandSeasons` 51, `doubleCountedBandSeasons`
+  40, `pressurePersistedAfterDeparture` 55 and `accessMemoryStatesNonNone` 18,417 all unchanged.
+
+  **BEHAVIOURALLY: five of six 20-year runs identical, and `firstPhysicalDivergenceTick` is NULL
+  IN ALL SIX.** The sole divergent run is map2 s1 (the only run producing friction at all), first
+  divergence **tick 32**, band `varied-dry-corridor-mid`, social only: ring 3 -> 2, inferred
+  1 -> 0, trip ids 1 -> 0, social tension 0.25 -> 0.24. **NO IMPROVEMENT IS CLAIMED.**
+
+  **THE ONE NON-SUBTRACTIVE CHANGE WAS ISOLATED WITH A THIRD ARM.** Access pressure moves slightly
+  UP (`sharedUsePressureSum` 182.11 -> 189.04, `strangerCautionSum` 298.32 -> 300.64). A third arm
+  with `recentOverlapCount` pinned to 1 gives **identical record counts** (61 / 28 / 0 / 33 — so
+  the -87 is entirely the removal of the private reads) but `sharedUsePressureSum` **164.49**:
+  the rise is entirely the observer-memory re-sourcing, and removal alone would have LOWERED it
+  by 9.7%. Pinning was REJECTED because it makes the top tension tier `moderate_placeholder`
+  **structurally unreachable** (17 -> 0, against 7 shipped) and reclassifies 8
+  `repeated_outsider_use` records as `possible_intrusion`; §9.4 requires a legitimate case to stay
+  capable of appropriate friction.
+
+  **LIMITS STATED, NOT BURIED.** (1) **P9 and P10 are UNCHANGED PASSES IN BOTH ARMS and are NOT
+  repair credit** — but each carries a POSITIVE CONTROL that strips the friction ring from a world
+  with real friction and shows the probe moving (`familiar_use` -> `tolerated_shared_use`,
+  `strangerCaution` 0 -> 0.13, `sharedUsePressure` 0 -> 0.24, social tension 0.22 -> 0.26), so the
+  nulls are real nulls and not an insensitive instrument. (2) **Defect chain A (hidden residence)
+  has a NATURAL OCCURRENCE OF ZERO** — `recordsSourcedOnlyFromPrivatePosition` reads 0 in BOTH
+  arms, so the whole -87 comes from chain B; the hidden-residence repair is proven ONLY by fixture
+  P2 and claims no natural credit. (3) Proximity-as-detection is symmetric, terrain-blind and
+  coarse; production still has **NO visibility, route or barrier rule** for social perception of
+  any kind. (4) `directObservedPresenceRecords` 31 -> 28 is a RE-IDENTIFICATION (event ids embed
+  `interpretation`, which depends on `recentOverlapCount`), not a loss of grounded records, and
+  was not separately isolated. (5) The rumour loop is only half-cut: `rangeFriction.ts:250` blocks
+  a band's OWN reports, but a false record travelling to a neighbour and returning is still
+  structurally possible.
+
+  PASSED: tsc (both projects), build, graph 221/764 0 dup 0 dangling, import boundary (back edges
+  85, unchanged), season-order invariance, step-mode invariance BOTH maps with
+  `fullCanonicalStateMatch` and `firstDivergence: null`, catchment invariants, living-ecology food
+  pipeline, mobility authority, fixtures **P1-P15 in BOTH arms with 0 vacuous**, CORRECTION-29
+  fixtures **12/12 unchanged**, CORRECTION-28 fixtures **12/12 unchanged**, AUDIT-27 fixtures
+  **11/11 unchanged vs the CORRECTION-29 tip** (C4 and C10b remain flipped, inherited),
+  `socialCausalityAudit` **byte-identical between arms**. The AUDIT-27 release-timeline probe moved
+  in exactly TWO fields, both `observerAccessSharedUsePressure`; the release LIFECYCLE is
+  unchanged.
+
+  **TWO FIXTURES WERE VACUOUS IN THEIR FIRST FORM AND WERE REPAIRED, NOT COUNTED:** P3 relied on
+  two bands staying adjacent through warming and drifted apart; P12 spawned onto a fixed offset
+  triple and silently got fewer than three bands.
+
+  DEFERRED AND UNTOUCHED: range-friction expiry and release (AUDIT-27's C5 still reads
+  `PHYSICAL_RELEASES_PERCEPTION_DOES_NOT`); access-memory decay; crowding double-counting;
+  `nearbyBandPressure` / `crowdingPenalty` weights; the residence-anchored physical shared-use
+  footprint; trip / expedition ecological competition; trails; camp traces; encounter visibility
+  and barriers; smoke detection; culture; territory; conflict; fission; `territorialPressure`;
+  Daughter Viability.
+
+  NOT RUN, deliberately: no 200 y / 500 y matrix, no performance re-measurement, no fresh-process
+  determinism run, no `simBenchmark` fingerprint comparison. INHERITED FAILURE, not rerun and not
+  claimed fixed: `expeditionLifecycleAudit` (recorded FAILING identically at CORRECTION-26's base
+  and tip).
+  See docs/evidence/shared-range-friction-provenance-30/FINDINGS.md.)
+
+Previously updated:
+  2026-08-01 (SHARED RANGE — DIRECT ENCOUNTER PROVENANCE CORRECTION-29:
+  PASS — PRIVATE PLACE-MEMORY COINCIDENCE NO LONGER CREATES DIRECT ENCOUNTERS / LEGITIMATE
+  PHYSICAL CONTACT REMAINS / ROADMAP ITEM 3 STAYS ACTIVE / DO NOT MERGE.
+  Branch checkpoint/shared-range-encounter-provenance-29 from the accepted CORRECTION-28 tip
+  c5eb58a8f5ff7054665f9c376ac4ca856403efab. **CORRECTION-28 is CLOSED and FROZEN at c5eb58a8.**
+  AUDIT-27 frozen at b352c31; CORRECTION-26 frozen at 5f341648; local and remote main untouched at
+  0a43083. **PRODUCTION BEHAVIOUR CHANGED** — no fingerprint parity is claimed or possible.
+
+  **CORRECTION-29 REPAIRS ONLY DIRECT-ENCOUNTER PROVENANCE. ROADMAP ITEM 3 REMAINS OPEN** and must
+  not be marked complete.
+
+  **THE GHOST CHAIN PASSED TWO INDEPENDENT GATES, AND BOTH ARE CLOSED IN THE SAME COMMIT.** One
+  production file, `src/sim/agents/socialContext.ts` (+21 −60). (1)
+  `getEncounterCandidatePairs` paired **any two bands whose `topReturnPlaceIds` named the same
+  tile, with no distance condition at all**, alongside the legitimate proximity-≤4 source. (2)
+  `getEncounterKind`'s `memoryOverlap > 0.24 || distance <= 3` then admitted a direct encounter at
+  **any** distance — the **only** non-distance-gated branch in the whole encounter system — and its
+  input came from `getSharedMemoryOverlap`, which read **the other band's private `placeMemory`
+  directly**. The pairing block is deleted, the disjunct becomes `distance <= 3`, and
+  `getSharedMemoryOverlap` is deleted with its single call site. `updateContactMemory`,
+  `applyEncounterToBand`, encounter outcomes, tolerance, tension, disposition, perception and
+  response distributions are **untouched** — a legitimate encounter does exactly what it did.
+
+  **THE FALSE RECORD WAS NOT INERT.** `applyEncounterToBand` is the **only** production writer of
+  `contactMemories` and `encounterRecords` outside spawn/fission, and `rangeFriction.ts:478` adds
+  **every** band in `contactMemories` to the friction candidate set **with no distance limit** — so
+  one ghost contact made a band 40+ tiles away a standing friction candidate. Closing the encounter
+  gates removes the contact memory that opened those doors, which is why `rangeFriction.ts` needed
+  no edit (§8 permits touching it only "where strictly necessary").
+
+  **HEADLINE, identical fixture in both arms.** Two bands spawned far apart so they had **never
+  met**, warmed 16 seasons, then one given a return-place record naming a tile the other also
+  holds — AUDIT-27 C10b's construction. At **42 tiles**: before, **3 `unrelated_overlap` encounter
+  records and a contact memory with `contactCount` 3**; after, **0 and none**. The remembering band
+  **keeps its place memory in both arms**. A genuinely nearby pair still encounters (P2) and
+  repeated legitimate contact still accumulates (P7).
+
+  **AUDIT-27'S OWN UNMODIFIED C10b FLIPS** `SOCIAL_KNOWLEDGE_FROM_MEMORY_OVERLAP_WITHOUT_PROXIMITY`
+  → **`NO_SOCIAL_KNOWLEDGE_WITHOUT_PROXIMITY`**, and P8's kin+memory arm reproduces AUDIT-27's
+  **44-tile** figure exactly (3 `shared_resource_area` encounters → 0) while kin-only-at-distance is
+  0 in **both** arms — kin recognition was not redesigned.
+
+  **THE NATURAL RESULT IS A CONSERVATION, NOT A DELETION.** Over the same worlds AUDIT-27 and
+  CORRECTION-28 used (20 y × 3 scenarios × 2 seeds, 2,400 living band-seasons per arm):
+  `contactMemoriesRefreshed` **42 → 32 (−10)** and `rememberedContactBandSeasons` **50 → 60 (+10)**
+  — ten band-seasons moved **exactly** from *refreshed* to *merely remembered*.
+  `contactMemoriesFirstCreated` **2 → 2** (no legitimate first contact lost), reported awareness
+  **35,776 → 35,776**, social-range recognition **94 → 94**, direct encounters 22 → 17. The four
+  provenance classes §11 requires to be separated are reported separately.
+
+  **BEHAVIOURALLY ALMOST INERT, AND SAID SO.** Five of six 20-year runs are **byte-identical**; the
+  sole divergence is map2 s1 at **tick 58**, one band, `tile:55:107` → `tile:56:107`. Population
+  817 → 817, bands 30 → 30, survival 6/6, fissions 0 → 0, moves 1,546 → 1,547. **No improvement is
+  claimed** — truthful provenance is the acceptance criterion and encounter frequency was **not**
+  recalibrated to preserve any previous number.
+
+  **THREE LIMITS STATED RATHER THAN BURIED.** (1) **P9 is an unchanged pass in BOTH arms and is not
+  credited as closing the friction cascade** — its bands are 42 tiles apart so they never shared
+  familiar country and no friction fired either way; AUDIT-27's C10b saw friction because its bands
+  were warmed *adjacent* first. (2) The "encounters beyond the admission radius" counter is an
+  **upper bound** measured at end-of-tick — encounters are written before the decision loop moves
+  bands, so the after arm reads 5 rather than 0; all five are `unrelated_overlap` and three are
+  identical to the before arm. Admission beyond 3 is impossible **by construction**. (3) **P3
+  records that production has NO visibility, route or barrier rule for encounters** — bands
+  separated by water still meet — and this checkpoint deliberately invented none.
+
+  **CORRECTION-28 REMAINS INTACT.** Its own fixtures rerun **12/12 unchanged**, the distant
+  remembering band still reads **zero physical crowding**, and P10's physical readings
+  (crowding, catchment share, reachable support, depletion) are **byte-identical** between arms.
+
+  PASSED: tsc (both projects), build, graph 221/764 0 dup 0 dangling, import boundary,
+  season-order invariance, step-mode invariance BOTH maps with `fullCanonicalStateMatch` and
+  `firstDivergence: null`, catchment invariants, living-ecology food pipeline, mobility authority,
+  fixtures P1-P12 in BOTH arms with **0 vacuous**, `socialCausalityAudit` unchanged.
+
+  DEFERRED AND UNTOUCHED: `rangeFriction.ts`'s **own** private-trip provenance (it reads another
+  band's `recentIntraSeasonTrips` gated on *place*, not observation); range-friction expiration and
+  release; access-memory decay; crowding score double-counting; `nearbyBandPressure` /
+  `crowdingPenalty` weights; range-saturation formulas; shared-catchment footprint expansion;
+  same-day trip / expedition / investigation-route overlap; kin crowding factors; parent-memory
+  dispersal pressure; `territorialPressure`; mobility-distance limits; Daughter Viability.
+
+  NOT RUN, deliberately: no 200 y / 500 y matrix, no performance re-measurement.
+  See docs/evidence/shared-range-encounter-provenance-29/FINDINGS.md.)
+
+Previously updated:
+  2026-08-01 (CROWDING — PHYSICAL VS REMEMBERED RANGE SEPARATION CORRECTION-28:
+  PASS — REMEMBERED PLACES NO LONGER CREATE PHYSICAL CROWDING / CURRENT PHYSICAL CROWDING AND
+  SHARED CATCHMENT COMPETITION REMAIN / ROADMAP ITEM 3 STAYS ACTIVE / DO NOT MERGE.
+  Branch checkpoint/crowding-physical-memory-separation-28 from the accepted AUDIT-27 tip
+  b352c3195406fc9494c0b693a98eb0786f1a3780. AUDIT-27 FROZEN at b352c31; CORRECTION-26 FROZEN at
+  5f341648; local and remote main untouched at 0a43083. **PRODUCTION BEHAVIOUR CHANGED** — no
+  fingerprint parity is claimed or possible.
+
+  **AUDIT-27 REMAINS A *PROGRESS* DIAGNOSTIC CHECKPOINT. CORRECTION-28 REPAIRS ONLY THE
+  PHYSICAL-VS-REMEMBERED CROWDING SEAM. ROADMAP ITEM 3 REMAINS OPEN** and must not be marked
+  complete.
+
+  **ONE PRODUCTION FILE.** `src/sim/agents/crowding.ts` derived physical crowding from
+  `(distanceWeight*0.58 + samePatchWeight*0.34 + memoryOverlap*0.24) * populationWeight`, and the
+  memory channel ALSO widened the scatter footprint itself: a band scattered into the radius-2 ball
+  around each of its salient return / attachment>0.5 places **regardless of where it currently
+  was**. The memory channel is removed from **both** implementations of the same rule — the cached
+  field path `buildCrowdingField` and the cache-less scan path `computeCrowdingContribDescriptor` —
+  and `getRememberedAreaOverlap` is deleted. The skip condition narrows from
+  `distance > CROWDING_RADIUS && memoryOverlap <= 0` to `distance > CROWDING_RADIUS`. Physical
+  crowding is now created ONLY by current physical proximity. `getSalientPlaceMemories` is
+  RETAINED — it still serves `getParentCoreOverlap`.
+
+  **HEADLINE, the identical fixture run in both arms.** A band **35 TILES AWAY** that still holds a
+  salient memory within 2 of the observer's tile contributed `weightedCrowding 0.03`,
+  `crowdingPenalty 0.01`, `nearbyBandCount 1`, a named contributor identity and
+  `RangeSaturationState.nearbyCrowding 0.03`. It now contributes **0 / 0 / 0 / none / 0**.
+  **A currently nearby band is UNCHANGED at 0.11 → 0.11**, and a nearby band that has formed no
+  memory at all still crowds — proximity never needed shared memory. The change was NOT obtained by
+  reducing bands, memory formation or stepping frequency: `totalBandSeasons` is 2,400 in both arms.
+
+  **45% OF NATURALLY OCCURRING CROWDING WAS MEMORY-DERIVED.** AUDIT-27's own natural-occurrence
+  script, rerun unmodified on both arms with the same maps, seeds and 20-year durations:
+  band-seasons with non-zero `crowdingPenalty` **89 → 49**, possible double-counting band-seasons
+  **83 → 38**, crowding contributor identities **96 → 54**. Everything else is identical — 7,360
+  active pair-seasons, 2,400 band-seasons, `sameTileResidencePairs` 0, `kinOverlapPairs` 0,
+  `overlappingPhysicalActivityPairs` 25, `movesWithCrowdingReason` 0, `crowdingReasonInstances` 0,
+  `terminalBandContributingToPressure` 0, and the access-state distribution pinned at 18,417.
+  Memory-only overlap still EXISTS as memory (26 pair-seasons); it simply no longer counts as
+  physical crowding.
+
+  **BEHAVIOURALLY ALMOST INERT, AND THAT IS REPORTED AS-IS.** Five of six 20-year runs are
+  **byte-identical**. The only divergence is map2 seed s1 at **tick 37**, band
+  `varied-dry-corridor-mid`, `weightedCrowding` 0.12 → 0.11, which costs **one residential move**
+  across 20 years (431 → 430) while that run's crowded band-seasons halve 82 → 40. Population
+  817 → 817, living bands 30 → 30, survival 6/6 → 6/6, fissions 0 → 0. **NO IMPROVEMENT IS
+  CLAIMED** — the correction makes the crowding authority truthful, not the simulation better.
+
+  **AUDIT-27'S OWN UNMODIFIED INSTRUMENTS CONFIRM THE ISOLATION.** Its C4 fixture flips
+  `OBSOLETE_CROWDING_PERSISTS` → **`NO_OBSOLETE_CROWDING`**, and **every other AUDIT-27 fixture is
+  unchanged** — including **C10b** (two bands 44 tiles apart still gain contact memory and a
+  friction event from shared memory alone) and **C5** (physical releases on departure, perception
+  does not). §7.5 and §8 required both to be left alone, and they were. The double-counting trace is
+  unchanged (13 moved quantities, 6 distinct score inputs, 12 analytic channels) because its fixture
+  is two bands at distance 1 — pure proximity, which this correction cannot move.
+
+  **A SECOND MEMORY→PRESSURE PATH SURVIVES, DELIBERATELY, AND IS MEASURED NOT ASSUMED ABSENT.**
+  `getParentCoreOverlap` still takes `max(directOverlap, memoryOverlap)` over the **parent** band's
+  salient places into `DaughterDispersalPressure.parentCoreOverlap`. It does not flow through
+  `CrowdingField` and it is kin machinery: §7.8 forbids modifying kin behaviour here and AUDIT-27
+  measured **zero** natural kin-overlap cases, so there is no evidence to recalibrate against. The
+  fixtures read `parentCoreOverlap` and `daughterDispersalPressure` on every measurement so the
+  residual is quantified.
+
+  PASSED: tsc (both projects), build, graph 221/764 0 dup 0 dangling, import boundary (back edges
+  85, unchanged), season-order invariance, step-mode invariance BOTH maps with
+  `fullCanonicalStateMatch` and `firstDivergence: null`, catchment invariants (0.5/0.5 symmetric
+  split, per-capita 1.5 → 1.2 under contest), living-ecology food pipeline, mobility authority,
+  controlled fixtures **P1-P12 in BOTH arms with 0 vacuous**, and **field/scan parity with 0
+  mismatches in both arms** across 3 bands × 8 probe tiles × 17 seasons.
+
+  **INSTRUMENT ERRORS RECORDED, NOT DROPPED.** P4 was vacuous in two earlier forms — first
+  `VACUOUS_NOT_NEARBY` (relied on drift), then `VACUOUS_NO_REMEMBERED_OVERLAP` (moved the wrong
+  band, so its memories stayed around its old home). The accepted construction parks the OBSERVER
+  on one of the other band's genuinely warmed salient tiles. Both earlier verdicts were honest
+  vacuous reports, not false negatives. Separately, `crowdingControlledFixturesAudit.mjs` and
+  `crowdingDoubleCountingTraceAudit.mjs` DEFAULT their outputs into the AUDIT-27 evidence directory
+  and were given explicit `--out` paths; the whole AUDIT-27 directory is preserved byte-for-byte.
+
+  NOT RUN, deliberately: no 200 y / 500 y matrix, no performance re-measurement, no double-counting
+  consolidation, no encounter-provenance repair, no range-release repair, no physical-activity
+  footprint expansion, no Daughter Viability.
+  See docs/evidence/crowding-physical-memory-separation-28/FINDINGS.md.)
+
+Previously updated:
+  2026-08-01 (RESOURCE INVESTIGATION PHYSICAL EXECUTION CORRECTION-26:
+  PASS — TECHNICALLY COMPLETE / AWAITING HUMAN ROADMAP CLOSURE / DO NOT MERGE. The roadmap
+  does not advance on this pass's authority: item 2 closes on the supervising human review,
+  and Crowding (item 3) is NOT started. Branch checkpoint/resource-investigation-physical-26, continuing
+  its own architecture-decision commit b746b68. Local and remote main untouched at 0a43083;
+  CLOSURE-25 frozen at f947550. **PRODUCTION BEHAVIOUR CHANGED** — no fingerprint parity is
+  claimed or possible. Entry invariant PASSED: `git diff --exit-code f947550 -- src/sim` clean.
+
+  **A SELECTED SCOUT OR PROBE NO LONGER LEARNS ANYTHING.** `applyBandDecision` used to pass
+  `collectProbeObservationTargets(world, band.position, targetTile)` — the target and its whole
+  1-ring, up to ten tiles away — straight to the canonical `observeTileAndNearby`, with the
+  band's own position present only so the ring could exclude it. Selection now observes exactly
+  what a `stay` observes (its own tile) and leaves ONE bounded `PendingInvestigationRecord`
+  carrying the exact `Decision.id`. `agents/intraSeasonTrips.ts` executes it on the next
+  ordinary trip day: a party staffed from labour the day's foraging group left, the same
+  `buildOutboundPathTiles`/`findPassablePath` route builder, the same
+  `isBandPassableDestination`, the same `deriveTripDurationDays` boundary, and the identical
+  aquatic-adjacent arrival rule `resolvePhysicalFoodHarvest` uses.
+
+  **MEASURED AT THE EXACT SEAM, NOT ACROSS A STEP.** The pre-existing audit-only
+  `decisionObserver` (`tick/advance.ts:213-215`) brackets `applyBandDecision` and nothing else,
+  and exists unchanged at f947550, so both arms measure the identical window. **Before: 176 of
+  192 selections (91.7%) gained target-area knowledge, with no pending identity and nothing
+  executed anywhere. After: 0 of 234.** The after arm selects MORE investigations (234 vs 192) — this is
+  NOT reduced scout frequency dressed as a repair. **PENDING IS NOT EXECUTED, and the two are
+  now named apart:** 234 selections produce 234 exact PENDING identities, which resolve to
+  **97 physical executions + 132 named non-executions + 5 still awaiting a trip day = 234**.
+  A pending identity proves the selection is joinable; it proves nothing physical, because
+  nothing has executed at the decision seam. The 2 residual after-arm changes are knowledge being LOST to ring eviction, the
+  opposite of the defect, which is why the metric is directional.
+
+  **NATURAL OCCURRENCE, 343 selections (20 y x 3 scenarios x 2 seeds):** 139
+  `executed_and_returned`, **147 `beyond_same_day_reach`**, 54 `route_unavailable`, 0
+  `arrival_failed`, 3 still pending, 0 lost, 0 duplicate executions, 0 information receipts, 0
+  support. `beyond_same_day_reach` being the largest class is an honest NAMED REFUSAL UNDER THE
+  CURRENTLY AUTHORITATIVE PRODUCTION BOUNDARY: selection reaches 10 tiles
+  (`SCOUT_MAX_DISTANCE`), the same-day round-trip budget is 8
+  (`SAME_DAY_ROUND_TRIP_TILE_BUDGET`). **This does NOT claim the four-tile boundary has been
+  proven physically correct** — the executor obeys the boundary production already had, and
+  nothing here tested whether that boundary is right.
+  `deriveTripDurationDays` is applied to BOTH the straight-line distance and the route actually
+  walked. `insufficient_labor`, `band_moved_before_departure`, `destination_blocked` and
+  `expired_before_execution` read zero naturally but are MEASURED zeros with controlled fixtures
+  (P3/P4/P8/P9), not unused enum values.
+
+  **AN ARRIVED PARTY LEARNS MORE PER EVENT THAN THE DEFECT DID, AND THAT IS STATED.** The free
+  chain wrote the target at distance 1 (0.68) and its ring at distance 2 (0.34) for nobody; a
+  party that stood there observes at distance 0 (1.0, visits+1) with its 4-neighbours at 1, plus
+  the walked route on the same terms, no second ring, capped at 32 targets. Acquisition kind
+  stays `residential_observation` — a same-day party from the residential camp is exactly what
+  that denotes — so retention, compression and the CORRECTION-24A label-bias finding are
+  untouched.
+
+  **LAYERING IS MEASURED, NOT ASSERTED.** `agents/resourceScoutObservation.ts` holds the
+  execution-neutral domain half (observation interpretation, memory mutation, plant-use learning,
+  debug projection, side-country formation and cautious test). Candidate selection
+  (`buildResourceScoutContext`, `selectResourceScoutTarget`) and selection classification
+  (`isAppliedSideCountryProbe`, `isAppliedProactiveInfo`) STAYED in the rules layer. The
+  decision-time VOI the old applier recovered by RE-RUNNING the selector is now captured once at
+  selection and carried on the record. A value-import graph over all 143 `src/sim` files reports
+  **0 runtime cycles anywhere in src/sim** and **0 agents -> rules runtime edges**;
+  `pendingInvestigation.ts` is a runtime leaf (every import type-only). `importBoundaryAudit`'s
+  informational back-edge count rose 84 -> 85 because its regex counts `import type`.
+
+  **CAMPMOVEMENT IS TRUTHFUL AND WAS NOT MERGED WITH ExpeditionTaskCamp.**
+  `TemporaryTaskCampRecord` fired whenever a band merely SELECTED a probe while holding
+  residence, and the event log, public story and both UI panels reported a camp that never
+  existed. Reclassified to `TemporaryTaskPartyRecord`, written ONLY from a resolved
+  investigation in which a party actually departed, carrying its `executionId`, real
+  `partyWorkers` and real `routeDistanceTiles`, asserting `noCamp: true`; the `active`/`expired`
+  states and expiry pass are gone because a same-day party is already home. CLOSURE-25's own
+  authority audit rerun unmodified: **camp_movement_temporary_record 129 -> 0**,
+  **expedition_task_camp 103 -> 113** (untouched).
+
+  **A REAL REGRESSION WAS INTRODUCED, CAUGHT AND FIXED — AND THE FIXTURE THAT MISSED IT WAS
+  REPAIRED.** `stepModeInvarianceAudit` FAILED after the first implementation
+  (`fullCanonicalStateMatch: false`, its own divergence finder returning null); a direct state
+  diff located observations stamped day 180 under seasonal stepping against 185 under daily.
+  `runDailyActions` never advances `world.time`, so the executor was observing with the span's
+  START time — the same defect CORRECTION-15 repaired as item (D) for the expedition timestamp.
+  Fixed by handing the executor the day it runs on. **Fixture P13 passed while that bug was
+  live** because it compared no timestamps; it now compares them, and a NEGATIVE CONTROL with
+  the bug reintroduced fails 3/3.
+
+  **THREE INSTRUMENT ERRORS IN THIS PASS'S OWN PROBES ARE RECORDED, NOT DROPPED.** (1) The
+  before/after probe first compared across a whole `advanceWorldByDays(world,1)` step — which
+  contains a day of daily actions — and reported 41/234 changes on the corrected tree; at the
+  observer seam it is 2/234, both losses. (2) The metric was symmetric, so forgetting counted as
+  leakage; it is now directional. (3) P13 was vacuous, above.
+
+  PASSED: tsc, build, graph 221/764 0 dup 0 dangling, import/decision/adaptation boundaries,
+  context lifecycle, season-order invariance, step-mode invariance BOTH maps with
+  fullCanonicalStateMatch, determinism true, resource + fauna anti-omniscience
+  (hiddenKnowledgeViolations 0), food capture 1.000 with conservation, terminal extinction,
+  return kinds, hardship outcome, expedition knowledge latency, fixtures P1-P14 37/37 plus a
+  negative control.
+
+  **INHERITED FAILURE, NOT A REGRESSION:** `expeditionLifecycleAudit` reports FAIL here and the
+  IDENTICAL FAIL on f947550 (sawOperating / sawReturning / sawTaskCamp all false in 40 y). Not
+  repaired.
+
+  **DEFERRED AND UNPROVEN — DO NOT CITE AS A FINDING.** The possible mismatch between the fixed
+  trip-distance budget and dynamic `bandMobility` is unproven in either direction. It refuses
+  43% of natural investigations, which is why it is visible, but **no mobility constant was
+  changed**, no counterfactual over the boundary was run, **no separate correction is
+  authorized**, and it is **not part of CORRECTION-26** — it remains deferred for later
+  evidence. Likewise `route_unavailable` (54/343) has no failure memory.
+
+  NOT RUN, deliberately: no 200 y / 500 y matrix, no population/survival/fitness comparison, no
+  Crowding work. No claim that physical investigation improves outcomes. ROADMAP: item 2
+  technically complete awaiting final human closure; item 3 Crowding NOT started; no
+  CORRECTION-27 exists.
+  See docs/evidence/resource-investigation-physical-26/FINDINGS.md.)
+
+Previously updated:
+  2026-07-31 (CORRECTION-24A FINALIZATION — EVENT-PAIRED FIRST-READER TRACE:
+  **THIS PASS CORRECTS THE ONE BELOW. Three of its conclusions are WITHDRAWN, and the cause is a
+  defect in the INSTRUMENT, not in the simulation.**
+
+  **THE PREVIOUS E6 WAS BIASED TOWARD NULL BY THE PRODUCTION WRITER.** `tileObservation.ts:326-329`
+  overwrites `acquisition` on every observation unless the record already reads
+  `residential_observation`, so a tile learned by exploration STOPS carrying the
+  `returned_frontier_exploration` label the moment the band residentially observes it. Any instrument
+  selecting rows by that label drops exactly the tiles exploration mattered most for. The old probe is
+  renamed **GLOBAL-SNAPSHOT SENSITIVITY** (0.84%/0.23%/0.19% at 40/200/500 y, denominator
+  band-snapshots). **WITHDRAWN: "the effect fades with time", "compounding is refuted", "the knowledge
+  is worth less than the labour it consumes", and "O2 makes outcomes worse".** **The same label bias
+  applies to the O5 arms** — `getFissionTargetRecordIds` suppresses on the same field — so the three
+  byte-identical O5 results are NOT evidence of inert readers.
+
+  **EVENT-PAIRED FIRST-READER TRACE (new, §6).** Every record carries an audit-only `recordEventId`
+  stamped at the canonical writer and is followed BY IDENTITY, not by label. One record at a time is
+  removed from ALL FIVE stores the §5 inventory proved can name it. 40 y, 11 worlds, 5 seeds,
+  **19,974 records**: movement **1,339/19,974**, camp **446**, resource **1,692**, fission
+  **1,160/14,053** changed a SELECTED ACTION — **4,637 records (23.2%)** in total, 3,743 within 90
+  days, **0 never read, 0 evicted before read**. Positive controls 96%/99.6%/27%/100%.
+  **BUT movement probe soundness is 59.7%** (11,930/19,974 reproduce production's own recorded
+  decision) and only **508 of 1,339** movement changes are physically realised. **So 2.5% is a FLOOR
+  with a closed physical chain and 23.2% is a CEILING of reader sensitivity; this pass did not narrow
+  the gap. Reader value is NOT claimed proven.**
+
+  **§5 AUTHORITATIVE-STORE INVENTORY over 337,910 exploration tiles.** FIVE stores can name one:
+  `observedTiles` (canonical), `placeMemory` (2,898 — derived once the band residentially reaches the
+  tile), `frontierInferredTiles` (1,730), `placeAttachments` (124), `verificationEvidence` (68),
+  `travelCorridors` (10). The last two are CO-NAMING, not copies. `resourcePatchMemory` is 0 (C4=0)
+  and `compressedKnownTileSummaries` has NO behavioural reader. **Deleting one KnownTileRecord is NOT
+  sufficient** — an earlier ablation stripped three and would have shipped the CORRECTION-23H failure.
+
+  **§8/§9 PAIRED MEDIATION.** O2 vs O0, 55 paired runs: **+6/-5/=44, median 0, bootstrap 95%
+  [-0.127, +0.291] crossing zero** — statistically indistinguishable from zero, which is what
+  withdraws the previous "-4.9%" claim (unpaired means). O3 preserves the first physical journey
+  **55/55**.
+
+  **§7 X3 IS NON-VACUOUS.** `NO_HEADING` is architecturally REACHABLE: branch (d) needs a known
+  passable tile with an unknown neighbour at distance > 1 (`MIN_ANCHOR_DISTANCE_TILES = 2`, floor
+  MIN-1), so a band knowing only its own tile and the 1-ring has nothing to point at. **9/9 controlled
+  bands return no heading with motive present** (evidence 0.46-0.69), `basesStillReturned: []`. The
+  construction only REMOVES knowledge. **X1-X16 = 16 PASS / 0 FAIL / 0 VACUOUS.**
+
+  **FOUR INSTRUMENT DEFECTS CAUGHT IN THIS PASS'S OWN PROBE**, each of which would have produced a
+  confident number: the camp reader read `candidates`/`selected`/`pressure`, none of which exist (a
+  vacuous 0/21); `ResourcePatchMemory` keys its tile as `approximateTile` not `tileId`; the fission
+  probe passed `contextCache: undefined` and `getFissionTargetRecordIds` then returns EVERY observed
+  tile instead of the salient subset (CORRECTION-23H bug #1 verbatim); and the movement probe first
+  ran AFTER the season-boundary step, scoring 0/33 soundness until moved to the pre-decision seam.
+
+  **§4.3 the dc08b2d -> 59391d54 comparison is DESCRIPTIVE ONLY** — the causal authority for
+  verification remains CORRECTION-23G's exact replay.
+
+  **NOT RUN: the 200- and 500-year event-paired matrices (§12).** Gate 12 is therefore UNMET and this
+  is reported as such rather than as closure. See docs/evidence/correction24a/COMPLETION_FINDINGS.md
+  sections F1-F6.)
+
+Previously updated:
+  2026-07-29 (ORDINARY EXPLORATION CAUSAL CLOSURE — CORRECTION-24A COMPLETION:
+  PROGRESS — LAUNCH THROTTLING CONFIRMED / NO EVIDENCE THAT MORE EXPLORATION IS BENEFICIAL.
+  Branch checkpoint/ordinary-exploration-capacity-24, continuing d865beec. CORRECTION-23 FROZEN,
+  remote still resolves to 59391d54 exactly. Local main untouched at 668763f; remote main untouched
+  at 0a43083. DIAGNOSTIC ONLY — diagnostics-off canonical fingerprints IDENTICAL to d865beec on both
+  maps (map1 7239c085…, map2 d748c78a…), confirmed TWICE by two independent instruments: the state
+  hash, and a 55-run production-behaviour comparison in which 59391d54 and d865beec are identical on
+  every column.
+
+  **PRECONDITION DEVIATION, REPORTED NOT HIDDEN.** The working tree was NOT clean at entry: ~1,175
+  uncommitted lines timestamped 2026-07-28 14:40-14:52, AFTER d865beec's 14:13 commit — an
+  interrupted earlier attempt at this same completion. It was PRESERVED (§1.8), backed up before any
+  edit, verified to typecheck and to reproduce d865beec's fingerprints, and built upon.
+
+  **THE FIRST PASS'S TWO BLOCKERS ARE CONFIRMED, LOCATED EXACTLY, AND BOTH ARE NON-BINDING.**
+  (a) The 12-tick cooldown: of 191,881 suppressed opportunities only **880 had a party still away**
+  and **191,001 (99.54%) had the party ALREADY HOME**, with **164,411** of those holding a
+  physically valid proposal. Mean cooldown elapsed at refusal 5.99 of 12 ticks. The §4.1 rename
+  (`SUPPRESSION_WINDOW_ACTIVE` + a separate `activeFrontierParty`) is what made this visible.
+  (b) The ordering gate: 18,242 fallthrough opportunities come from just **200 distinct claim
+  chains**, **147 of which repeat**, and **17,959 of 18,042 repeats are ROUTE_BUILD_FAILED** — one
+  band claiming the SAME unreachable tile every sixth day for THIRTY YEARS (longest run 1,726,
+  site_B_dry_plains tile:16:34).
+
+  **EVERY COUNTERFACTUAL IS NULL — this is the headline.** Nine arms at 40 y (11 worlds x 5 seeds):
+  O0 production 53.836, O1 priority 54.036, O2 fallthrough-repaired 53.909, O3 knowledge-withheld
+  54.055, O4 retention-protected 53.982, O5 movement 53.891, O5 fission/camp/resource **byte-identical
+  to O0**. **Spread 0.219 people (0.4%), survival 1.000 on all nine.** O2 removes the fallthrough
+  COMPLETELY (18,272 -> 0) for +8.6% launches and **0** additional changed actions. O3 destroys all
+  19,974 returned records and outcomes do not degrade. O4 cuts first-compression eviction 72%
+  (6,121 -> 1,724) and the reader changes FEWER actions (6 vs 7).
+
+  **THE READER EXISTS AND WEAKENS WITH TIME.** E6 same-snapshot counterfactual, positive control
+  sensitive at every horizon: **7/833 (0.84%) at 40 y, 4/1,716 (0.23%) at 200 y, 3/1,539 (0.19%) at
+  500 y**, controls 833/833, 1,716/1,716, 1,539/1,539. Compounding — the one mechanism under which a
+  launch-side repair could pay for itself — is REFUTED. At 200 y the arms separate and the sign runs
+  AGAINST more exploration (O2 44.636, O0 46.945, O3 48.655 with survival 0.818 vs 0.745), but that
+  rests on 5-seed means over near-extinct worlds with an inconsistent sign, so **exploration is NOT
+  claimed to be harmful**.
+
+  **§14 HISTORICAL COMPARISON — REMOVING 57,638 PARTIES CHANGED POPULATION BY 0.02.** dc08b2d ->
+  59391d54: frontier_verification 57,728 -> 90 (-99.8%), exploration launches 1,347 -> 1,366
+  (+1.4%), mean population 53.8182 -> 53.8364, survival 55/55 both. **Exploration was never
+  meaningfully crowded out by verification**, which reframes the first pass's premise. One real
+  effect: exploration-derived records +27.7% on 1.4% more launches, because verification had been
+  pre-observing the same country.
+
+  **TWO BLOCKER CLASSES READ ZERO AT 40 YEARS AND ARE REAL AT THE LONG HORIZONS** — POPULATION_TOO_SMALL
+  2.36% at 200 y and ADEQUATE_KNOWN_ALTERNATIVE non-zero for the first time at 500 y. Both PHYSICAL,
+  neither a policy cap. This is why §15 required the long runs.
+
+  **§11 READER MAP.** route/corridor has **NO READER AT ALL** — travelCorridors is written by
+  updateTravelCorridorMemory from the residential movement record, never from the exploration
+  hand-off, so no O5 arm is constructible and none is faked. camp, daughter/fission and resource
+  activity are **measurably inert**. Only movement/destination consumes anything. deriveFordContext
+  was REJECTED as a seam: its own header states it never runs inside stepSim.
+
+  **§6 AUTHORITY ABSENCES.** NO LAUNCH-TIME PROVISION AUTHORITY and NO LAUNCH-TIME RISK AUTHORITY —
+  frontierExploration.ts contains zero references to either. But provisions ARE a real EN-ROUTE
+  authority: provisionsExhausted forces `returning` with outcomeReason `provisions_ran_out`
+  (expedition.ts:912). Reported through EXPLORATION_LAUNCH_AUTHORITIES so no consumer can read an
+  absence as a tested zero. PARTY_COMPOSITION_FAILED and DURATION_FAILED read zero but have real
+  raise sites (:2452, :2490) — MEASURED zeros, not unused enum values.
+
+  **RECOMMENDED SEAM, IF EVER JUSTIFIED — NOT the cooldown and NOT the ordering.** `ROUTE_BUILD_FAILED`
+  has no failure memory. A bounded negative memory in the CLAIMING family's own retry logic would end
+  17,959 of 18,042 repeats. That is a correctness repair with independent justification and must NOT
+  be sold as an exploration improvement, because this pass shows it would not be one.
+
+  PASSED: tsc, build, graph 221/764 0 dup 0 dangling, import (84 back-edges, unchanged)/adaptation/
+  decision boundaries, X1-X16 **15 PASS / 0 FAIL / 1 VACUOUS** (X7 and X13 promoted from vacuous by
+  controlled runs — 180/180 low-labour rows classified on labour with 0 launches; 24 forced-lost
+  parties with 0 transfers AND 0 records written), anti-omniscience C1-C5 and D all zero over 747
+  breadcrumb steps, hidden-truth 0 unsupported copies 7/7 conclusions, food capture **1.000**,
+  population conservation 155+316-297=174, cohort conservation, determinism true, fresh-process
+  determinism, step-mode invariance both maps with fullCanonicalStateMatch, diagnostics-off
+  fingerprint parity to d865beec, offer-state pairing violations **0 every simulated day**, lost-party
+  transfers **0** at every horizon. State bounded (observedTilesPerBand pinned at the 72 cap).
+  28.88 ms/tick on an idle machine.
+
+  AUDIT DEBT: **+610 production lines since 59391d54, of which +518 in expedition.ts and 284 of those
+  are ONE function** (`recordExplorationOpportunity`, pure audit code kept there only for access to
+  module-private helpers). Four-item cleanup plan in the findings. Inherited and unchanged:
+  `WorldAuditOptions.retentionInteractionArm` still has no consumer; the superseded 23E/23F replay
+  arms are still present.
+
+  NOT DONE, deliberately: no production repair, no cooldown shortened, no scheduler reordered, no
+  roadmap feature started. See docs/evidence/correction24a/COMPLETION_FINDINGS.md.)
+
+Previously updated:
+  2026-07-28 (ORDINARY EXPLORATION AUTHORITY / LAUNCH-FUNNEL DIAGNOSIS CORRECTION-24A:
+  PROGRESS — ORDINARY-EXPLORATION BLOCKER ISOLATED / NO PRODUCTION REPAIR YET, and PARTIAL —
+  ACCEPTANCE GATES 13-18 ARE UNMET. Branch checkpoint/ordinary-exploration-capacity-24 from
+  CORRECTION-23's closure 59391d54. CORRECTION-23 is FROZEN; its remote still resolves to
+  59391d54 exactly. Local main untouched at 668763f; remote main untouched at 0a43083.
+  DIAGNOSTIC ONLY — diagnostics-off canonical fingerprints IDENTICAL to 59391d54 on both maps
+  (map1 7239c085…, map2 d748c78a…).
+
+  **THE ORDINARY-EXPLORATION BLOCKER IS NOT MOTIVE, NOT DIRECTION, NOT LABOUR AND NOT
+  COMPETITION.** 277,250 real production launch opportunities (11 worlds x 5 shared seeds x 40 y),
+  each classified into exactly ONE typed primary blocker: eligibility is **99.4% on nine of eleven
+  worlds** and 80.1%/91.2% on the default maps, with mean evidence score 0.55/0.66 against a 0.50
+  threshold and **nothing at all below 0.3 on map1**; `headingAvailable` is **1.000 on EVERY
+  world** (map2 basis: corridor_continuation 83,173, water_margin 24,531, known_edge 750; mean
+  43.3 known frontier-edge tiles); `INSUFFICIENT_LABOR` = **0**; `ACTIVE_CAP_FULL` = 32; and both
+  displacement classes together are **176 of 277,250 (0.06%)**. Exploration does not lose
+  contests — it is not entered into them.
+
+  **THE TWO AUTHORITIES THAT ACTUALLY BIND.** (a) **`ALREADY_EXPLORING` — 89.12%.**
+  `FRONTIER_EXPLORATION_SUPPRESSION_TICKS = 12` ticks = 12 seasons = **3 SIMULATED YEARS**, and it
+  is stamped the moment the party is RAISED, not when it returns — so a band gets one look per
+  three years regardless of what the look found, how large it is, or how much pressure it is
+  under. The measured launch rate matches exactly: 13 launches per 40-year run, one per 3.1 years.
+  (b) **`VALID_BUT_IDLE_SLOT_UNUSED` — 8.60%, and 23,852 of 23,852 were NEVER OFFERED the slot,
+  with 0 offered-and-refused.** Exploration competes last: it is called only when no retrieval,
+  patch-verification or reconnaissance candidate exists. The claiming family then launches
+  nothing — patch_verification 13,447, reconnaissance 4,621, retrieval 440.
+
+  **THE FAILURE IS TERRAIN-HETEROGENEOUS.** Nine worlds are bound by the suppression window, but
+  **site_B_dry_plains and site_D_aquatic are bound by the ordering gate instead** — a valid
+  proposal exists on 59%/56% of their opportunities, ~7,000 are claimed-and-unlaunched on each,
+  and those two worlds launch the LEAST of all eleven (27 against 63-65). **§15 classification is
+  I (interaction-dependent)**: **C (a cap, not a physical limit)** on nine worlds and **E
+  (idle-capacity policy failure)** on two. **A (no motive authority), B (heading failure) and
+  D (scheduler competition) are REFUTED by measurement.**
+
+  **AN INSTRUMENT ERROR WAS CAUGHT AND IS RECORDED.** The first version of this audit recorded
+  every day and reported `OFF_LAUNCH_CADENCE` as the top blocker at 83% — but production schedules
+  only one day in six, so that was the audit's own sampling choice presented as a finding.
+  Off-cadence days are no longer recorded; every denominator above is real opportunities.
+
+  **NOT BUILT — ACCEPTANCE GATES 13-18 UNMET, stated plainly rather than implied complete:** the
+  §10 O0-O5 same-snapshot counterfactuals; the §11 X1-X16 controlled fixtures; the 200-year and
+  500-year horizons; the §13 dc08b2d vs 59391d54 historical comparison; the §14 feedback-loop
+  first-divergence traces (**no loop is claimed**); the §17 read-only projection; and every
+  E4/E5/E6 returned-knowledge seam — so **returned records, one-year eviction, first-reader traces
+  and changed physical actions are NOT measured in this pass.**
+
+  **NO REPAIR IS LICENSED.** The window being the top blocker does NOT justify shortening it:
+  nothing here shows extra launches would produce DURABLE knowledge, and the CORRECTION-23E
+  retention debt (72-record capacity, mandatory set at 161%, median record lifetime 0.9 years) is
+  untouched and could erase every additional return. That is exactly what O4 and the 200-year
+  matrix would have to settle, and neither was run.
+
+  PASSED: tsc, build, graph 221/764 0 dup 0 dangling, import/adaptation/decision boundaries,
+  anti-omniscience C1-C5 and D all zero, determinism true, step-mode invariance both maps, food
+  capture 1.000, per-lineage population and cohort conservation, diagnostics-off fingerprint
+  parity to 59391d54. 26.8 ms/tick. Audit-code footprint: +207 lines in expedition.ts (one
+  wrapper + one recorder + two markers, all no-op when unregistered), one 247-line diagnostics
+  module, one 235-line script. See docs/evidence/correction24a/FINDINGS.md and
+  AUTHORITY_LEDGER.md.)
+
+Previously updated:
+  2026-07-28 (TEMPORARY-USE PENDING-ACTION AUTHORITY / EXACT LAUNCH-TO-CAMP CONSUMPTION
+  CORRECTION-23J: PASS — TEMPORARY-USE SUSPENDED UNTIL A REAL OPERATION READER EXISTS /
+  CORRECTION-23 VERIFICATION BEHAVIOUR CLOSED, branch checkpoint/physical-frontier-verification-23
+  from 0955c87. Local main untouched at 668763f; remote main recorded and untouched at 0a43083.
+  PRODUCTION BEHAVIOUR CHANGED — no fingerprint parity to 0955c87 is claimed or required.
+
+  **CORRECTION-23I GATED `temporary_use` ON SOMETHING THAT IS NOT A PENDING OPERATION.** The gate
+  read "a resource patch is remembered here OR some party is away toward this tile
+  (prepared/outbound/operating/returning)". Neither disjunct proves a concrete camp-requiring
+  operation is pending: a remembered patch is MEMORY, NOT INTENT, and a `returning` party has
+  ALREADY TAKEN the camp decision the answer was supposed to inform.
+
+  **THE TYPED IDENTITY.** New module `src/sim/agents/pendingOperation.ts` — operationId, bandId,
+  activityKind, targetTileId, selectedDay, expectedLaunchDay, expectedOperatingDay,
+  requiresMultiDayOperation, requiresTaskCampDecision, partyOrTaskIdentity, authoritativeSelector,
+  phase. Every field is read off the expedition record the production selector wrote; nothing is
+  reconstructed from patch memory, richness, hidden stock, a hypothetical task, or candidate-list
+  membership, and the module takes a BAND, never the world. `frontier_exploration` is excluded (its
+  targetTileId is an anchor it walks past, not a destination) and `frontier_verification` is
+  excluded (one verification party justifying another would make the gate self-referential). Only
+  `prepared` and `outbound` are pre-camp-decision — `operating` is already too late, because
+  `deriveTaskCampForOperating` runs on the step that puts a party there. The travel-pace constant
+  moved to this module so `frontierVerification.ts` can import it without closing a cycle;
+  `expedition.ts` re-exports it under its original name.
+
+  **§7 THE ORDERING MODEL IS C, AND IT IS MEASURED RATHER THAN ARGUED.** Model A (operation
+  reserved, then investigated) DOES NOT EXIST: `maybeLaunchExpedition` picks a candidate and calls
+  `createPreparedExpedition`/`attachExpedition` in the SAME CALL, so there is no interval in which
+  an operation is selected but not yet launched — `selectedDay === expectedLaunchDay` is a finding,
+  not a shortcut. Measured: **4,186,352 refusals for `no_selected_operation` against 27**
+  evaluations that found a genuinely pending operation. Model B (selector blocked by temporary-use
+  evidence, re-evaluating after an answer) DOES NOT EXIST EITHER: `taskCampRefusedByEvidence` has
+  exactly ONE production reader and it runs on ARRIVAL, inside the operating step, never in
+  candidate selection. Model C holds by arithmetic — a camp is only decided when the outbound leg is
+  at least a day, so the decision falls `legDays` after departure while the answer needs
+  `2 * legDays + VERIFICATION_ON_SITE_DAYS`, which is greater for every leg length there is.
+  **25 of those 27 failed exactly there**, and fixture J4/J8 pins it on a real warmed band and a
+  real route: the operation decides its camp in **3 days**, the verification round trip is **8**.
+
+  **§10 A THROUGH H MEASURED SEPARATELY, AND D = 0 IS THE FINDING.** Before arm (the 23I gate,
+  eleven worlds x five shared seeds x 40 y, the after arm differing ONLY in the temporary-use
+  block): A = 343 camp decisions blocked by stored negatives, B = 63 distinct blocking records,
+  C = 1,145 launches, **D = 0**, E = 0, F = 0, G = 0, H = 1,145. **Not one of 1,145 launches had a
+  selected operation at the same tile whose camp decision was still ahead of it**, so A cannot be
+  read as evidence for the launch — those 343 camps were blocked by evidence that arrived through
+  some earlier, unrelated journey. Only **378 of 1,145 (33%)** launches were even at a place any
+  work operation ever reached across the whole 40 years. A is reported SPLIT by who was refused —
+  **343 for real work operations, 0 for verification parties themselves** — so the 23I total is not
+  inflated by the question governing its own parties. After arm: every column zero, launches
+  1,142 -> 0.
+
+  **THE 18.09% vs 10.6% DISCREPANCY IS WORSE THAN CORRECTION-23J ASSUMED, AND IS CORRECTED.**
+  Running 23I's own audit script UNMODIFIED on the commit its evidence file shipped in (0955c87)
+  gives **343 / 3,672 = 9.34%**, and a second seed prefix on the same commit gives 363 / 3,816 =
+  9.51% — a 4% spread, so NEITHER 10,724/59,286 (18.09%) NOR 492/4,626 (10.6%) is inside seed
+  jitter. The 23I evidence file therefore describes an intermediate DIRTY-TREE state, not committed
+  behaviour, under a filename implying otherwise; it cannot have come from dc08b2d either, because
+  the diagnostics module it depends on did not exist there. The 10.6% figure is REMOVED from the
+  source comment. The 23I evidence file is PRESERVED UNALTERED per §14 and corrected in
+  docs/evidence/correction23j/FINDINGS.md and here. **Do not cite either published figure.**
+
+  **§13 OUTCOME B — TEMPORARY USE SUSPENDED UNTIL A REAL OPERATION READER EXISTS**, and
+  deliberately NOT by adding the name to `SUSPENDED_QUESTIONS`. Unlike the three questions in that
+  set, `temporary_use` HAS a real reader and a held negative genuinely refuses a camp (fixtures I5,
+  J7). The dormancy is a PHYSICAL CONSEQUENCE of the §6 gate — nothing can satisfy condition 7 in
+  this architecture — so the question re-opens BY ITSELF the moment a pre-operation seam exists,
+  with no policy to revisit. Type, physical resolver, evidence shape and reader are all retained and
+  documented dormant at the gate. The reservation seam belongs to Resource Investigation / Temporary
+  Use Closure and is deliberately NOT built here.
+
+  **J1-J12: 11 PASS, 1 VACUOUS, 0 FAIL.** J12 is recorded as VACUOUS, not as a pass: its assertions
+  hold over an empty set because there are no natural launches, so it states the contract without
+  demonstrating the behaviour exists — counting it would be exactly the vacuous pass
+  AUDIT_ADMISSIBILITY.md forbids. J2 was rewritten after a first version passed on an EMPTY
+  candidate list. §14 cleanup: the weak `patch memory OR any active party` logic is removed; I5's
+  stale caveat is corrected; **I6 is rewritten** to assert that a band holding BOTH a remembered
+  patch AND a returning party at the target still does not ask, instead of the old version that
+  stripped both and asserted nothing was asked (which tested the weak assumption itself). Closure
+  fixtures remain 14/14. No E-H audit machinery was reintroduced.
+
+  **§11/§12 NATURAL MATRIX — BOTH ARMS RE-MEASURED** (eleven worlds x five seeds, 40 y and 200 y;
+  the 23I acceptance files were NOT reused, because the discrepancy above shows 23I evidence cannot
+  be assumed to describe 0955c87). water_access 103 -> 109 — the water gate's code is UNTOUCHED and
+  the +6 is downstream world divergence from raising 1,142 fewer parties, not a change in water
+  launch policy. The three suspended questions stay 0 -> 0. Exploration is materially unchanged
+  (most worlds identical at 13 parties; the two that move, site_B -2 and site_D +2.6, move in
+  OPPOSITE directions), and no exploration eligibility rule, target rule or cadence was touched.
+
+  PASSED: tsc, build, graph 221/764 0 dup 0 dangling, import/adaptation/decision boundaries,
+  anti-omniscience all-zero including C3 lost-party transfer, hidden-truth zero unsupported copies,
+  food capture 1.000, per-lineage population and cohort conservation, determinism true,
+  fresh-process determinism (map1 7239c085… identical across separate processes), step-mode
+  invariance on both maps with fullCanonicalStateMatch, J1-J12, I1-I14. State bounded. NOT DONE,
+  deliberately: no ordinary-exploration repair, no invented reservation seam, no next-roadmap system
+  built early, no population tuning. **The ordinary-exploration deficit remains the next blocker.**
+  See docs/evidence/correction23j/FINDINGS.md.)
+
+Previously updated:
+  2026-07-27 (DECISION-CONTINGENT VERIFICATION / VALUE-OF-INFORMATION CORRECTION-23H:
+  PROGRESS — DIAGNOSIS ACCEPTED / CORRECTION-23 PARENT STILL NOT MERGEABLE, branch
+  checkpoint/physical-frontier-verification-23 from ff48d29. Local main untouched at 668763f;
+  remote main recorded and untouched at 0a43083. DIAGNOSTIC ONLY — NO PRODUCTION BEHAVIOUR
+  CHANGED. New seams: one audit-only module (src/sim/diagnostics/verificationValueOfInformation.ts),
+  one capture call in carryingCapacity, one optional out-parameter on the verification selector,
+  and a read-only §13 projection. Diagnostics-off fingerprints identical to ff48d29 on map1
+  (9a204dde…) and map2 (439b4e7a…) at 40 years.
+
+  **CORRECTION-23G established that verification answers are inert in aggregate. 23H establishes
+  WHY, question by question, by asking the production readers what they WOULD say.**
+
+  **THE QUESTION-TO-READER LEDGER, read from production rather than documentation.**
+  `water_access` → `isWaterAccessFeasible` → the `consideredAsTarget` GATE (carryingCapacity.ts:905).
+  `resource_presence` → `resourceTestEligible` → ONLY the verification selector's own
+  `resource_test_possible` gate (frontierVerification.ts:317). `resource_test_possible` → NO READER.
+  `temporary_use` → `taskCampRefusedByEvidence` → the bounded task camp (expedition.ts:293), and
+  only on a NEGATIVE. `seasonal_persistence` → NO READER. Two structural consequences:
+  **`resource_presence` → `resource_test_possible` is a chain terminating in nothing**, and
+  **`temporary_use` is an ASYMMETRIC reader** — absence of evidence already permits the camp, so
+  its positive branch cannot enable anything.
+
+  **§5 SAME-SNAPSHOT Q0–Q3, 1,632,900 candidates** (11 physical worlds × 5 shared seeds × 40 y,
+  99.25% baseline soundness). `water_access` is 84.4% eligibility-relevant — but **76.2% of that
+  lives in the NEGATIVE arm against 9.3% in the confirmed arm**, realized answers are 6,414
+  confirmed to **102 negative (rate 0.98 — TAUTOLOGICAL)**, and **89% of candidates already have
+  observed water above the gate threshold**. `resource_presence` is 43.3% eligibility-relevant
+  with **zero negatives ever returned across 22,205 answers (rate 1.00 — TAUTOLOGICAL)**.
+  `resource_test_possible` is **95.4% future-system evidence**. `temporary_use` is 69.4%
+  eligibility-relevant carried **100% by the negative arm and 0.0% by the positive**, with
+  realized negatives at 52%. `seasonal_persistence` is **100% future-system**, 9,435 answers all
+  `inconclusive` by construction. Immediate action relevance never exceeds 1.5% in any world; on
+  the isolated-marginal tier 82.7% of everything the band asks is future-system evidence.
+
+  **§11 BOUNDED-HORIZON READER TRACE (55,274 returned answers, 90-day horizon, never long-run
+  population).** Only **6,279 (11.4%)** changed a reader that gates a physical action, and
+  **94% of those are `temporary_use` negatives** (5,883). Water contributes 396 (6% of its
+  answers). `resource_presence` contributes **zero physical** while moving its declared reader
+  22,205 times. `resource_test_possible` and `seasonal_persistence` contribute zero.
+
+  **H1–H12: 9/12 pass, and the three failures ARE the findings.** H3 and H5 name missing readers;
+  H6 names the temporary-use asymmetry. Gate 10 met (H1/H12 — a controlled positive changes a real
+  gate); gate 11 met (H2/H7 — a controlled negative prevents a real action).
+
+  **§10 selector-only is ZERO BY TAXONOMY, not by measurement**, and is reported as such: a
+  hypothetical negative moves the water gate first, so no candidate reaches the "no reader moves
+  at all" bucket. The realized-answer decomposition measures the same phenomenon instead.
+
+  **§12 RECOMMENDATION IS PER QUESTION, NOT GLOBAL** — `water_access` → A (decision-contingent
+  launch gate); `temporary_use` → E (already decision relevant, leave alone); `resource_presence`
+  and `resource_test_possible` → B (missing-reader construction); `seasonal_persistence` → C
+  (retire until seasonal scheduling exists). None is applied here.
+
+  **THREE INSTRUMENT BUGS WERE CAUGHT, EACH OF WHICH WOULD HAVE PRODUCED A VACUOUS PASS.**
+  (1) The audit re-ran the opportunity reader with `cache: undefined`, so
+  `collectOpportunityCandidates` dropped the salient-memory candidate set — 0/331 sound before the
+  fix, 99.25% after. (2) The reader trace counted "consumed" whenever a pure function returned a
+  value, reporting 100% consumption for questions with NO reader. (3) **The Q0 arm stripped only
+  `band.verificationEvidence`, but `find()` consults `KnownTileRecord.verificationDisposition`
+  FIRST** — CORRECTION-23D's place-record authority — so Q0 was not "no evidence" at all. The
+  entire first matrix was discarded and re-run with both stores substituted.
+
+  **§15 AUDIT-INSTRUMENTATION DEBT INVENTORIED**: 39/3,008 marker lines in expedition.ts,
+  12/1,551 in carryingCapacity.ts, 11/690 in memoryCompression.ts, 10/498 in
+  frontierVerification.ts, 6/449 in tileObservation.ts, plus 1,079 lines of diagnostics modules.
+  **`WorldAuditOptions.retentionInteractionArm` has NO consumer anywhere in src/ and should be
+  deleted.** The parent branch cannot become merge-ready until the superseded 23E/23F replay arms
+  are removed. PASSED: tsc, build, graph 221/764, boundaries (back edges 84, unchanged),
+  anti-omniscience all-zero, hidden-truth zero copies, lost-party no-transfer, food capture 1.000,
+  population and cohort conservation, determinism true, step-mode both maps with
+  fullCanonicalStateMatch, diagnostics-off parity. State bounded. 30.90 ms/tick. NOT DONE,
+  deliberately: no launch gate added, no question disabled, no selector or score changed.
+  See docs/evidence/correction23h/FINDINGS.md.)
+
+Previously updated:
+  2026-07-27 (EXACT TRAVEL REPLAY / TARGET-SELECTION ISOLATION / TERRAIN-SENSITIVITY SIGNATURE
+  CORRECTION-23G: PROGRESS — DIAGNOSIS ACCEPTED / CORRECTION-23 PARENT STILL NOT MERGEABLE,
+  branch checkpoint/physical-frontier-verification-23 from ca9e3b8. Local main untouched at
+  668763f; remote main recorded and untouched at 0a43083. DIAGNOSTIC ONLY — NO PRODUCTION
+  BEHAVIOUR CHANGED. Every new seam is an audit-only module slot in
+  src/sim/diagnostics/verificationScheduleReplay.ts or a read counter that no-ops when
+  unregistered; the diagnostics-off canonical fingerprint is identical to ca9e3b8 on map1
+  (9a204dde…) and map2 (439b4e7a…) at 40 years.
+
+  **CORRECTION-23F's GATE 10 IS MET AND THE ANSWER IS NEGATIVE: VERIFICATION SEMANTICS
+  CONTRIBUTE NOTHING.** F13 was inadmissible because suppressing the returned RESULT also
+  suppressed the durable DISPOSITION, which moved the production selector. G1 does not let the
+  selector run at all: it replays F1's exact donor schedule — same launch days, same targets,
+  same routes TILE FOR TILE (0 route rebuilds and 0 replay failures across 6 sites × 5 seeds) —
+  with no question, no answer, no evidence and no disposition, proved by 0/0/0 attempt/evidence/
+  disposition rows against F1's 12/48/430. **G1 reproduces F1 EXACTLY on all six sites.** On
+  terrain A seed s1 at 200 years the two agree to four decimals on every instrumented quantity:
+  32 people, mean support 1.3028, 97 births, 99 deaths, 226.74 receipts, 502 residential moves,
+  921 evictions, 29,163 refreshes, 1,360 season additions, 351 new records, 326 unique tiles.
+  **430 durable verification conclusions change no birth, no death, no calorie and no move.**
+  Their entire causal contribution runs through TARGET SELECTION and nowhere else.
+
+  **THE CADENCE IS NOT THE MECHANISM.** Holding F1's exact launch days and party count and
+  changing only the target rule collapses terrain A from 1.00/34.0 to 0.20/5.4 (G3 ordinary
+  broad-exploration targets), 0.40/13.6 (G4 nearest legal uncertain target) and 0.40/19.6 (G5
+  deterministic rotating sectors). On the other five sites none of them changes anything.
+
+  **NOR IS TARGET DIVERSITY.** G1 vs G2 is null BY CONSTRUCTION — 0 rotation retargets fire under
+  an exact replay — and is reported as such, never as a measurement. The §6 supplement tests
+  rotation where it can decide: F13 reproduces (5,069.8 parties, 30.2 distinct targets, 55.4
+  tiles, 0.00 survival; 23F reported 5,081/55.6) and F13+rotation repairs the collapse COMPLETELY
+  (285.8 parties, 221.4 targets, 234.2 tiles) while STILL returning 0.00. What reproduces F1 is
+  replaying the SPECIFIC target set F1's own band-known selector produced.
+
+  **G6 — retaining the donor places without launching anything — is a PARTIAL substitute on
+  terrain A alone**: F0 0.60/19.0 → 0.80/22.0, with the physical travel worth the remaining
+  → 1.00/34.0. Worth nothing on the other five sites. No production retention change selected.
+
+  **NO REPLICATED TERRAIN-CONDITIONAL MECHANISM WAS FOUND.** Six physically qualified sites, TWO
+  PER STRUCTURE CLASS so no class rests on one site. Only terrain A is sensitive and its class
+  does NOT replicate: site D (tile:119:116) is the other coastal/aquatic site, has MORE water
+  (0.367 vs 0.303) and a LARGER aquatic food share (0.367 vs 0.246), and is neutral on every arm;
+  both dry-plains sites and both hills sites are neutral. The axes on which A is extreme make it
+  an OUTLIER rather than a terrain type — it is the only site with a FREE escape corridor (100%
+  passable, 0 obstacles, against 1–3 everywhere else) and the only site whose production baseline
+  is not already safe (F0 0.60 against a 0.96 mean elsewhere).
+
+  **TERRAIN A FAILS THE QUALIFICATION RULE CORRECTION-23F ITSELF WROTE** (corridorPassableShare
+  ∈ [0.55, 0.98]; A measures 1.00). 23F used as its reference a site that fails its own filter
+  and never checked. Do not treat A as a representative `marginal_escapable` fixture without
+  re-qualifying it.
+
+  **§8 — EVERY NEW RECORD NECESSARILY RECEIVED BASE OBSERVATION CONTENT** (ratio exactly 1.00 on
+  every arm and every site), so a "new tiles only" arm can never be a season-only arm. 23F's F5
+  and F10 must not be read as clean season-identity tests and this pass claims none.
+  `KnownTileRecord.seasonsObserved` has exactly FOUR behavioural readers (`bandDecision`'s 0.06
+  seasonal-food-modifier penalty, the place-memory merge that feeds protoCamps, and the two
+  verification-side ones); the verification pair falls to zero reads on G1–G5 while the only
+  direct movement-scoring consumer is IDENTICAL between F1 and G1.
+
+  Complete §13 mediation chains for every material arm (schedule → target → route → records →
+  seasons → retention → reader → changed movement → receipt → support → demography). PASSED:
+  tsc, build, graph 221/764, import/adaptation/decision boundaries (internal back edges 84,
+  unchanged), anti-omniscience C1–C5 and D all zero, hidden-truth zero unsupported copies,
+  lost-party no-transfer, food capture 1.000, population and cohort conservation, determinism
+  true, step-mode invariance both maps with fullCanonicalStateMatch, diagnostics-off parity.
+  State bounded (disposition rows/band 174 → 397 → 415 → 490 at 25/50/100/200 y; evidence rows
+  pinned at 48; display ring 12). 31.13 ms/tick. NOT DONE, deliberately: no production behaviour
+  selected, restored, tuned or changed. See docs/evidence/correction23g/FINDINGS.md.)
+
+Previously updated:
+  2026-07-27 (SEASONAL RETRAVERSAL BENEFIT DECOMPOSITION CORRECTION-23F: PROGRESS — THE
+  CORRECTION-23E GENERALISATION IS REFUTED / GATES 9, 10, 11 AND 16 UNMET, branch
+  checkpoint/physical-frontier-verification-23 from a5b67a0. main untouched at 668763f.
+  DIAGNOSTIC ONLY — NO PRODUCTION BEHAVIOUR CHANGED; canonical-state fingerprint identical to
+  a5b67a0 on both maps at 40y with every switch unset.
+
+  **THE 23E RESULT DOES NOT REPLICATE ACROSS TERRAIN, AND ITS GENERAL CLAIM IS WITHDRAWN.**
+  CORRECTION-23E reported, as a property of the marginal tier, that restoring one season term
+  restores survival (0.70/21.5 -> 1.00/36.9) and that suppressing the walked-route observation
+  collapses it. Both hold on terrain A (tile:204:72, coast) and on NEITHER of two further
+  qualified marginal_escapable terrains. On terrain C (tile:100:23, dry plains) EVERY arm
+  survives 10/10 and F1 is the WORST of them (21.4 against production 24.6). On terrain B
+  (tile:10:34, dry plains) every arm except F0 and F7 survives 5/5 inside 8.4-13.8. Only
+  terrain A discriminates at all. 23E rested on ten runSeed values on ONE site — near-tie
+  ordering jitter, never terrain — which is the first canonical mistake in its own rule list.
+  **Do not cite the 23E season-term or route-observation result as a general property of the
+  marginal tier, and do not build a production seam from it.**
+
+  **ON TERRAIN A THE BENEFIT IS AN INTERACTION, NOT A COMPONENT.** It lives in the ROUTE
+  country, not the destination: F4 (route tiles only) reproduces F1 at 1.00/34.6 while F3
+  (target tile only) collapses to 0.30/6.5, BELOW the no-observation control F2 (0.40/12.1).
+  Neither discovery nor maintenance alone works (F5 new-tiles-only 0.00/0.0; F6
+  existing-only 0.30/10.5). Neither content nor recency alone works (F7 content-no-recency
+  0.80/23.4; F8 recency-no-content 0.10/3.5). Season identity is NECESSARY but nowhere near
+  SUFFICIENT: removing it (F9) lands exactly back on production (0.70/20.1), while season
+  identity alone (F10) is 0.10/1.8.
+
+  **F13 IS INVALID AS RUN — do not cite its 0.00.** It was meant to be F1's target schedule and
+  routes with the question removed; the implemented seam suppresses the returned RESULT, which
+  also suppresses the durable DISPOSITION, so mayAskAgain answers "never asked here" forever
+  and selection collapses onto one place: 5,081 parties raised (most of any arm) but 55.6
+  unique tiles and 7.0 frontier tiles (fewest). It measures lost retry memory, not the absence
+  of a question. A valid arm needs a target-schedule replay seam, NOT BUILT.
+
+  **MEMORY-COMPRESSION DEBT IS INTERACTION-DEPENDENT, NOT THE PRINCIPAL MECHANISM.** The same
+  161%-of-capacity mandatory set and the same inert salience scoring are present on all three
+  terrains, yet only terrain A is sensitive to what travel does to records. A defect constant
+  across terrains cannot by itself explain an effect appearing on one of three.
+
+  NOT BUILT: F11, F12, F14, F16 (gates 9, 11, 16 unmet); F13 invalid (gate 10 unmet). F15 is
+  subsumed by F7 — lastObservedAt/visits are the only liveness fields the writer touches.
+  PASSED: tsc, build, graph 221/764, boundaries, anti-omniscience all-zero, hidden-truth zero
+  copies, lost-party no-transfer, food capture 1.000, conservation, step-mode both maps,
+  determinism true, diagnostics-off parity. 31.8 ms/tick.
+  See docs/evidence/correction23f/FINDINGS.md.)
+
+Previously updated:
+  2026-07-27 (RETRY-SUPPRESSION POPULATION MEDIATION / PLACE-MEMORY RETENTION AUTHORITY
+  CORRECTION-23E: PROGRESS — DIAGNOSIS ACCEPTED / CORRECTION-23 PARENT STILL NOT MERGEABLE,
+  branch checkpoint/physical-frontier-verification-23 from 6258c97. main untouched at 668763f.
+  DIAGNOSTIC ONLY — NO PRODUCTION BEHAVIOUR CHANGED. Every new switch is an audit-only
+  WorldAuditOptions field, undefined in every normal world.
+
+  **THE MARGINAL REGRESSION IS ONE DELETED LINE.** CORRECTION-23D's marginal loss
+  (survival 0.9 -> 0.7, mean population 35.6 -> 21.5 on ten shared seeds) is caused ENTIRELY by
+  removing ONE term from `mayAskAgain`: `seasonChanged && (water_access || resource_presence)`.
+  Arm R2 (durable disposition still WRITTEN, pre-23D eligibility READ) reproduces 76893be
+  EXACTLY, seed for seed, on every metric — so the storage/authority change, the daughter reset
+  and the observeTile carry-forward are all innocent. Arm R4 (23D gate + that one season term)
+  gives 1.00 / 36.9, restoring and slightly exceeding R0. Hardship removal is NOT the cause
+  (R3 0.60/18.7, worse than production). Disabling settled-answer suppression entirely gives the
+  MOST launches (4,634) and the SECOND WORST population (0.70/14.1) — **more verification is not
+  better**; seasonal rotation over a bounded place set is what matters.
+
+  **VERIFICATION'S SURVIVAL VALUE IS ITS WALK, NOT ITS ANSWER.** Arm R6 keeps the party, the
+  route and the returned answer and suppresses ONLY the ordinary tile observation of the walked
+  route: survival 0.70 -> 0.10, population 21.5 -> 2.1, place refreshes 29,124 -> 4,572. Arm R7
+  (exploration offered the same single slot first, budget unchanged) is 0.70/24.0 — verification
+  does not meaningfully crowd exploration out.
+
+  **THE RETENTION SCORING IN memoryCompression.ts IS INERT IN PRODUCTION.** Measured through
+  the production scorer: the MANDATORY set (band position + full 2-ring + crossing endpoints +
+  important water + valenced places) averages **161% of the 72-record capacity** on the marginal
+  fixture and 113% on default map2. Mandatory records carry +10 and sort first, so
+  `retained.size < capacity` is never true for a scored record — the retained set IS the
+  mandatory set, and recency/visits/confidence/water/provenance/attachment change NOTHING.
+  Route relevance, candidate relevance and verification evidence are not terms at all. A verified
+  place survives only by accident of falling in the mandatory set.
+
+  **FORGETTING HERE IS NOT LEGITIMATE BY THE SPEC'S OWN TEST.** 862 of 890 evicted records
+  (96.9%) had been observed within the previous year; 821 (92.2%) were reacquired, median gap
+  540 days; 299 carried a verification disposition and **250 verification questions were re-asked
+  after reacquisition**. Default map2 over 100 years: 1,493 questions re-asked after
+  reacquisition. Median completed place-record lifetime 324 days = 3.6 seasons = 0.9 years.
+  §9 TIME UNIT VERIFIED IN-RUN: one daily step = 1 day, 90 daily steps = 1 tick = 1 season,
+  360 days = 1 year, compression runs once per YEAR. CORRECTION-23D's "282 days" label was
+  correct as a unit.
+
+  **DO NOT REPAIR THIS BY ADDING MEMORY.** K4 (capacity 72 -> 288, priorities untouched)
+  collapses the marginal tier to 0.20 / 7.6 despite producing the LEAST forgetting of any arm
+  (57 evictions vs 1,039). K5 (no inherited mandatory set) is worse: 0.10 / 3.7. K1/K2/K3
+  (protect verified places, three definitions) remove 96-97% of the forget-relearn-reverify loop
+  (verified reacquisitions 299 -> 9, repeats 250 -> 7) and buy **+2 people**. Neither capacity nor
+  prioritisation is the population lever. K4/K5 are NOT attributed — no mediation trace was run.
+
+  **THE REGRESSION IS CONFINED TO marginal_escapable.** map1 default 188.2/184.8/183.4,
+  map2 default 200.0/200.6/198.2, ordinary 31.1/31.8/30.3, hostile 17.3/15.5/17.1 (R0/R1/R4),
+  all 5/5 or 10/10 survival. Isolated marginal is 0.1/1.1 in ALL THREE arms, IDENTICAL.
+  **CORRECTED: the isolated survivor is at population ELEVEN, not one** — CORRECTION-23D's
+  report called it "one seed at population 1"; 1.1 was the ten-seed MEAN. It is deterministic,
+  it has real receipts and movement, and verification did not cause it.
+
+  **CORRECTED: the ten "shared seeds" are ten runSeed values on ONE site.** VAR-1's runSeed
+  perturbs only near-tie decision ordering, never terrain (simRunner.ts:83-86). Habitat variation
+  comes from the tier/default-map runs, not from the seed list.
+
+  PASSED: tsc, build, graph 221/764 0 dup 0 dangling, import/adaptation/decision boundary,
+  anti-omniscience (C1-C5 and D all 0), hidden-truth 0 copies, lost-party no-transfer, food
+  capture 1.000, per-lineage conservation, step-mode invariance both maps with
+  fullCanonicalStateMatch, determinism true, 23B R1-R12 13/13, 23C W1-W10 10/10, 23D B1-B15
+  15/15. State size bounded (disposition rows peak ~415/band at 100y, 316 at 300y; evidence rows
+  pinned at 48, display ring at 12). Performance 42.9/43.1 ms/tick over two 100-year reps.
+  NOT DONE, deliberately: no production retention policy selected, no capacity raised, no
+  eviction weight changed, no retry restored. See docs/evidence/correction23e/FINDINGS.md.)
+
+Previously updated:
+  2026-07-26 (FRONTIER OPPORTUNITY / DAUGHTER FISSION CAUSAL CLOSURE CORRECTION-20: PROGRESS
+  — NOT ACCEPTED / DO NOT MERGE, branch checkpoint/frontier-opportunity-fission-closure-20
+  from 4d20c98. main untouched at 668763f. NO PRODUCTION BEHAVIOUR CHANGED.
+
+  **THE FISSION HYPOTHESIS IS REFUTED. BOTH MAPS ARE NON_FISSION_DOMINATED.** The §6 reader
+  isolation ran all five seeds on both maps with four arms (disabled / no-transfer /
+  hidden-from-fission / production), using two audit-only seams that drop
+  returned_frontier_exploration tiles from collectOpportunityCandidates and
+  getFissionTargetRecordIds only:
+      map1  disabled 244.6  noTransfer 241.6  hiddenFromFission 181.4  production 188.4
+            fission-only +7.0   non-fission -60.2   total -53.2
+      map2  disabled 226.0  noTransfer 231.6  hiddenFromFission 201.2  production 196.4
+            fission-only -4.8   non-fission -30.4   total -35.2
+  Letting frontier knowledge reach opportunity/fission is worth +7.0 on map1 and -4.8 on
+  map2 — neither is close to the -30/-60 caused by the NON-FISSION readers (movement,
+  resource selection, camps, seasonal rounds). **Do NOT change the travelCost/split-motivation
+  coupling on the strength of the 'distance double-count' label** — the §9 ledger records it
+  as a real CONTRACT violation (T2 re-consumes T1's normalized value with no physical
+  quantity of its own, swing 0.10 vs threshold 0.64) but it is NOT the mechanism.
+
+  **THE EXPEDITION IS CLOSE TO COSTLESS.** ARM_A (party walks, commits workers, eats
+  provisions, transfers nothing) matches or BEATS the disabled control: 241.6 vs 244.6 on
+  map1 and 231.6 vs 226.0 on map2. Band counts under ARM_A return to disabled levels
+  (8.6 vs 8.8; 11.2 vs 11.0). Confirms CORRECTION-19 across both maps and all ten seeds.
+
+  **§5 CROSS-SEED DECOMPOSITION COMPLETED (20 runs).** map1 gap 56.2 = 88.8% amplification
+  + 11.2% direct; map2 gap 29.6 = 4.3% amplification + 95.7% direct. These describe WHERE
+  the difference materialises; §6 describes WHICH READER causes it. Consistent: on map1
+  hiding knowledge from fission does NOT restore band count (7.2 vs 7.0 vs 8.8 disabled)
+  but withholding transfer entirely does (8.6).
+
+  **RETRACTED: my CORRECTION-19 claim that 'exploring bands are better fed, support +12.4%'.**
+  That came from map1 seed c18:a alone. Across five seeds support is -0.33% (map1) and
+  -9.09% (map2). Seeds disagree WITHIN each map, so no single mechanism describes either.
+
+  LEADING MECHANISM, unrepaired: the epistemic-adequacy gap. KnowledgeAcquisitionKind
+  provenance exists but NO adequacy test reads it, so a tile crossed once by two people
+  carries the same confidence as country worked for seasons and enters movement, resource
+  and camp decisions on that basis. NOT BUILT: §7 pipeline waterfall, §10 D0-D5, §11 P1-P6,
+  §12 projection model, §14 fission-gate audit, §18/§20/§21, most of §22.
+  See docs/evidence/correction20/.)
+
+Previously updated:
+  2026-07-25 (FRONTIER EXPEDITION PHYSICAL-COST AND LABOR ACCOUNTING CORRECTION-19: the
+  expedition labour accounting is CORRECT AND SINGULAR — NO REPAIR WARRANTED at the labour
+  seam. Branch checkpoint/frontier-expedition-labor-accounting-19 from 8504b76 (4b1f363 is
+  a verified ancestor; the two extra commits are documentation-only). main untouched at
+  668763f. The FEATURE BRANCH overall remains PROGRESS — NOT ACCEPTED / DO NOT MERGE
+  because destination semantics and expansion-chain closure are unfinished.
+
+  **§12 INVARIANTS: ZERO VIOLATIONS over 9,600 sampled days.** No double-commitment, no
+  over-reservation, no reservation outliving the journey, no labour retained on terminal
+  phase, no reservation exceeding working adults. Every frontier party is exactly two
+  workers (399/399). Person-days are STEP-MODE INVARIANT (map1 8807=8807, map2
+  10343=10343). Classification: CORRECT_AND_SINGULAR.
+
+  **TWO PATHS UNDER-CHARGE; NONE DOUBLE-CHARGES.** adultEquivalentDemand counts away adults
+  in full (correct — they still eat). laborCapacity ALSO counts them in full, which is an
+  under-charge. Same-day party sizing subtracts awayWorkers once and scales the PARTY not
+  the band. Mobility pools gate on away-phase and release on terminal.
+  **Provisions cost the band ZERO food**: provisionUnitsConsumed is read only by acuteRisk
+  and buildReturnedRecord (which subtracts from the DELIVERED harvest), and an
+  information-only task has no pendingReturnRecord so that path never runs.
+  **Expedition walking imposes NO whole-band fatigue**: getRecentMovementFatigue reads
+  RESIDENTIAL movementHistory, not expedition kilometres.
+
+  **NORMALIZATION REFRAMES THE REGRESSION — THE TWO MAPS DIFFER.** map1 pop/band ON 28.85 vs
+  OFF 27.65 with bands 7,8,6 vs 10,8,9: bands are individually LARGER and the whole gap is
+  FEWER BANDS. map2 band counts are IDENTICAL (11,12,11 vs 11,11,11) with pop/band ON 17.09
+  vs OFF 20.24: a genuine per-band effect. A cross-map average conceals both.
+
+  **EXPLORING BANDS ARE BETTER FED, NOT WORSE.** map1 c18:a: food per working-adult-year
+  0.0050 ON vs 0.0049 OFF (identical), raw support ratio 0.3019 ON vs 0.2686 OFF (+12.4%),
+  expedition person-days 0.32% of working-adult days (frontier-specific share ~0.12%). The
+  gap is fissions: 2 @ y102 ON vs 5 @ y80 OFF — fewer, and 22 years later.
+  **Do NOT describe the regression as a food or labour cost.**
+
+  Leading mechanism, recorded not repaired (fission is out of scope here): CORRECTION-18's
+  §9.3 distance DOUBLE-COUNT — travelCost is subtracted both in destination ranking and in
+  split motivation, so discovering good distant country makes a band LESS willing to divide.
+
+  NOT RUN: Arms 0-7 matrix (Arms 3-7 not built; Arm 2 is one seed), the §7 successor
+  external-divergence audit, most of the §16 matrix. INHERITED AUTHORSHIP EXCEPTIONS
+  REPORTED NOT ALTERED: d41c973 has author/committer name "Claude" plus a Co-Authored-By
+  trailer, and 1faa7c9 has the trailer; both predate this rule; rewriting them would destroy
+  the exact ancestry §2 requires. See docs/evidence/correction19/.)
+
+Previously updated:
+  2026-07-25 (FRONTIER KNOWLEDGE CONSUMPTION / DAUGHTER-DESTINATION VIABILITY CORRECTION-18:
+  PROGRESS — NOT ACCEPTED / DO NOT MERGE, branch
+  checkpoint/frontier-knowledge-consumption-destination-18 from CORRECTION-17's febbdc2
+  (parent 1faa7c9; d41c973 and 668763f verified ancestors). main untouched at 668763f.
+  DIAGNOSTIC half done, CONSTRUCTION half largely NOT done — see §9 of the findings.
+
+  **THE POPULATION REGRESSION REPRODUCES AND IS LARGER THAN REPORTED.** Five predeclared
+  seeds per map, 300y, identical seed and world: map1 -23.98%, map2 -15.13%, 5/5 seeds
+  lower on BOTH maps. The trip loss (-8068 on map1) is a CONSEQUENCE not a cause —
+  per-band trips are HIGHER with exploration on (5642 vs 5071); totals fall only because
+  there are fewer bands (7 vs 10).
+
+  **§6 FIRST DIVERGENCE = EXPEDITION LABOUR, 6/6 runs.** Stepped in lockstep DAILY FROM
+  TICK ZERO (an earlier 40-year seasonal warm-up reported everything diverging on day 1 —
+  a sampling artefact). Ordering, identical on all six: party raised t96 -> walks t97 ->
+  knowledge returns t106 -> resource memory t180 -> support t192 -> fission pressure t360
+  -> pressure t450 -> position t630 -> demography t720. Physical divergence precedes
+  knowledge by 9-10 days, exactly the outbound leg.
+
+  **§7 Arm A built and PARTIALLY measured (one seed, not the matrix).**
+  frontierKnowledgeTransferDisabled runs the party physically and suppresses only the
+  return hand-off. map1 seed a: production 215, armA 209, disabled 264 => labour ~112% of
+  the gap, returned knowledge slightly POSITIVE (-6). Reader-release arms C1-C9 NOT built.
+
+  **§11 MASKING CONFIRMED AND REPAIRED — this corrects CORRECTION-17.** An audit-only
+  candidate-ledger observer placed BEFORE the score gate shows, over 50,579 production
+  ledgers: 62,544 frontier-derived candidates DO reach the list (not starvation), 19,773
+  of them viable, distant candidates to 41 tiles evaluated and sometimes winning — but the
+  score winner FAILS viability 63.7% of the time and 6,413 viable candidates were
+  discarded because a non-viable one scored higher. CORRECTION-17's "no alternatives are
+  materially better / the blocker is ecological" measured only the score winner and is NOT
+  SUPPORTED. REPAIR: deriveKnownUnusedHabitat keeps a second slot for the best candidate
+  that passed viability, ranked by the SAME unchanged score, returning bestViable ?? best.
+  No threshold, margin or coefficient moved. Step-mode invariance still PASSES on both
+  maps with fullCanonicalStateMatch.
+
+  **§9 units ARE invalid but are NOT the blocking gate.** expectedPerCapita is a
+  normalized PER-TILE yield fraction (the same module multiplies it by TILE_SUPPORT=12.5
+  to get adult-equivalents); currentPerCapita is whole-catchment support / whole-band
+  demand. Like-for-like, the candidate side is understated ~5-6x. But a derived hypothesis
+  — that clamp01 makes the test unsatisfiable for well-fed bands — was REFUTED by
+  measurement: consideredAsTarget is TRUE in 87.5% of 4,337 band-years and the threshold
+  exceeds the clamp ceiling in only 2.9%. The error makes the gate TOO PERMISSIVE in the
+  common low-support regime. Repair the units on correctness grounds, not to unblock
+  destinations.
+
+  **§9.3 DISTANCE IS DOUBLE-COUNTED (structural, unrepaired, magnitude unmeasured).**
+  travelCost = clamp01(distance/12) is subtracted BOTH in destination ranking
+  (score -= travelCost*0.2) AND in split motivation (travelRiskPenalty -> pressure -=
+  ...*0.2). A band that DISCOVERS good distant country therefore becomes LESS willing to
+  divide. Max motivation swing 0.10 against SPLIT_PRESSURE_THRESHOLD 0.64.
+
+  **§8 typed provenance implemented.** KnowledgeAcquisitionKind on KnownTileRecord
+  (optional; absent = residential_observation), stamped at the expedition return seam,
+  upgrading but never downgrading. Verified: 26.7 frontier-derived tiles/band in
+  production, 0.0 in Arm A.
+
+  NOT BUILT: §12 synthetic cases A-F, §13 regression repair, §14 memory bounds and the
+  100/500/1000-year proofs, §15 chain re-run, §16 eight-arm matrix, §17 acceptance, §19
+  fresh performance, most of §20. Births/deaths in the §5 ledger read 0 (wrong field path,
+  fixed in-script, NOT re-run). See docs/evidence/correction18/.)
+
+Previously updated:
+  2026-07-25 (DESTINATION KNOWLEDGE HORIZON / FRONTIER EXPLORATION CORRECTION-17: PROGRESS —
+  NOT ACCEPTED / DO NOT MERGE, branch checkpoint/frontier-exploration-knowledge-horizon-17
+  from CORRECTION-16's 1faa7c9 (parent d41c973, public-main ancestor 668763f verified).
+  main untouched at 668763f.
+
+  **THE ~9-TILE DESTINATION-KNOWLEDGE HORIZON IS NO LONGER THE BINDING LIMIT.** A new
+  expedition task family `frontier_exploration` (src/sim/agents/frontierExploration.ts, new;
+  lifecycle in expedition.ts) sends a party out on a BAND-KNOWN DIRECTIONAL HYPOTHESIS with
+  no destination tile, no remembered patch and no precomputed route. It discovers its route
+  one 4-adjacent physical step at a time, reserves return capacity at EVERY step, keeps its
+  observations party-local until it physically walks home, and writes residential knowledge
+  only through the canonical observeTileAndNearby writer. Measured: residential max known
+  distance 40.4 tiles ENABLED vs 28.8 DISABLED on identical seeds (baseline single-founder
+  probe was 7-11 tiles across 300 years). No existing cap was raised; no demography,
+  nutrition, yield, carrying-capacity or fission coefficient was touched.
+
+  **THE CHAIN DOES NOT CLOSE.** It breaks at exactly one link on 5/5 controlled seeds: L09,
+  opportunity evaluation over the newly known country. §15 was answered with measurement,
+  not assertion: non-overlapping candidates ARE known, ARE admitted to the candidate domain
+  and DO survive the candidate slice (795/795 band-years, stages S1-S3), but never win the
+  score. Across 7,186 non-overlapping candidates, the number that held a habitat advantage
+  exceeding their travel+risk penalty and lost anyway is ZERO (max advantage 0.094). A
+  strictly superior synthetic region (richness 1.0, water 1.0, risk 0) placed at distance
+  9-11 and 18-24 still did not win, because the winner's OWN observed richness is 0.93-1.0 —
+  the parent catchment is already at the ecological ceiling. Conclusion recorded as
+  `no_alternatives_materially_better_scoring_not_at_fault`. The travel-cost term was
+  therefore NOT tuned.
+
+  A REAL but UNREPAIRED defect was isolated and documented: collectOpportunityCandidates
+  appends knownFrontierTileIds (the only uncapped-distance path) into the same set as the
+  <=8-tile path and slices the union; the <=8 path alone supplies a mean 15.99 candidates
+  against the budget. A reserved-slot repair was implemented, measured to change NO outcome,
+  and REVERTED rather than merged on speculation.
+
+  ONE band field added: lastFrontierExplorationTick (the suppression window cannot be read
+  off the 6-slot recentExpeditionOutcomes LRU; 288 -> 153 explorations/300y once exact).
+  Two audit-only WorldAuditOptions added (frontierExplorationEnabled,
+  frontierExplorationAlwaysLost), both undefined in every normal world.
+
+  PASSED: build, TypeScript, graph 217/754 0 dup 0 dangling, import boundary, adaptation
+  boundary, context lifecycle, season-order invariance, deterministic benchmark,
+  fresh-process determinism, step-mode invariance on BOTH maps (fullCanonicalStateMatch),
+  food-receipt capture 1.000, annual-nutrition like-for-like (905 comparisons / 0
+  mismatches), C16 death-memory 5/5, C16 social exact-seam preserved, anti-omniscience
+  (622 breadcrumb steps all 4-adjacent, 0 leaks, 0 unknown anchors).
+  OPEN: a default-map population A/B effect under multi-seed re-measurement — blocking for
+  merge. NOT BUILT: everything in §3 scope exclusions. See docs/evidence/correction17/.)
+
+Previously updated:
+  2026-07-25 (HUMAN VIABILITY / CAUSAL CLOSURE CORRECTION-16: PROGRESS — NOT ACCEPTED / DO NOT
+  MERGE, branch checkpoint/human-viability-causal-closure-16 from CORRECTION-15's d41c973.
+  main untouched at 668763f. This checkpoint completed the EVIDENCE-REPAIR half of its scope and
+  did NOT complete the CONSTRUCTION half.
+
+  **TWO CORRECTION-15 CLAIMS ARE RETRACTED. Do not carry them forward.**
+
+  (1) "The social layer is readability-only; only socialPressure is causal" is FALSE. Under an
+  admissible instrument every social field changes physical outcomes. innerFission perturbed at
+  the correct seam moves movement, physical food receipts, knowledge, demography and viability on
+  5/5 seeds; socialTension on 4/5 and 3/5; cohesion on 4/5 and 2/5. CORRECTION-15's null had two
+  independent causes, separated on its OWN seed: innerFission/socialTension are DERIVED and their
+  canonical writer applyInnerFissionSocialReadabilityContext runs at position 7 of the
+  updateBandContextStates chain while their readers applyProtoCampContext (8) and
+  applyForagingLearningAdaptationContext (12) run later IN THE SAME CALL, so a between-tick clamp
+  was destroyed before any reader executed (wrong seam); and the cohesion null was a single seed
+  plus a 10-field projection wrongly called "canonical state" that omitted protoCampMemory.behavior,
+  foragingAdaptation.behavior and pressureState. CORRECTION-15's own STATIC half had classified
+  every one of these fields as causal_or_intermediary_static_read — the documented conclusion
+  contradicted its own evidence.
+
+  (2) "demographicDeathMemoryPathAudit's 2/11 failure is a production regression" is FALSE. Both
+  failing checks assert orderings on 40-YEAR TRAJECTORY MEANS of arms that moved independently;
+  mean currentFoodStress rises monotonically as suppression falls (R0 0.4233 → R1 0.4347 → R3
+  0.4526), so density-dependent food feedback reverses the asserted sign. A same-snapshot
+  counterfactual (one identical spring pre-demography snapshot, arms differing ONLY in
+  band.deathMemory, exactly one production annual update) passes 6/6 checks on 5/5 seeds, with the
+  measured fertility delta 0.070 matching the production formula recentDeathSuppression*0.18 =
+  0.072 exactly. Classification: INVALID AUDIT EXPECTATION. Production not changed, not tuned.
+
+  Also downgraded to UNRESOLVED: "cohort composition is worth exactly 0.01 of support ratio" and
+  "age structure is close to decorative" — measured by the same class of instrument and NOT
+  re-proven here. relationshipMemory and reportedKnowledge are UNRESOLVED, not classified.
+
+  NEW instrumentation: src/sim/diagnostics/socialReadSeamHook.ts, an audit-only non-persisted
+  read-seam hook; diagnostics-off output is byte-identical to d41c973 on map1 and map2 at 40y.
+  NOT BUILT: cohort arms, viability cause taxonomy, adaptation cascade, extinction arms, frontier
+  exploration, fresh performance. The ~9-tile destination-knowledge horizon remains the binding
+  blocker. See docs/evidence/correction16/FINDINGS.md and AUDIT_ADMISSIBILITY.md.)
+
+Previously updated:
+  2026-07-25 (HUMAN VIABILITY / RECOVERY / ADAPTIVE RESILIENCE CORRECTION-15: PROGRESS — NOT
+  ACCEPTED / DO NOT MERGE, branch checkpoint/human-viability-adaptive-resilience-15 from public
+  main 668763f, with CORRECTION-14's 222d3ec as evidence/patch donor only (not merged, not
+  wholesale cherry-picked). PARTIAL. All four CORRECTION-14 candidate repairs were independently
+  re-proven on this branch BEFORE porting: the annual demographic step consumed 0.555 mean food
+  pressure against a year that held 0.335 with 89 physically-surplus years and 0 surplus-signal
+  years; 31 of 480 seasons had zero trips while the band held remembered patches inside the trip
+  radius but none inside the same-day budget; a unit proof that a saturated 48-slot cap evicts
+  the just-observed local patch; and the expedition timestamp repair proven REQUIRED BY the other
+  two. NEW RESULTS: the recovery basin is sound (no absorbing collapse spiral — one/three/five
+  severe bad years all recover, chronic hunger clears in 2 years, bereavement washes out, 33/34/35
+  people do not bifurcate). RETRACTED BY CORRECTION-16 — this checkpoint's social and cohort
+  conclusions are NOT valid evidence and must not be cited: "the social layer is readability-only"
+  is disproven (wrong perturbation seam + narrow fingerprint + single seed), and "cohort
+  composition is worth 0.01 of support ratio / age structure is close to decorative" is downgraded
+  to UNRESOLVED pending a re-measurement with an admissible instrument. NOT BUILT: the
+  whole-viability cause taxonomy, the adaptation cascade, the dedicated extinction
+  arms. See docs/evidence/correction15/ and, for the retractions, docs/evidence/correction16/.)
+
+Previously updated:
   2026-07-25 (DEMOGRAPHIC RESPONSE COMPRESSION CORRECTION-13: PASS CANDIDATE, branch
   checkpoint/demographic-response-compression-13 from public main 22123aa (contains
   RECOVERY-12 as 022f213). The food->demography signal was one-sided: nutrition
@@ -125,20 +1925,139 @@ Implemented checkpoint:
     - DECOMPOSITION-3: Workstream B (adaptation public boundary) + Workstream C
       (context lifecycle 4→2 rebuilds). See §25.2.
 
-Current active checkpoint:
-  CLIMATE / WEATHER / REGIONAL SEASONALITY FOUNDATION-2 — RESTORED AS ACTIVE
-  after CORRECTION-8 PASS (roadmap item 2 — foundational, before seasonal-route
-  migration). The ecology-viability correction line (CORRECTION-1..8) is CLOSED:
-  ordinary habitat no longer goes extinct. One measured, non-blocking item is
-  deferred as optional CORRECTION-9 — same-day candidate selection uses
-  straight-line `getGridDistance` while execution requires a passable path within
-  MAX_TRIP_DISTANCE_TILES, costing 18.1% of ordinary trips and 0% of rich. EXPEDITIONARY LOGISTICAL
-  MOBILITY / TASK CAMPS / VIEWSHED PERCEPTION / FIRE SIGNALS-1 is COMPLETE
-  (MOBILITY-1..4 implementation, MOBILITY-5 validation closure — both remaining
-  gates PASS; see docs/HANDOFF.md). Adaptation is reached ONLY through
-  src/sim/agents/adaptationBoundary.ts; the seasonal read-model rebuild budget
-  is 2 full buildTickContextCache + 1 partial refresh per tick; climate must
-  replace/extend src/sim/agents/environmentBoundary.ts, never bypass it.
+  Current active checkpoint:
+  DYNAMIC FISSION / DAUGHTER VIABILITY / SUCCESSOR GROUPS (roadmap item 4) — **ACTIVE, PROGRESS,
+  DO NOT MERGE.** Branch `checkpoint/dynamic-fission-provisional-successor-38`, recovered from
+  remote tip `22da95c` and beginning the positive-stabilization subpass at accepted tip `bf0823d`.
+  Natural PRE-DEPARTURE reachability is implemented, and a controlled-only positive stabilization
+  authority now admits a successor only after direct consumed-departure provenance, real
+  post-departure independent operation and monotonic proof it never entered a return path. Release
+  initializes completed lineage/history/current-camp/read-model state atomically without moving
+  bodies or fabricating viability. `createDaughterBand` remains unchanged with zero calls;
+  `prepareFissionDeparture` has one natural caller; `performAtomicDeparture` has zero natural
+  callers, so there is still no natural provisional successor or physical transfer. Item 5 is
+  unstarted. `unresolved_after_failed_return` remains untouched and is the next Item-4 dependency.
+  Historical context follows.
+  The audit/architecture checkpoint that preceded it: branch
+  `checkpoint/dynamic-fission-daughter-viability-37` from `ef76971`, audit-only (`git diff -- src/`
+  is empty). The before-audit measured six defects over 200 years on two seeds, of which three are
+  decisive: the daughter TELEPORTS 5-7 tiles, the split MANUFACTURES DEPENDENTS while destroying
+  working adults and elders (cohorts conserved 0 of 2 on all three counts), and FAILURE IS
+  IMPOSSIBLE. **Direction D is selected and NOT implemented**: a reversible attempt holding no
+  bodies, resolving at one departure event into a provisional successor that must travel, establish
+  and then stabilize or return. Direction C — the smallest diff — was rejected because it cannot fix
+  the teleport, the instantaneity or the impossibility of failure. Implementation is deliberately
+  deferred rather than half-shipped, because a partial Direction D would be the half-state §18
+  forbids. Roadmap Item 5 is NOT started. See
+  docs/evidence/dynamic-fission-daughter-viability-37/.
+
+  **ROADMAP ITEM 3 IS ACCEPTED AND FROZEN** at production `706166892d40189fc56ac7458b9e90a8ffdbddd7`
+  with its certification and manifest at `ef76971bd66a7413313183349b9468a879405970`. Its six
+  carried-forward seams remain OPEN and are closed by nothing in Item 4; the three inert territorial
+  names remain inert and Item 4 gives none of them a writer. Historical Item 3 context follows.
+
+  CROWDING / SHARED RANGE / RANGE RELEASE (roadmap item 3) — **FROZEN.**
+  **A FINAL FREEZE AUDIT HAS RUN ON THE ACCEPTED CORRECTION-35 PRODUCTION AND RETURNED A FINAL
+  FREEZE CANDIDATE, AWAITING BROWSER GPT ACCEPTANCE.** Branch
+  `checkpoint/shared-range-item-3-final-freeze-36` from `706166892d40189fc56ac7458b9e90a8ffdbddd7`,
+  audit-only (`git diff -- src/` is empty). Both blockers the previous final audit left standing are
+  certified closed from production's own readers: a `released_historical` record is retained and
+  moves exactly nothing (197 and 305 released places checked naturally at 200 years on two seeds,
+  0 still moving behaviour), and `Band.territorialPressure` enters no arithmetic or conditional
+  expression anywhere. A THIRD inert territorial name — a producer-less
+  `Reason<"territorial_pressure">` — was found and recorded, not patched. **Freezing Item 3 closes
+  NONE of the six carried-forward seams**, which are copied verbatim into the manifest, the findings
+  and docs/HANDOFF.md. Roadmap Item 4 is NOT started. See
+  docs/evidence/shared-range-item-3-final-freeze-36/.
+  Historical context follows.
+  **CORRECTION-35 IS ACCEPTED AND FROZEN AT `706166892d40189fc56ac7458b9e90a8ffdbddd7`.** It closes the ONE blocker
+  the final integration audit left standing — a place labelled `released_historical` could still
+  move behaviour, at a true magnitude of **0.04** rather than the published `<= 0.02` — and closes
+  the `territorialPressure` orphan that audit recorded as still open, removing THREE behavioural
+  readers of a spawn constant with no lived writer. Roadmap Item 4 is NOT started. Freezing Item 3
+  is the supervisor's decision and is NOT taken here. **Freezing it would NOT close these seams**,
+  which must be carried forward verbatim: the residence-anchored `sharedCatchment` footprint (so
+  real trips, expedition routes and investigation walks still compete for nothing — measured and
+  published in `shared-catchment-boundary.json`, production UNCHANGED); activity-party crowding and
+  expedition overlap; no visibility, route or barrier rule of any kind; no physical-trace authority;
+  `SocialPressureProfile.territorialPressure`, a second orphan with ZERO readers repository-wide,
+  documented and left inert; and no UI surfacing the social-evidence lifecycle. See
+  docs/evidence/shared-range-release-territorial-authority-35/.
+  Historical context follows. The final integration audit returned PROGRESS —
+  the item was a CANDIDATE FOR CLOSURE and is NOT frozen. The integrated chain connects, conserves and releases (I1-I16
+  16/16, 0 vacuous; 0 adverse over 200 natural years; four-way and fresh-process determinism
+  identical on both arms with Item 3 behaviour present). ONE blocker stands in the way of an
+  unqualified freeze: a place production labels `released_historical` can still move behaviour by
+  <= 0.02, because `socialEvidencePhase` flips at `SOCIAL_EVIDENCE_ACTIVE_MIN_WEIGHT = 0.05` while
+  the contribution scales continuously to zero — so `types.ts:2522`'s claim that historical records
+  "no longer move anything" is contradicted by one measured case in 448 over 200 years. The smallest
+  correction is named and NOT applied: label `released_historical` only at weight exactly 0, a
+  derived read-model change with no behavioural effect. Roadmap Item 4 is NOT started. See
+  docs/evidence/shared-range-item-3-final-freeze/.
+  Historical detail follows. AUDIT-27
+  (b352c31) mapped the authorities and returned PROGRESS; it remains a diagnostic checkpoint and
+  authorized no production work beyond the seams it defined. Three of those seams are now repaired,
+  each in its own checkpoint: **CORRECTION-28 (CLOSED and FROZEN at c5eb58a8)** — remembered places
+  no longer create physical crowding; **CORRECTION-29 (CLOSED and FROZEN at a15d0a78)** — private
+  place-memory coincidence no longer creates direct encounters; and **CORRECTION-30** — private
+  other-band position and trip records no longer create observer range friction;
+  **CORRECTION-31** — legitimate evidence now has a lifecycle: it cools with age, releases
+  behaviourally, is contradicted faster by a band that stands at the place and finds nobody, and
+  reactivates only through fresh evidence, while the records, the contact memory and the place
+  memory all remain; and **CORRECTION-32 (this checkpoint, PROGRESS — NOT ACCEPTED, NOT FROZEN; its evidence was repaired by CORRECTION-32A)** — current physical crowding now has ONE
+  explicit bounded decision authority. `weightedCrowding` is evidence; `crowdingPenalty` is the single
+  decision-facing cost at `CROWDING_DECISION_COST_WEIGHT = 0.96`; an unknown destination costs 0; the
+  residence's crowding reaches non-stay candidates once through `netMovePressure` and the exploration
+  option once through `crowdingExploreBoost`; `saturationPressureExcludingCrowding` partitions the
+  range-saturation overlap at the decision seam; and crowding no longer touches `riskPressure`,
+  `placeAttachmentPull`, `safeFrontierPull`, the move-side `perCapitaReturn` or `socialAccessRisk`.
+  Candidates carrying three or more separately-named crowding charges: **49 -> 0** measured,
+  **56 -> 0** naturally at 20 years, **144 -> 0** at 50.
+  **Item 3 does NOT close on any of them.** The AUDIT-27 seams still open, each needing its own
+  checkpoint and its own before/after evidence: the physical
+  shared-use substrate (`sharedCatchment`'s footprint is residence-anchored, so real trips, expedition
+  routes and investigation walks compete for nothing); `territorialPressure`, a spawn constant
+  with three live behavioural readers and no writer; activity-party crowding and expedition overlap;
+  kin crowding weights; parent-memory dispersal pressure; and whether `0.96` is the physically right
+  magnitude for the single crowding cost — CORRECTION-32 fixed the AUTHORITY and deliberately did not
+  tune the STRENGTH. **Two defects were found by CORRECTION-32 and deliberately left**:
+  `dryMargin.getSocialAccessRisk`'s `unrelatedRisk` reads `Object.values(world.bands).length`, a
+  world-truth band count a band cannot know; and `rangeSaturation.perCapitaReturnEstimate` still carries
+  crowding into the stay candidate through the ecology authority.
+  **AUDIT-27's C5 will not flip and must not be waited for**: its test counts RETAINED friction
+  records, which CORRECTION-31 deliberately keeps, and its access readings are taken at the
+  observer's current tile rather than the departed band's place, so it cannot express behavioural
+  release. Use the with-ring-minus-without-ring counterfactual in
+  `docs/evidence/shared-range-release-lifecycle-31/` instead.
+  Two absences are recorded across CORRECTION-29 and -30 and were deliberately NOT filled in:
+  production has **no visibility, route or barrier rule** for social perception at all (bands
+  separated by water still meet), and there is **no physical-trace authority of any kind** — no
+  tracks, no trails as world features, no camp remains, no trace freshness, no cross-band smoke, and
+  no band or person cue in `landscapeVisibility.ts`. Both belong to the future Persistent Human
+  Landscape pass; inventing either to preserve event frequency is explicitly forbidden.
+  Roadmap item 2 (RESOURCE INVESTIGATION / TEMPORARY USE) — CORRECTION-26 is TECHNICALLY
+  COMPLETE and awaiting final human roadmap closure; it is not self-closed. Historical context follows:
+  HUMAN VIABILITY / CAUSAL CLOSURE (CORRECTION-16, PROGRESS) then DESTINATION KNOWLEDGE HORIZON /
+  EXPLORATION REACH. The two "architecture facts" CORRECTION-15 recorded here are RETRACTED:
+    - The social layer is NOT readability-only. cohesion, innerFission and socialTension all have
+      real production readers (pressure.ts:157-158, protoCamps.ts:159/451/492/500,
+      foragingAdaptation.ts:1352/1418) and, perturbed at the correct seam, change movement,
+      physical food receipts, knowledge, demography and viability. innerFission does so on 5/5
+      seeds. They MAY be cited as causes, with the specific traced path named. The prohibition
+      that DOES survive: still do NOT add a generic cohesion/cooperation scalar — real cooperation
+      must move labor, goods or information in the subsystem where those physically move.
+    - COHORT COMPOSITION magnitude is UNRESOLVED. The "worth 0.01 of support ratio / age structure
+      is close to decorative" figure came from the same class of instrument as the retracted social
+      claim and has NOT been re-proven. Do not rely on it in either direction until paired-seed
+      cohort arms with a full mediation waterfall are run (CORRECTION-16 §8, not built).
+  Binding method rule from CORRECTION-16: docs/evidence/correction16/AUDIT_ADMISSIBILITY.md. A
+  derived field must be perturbed at its read seam, never between ticks; a narrow projection must
+  never be called "canonical state"; a mechanism claim needs a same-snapshot counterfactual, not a
+  trajectory-mean ordering; and an empty arm/seed set must report failure, not a vacuous pass.
+  Demography reads deriveAnnualNutritionState; every behavioral consumer keeps
+  deriveCanonicalNutritionState. Adaptation is reached ONLY through adaptationBoundary.ts; the
+  seasonal read-model rebuild budget is 2 full buildTickContextCache + 1 partial refresh per tick;
+  climate must replace/extend environmentBoundary.ts, never bypass it.
 
 Verification provenance (do not blur these):
   - Verified by the persistence-1 implementation run: 2×2, waterfall,
@@ -1686,6 +3605,43 @@ Sickness/risk exists in some form according to the project description, but full
 
 Chronicle exists conceptually, but exact bounds, grounding, post-extinction freeze, and future cultural use require verification.
 
+### 12.13 Place-memory retention: the scoring is inert and the forgetting is not legitimate
+
+**Status: MEASURED, UNREPAIRED (CORRECTION-23E).**
+
+`memoryCompression.ts` retains at most `MAX_EXACT_KNOWN_TILES = 72` exact `KnownTileRecord`s per
+band, once per simulated year. Its mandatory-retention set — band position, the **full 2-ring**
+around it, every crossing endpoint, every "important water" record, and every place memory
+valenced `isReturnPlace`/`avoid_place`/`risky`/`depleted` — averages **161% of that capacity** on
+a controlled marginal founder and **113%** on default map 2. Mandatory records score `+10` and
+sort first, so the loop
+
+```ts
+if (mandatory.has(record.tileId) || retained.size < capacity) retained.add(record.tileId);
+```
+
+never reaches its second clause for a scored record. **The retained set IS the mandatory set.**
+Recency, visits, confidence, water value, provenance and place attachment are computed and then
+have no effect. Route relevance, candidate relevance and verification evidence are not terms at
+all.
+
+Consequences, all measured over 100 years:
+
+- median completed place-record lifetime **324 days (0.9 years)**; 96.9% of evicted records had
+  been observed within the previous year;
+- 92.2% of evictions are followed by reacquisition (median gap 540 days);
+- 299 evicted places carried a settled verification disposition and **250 verification questions
+  were re-asked after the place was re-learned** (1,493 on default map 2).
+
+**Do not repair this by raising the capacity or by protecting verified places on population
+grounds.** Audit arms K1–K5 measured both: protecting verified places removes 96–97% of the
+forget-relearn-reverify loop and buys +2 people; raising capacity to 288 *collapses* the marginal
+tier (0.20 survival / 7.6 people) and removing the mandatory set is worse (0.10 / 3.7). Why the
+two capacity arms hurt is **not attributed** — no mediation trace was run for them.
+
+The read-only `PlaceRetentionProjection` on the Knowledge panel now shows salience, retention
+rank, eviction reason, and whether a settled conclusion will disappear with its record.
+
 ### 12.12 Cache and projection limits
 
 **Status: UNCERTAIN.**
@@ -1785,8 +3741,22 @@ Demographic persistence is implemented (persistence-1 and persistence-2 both PAS
 9. **SMALL-SCALE CONFLICT / FEUD / RETALIATION-1**, followed later by alliances, raids, and organized war.
 10. **EMERGENT TRAILS / ROUTES / ROADS / SEDENTISM.**
 11. **Major missing human biological and social systems** — now explicitly includes the **DEMOGRAPHIC SEX-COMPOSITION prerequisite**: EXPEDITIONARY-3 chose §6 Option B (mobility-role cohorts, no sex state) because canonical population state has NO sex composition and adding it means sex-aware aging/mortality/birth/fission/absorption/extinction surgery on the single-net-rate core (§10.3). Any sex-specific reporting — mobility, labor, culture, or kinship — REQUIRES that demographic checkpoint FIRST. Do not fabricate `adultMen = adults / 2` in a downstream checkpoint.
-12. **WHOLE-SIM CAUSAL CONNECTIVITY / DECORATIVE SYSTEMS AUDIT.**
-13. **PUBLIC POLISH + MVP CLOSURE.**
+    **CORRECTION-16 §15 — the human-system sequence inside item 11, in order. Recorded only;
+    none of these is implemented, and CORRECTION-16 implemented none of them:**
+    1. adaptation-authority consolidation;
+    2. physical landscape referents and meaningful places;
+    3. knowledge carriers and internal subgroup foundation;
+    4. semantic communication and real transmission;
+    5. plural views and interpretive ecology;
+    6. culture, identity, customs, norms and taboos;
+    7. temporary segmentation, factional fission and selective daughter inheritance;
+    8. religion, myth, ritual and sacred landscapes;
+    9. population genetics, heritable variation and inbreeding consequences;
+    10. learned incest avoidance and kin-distance heuristics.
+12. **PUBLIC EXPERIENCE POLISH / RELEASE CANDIDATE.**
+13. **WHOLE-SIM CAUSAL CONNECTIVITY / MISSING THREADS / DECORATIVE SYSTEMS AUDIT.** Do NOT pull
+    this forward — CORRECTION-16 deliberately did not execute it. It stays at the end.
+14. **MVP CLOSURE — only if the final audit in item 13 passes.**
 
 Roadmap rules:
 
@@ -2419,6 +4389,23 @@ Keep this bounded to the latest 10–15 accepted architecture changes. Condense 
 
 | Checkpoint/commit | Architecture change | Remaining caveat |
 | --- | --- | --- |
+| ROADMAP ITEM 4 — TRUTHFUL PHYSICAL-EVIDENCE CLEANUP (2026-08-08; branch `checkpoint/dynamic-fission-provisional-successor-38`; parent WIP snapshot `be490f9b565119545938348b10cc9bf720310ebf`; **PROGRESS / PUSHED / INDEPENDENTLY AUDITED**) | Removed every current WIP path that treated bounded subsistence measurements as positive identity authority: there is no production `establishing -> stabilized` caller, no `selfProvisioned` or locality-count gate, no attempt manufactured by phase membership, no unwritten parent-support gate, no cycle credit and no establishing relocation under a two-barren-day abstraction. Retained `operationHistory` / `SubsistenceAssessmentWindow` records only real demand, support, physical take and depletion; its approximately ten-day window is a measurement unit with zero outcome authority. A failed return enters dedicated `unresolved_after_failed_return`, structurally an event-bounded living condition rather than a timed decision/action. It remains bodily alive under provisional subsistence, hunger/water, demography and zero-population extinction, and can reintegrate only through legitimate physical co-location. C1-C12 12/12, V4/V9 PASS, mandatory lifecycle/invariance/typecheck/build regressions green, no frozen-evidence churn | The kernel retains the legal stabilization edge for a future authority, but **real positive commitment and sufficient early-operation semantics are deliberately not implemented**. Natural Item-4 cutover remains unstarted; Item 5 remains unstarted; no natural-occurrence claim; no push. Cleanup commit 32a668850739207b1a202f360f9321080e8b9189, pushed |
+| ROADMAP ITEM 4 — PHYSICAL TRAVEL AND RETURN VERTICAL (2026-08-04; branch `checkpoint/dynamic-fission-provisional-successor-38`; **PROGRESS — STABILIZATION NOT BEGUN / NOT PUSHED / DO NOT MERGE**) | **A clock can no longer decide that a group got home.** Every phase declares whether elapsed time alone may enter it; `reintegrated`, `stabilized`, `departed` and `provisional_extinguished` require a **physical event**; `requestTransition` takes a **REQUIRED `cause`** — a default would have restored the defect for any caller that forgot, which is precisely how it survived, since it needed nothing and the absence read as permission; `reintegrated` additionally demands `physicalCoLocationProven`; `resolveTimeout` routes through the same guards rather than around them; and **`assertSingleOwnership` refuses any contract whose `onTimeout` points at a physical-event phase**, so the defect cannot be re-entered by editing the table. A failed return abandons the attempt and the group **tries to live where it stands**, with the CHURN bounded at 3 cycles and its end REPORTED — every remaining exit physical. **The five shared references are deep-frozen and the world advanced 400 days: nothing writes in place.** **New `provisionalTravel.ts` is the ONE writer of a provisional body** — bounded local next-step planning plus a retained trail, rejecting a precomputed route as omniscience wearing the word "pathfinding"; **exactly one world-truth read, and it is a physical execution constraint**: passability may REFUSE a step, recorded as a contradiction rather than as knowledge of what lies beyond. Pace comes from the canonical `deriveTravelPace(band, "whole_band_residential_move")` because a provisional group is EVERYBODY moving as a column. **Measured: 5 contiguous tiles, arrival on day 4, arrival producing `establishing` and never `stabilized`.** **New `provisionalReintegration.ts` requires the SAME TILE as a living parent** — anything looser is the teleport in the opposite direction — adds cohorts line by line with no fixed-ratio re-derivation (**12+7=19, 8+3=11, 3+1=4, world population 235 -> 235**), and removes the entity **exactly once**. **A parent that has moved prevents it**, and the travellers are not retargeted at a position they have no channel to observe. E1-E7+A1-A3 10/10, V1-V10 10/10, R1-R9 9/9, every prior suite unchanged, all 0 vacuous | **TRAVEL SUBSISTENCE IS NOT BUILT and the gap runs the WRONG WAY — a published finding: the group's hunger FALLS TO ZERO while it walks on nothing**, because `seasonalSupport` is correctly reset by the transfer policy and `deriveCanonicalNutritionState` reads ABSENT AS NO STRESS. The reset that prevents an unearned inheritance produces an unearned improvement — the same shape as the `cause` field this pass made required. Not repaired: a hunger floor would be a tuned number standing in for a mechanism. **Evidence-based stabilization is NOT built** and establishment is arrival-boundary only. **No natural return TRIGGER** — the return is driven by the bounded lifecycle, not yet by the group's own evidence. **NOTHING CALLS THE DEPARTURE SEAM**, so there is no natural-occurrence evidence for any of it. **Ten acute-risk episodes walk home and are recorded as NOT MERGED** — merging two bounded episode rings needs an authority nobody has written. **Two instrument errors are recorded:** `returning.permittedNext` never listed `establishing`, so the re-routed timeout was `transition_not_permitted` and the group STUCK forever — the immortality failure wearing the opposite mask, and the exit audit passed for the wrong reason until it was caught; and the alias fixture first treated a content change under a freeze as a failure when it is positive evidence of immutable replacement. **A third correction was to this pass's own earlier invariant:** `auditFissionLineageOwnership` flagged a correctly completed reintegration as `departed_attempt_without_a_successor`, because it was written when a split could only be under way and never finished |
+| ROADMAP ITEM 4 — PROVISIONAL QUARANTINE CONTRACT: FIELD TRANSFER, EMBODIED BURDEN AND BODILY PROCESS (2026-08-04; branch `checkpoint/dynamic-fission-provisional-successor-38`; **PROGRESS — TRAVEL NOT STARTED / NOT PUSHED / DO NOT MERGE**) | **A per-field probe of a REAL departure found 86 of the 125 populated `Band` fields were still THE PARENT'S OWN OBJECT** — complete knowledge and place memory against the legacy daughter's degraded 13-15%, every field the legacy path deliberately degrades, `verificationEvidence` CORRECTION-23B forbids, six quantities derived from the parent's 34 people while the group holds 11, its camp and annual round, its whole biography and social world, and **its own colour**. Fixing those 86 would have left the eighty-seventh to the next `Band` field, so the answer is a TABLE: new `fissionFieldTransferPolicy.ts` classifies **all 133 `keyof Band` into twelve classes, exactly once each**, enforced three independent ways — the `Record<keyof Band, ...>` annotation (**which fired on its first compile and caught `position`**), an audit that re-derives `keyof Band` from `types.ts` INDEPENDENTLY of the compiler, and a runtime check on the constructed successor that **REFUSES the departure**. **Structural resets come from the classification**, so a newly classified field is reset with no edit to the seam at all. **86 -> 5, 0 violations**; the five are `SHARED_HISTORICAL_FACT` plus one published `carried_pending_recompute`, and `deathMemory` is shared BY REFERENCE deliberately so L6 holds structurally. Knowledge is partial through the SAME canonical inheritors the legacy path uses: **observed tiles 58 -> 15, place memory 42 -> 5, corridors 9 -> 2, patches 48 -> 12, storage 0.16 -> 0, hunger unchanged, `acuteRisk` RE-IDENTIFIED**. Embodied burden may never improve by travelling and `health` compares TERM BY TERM. `demography.ts` DERIVES its registry from the table; the difference from the retained literal is **provably inert**, not believed to be. **33 fields of legacy debt published, including `expeditions` — `demography.ts` contains ZERO occurrences of the word, so a legacy daughter holds the parent's away parties by reference.** The quarantine contract closes with a **with-minus-without counterfactual**: 11 fields blocked, each a positive control; the resolver is the only writer that moves a quarantined group; **the ANNUAL DEMOGRAPHIC STEP still runs on it**, so a quarantine is not a freezer; and the phase matrix shows `establishing` and `failed_early` read `isProvisionalGroupInTransit: false`, which is the measured justification for the canonical gating rule. T1-T12 12/12 and Q1-Q9 9/9, 0 failing, 0 vacuous, with an eight-case negative control catching every historical defect re-introduced | **TRAVEL IS NOT STARTED and the successor remains quarantined and inert.** **NOTHING CALLS THE SEAM**, so there is NO natural-occurrence evidence for any of this. **FINDING PUBLISHED AND NOT FIXED: a group can leave quarantine ON A TIMER into ordinary status** — `returning` times out to the terminal `reintegrated`, whose contract says the provisional entity is REMOVED exactly once, and nothing removes it because the reintegration writer does not exist; reproduced at 359 days with the band still holding 11 people. It is the exact mirror of `establishing` routing its timeout to `failed_early` so a timer alone can never stabilize. Not repaired because reintegration is the return vertical this pass may not begin. The legacy debt is measured **LEXICALLY** and its **natural frequency is unmeasured**; `createDaughterBand`'s BEHAVIOUR is unchanged. `socialPressure` still holds the parent's derived value, published rather than hidden. **Three instrument errors in this pass's own audits are recorded** — a quarantine measured over days the group was not quarantined (reporting a leak that did not exist), an off-by-one at the quarantine boundary, and a HORIZON ARTEFACT putting the annual demographic step one day outside the window — plus a fourth in a FIXTURE, whose synthetic world had no `tiles` map and whose 4-digit band colour made `deriveDaughterColor` return the parent's colour verbatim; the fixture was completed rather than the seam weakened |
+| ROADMAP ITEM 4 — PARENT RESIDUAL VIABILITY AND THE PROVISIONAL READER SURFACE (2026-08-03; branch `checkpoint/dynamic-fission-provisional-successor-38`, `b342e89` + `42951ea`; **PROGRESS — TWO PURE AUTHORITIES BUILT, LIFECYCLE NOT BUILT / NOT PUSHED / DO NOT MERGE**) | **The parent-side authority `AUTHORITY_MAP.md` recorded as not existing now exists**, as a pure leaf reading the allocation rather than recomputing it. **The interrupted attempt at it did not compile and its model was wrong in a measurable way: it summed split-caused deterioration and pre-existing hardship into one `residualStrain` against one threshold, so a hungry, sick, badly placed parent scored 0.92 against 0.62 with 73% of that contributed by hardship the departure did not cause — and lowering the minimum founder request from 18 to 2 moved the score not at all, because every dominant term was invariant to the founder count.** Five models compared. The selected hybrid keeps **hard physical blocks** as absolute tests on the residual; computes `splitCausedDamage` from **before→after movements only**, which is why nutrition, embodied condition and ecological position contribute zero (**L2**; the parent does not move; no unearned improvement); and reads `priorFragility` at **before levels only**, so it structurally cannot contain anything the split did, narrowing a floored `tolerance` instead of joining the score. **Two guarantees then follow from the shape rather than from calibration: zero damage is never refused however fragile the parent (so hardship can never veto), and tolerance shrinks with fragility (so hardship is never irrelevant).** `labourShareAtCamp` after the split is published as evidence and **charged nowhere**, avoiding the CORRECTION-32 double-charge. PR1-PR20 **20/20, 0 failing, 0 vacuous**; PR18 proves the closed input struct blocks unrelated information **structurally**. Separately, `42951ea` **counts the Direction D reader surface for the first time — 160 band-enumeration sites, 144 unguarded, 104 status branches, 17 subsystems classified** into allowed unchanged / allowed with provisional interpretation / blocked / deferred | **Both authorities have ZERO PRODUCTION CALLERS; `createDaughterBand` is untouched and all six measured defects are still live. Item 4 is NOT implemented.** No natural-occurrence evidence exists for either module because nothing calls them, and the two "real natural fission" fixtures use the measured cohorts of the before-audit's events rather than showing the authority run inside a simulation. **NOT RUN: F1-F26, G1-G10, natural horizons, the Item 3 regression suites, performance and serialization, any determinism arm beyond fixture-level repeat.** The weights and the three tolerance constants are **authority boundaries, not calibrated magnitudes** — no natural run was used to fit them. **Dependents and elders are treated identically as non-working burden**; the repository has no differential burden model and inventing one would be an anthropological claim this checkpoint may not make. **The parent authority cannot answer "should this be refused because both groups would be equally bad" — it sees one group**; the hard blocks catch the incoherent-remainder case and the rest belongs to the successor authority. **Four instrument errors in this pass's own fixtures are recorded**, including PR5 asserting a refusal the authority correctly declined to make, and **PR16 finding this pass's own authority publishing rounded numbers while deciding on full precision — fixed in the authority, not the test.** No graph node added: a leaf with no callers is not yet an architecture node, following `e01d979`'s precedent |
+| SHARED RANGE — RELEASED-EVIDENCE FIELD CONSISTENCY AND ORPHAN TERRITORIAL AUTHORITY — CORRECTION-35 (2026-08-03; branch `checkpoint/shared-range-release-territorial-authority-35` from the Item 3 candidate freeze head `742b567`; **CANDIDATE COMPLETE — AWAITING BROWSER GPT AUDIT / ROADMAP ITEM 3 REMAINS ACTIVE AND IS NOT FROZEN / ITEM 4 NOT STARTED / DO NOT MERGE**) | **Two defects the Item 3 final audit named and did not fix.** **PART A — the Item 3 blocker.** `types.ts` said in two places that a `released_historical` record "no longer moves anything", but every social contribution scales by `entry.weight`, so a record stops moving behaviour at weight **zero** while the labels were derived from `weight >= SOCIAL_EVIDENCE_ACTIVE_MIN_WEIGHT = 0.05`. Everything in `0 < weight < 0.05` was published as fully historical while still changing behaviour — **the label led its own quantity**. Fixed by deriving `activeEvidenceCount`, `historicalEvidenceCount` and `socialEvidencePhase` from `contributingEvidence = weight > 0` (exact, because `weighSocialEvidence` returns `round2`), while a separately named `confidenceEvidence` keeps the `0.05` set and leaves `confidence` numerically unchanged — that threshold's real CORRECTION-31 job is untouched and **no constant moved**. **The incident is twice the published size: 0.04, not `<= 0.02`**, because `kinTolerance` moves 0.02 and the original probe read only three of six scalars; the original three reproduce to the digit. Recorded as a superseding addendum with the original evidence unaltered. **Behaviour-neutral, measured cross-tree:** parent `742b567` vs lifecycle-only `e5e3143` give identical digests for access behaviour (six scalars + confidence over **72 place-rows, all non-zero**), decisions, candidates, pressure state and every reason's reported pressure. **The Item 3 audit's own unmodified released-place probe now reports 0 incidents.** **PART B — the orphan.** `Band.territorialPressure` is written twice ever (`0.12` at spawn, `clamp01(parent * 0.72 + 0.04)` at daughter creation) and reached behaviour through **three** readers — `pressure.ts` x0.08, `mobilityIntent.ts` x0.12, `bandDecision.ts` x0.14. **The brief named two; the inventory found the third, and it is the one that scores movement intents.** Option A: all three removed, field retained in state, **no lived writer invented** and `CROWDING_DECISION_COST_WEIGHT` untouched. Reproduced first — **18 of 18** band-measurements move on the parent and on the lifecycle-only commit, **0 of 18** on the tip; the attribution figure runs `0.1523 -> 0.1691 -> 0.2643` before and is constant after. **Zero-divergence control:** warmed 0 days with every band's field pinned to 0, all three trees produce the **identical digest**, so removal is exactly equivalent to holding the field at zero and no reader survives. New `scripts/releaseTerritorialCrossTreeProbe.mjs`, `releaseTerritorialCrossTreeCompare.mjs`, `releaseTerritorialFixturesAudit.mjs`, `releaseTerritorialNaturalAudit.mjs`, `sharedCatchmentBoundaryAudit.mjs`; L1-L12 12/12, T1-T12 12/12, C1-C8 8/8, **0 failing, 0 vacuous**, `L3` honestly NOT CONSTRUCTED | **NO OUTCOME IMPROVEMENT IS CLAIMED OR MEASURED** — Part B changes the world trajectory and nothing here says the result is better. **Part A's natural frequency is very low and the repair is justified by the CONTRACT, not by frequency:** the corrected interval is occupied 0 times in 55,592 place-samples at the shared-range seed over 200 years and 2 of 55,714 at the incident seed. **`L7` records that direct evidence cannot naturally occupy the sub-0.05 interval** — its decay is too coarse — so the measured incident came through reported hearsay and the direct channel claims no natural credit. **`SocialPressureProfile.territorialPressure` is a SECOND ORPHAN**, `0.08` at spawn against `0.12` on `Band`, with **zero readers repository-wide**; inert, therefore not a blocker, documented rather than removed. **`sharedCatchment.ts` is UNCHANGED** and its residence-anchored footprint remains an OPEN future dependency, published so freezing Item 3 cannot be read as resolving it. **No UI surfaces the lifecycle.** **Eight instrument errors are recorded, four of them inherited** — a cross-tree probe blind to `kinTolerance`, candidate identity never actually compared, an attribution figure that was three `-1` sentinels, and a `d.score` that is not a field on `Decision`. **A frozen-evidence incident occurred and is reported:** three audits wrote into frozen directories through multi-line `arg(` declarations the flag sweep missed; four files restored with `git checkout` **before any commit**, verified clean, every audit rerun fully redirected, **no frozen-evidence commit exists**. **Two deviations:** `P8_P18` vacuous on both trees (inherited), and `P9_concurrent_parties` vacuous at 20 y on the corrected tree but **restored at 50 y and 100 y** — a horizon artefact of a changed world. **ROADMAP ITEM 4 UNSTARTED**; `createDaughterBand` untouched. **Item 3 is NOT declared frozen here** |
+| SHARED RANGE — CROWDING DECISION-PRESSURE AUTHORITY AND DUPLICATE INFLUENCE — CORRECTION-32 (2026-08-02; branch `checkpoint/crowding-decision-pressure-authority-32` from CORRECTION-31's `3e2c1215`; **PASS — ROADMAP ITEM 3 STAYS ACTIVE / DO NOT MERGE**) | **One nearby band was being charged up to six times under six names.** Measured with CORRECTION-31's with-minus-without counterfactual applied to the decision score — the tick cache's nearby-band-pressure memo answered as "nobody nearby", so `deriveBandPressureState`, `getCrowdingPenalty`, `applyRangeSaturationContext`, `getDaughterDispersalPressure` and the whole candidate scorer re-derive on REAL production code with crowding at zero, and no formula is re-implemented. `nearbyBandPressure * 0.24` and `crowdingPenalty * 0.72` were **the same scalar with and without the terrain transform**, so the raw term diluted the capacity conditioning it was meant to respect; the pair recurred inside `expectedFutureValue` and `getBadSiteStuckResidencePenalty`; `rangeSaturation` carried it again as `weightedCrowding * 0.34` AND through `populationPressure`; `riskPressure += crowdingPenalty * 0.08` made proximity raise a **danger** signal `demography.ts` and `viability.ts` read; `placeAttachmentPull` charged the stay candidate a second time and propagated a third through `netMovePressure`; `getSafeFrontierPull` subtracted crowding from a term scored at **+0.62**; the move-side `perCapitaReturn` inferred depletion from bodies; **the exploration candidate was charged the RESIDENCE's crowding**, six paths with contradictory signs netting **-0.01**; and `dryMargin.getSocialAccessRisk` built social danger from `nearbyBandCount / 5 + salientUsers / 4` — bodies plus **other bands' remembered places with no distance gate**. **Option D on an Option-B quantity, six files, +142 -44, NO new module/store/type/constant:** `weightedCrowding` is EVIDENCE, `crowdingPenalty` is the ONE cost at `CROWDING_DECISION_COST_WEIGHT = 0.96` (= the 0.24 + 0.72 it replaces, so the maximally constrained tile is unchanged and only the spacious-ground over-charge goes), an unknown destination costs **0**, the residence reaches non-stay candidates once via `netMovePressure` (0 on stay) and the exploration option once via `crowdingExploreBoost`, a DERIVED `saturationPressureExcludingCrowding` partitions the overlap at the decision seam while every other reader keeps the full value, and `socialAccessRisk` is re-sourced to the band's own `protoAccessMemory.places[tileId]`. **HEADLINE: candidates with >=3 crowding charges 49 -> 0; naturally 56 -> 0 at 20 y and 144 -> 0 at 50 y; max paths 4 -> 2; crowding raising `riskPressure` 3 -> 0 and 7 -> 0; reducing `placeAttachmentPull` 11 -> 0 and 22 -> 0. THE PHYSICAL CROWDING LAYER IS IDENTICAL AT 20 YEARS ON ALL SIX KEYS.** Fixtures P1-P21 **21/21, 0 vacuous, BOTH arms**, four verdicts flipping and 17 unchanged passes reported as preservation rather than credit. New `scripts/crowdingDecisionAttributionAudit.mjs`, `crowdingDecisionAuthorityFixturesAudit.mjs`, `crowdingDecisionAuthorityNaturalAudit.mjs`, `crowdingDecisionAuthorityBehaviorTrace.mjs` | **NO IMPROVEMENT IS CLAIMED** — `crowdedSeasonsWhereCrowdingFlippedSelection` is **0 in BOTH arms** at 20 and 50 years; map1:s2 is byte-identical across 80 seasons, map1:s1 has no physical divergence at all, and 75 of 84 final-state keys are identical. **The daughter-dispersal crowding path is RETAINED, documented and measures 0 naturally** (fissions 0, kinOverlapPairs 0; P11 uses a synthetic lineage link and claims no natural credit). `rangeSaturation.perCapitaReturnEstimate` still carries crowding into the STAY candidate — ecology authority, out of scope. `crowdingExploreBoost` reads 0 in the aggregate detector only because its product falls below `scoreDecision`'s own round2. **A NEW anti-omniscience defect was found and deliberately NOT repaired:** `getSocialAccessRisk`'s `unrelatedRisk` reads `Object.values(world.bands).length`. **A repository constraint worth remembering:** known-move candidates are capped at Manhattan distance <= 2 while `CROWDING_RADIUS = 4`, so residence-versus-target separation exists only in narrow geometries. Three instrument errors in this pass's own probes were caught and recorded, and a mistyped `--timeline` flag overwrote AUDIT-27's frozen `release-timelines.json` once (restored with `git checkout`). CORRECTION-31's lifecycle TIMELINES and AUDIT-27's release timeline diverge because the world changed — different distances, a different selected episode — while both checkpoints' FIXTURE VERDICTS are unchanged. No 200 y matrix, no performance measurement, no decision-by-decision trace of the map2 divergence |
+| SHARED RANGE — RANGE-FRICTION AND ACCESS-EXPECTATION LIFECYCLE — CORRECTION-31 (2026-08-02; branch `checkpoint/shared-range-release-lifecycle-31` from CORRECTION-30's `1c6a3ed8`; **PASS — ROADMAP ITEM 3 STAYS ACTIVE / DO NOT MERGE**) | **Legitimate social evidence now has an afterlife.** Three defects, all verified: every one of the six functions turning a friction record into pressure read ONLY fields stamped at creation and **none read `event.tick`**, so the single age test was a binary 48-tick window — twelve years at full strength, then a cliff; `confidence` counted `friction.length` while `staleness` can only fire below confidence 0.36, so **retained records propped up the confidence that would have retired them** and the classification could cross into `avoided_shared_use` AFTER the other band left; and `deriveReportLinkedEvents` stamped every record with the CURRENT tick with that tick embedded in the id, so each pass minted a NEW record — **permanently age 0, keeping a friction record alive for up to `REPORT_MAX_AGE_TICKS = 160`, forty simulated years**, with the report's own decaying freshness never read. The decisive repository fact is that **`ProtoAccessMemory` stores nothing** (recomputed every tick), so the lifecycle is expressed as how evidence is WEIGHTED, with **no new store and no constant changed**: full inside the current annual round (3 ticks), then a straight decline to zero at 8 (kin/tolerated), 12 (neutral), 16 (tense), and 16 x 0.7 x hop x the report's own freshness (hearsay); `confidence` counts only ACTIVE evidence; report events carry `report.tickReceived` (a stable id, so the ring refreshes one record) and are deduped by ORIGINAL EPISODE `(originalObserverBandId, topic, targetTileId)`; and `reportedKnowledge.ts:648` stops republishing friction that is report-derived or already released, cutting the friction-report-friction loop. Five optional DERIVED fields expose it (`activeEvidenceWeight`, `activeEvidenceCount`, `historicalEvidenceCount`, `socialEvidencePhase`, `presentWithoutOthersSeasons`). **Option B (a stored pair/place state machine) rejected** as a fifth home for facts four authorities already hold and quadratic where an unbounded ledger is forbidden; **Option E (a shorter constant) rejected** as moving the cliff; of Option D's contradiction channels only `revisited_without_presence` is representable, so **fixture P5 is deliberately not constructed**. **HEADLINE: social release season 18 -> season 8 with physical release at season 0 in BOTH arms; revisiting and finding nobody NEVER_RELEASES -> CONTRADICTION_ACCELERATES_S6_VS_S8; report-only belief DOES_NOT_FADE -> FADES; five relayed copies TREATED_AS_2_INDEPENDENT_CONFIRMATIONS -> ONE_EPISODE_ONE_RECORD.** Natural 20 y: stale escalations **3 -> 0**, friction contribution to access **27.13 -> 6.74 (-75%)**, active band-seasons **12 -> 4** while retained-but-inert **13 -> 21**, report-linked records **33 -> 3**, direct records **28 -> 28**; **physical layer identical on all 17 keys at 20 AND 50 years**. New `scripts/rangeReleaseLifecycle{FixturesAudit,NaturalAudit,Compare}.mjs`; P1-P22 both arms, 0 vacuous | **AUDIT-27's C5 is byte-identical between arms and does NOT flip** — its test counts RETAINED RECORDS, which this design deliberately keeps, and its access readings are at the observer's current tile rather than the departed band's place; it cannot express this repair and is reported unchanged rather than worked around. **P2 does not show what the spec anticipated**: `recentOverlapCount` saturates at 1 + the 8-slot ring = 9 within the first seasons, so both arms sit at the ceiling — saturation IS demonstrated, 'repeated use persists measurably longer' is NOT, because the counter has no headroom. **Three instrument errors in this pass's own probes were caught and repaired**: raw access scalars also carry the band's own use pressure (a departure looked like escalation); a cooled place drops out of the 8-slot access memory so 'not tracked' was indistinguishable from 'released'; and reactivation was measured place-scoped while a returning band returns to wherever the observer now is. `presentWithoutOthersSeasons` is the ONE accumulator added to an otherwise purely derived store, bounded at 8. Cooling is time-based, not season-aware. The four release horizons are justified but not measured against data. No 200 y matrix, no performance measurement. Inherited failure not rerun: `expeditionLifecycleAudit` |
+| SHARED RANGE — RANGE-FRICTION OBSERVATION PROVENANCE — CORRECTION-30 (2026-08-02; branch `checkpoint/shared-range-friction-provenance-30` from CORRECTION-29's `a15d0a78`; **PASS — ROADMAP ITEM 3 STAYS ACTIVE / DO NOT MERGE**) | **A place being familiar to the observer is no longer evidence about anybody else.** `rangeFriction.ts` contained **no distance computation of any kind** — no `getGridDistance` import, no `distance` identifier in 800 lines — so a remembered tile alone licensed three separate reads of another band's PRIVATE state: `other.position` as an `observed` `residential_presence` at ANY distance (candidates came from proximity OR kinship OR any `contactMemories` entry, the last two ungated); `other.recentIntraSeasonTrips` as `inferred_from_recent_activity` with a `linkedActivityTripId` and an activity kind read off private task/objective/cause/movement/resource fields over a **12-tick, THREE-YEAR** window; and `countRecentTripsInRange` reading the same trip list a THIRD time to inflate `recentOverlapCount` on the RESIDENTIAL notice — the value driving `repeated_outsider_use` and `moderate_placeholder`. A contemporary notice now requires the other band to be in the observer's CURRENT physical proximity set (`cache.nearbyBandsByBandId`, `DEFAULT_NEARBY_RADIUS = 4` — **the same canonical authority CORRECTION-28 kept for crowding and CORRECTION-29 for encounter candidacy; no new constant, type, module or import**). All three private reads deleted with `classifyTripActivity`, `makeTripId`, `compareTrips`, `RANGE_FRICTION_TRIP_WINDOW_TICKS`; `recentOverlapCount` re-sourced to the observer's OWN ring; `linkedActivityTripId` removed from the internal notice shape (field retained in types.ts for a future witnessed-activity channel); `deriveReportLinkedEvents` and `deriveCandidateBands` UNTOUCHED. **The records were never inert and the header said they were:** via `accessNorms.ts:426` they set `strangerCaution` / `sharedUsePressure` / `rememberedRefusalAvoidance` -> `ProtoAccessBehaviorEffectState` -> **`pressure.ts:161-166`, five real decision inputs**; header corrected. **Option D (physical traces) rejected on inspection:** no tracks, no trails as world features, no camp remains (`TemporaryTaskPartyRecord` asserts `noCamp: true`), no freshness, no cross-band smoke, no band cue in `landscapeVisibility.ts`. **HEADLINE: two bands 42 tiles apart, no encounter, no report, the other band's newest REAL trip retargeted at a remembered tile — 1 inferred-activity record with a trip id -> 0, trip record surviving in BOTH arms; hidden residence 2 -> 0.** Natural (same maps/seeds/duration as 27/28/29, 2,400 band-seasons/arm): records **148 -> 61**, inferred **84 -> 0**, trip ids **84 -> 0**, reports **33 -> 33** and **35,776 -> 35,776**; **physical layer identical on all 17 keys**; AUDIT-27's own instrument moves **1 of 24 aggregates**. Five of six 20-year runs identical, `firstPhysicalDivergenceTick` **null in all six**. New `scripts/rangeFrictionProvenance{FixturesAudit,NaturalAudit,BehaviorTrace,Compare}.mjs`; P1-P15 both arms, 0 vacuous | **NO IMPROVEMENT IS CLAIMED** — population 817, bands 30, moves 1,547, survival 6/6, fissions 0, all unchanged; no long-horizon matrix. **The one non-subtractive change is isolated with a third arm:** access pressure rises slightly (`sharedUsePressureSum` 182.11 -> 189.04) and an arm with `recentOverlapCount` pinned to 1 gives identical record counts but **164.49**, proving the rise is entirely the observer-memory re-sourcing; pinning was rejected because it makes `moderate_placeholder` **structurally unreachable** (17 -> 0 vs 7). **P9/P10 are UNCHANGED PASSES IN BOTH ARMS and are NOT repair credit** — each carries a positive control proving the probe does move with real friction, so the nulls are real. **Defect chain A has a NATURAL OCCURRENCE OF ZERO** (`recordsSourcedOnlyFromPrivatePosition` 0 in both arms) — proven only by fixture P2, no natural credit claimed. `directObservedPresenceRecords` 31 -> 28 is a re-identification (event ids embed `interpretation`), not a loss, and was not separately isolated. The rumour loop is half-cut: a band's own reports are blocked, a false record travelling to a neighbour and back is not. Two fixtures were vacuous in their first form (P3 drift, P12 spawn) and were repaired, not counted. Deferred: range release (C5 still `PHYSICAL_RELEASES_PERCEPTION_DOES_NOT`); access-memory decay; crowding double-counting; footprint expansion; trails/camps/traces; encounter visibility; `territorialPressure`; Daughter Viability. Inherited failure not rerun: `expeditionLifecycleAudit` |
+| SHARED RANGE — DIRECT ENCOUNTER PROVENANCE — CORRECTION-29 (2026-08-01; branch `checkpoint/shared-range-encounter-provenance-29` from CORRECTION-28's `c5eb58a`; **PASS — ROADMAP ITEM 3 STAYS ACTIVE / DO NOT MERGE**) | **A coincidence between two bands' private place memories is no longer a meeting.** The ghost chain lived entirely in `socialContext.ts` and passed **two independent gates**, both closed in the same commit: `getEncounterCandidatePairs` paired any two bands whose `topReturnPlaceIds` named the same tile **with no distance condition at all**, and `getEncounterKind`'s `memoryOverlap > 0.24 \|\| distance <= 3` admitted a direct encounter at **any** distance — the only non-distance-gated branch in the encounter system — fed by `getSharedMemoryOverlap` reading the **other band's private `placeMemory`** directly. Pairing block deleted, disjunct narrowed to `distance <= 3`, `getSharedMemoryOverlap` deleted with its single call site. `updateContactMemory`, encounter outcomes, tolerance, tension, disposition and response distributions **untouched**. **Option B (physical-activity evidence: trips, expeditions, camps, routes) was DEFERRED not rejected** — §8 excludes those overlaps, and it would ADD encounters, making the before/after proof unreadable. **HEADLINE: two bands 42 tiles apart that had NEVER met, sharing one remembered tile, produced 3 `unrelated_overlap` encounter records and a contact memory with contactCount 3 — now 0 and none, keeping their place memories in both arms.** AUDIT-27's own C10b flips to `NO_SOCIAL_KNOWLEDGE_WITHOUT_PROXIMITY`; P8's kin+memory arm reproduces the **44-tile** figure (3 → 0) while kin-only-at-distance is 0 in both arms. **The natural result is a CONSERVATION: refreshes 42 → 32 (−10) and remembered-contact band-seasons 50 → 60 (+10)** — ten moved exactly from *refreshed* to *merely remembered* — with first-created contacts **2 → 2**, reports **35,776 → 35,776** and social-range recognition **94 → 94**. Five of six 20-year runs byte-identical; sole divergence map2 s1 tick 58, one band, one tile. New `scripts/encounterProvenance{FixturesAudit,NaturalAudit,Compare}.mjs`; P1-P12 both arms, 0 vacuous | **NO IMPROVEMENT IS CLAIMED** — population 817 → 817, bands 30 → 30, survival 6/6, fissions 0; encounter frequency deliberately not recalibrated. **P9 is an UNCHANGED PASS in both arms and is NOT credited as closing the friction cascade**: its bands are 42 tiles apart so they never shared familiar country and no friction fired either way. The contact memory that feeds `rangeFriction.ts:478` (which adds **every** `contactMemories` band as a friction candidate with no distance limit) is simply no longer created. **The "encounters beyond admission radius" counter is an UPPER BOUND** measured at end-of-tick — encounters are written before the decision loop moves bands — so the after arm reads 5, not 0; all five are `unrelated_overlap` and three are identical to the before arm; admission beyond 3 is impossible by construction. **P3 records that production has NO visibility, route or barrier rule for encounters** (bands separated by water still meet) and none was invented. Deferred: `rangeFriction.ts`'s own private-trip provenance; range-friction release; access-memory decay; crowding double-counting; range-saturation formulas; footprint expansion; kin factors; `territorialPressure`; Daughter Viability. No long-horizon matrix |
+| CROWDING — PHYSICAL VS REMEMBERED RANGE SEPARATION — CORRECTION-28 (2026-08-01; branch `checkpoint/crowding-physical-memory-separation-28` from AUDIT-27's `b352c31`; **PASS — ROADMAP ITEM 3 STAYS ACTIVE / DO NOT MERGE**) | **Physical crowding can no longer be created by memory alone.** `crowding.ts` derived it from `(distanceWeight*0.58 + samePatchWeight*0.34 + memoryOverlap*0.24) * populationWeight`, and the memory channel ALSO widened the scatter footprint — a band scattered into the radius-2 ball around each salient return / attachment>0.5 place **regardless of where it currently was**. The channel is removed from **both** implementations of the same rule (`buildCrowdingField` and `computeCrowdingContribDescriptor`), `getRememberedAreaOverlap` is deleted, and the skip narrows to `distance > CROWDING_RADIUS`. **Option B (a typed second channel) was rejected**: remembered overlap already has four honest homes — `placeMemory`, `FamiliarCountrySummary`, `SocialRangeRecognitionSummary`, `ProtoAccessMemoryState` — and manufacturing a fifth with no reader is the "state field nobody reads" anti-pattern. **HEADLINE, identical fixture both arms: a band 35 TILES AWAY went from `weightedCrowding 0.03` / `crowdingPenalty 0.01` / `nearbyBandCount 1` / a named contributor identity / `rangeSaturation.nearbyCrowding 0.03` to 0 / 0 / 0 / none / 0, while a currently nearby band is UNCHANGED at 0.11 → 0.11 and a band with no memory at all still crowds.** **45% of natural crowding was memory-derived** — crowded band-seasons 89 → 49, double-counting 83 → 38, contributor identities 96 → 54, with every other natural counter identical. **Five of six 20-year runs byte-identical**; the sole divergence is map2 s1 at tick 37 (0.12 → 0.11), costing one move; population 817 → 817, bands 30 → 30, survival 6/6, fissions 0 → 0. AUDIT-27's own C4 flips to `NO_OBSOLETE_CROWDING`; C5 and C10b unchanged. New `scripts/crowdingMemorySeparation{FixturesAudit,BehaviorTrace,Compare}.mjs`; P1-P12 in both arms, 0 vacuous; field/scan parity 0 mismatches both arms | **NO IMPROVEMENT IS CLAIMED** — population, bands, survival and fissions are unchanged at 20 years and no long-horizon matrix was run. **A second memory→pressure path SURVIVES deliberately:** `getParentCoreOverlap` still takes `max(directOverlap, memoryOverlap)` over the PARENT band's salient places into `DaughterDispersalPressure`; it is kin machinery, §7.8 forbids touching it here, and AUDIT-27 measured **zero** natural kin-overlap cases — measured on every fixture read, not assumed absent. **Roadmap item 3 remains OPEN** with five AUDIT-27 seams unrepaired: double-counting in `computeCandidateScore`, encounter provenance (the 44-tile ghost), range-release lifecycle (48-tick clock blind to departure), the residence-anchored physical footprint, and `territorialPressure`'s missing writer. Instrument errors recorded: P4 was vacuous in two earlier forms, and two AUDIT-27 scripts default their output into AUDIT-27's evidence directory and needed explicit `--out` |
+| RESOURCE INVESTIGATION PHYSICAL EXECUTION — CORRECTION-26 (2026-08-01; branch `checkpoint/resource-investigation-physical-26` continuing `b746b68`; **PASS — TECHNICALLY COMPLETE / AWAITING HUMAN ROADMAP CLOSURE / DO NOT MERGE**) | **A selected `resource_scout`/`logistical_probe` no longer observes anything.** `collectProbeObservationTargets` is deleted; selection observes what a `stay` observes and leaves ONE bounded `PendingInvestigationRecord` (new `agents/pendingInvestigation.ts`) carrying the exact `Decision.id` into the following season's first trip day, where `agents/intraSeasonTrips.ts` staffs a party from labour the day's foraging group left, walks `buildOutboundPathTiles`/`findPassablePath`, and either arrives or names why not. Observation happens ONLY on arrival, through the canonical `observeTileAndNearby`; `derivePlantScoutObservationHint` (the one raw-truth read) sits behind that gate. New `agents/resourceScoutObservation.ts` holds the execution-neutral domain half — candidate selection and applied-decision classification STAYED in `rules/`. **Measured at the pre-existing `decisionObserver` seam (present unchanged at f947550): target-area knowledge gained at selection 176/192 (91.7%) → 0/234, with 234/234 now carrying an exact PENDING identity that resolves to 97 physical executions + 132 named non-executions + 5 awaiting a trip day, on MORE selections not fewer. A pending identity is not an execution and is not reported as one.** 343 natural selections resolve 139 executed / 147 `beyond_same_day_reach` / 54 `route_unavailable` / 3 pending / 0 lost / 0 duplicate executions / 0 receipts. `TemporaryTaskCampRecord` → `TemporaryTaskPartyRecord`, written only on a real departure with `noCamp: true` (`camp_movement_temporary_record` 129 → 0; `expedition_task_camp` 103 → 113, untouched, NOT merged). 0 runtime cycles in `src/sim`, 0 `agents → rules` runtime edges | **A real step-mode regression was introduced and fixed** (the executor observed with `runDailyActions`' span-start `world.time`, stamping day 180 vs 185 — the same defect CORRECTION-15 repaired as item (D)); **fixture P13 passed while it was live** and was strengthened with a negative control. Three instrument errors in this pass's own probes are recorded (whole-step measurement window, symmetric metric, vacuous P13). `expeditionLifecycleAudit` FAILS here and **identically on f947550** — inherited, unrepaired. **DEFERRED AND UNPROVEN:** `beyond_same_day_reach` is an honest named refusal under the currently authoritative production boundary; the four-tile boundary itself is NOT claimed proven physically correct. The possible mismatch with dynamic `bandMobility` is unproven in either direction, no mobility constant was changed, no separate correction is authorized, and it is not part of CORRECTION-26. `route_unavailable` has no failure memory. No long-horizon matrix, no population/survival comparison, no claim that physical investigation improves outcomes |
+| ORDINARY EXPLORATION CAUSAL CLOSURE — CORRECTION-24A COMPLETION (2026-07-29; branch `checkpoint/ordinary-exploration-capacity-24` continuing `d865beec`; **PROGRESS — LAUNCH THROTTLING CONFIRMED / NO EVIDENCE THAT MORE EXPLORATION IS BENEFICIAL**) | **Both launch-side blockers are confirmed and located exactly, and both are non-binding.** §4.1 splits the old `ALREADY_EXPLORING` into `SUPPRESSION_WINDOW_ACTIVE` (the 12-tick cooldown) and a separate `activeFrontierParty`, which is what reveals that **191,001 of 191,881 suppressed opportunities (99.54%) had the party ALREADY HOME** and **164,411 held a physically valid proposal**. §7's typed post-claim ledger reveals the fallthrough is **200 claim chains, 147 repeating, 17,959 of 18,042 repeats `ROUTE_BUILD_FAILED`** — one band claiming the same unreachable tile every sixth day for thirty years. **Nine counterfactual arms all null**: spread 53.836-54.055 (0.4%), survival 1.000 on all; O2 eliminates the fallthrough completely for +8.6% launches and **0** extra changed actions; O3 destroys all 19,974 returned records without degrading outcomes; O4 cuts eviction 72% and the reader changes FEWER actions; O5 camp/fission/resource are **byte-identical** to production. **E6 weakens with horizon — 0.84% -> 0.23% -> 0.19% at 40/200/500 y** with a fully sensitive positive control, refuting compounding. §14: removing **57,638 verification parties** moved exploration launches +1.4% and population **+0.02**. New: `explorationHistoricalComparisonAudit.mjs`, `explorationFeedbackLoopAudit.mjs`, per-family O5 reader seams, a bounded `drainExplorationFunnel` for the long horizons | **No repair made and none licensed.** route/corridor has **no reader at all** (travelCorridors is written from the residential movement record); camp/fission/resource readers are measurably inert. **NO LAUNCH-TIME PROVISION OR RISK AUTHORITY** exists — but provisions bind EN ROUTE (`provisions_ran_out`, expedition.ts:912). `POPULATION_TOO_SMALL` (2.36% at 200 y) and `ADEQUATE_KNOWN_ALTERNATIVE` (500 y) read zero at 40 years and are real later. The 200-year sign runs against more exploration but rests on 5-seed means over near-extinct worlds — **exploration is NOT claimed harmful**. X3 remains VACUOUS. **Audit debt: +610 production lines, +518 in expedition.ts, 284 of them one audit function** that should move to diagnostics. `retentionInteractionArm` still has no consumer; 23E/23F replay arms still present. Recommended seam if ever justified: a bounded failure memory in the CLAIMING family's retry logic, on correctness grounds, NOT as an exploration improvement |
+| TEMPORARY-USE PENDING-ACTION AUTHORITY / EXACT LAUNCH-TO-CAMP CONSUMPTION CORRECTION-23J (2026-07-28; branch `checkpoint/physical-frontier-verification-23` from `0955c87`; **PASS — TEMPORARY-USE SUSPENDED UNTIL A REAL OPERATION READER EXISTS / CORRECTION-23 VERIFICATION BEHAVIOUR CLOSED**) | **A verification party is now sent only when one named, already-selected operation will read the answer before it decides its camp.** New typed identity `src/sim/agents/pendingOperation.ts` built entirely from the expedition record the production selector wrote (`frontier_exploration` excluded — no destination; `frontier_verification` excluded — self-reference; only `prepared` and `outbound` are pre-camp-decision). The 23I gate — `patch memory exists OR any active party exists` — is removed: memory is not intent, and a `returning` party has already taken the decision. **§7 model C, measured**: Model A cannot exist because `maybeLaunchExpedition` selects and launches in one call (4,186,352 `no_selected_operation` refusals against 27 genuinely pending), Model B cannot exist because `taskCampRefusedByEvidence` is read only on ARRIVAL, and the arithmetic closes it — a camp falls `legDays` after departure while an answer needs `2*legDays + on-site` (J4/J8: 3 days vs 8). **§10 D = 0**: of 1,145 launches under the 23I gate, NONE named a still-pending operation, and only 378 (33%) were even at a place work ever reached — so 23I's A cannot support its retention decision. Launches 1,142 -> 0; water 103 -> 109 (downstream divergence, gate untouched); suspended questions 0 -> 0; exploration unchanged. J1-J12 11 pass / 1 vacuous / 0 fail, I1-I14 14/14, I6 rewritten to test the real contract | **The 23I evidence file `temporary-use-camp-prevention.json` does not describe the commit it shipped in.** 23I's own audit run unmodified on `0955c87` gives **343/3,672 = 9.34%**, against the file's 10,724/59,286 (18.09%) and the source comment's 492/4,626 (10.6%); a second seed prefix gives 9.51%, so neither published figure is inside seed jitter. The file is preserved unaltered and corrected in `docs/evidence/correction23j/FINDINGS.md`; the 10.6% comment is deleted. **Do not cite either.** J12 is VACUOUS, not a pass — with zero natural launches it states the contract without demonstrating it. The suspension is a physical consequence of the gate, not a policy entry, so it reverses itself when a reservation seam exists; that seam belongs to Resource Investigation / Temporary Use Closure and was deliberately not built. **The ordinary-exploration deficit recorded by 23I is unrepaired and remains the next blocker** |
+| DECISION-CONTINGENT VERIFICATION / VALUE-OF-INFORMATION CORRECTION-23H (2026-07-27; branch `checkpoint/physical-frontier-verification-23` from `ff48d29`; **PROGRESS — DIAGNOSIS ACCEPTED / DO NOT MERGE**) | **Every verification question now has an explicit, measured reader — or a named missing one.** New audit-only module `src/sim/diagnostics/verificationValueOfInformation.ts` (opportunity-input capture, candidate observer, relevance taxonomy, bounded-horizon reader trace). Production seams: one capture call in `carryingCapacity.ts` (the reader's `biomeCompetence`/`resourcePressure` are local intermediates no band field carries, so reconstructing them would make every arm approximate — the real object is captured instead), one optional `auditEligibleOut` out-parameter on `selectVerificationCandidate` so §5 can evaluate EVERY eligible candidate rather than only the winner, `deriveKnownUnusedHabitatForAudit` extended to take the tick cache (without it the audit silently evaluated a smaller candidate set), and `WATER_ACCESS_OBSERVED_THRESHOLD` exported. New read-only §13 `decisionRelevance` projection on the Knowledge panel: for each place the band would verify, which decision is blocked, what each answer would do, and whether the reader exists. New audits `verificationValueOfInformationAudit.mjs` and `verificationDecisionFixturesAudit.mjs` (H1–H12) | **No production change made.** Three of five questions cannot change a physical action: `resource_test_possible` and `seasonal_persistence` have no reader at all, and `resource_presence`'s only consumer is another question nobody reads. `water_access` and `resource_presence` are TAUTOLOGICAL in practice (confirmation rates 0.98 and 1.00); 89% of water candidates already pass the gate on the band's own observation. **94% of all physically consequential verification evidence is a single branch of a single question** — a `temporary_use` negative. §10 selector-only is zero BY TAXONOMY and is reported with that reason. `retentionInteractionArm` is declared with no consumer and should be deleted; the superseded 23E/23F replay arms must be removed before the parent branch can be merge-ready |
+| EXACT TRAVEL REPLAY / TARGET-SELECTION ISOLATION CORRECTION-23G (2026-07-27; branch `checkpoint/physical-frontier-verification-23` from `ca9e3b8`; **PROGRESS — DIAGNOSIS ACCEPTED / DO NOT MERGE**) | **A valid replacement for the inadmissible F13, and it says verification semantics are worth nothing.** New audit-only module `src/sim/diagnostics/verificationScheduleReplay.ts` (module-slot registry in the `socialReadSeamHook.ts` idiom — donor recorder, schedule replay, bounded rotation disposition, donor-place protection, season-identity read counter). Stage 1 records every `frontier_verification` launch the BAND-KNOWN production selector makes; stage 2 replays it physically with the selector bypassed entirely, which is what F13 could not do. Seams: `expedition.ts` (recording, replay launcher, replay on-site task), `memoryCompression.ts` (G6 donor-place retention), and four one-line season-identity read counters in `bandDecision.ts`, `memory.ts` and `frontierVerification.ts`. **G1 reproduces F1 exactly on 6/6 sites** — and to four decimals on every quantity at 200 y on terrain A — while carrying 0 attempts, 0 evidence rows and 0 dispositions against F1's 12/48/430. **The cadence is not the mechanism** (G3/G4/G5 hold F1's exact launch days and party count and collapse terrain A to 0.20/5.4, 0.40/13.6, 0.40/19.6). **Nor is target diversity** (the §6 supplement repairs F13's collapse from 30 to 221 distinct targets and still returns 0.00). **G6 retention is a partial substitute on terrain A alone** (0.60/19.0 → 0.80/22.0 against F1's 1.00/34.0). Six qualified sites, two per structure class; new `scripts/marginalSitePhenotypeProbe.mjs`, `scripts/scheduleReplayMatrixAudit.mjs`, `scripts/scheduleReplayDiagnosisReport.mjs`. `.claude/launch.json` removed as unrelated scope and `.claude/` gitignored | **NO REPLICATED CONDITIONAL MECHANISM FOUND, and no production change made.** One site of six is sensitive and its structure class does not replicate — the other coastal/aquatic site is wetter, more aquatic, and neutral. **Terrain A fails the qualification rule CORRECTION-23F itself wrote** (corridor 100% passable, 0 obstacles, against 23F's stated [0.55, 0.98]); it is also the only site whose F0 baseline is not already safe (0.60 vs 0.96), so elsewhere there is nothing for any arm to improve. Whether A is a terrain class or one unrepresentative fixture is the open question. §8 proves every new record necessarily carries base content (ratio 1.00), so 23F's F5/F10 are not clean season-identity tests and none is claimed here. Memory-compression debt remains unrepaired and interaction-dependent |
+| HUMAN VIABILITY / CAUSAL CLOSURE CORRECTION-16 (2026-07-25; branch `checkpoint/human-viability-causal-closure-16` from CORRECTION-15's `d41c973`; **PROGRESS — DO NOT MERGE**) | **Evidence repair, not construction.** Two CORRECTION-15 conclusions are RETRACTED and one instrument was added. (1) **The social layer is NOT readability-only.** `socialCausalityAudit.mjs` was rewritten: derived fields are now perturbed through a new audit-only read seam, effects are reported against ELEVEN separately named fingerprints (none called "canonical state"), and every arm runs on 5 predeclared shared seeds. `innerFission` moves movement, physical receipts, knowledge, demography and viability on **5/5 seeds**; `socialTension` on 4/5 and 3/5; `cohesion` on 4/5 and 2/5. Re-running C15's OWN seed separates the two defects: innerFission/socialTension nulls were purely the WRONG SEAM, the cohesion null was single-seed + narrow fingerprint. (2) **The 2/11 `demographicDeathMemoryPathAudit` failure is an INVALID AUDIT EXPECTATION, not a regression** — new `demographicDeathMemoryCounterfactualAudit.mjs` clones ONE spring pre-demography snapshot into arms differing only in `band.deathMemory` and runs exactly one production annual update: fertility and net rate are monotone non-increasing in death memory, mortality is unchanged (no mortality path consumes it), and the measured fertility delta **0.070** matches `recentDeathSuppression*0.18 = 0.072`. 6/6 checks × 5/5 seeds. Added `src/sim/diagnostics/socialReadSeamHook.ts` (audit-only, non-persisted; one boolean check when unregistered) and `docs/evidence/correction16/AUDIT_ADMISSIBILITY.md`. Diagnostics-off output byte-identical to `d41c973` on map1 and map2 at 40y | **NOT ACCEPTED and largely UNBUILT.** Not built: §5A's §4.1-compliant annual-nutrition comparisons, §6.3 death-memory decay, §7.1 relationshipMemory / reportedKnowledge traces (both **UNRESOLVED**, not classified), §8 cohort arms and mediation waterfall, §9 viability cause taxonomy, §10 adaptation cascade (**no family proven in either direction**), §11 frontier exploration, §12 extinction arms, §13 fresh performance. Gates 4, 9, 11–19 and 25 unmet. `candidateRepairIsolationAudit`'s A metric still subtracts a component (`annualGroundTruthMeanFoodStress`) from a composite (`foodDemographicPressure`) — a §4.1 violation; **do not cite `consumedMinusGroundTruth = -0.077`**. The ~9-tile destination-knowledge horizon remains the binding blocker |
+| HUMAN VIABILITY / RECOVERY / ADAPTIVE RESILIENCE CORRECTION-15 (2026-07-25; branch `checkpoint/human-viability-adaptive-resilience-15` from public main `668763f`; **PROGRESS — DO NOT MERGE**; `222d3ec` used as evidence/patch donor only) | **Four ported repairs, each independently re-proven on this branch first** (`candidateRepairIsolationAudit.mjs`, before evidence taken on `668763f`): (A) the ANNUAL demographic step consumed mean food pressure **0.555** against a year that actually held **0.335** — overstating hardship by +0.220, with **89 physically-surplus years producing 0 surplus-signal years** (after: 0.129 vs 0.206, 111 → 114); repaired by `deriveAnnualNutritionState` consumed at the single annual call site, seasonal read retained for all behavior. (B) **31 of 480 seasons had zero trips** while the band held remembered patches inside the 10-tile radius but NONE inside the same-day budget (after: 0); repaired by a `requireSameDay` argmax domain. (C) unit proof that a saturated 48-slot `RESOURCE_KNOWLEDGE_CAP` **evicts the just-observed local patch**; repaired by protecting just-observed patch ids, list still bounded at 48. (D) the expedition observation timestamp is **required BY B and C** — `668763f` passes step-mode only because the recon path is never exercised; with B+C and without D map2 fails on `day`/`dayOfSeason` alone. **NEW: the recovery basin is sound** (`recoveryBasinAudit.mjs`) — no absorbing collapse spiral: one bad year recovers in 1 y, three bad years in 1 y, five SEVERE years in 12 y; chronic hunger clears within 2 y of sustained recovery; heavy prior death memory depresses one year then washes out; 33/34/35 starting people give a 3-person spread at 150 y. ~~NEW: the social layer is READABILITY-ONLY~~ — **RETRACTED BY CORRECTION-16.** The clamp was applied BETWEEN ticks, but `innerFission`/`socialTension` are rewritten by `applyInnerFissionSocialReadabilityContext` at position 7 of the `updateBandContextStates` chain BEFORE their readers at positions 8 (`applyProtoCampContext`) and 12 (`applyForagingLearningAdaptationContext`) execute, so the perturbation never reached a reader; the "canonical state" compared was a 10-field projection omitting `protoCampMemory.behavior`, `foragingAdaptation.behavior` and `pressureState`; and only ONE seed was used. Perturbed at the correct seam, `innerFission` moves movement, receipts, knowledge, demography and viability on 5/5 seeds. ~~NEW: cohort composition is worth 0.01 of support ratio~~ — **DOWNGRADED TO UNRESOLVED** (same instrument class, not re-proven). Added `candidateRepairIsolationAudit.mjs`, `recoveryBasinAudit.mjs`, `socialCausalityAudit.mjs` | **NOT ACCEPTED and PARTIAL.** Not built: the §6/§7 whole-viability cause taxonomy, the §9 adaptation cascade, the §12 dedicated multi-cause extinction arms — so gates 9/10/11/19/26 are unmet and "adaptation appears before collapse" is unproven in either direction. Habitat-ladder gates unchanged from CORRECTION-14 and with the same measured cause (9-tile destination-knowledge horizon): max 4 successful rich fissions, no second-generation fission, 3/5 `good` lineages fission, marginal never escapes, hostile never goes extinct. `demographicDeathMemoryPathAudit` FAILS 2/11 — ~~a REAL new failure~~ **RECLASSIFIED BY CORRECTION-16 as an INVALID AUDIT EXPECTATION**: both checks assert orderings on 40-year trajectory means of independently moving arms, and density-dependent food feedback reverses the sign (mean currentFoodStress R0 0.4233 → R1 0.4347 → R3 0.4526). A same-snapshot counterfactual passes 6/6 on 5/5 seeds. Production unchanged and untuned. `demographicPerLineageAudit`'s world equation was COMPLETED (transferred daughter population counted as new people; gap exactly 36 = 2×18) and passes on both commits. Performance not re-measured on this branch |
 | DEMOGRAPHIC RESPONSE COMPRESSION CORRECTION-13 (2026-07-25; branch `checkpoint/demographic-response-compression-13` from public main `22123aa`, which contains RECOVERY-12 as `022f213`) | **The food→demography signal was one-sided.** Measured via `demographicCompositionAudit.mjs`: demography runs annually (`shouldRunAnnualDemography`, spring); `growthRate = clamp(survivalBaseline(0.002) + fertilityPressure×0.012 − mortalityPressure×0.014 − penalties, maxDecline, maxGrowth)`; reconciliation (`advancePopulationAccounting`, sign-gated single net rate, fractional accumulators preserved) is correct and NOT the defect. The FIRST compression point is the NUTRITION STATE: `deriveCanonicalNutritionState`'s `foodDemographicPressure = clamp01(… − recoveryRelief×0.14)` is floored at 0, and `foodStress = clamp01(1−rawSupportRatio)=0` for any ratio ≥1 — so genuine surplus (ratio 1.5) was **byte-identical** to bare maintenance (ratio 1.0): same nutrition, fertility 0.54, net rate +0.0074, trajectory 34→94 (`strongGtMaintenance:false`). Fix (only the measured defect): a symmetric bounded `nutritionalSurplus ∈ [0,1]` on the canonical nutrition state = `clamp01(clamp01((meanRawSupport − SURPLUS_ONSET=1.12)/SURPLUS_SPAN=0.6) × recoveryRelief)`, where `meanRawSupport` is the UNCAPPED rolling raw support (the `rolling*SeasonSupport` fields use the clamped ratio ≤1, so surplus was invisible; cached once/season as `rolling8SeasonRawSupport` for O(1) reads) and the recovery-streak gate blocks one-season spikes. It drives `foodFertilitySurplusBonus = nutritionalSurplus × 0.22` (symmetric with `foodFertilitySuppression`) into `fertilityPressure`, surfaced on `BandDemography`. **Exactly 0 at maintenance and below** — maintenance and every deficit arm unchanged. Post-fix arms order strong(+0.0062,34→80) > maintenance(+0.0045,34→64) > moderate(−0.0006,34→32) > severe(−0.0102,34→7); one bad season not fatal, one good season not explosive. Production preserved: Dry Margin 13/12/12, Estuary 35/33/33 (grows), North Frontier 9/9/9 (rescue), corridors 0/0/0 (extinct). Added `demographicCompositionAudit.mjs` | No arbitrary fertility/mortality tuning, no floors, no founder/habitat rules, no food-yield/demand change. Real default founders are genuinely food-limited (meanFoodPress 0.40–0.99), NOT genuinely surplus, so they correctly stay marginal — that food-reach/ecology-adequacy limit is OUT OF SCOPE (Layer B / logistical range / climate). Single net-rate model + reconciled age cohorts remain; fission/migration/adaptation/culture remain roadmap. Perf ~+8% bounded O(1). Ecology/human-survival NOT complete |
 | LOST-LINEAGE RECOVERY — FOOD RECEIPT ACCOUNTING (RECOVERY-12) (2026-07-24; branch `checkpoint/recover-food-receipt-accounting-12` from public main `e539813`) | **The human food ledger no longer derives current food from `Band.recentIntraSeasonTrips`.** New authoritative bounded per-accounting-period accumulator `src/sim/agents/seasonalFoodReceipts.ts` (`Band.seasonalFoodReceipts`): written ONLY on a successful physical food return — same-day trip (`intraSeasonTrips.applyTripDay`) + expedition cargo deposit (`expedition.ts`) — as O(1) running sums of the SAME `usableSupport`/harvest/losses (creates no food; preserves loss + resource-class attribution; `topReceipts` ≤16 display-only). `deriveHumanFoodSupportLedger(band, demand, currentTick)` reads it via `readFreshAccumulator` under a **one-current-period freshness rule** `periodTick === currentTick − 1` (season-N food deposited at tick N feeds the boundary decision at N+1; a zero-harvest season credits exactly zero; stale receipts cannot persist). Reproduced defect: the bounded 24-record `recentIntraSeasonTrips` window (`RECENT_TRIP_RECORD_CAP=24`) evicted early physical receipts because a season runs 28 trip-days (`FIRST_TRIP_DAY_OF_SEASON=6`,`TRIP_DAY_CADENCE=3`) and most trips are non-food — measured mainline capture 0.49–0.80 on the same history; new capture **1.000** for all Map 1 founders (`recoveryFoodAccountingAudit`). `recentIntraSeasonTrips` unchanged, now non-authoritative for food; fission daughters reset the accumulator (clone guard + explicit undefined). Before/after 150y: Dry Margin 0/0/10→15/12/12, Delta Reed s3 0→40; Map 2 Estuary grows above founding, North Frontier rescued 0→9, Upper/Yellow Corridor stay extinct. Added `recoveryFoodAccountingAudit.mjs`, `stepModeInvarianceAudit.mjs`, `founderTrajectoryAudit.mjs`; graph node `seasonalFoodReceipts` | Improvement is proportional to food previously lost to eviction — several founders still finish below founding population and corridors remain honestly extinct. Demographic growth compression was **explicitly out of scope**: no fertility/mortality/clamp/fission/ecology-density/yield/demand/movement/adaptation/storage/migration change. Perf ~+6% (bounded O(1) constant; ≤16-receipt display list per band). The demographic net-rate growth response is the next checkpoint |
 | ECOLOGY VIABILITY ADAPTATION CORRECTION-8 (2026-07-19; from 6fe9cf2) | **The ~97% same-day failure gate is SELECTION, not harvest.** Terminal-classifying every attempted trip (`scripts/sameDayFailureGateProbe.mjs`, reading only fields production already writes) showed 89.4% of ordinary and 90.7% of marginal trips were `cause=water_check` and never reached the physical resolver — rich: 1 trip in 160 seasons. Root cause measured, not inferred: `waterStress` (`pressure.ts:209`) derives from tile `waterAccess` + seasonal/acute terms and has **no term for water actually fetched**, while a water_check returns `returned_with_information` and creates nothing — so the trigger could not be released by the action it triggered. With ONE candidate per day and the water branch evaluated ahead of every food cause, any habitat below ~0.6 waterAccess starved permanently (ordinary waterStress 0.35–0.52 across all 160 seasons, never < the 0.32 trigger; foodStress pinned at 1.0 from season 8; 9 distinct tiles re-checked, top one **1073x** at mean confidence 0.76). Repair: one predicate in `getTripCause` (`intraSeasonTrips.ts`) — an information action fires only when the band's OWN knowledge is deficient (`isDormant \|\| effectivePresenceConfidence < OBSERVATION_CONFIDENCE_THRESHOLD`, the existing 0.42 constant). Band knowledge only; no hidden state; no global coefficient raised. Result: ordinary **extinct y90 → survives 100y at pop 11** (receipts 8.29 → 27.56), marginal 0.72 → 2.97 (still correctly extinct), rich byte-identical at 134.0164. Added `sameDayFailureGateProbe.mjs` + `waterCheckLoopProbe.mjs` | Ordinary is rescued from extinction but **NOT at replacement** (34–44% of the 0.1875 break-even across 4 seeds, declining 22 → 11 over a century). Newly exposed and deliberately unfixed: `route_time_infeasible` = 18.1% of ordinary trips vs **0% of rich** — selection uses straight-line `getGridDistance` (`:527`) while execution needs a passable path within `MAX_TRIP_DISTANCE_TILES=10`, so fragmented terrain wastes the day. Whether that is defective or honest terrain is **unproven** (code reading, not a controlled arm) — CORRECTION-9. `depleted_below_threshold` is now 38.7% ordinary vs 41.2% rich = honest depletion |

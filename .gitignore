@@ -19,3 +19,7 @@ docs/superpowers/
 
 # Local assistant/tool cache (design/config files remain tracked)
 .impeccable/hook.cache.json
+# Agent-harness dev-server config. CORRECTION-23G §4 removed a .claude/launch.json that the
+# diagnostic workflow had committed by accident; it configures a local preview server and has
+# nothing to do with the simulator. Ignored so it cannot silently return.
+.claude/

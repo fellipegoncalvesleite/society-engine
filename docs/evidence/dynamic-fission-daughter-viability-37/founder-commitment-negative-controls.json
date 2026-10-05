@@ -1,0 +1,60 @@
+{
+  "checkpoint": "ROADMAP ITEM 4 \u2014 unknown consequence + pre/post-departure authority semantics",
+  "method": "each mutation applied to the real production module, the full A-Y suite run, module restored from a pre-mutation copy; production verified byte-identical by sha256 afterwards",
+  "pristineSha256": "f4ed5871d6e9508dfdc4ec4d364711e84269d5379d36b5d61ee808293081c18a",
+  "controls": [
+    {
+      "control": "A3: optional + `?? 0` restored",
+      "expected_to_bite": "X (unknown becomes zero)",
+      "fixtures_failing": [
+        "X"
+      ]
+    },
+    {
+      "control": "reason-count-as-cost restored",
+      "expected_to_bite": "O",
+      "fixtures_failing": [
+        "O"
+      ]
+    },
+    {
+      "control": "additive readiness restored",
+      "expected_to_bite": "D",
+      "fixtures_failing": [
+        "D"
+      ]
+    },
+    {
+      "control": "permit stops checking liveness",
+      "expected_to_bite": "P/Q/R/S/T/U",
+      "fixtures_failing": [
+        "Q",
+        "R",
+        "S",
+        "T",
+        "U"
+      ]
+    },
+    {
+      "control": "terminal permit can be re-ended",
+      "expected_to_bite": "S/T/U",
+      "fixtures_failing": [
+        "S",
+        "T",
+        "U"
+      ]
+    },
+    {
+      "control": "unreachable status re-advertised",
+      "expected_to_bite": "Y",
+      "fixtures_failing": [
+        "T",
+        "Y"
+      ]
+    }
+  ],
+  "notes": [
+    "Control 6 re-advertises `ended_by_return` as a declared status. It fails Y (unreachable member advertised) AND T, because T asserts the removed cause appears nowhere in production code \u2014 two independent fixtures catch the same regression from different directions.",
+    "Control 4 fails Q as well as R/S/T/U: a permit that stops checking liveness also stops refusing a superseded one."
+  ]
+}

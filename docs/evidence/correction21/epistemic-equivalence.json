@@ -1,0 +1,339 @@
+{
+  "audit": "epistemicEquivalence",
+  "checkpoint": "CORRECTION-21 §6/§13",
+  "seam": "src/sim/agents/tileObservation.ts observeTileAndNearby -> observeTile",
+  "tileId": "tile:0:100",
+  "statedContract": {
+    "source": "docs/evidence/correction17/RESEARCH_CONSTRAINTS.md lines 40-45",
+    "permits": [
+      "existence",
+      "distance",
+      "passability",
+      "broad terrain",
+      "visible water/wetland/relief",
+      "approximate risk"
+    ],
+    "forbids": [
+      "stock sizes",
+      "which plants are edible",
+      "processing",
+      "recovery rates",
+      "the seasonal calendar of a place seen once in one season"
+    ],
+    "justificationGiven": "returned exploration writes only KnownTileRecords through the canonical observation writer and creates no resource memory and no food receipt",
+    "justificationHolds": false,
+    "whyNot": "A KnownTileRecord is not a neutral existence marker. It carries observedRichness, observedWaterAccess, observedAquaticPotential, observedStorageSuitability and a full observedSeasonalPattern (peakSeasons, leanSeasons, reliability). Routing a frontier return through the UNMODIFIED writer teaches exactly what the contract forbids."
+  },
+  "records": {
+    "frontierCrossedOnce": {
+      "tileId": "tile:0:100",
+      "firstObservedAt": {
+        "tick": 0,
+        "seasonTick": 0,
+        "day": 0,
+        "dayOfSeason": 0,
+        "seasonLengthDays": 90,
+        "daysPerYear": 360,
+        "year": 0,
+        "season": "spring",
+        "seasonIndex": 0,
+        "generation": {
+          "index": 0,
+          "yearWithinGeneration": 0,
+          "tickWithinGeneration": 0
+        }
+      },
+      "lastObservedAt": {
+        "tick": 0,
+        "seasonTick": 0,
+        "day": 0,
+        "dayOfSeason": 0,
+        "seasonLengthDays": 90,
+        "daysPerYear": 360,
+        "year": 0,
+        "season": "spring",
+        "seasonIndex": 0,
+        "generation": {
+          "index": 0,
+          "yearWithinGeneration": 0,
+          "tickWithinGeneration": 0
+        }
+      },
+      "seasonsObserved": [
+        "spring"
+      ],
+      "visits": 1,
+      "observedRichness": 0.5,
+      "observedWaterAccess": 0.06480841499896826,
+      "observedAquaticPotential": 0,
+      "observedMovementCost": 1.2,
+      "observedRisk": 0.10343304948411461,
+      "confidence": 0.4,
+      "knowledgeSource": "personally_observed",
+      "acquisition": "returned_frontier_exploration"
+    },
+    "frontierCrossedFiveTimes": {
+      "tileId": "tile:0:100",
+      "firstObservedAt": {
+        "tick": 0,
+        "seasonTick": 0,
+        "day": 0,
+        "dayOfSeason": 0,
+        "seasonLengthDays": 90,
+        "daysPerYear": 360,
+        "year": 0,
+        "season": "spring",
+        "seasonIndex": 0,
+        "generation": {
+          "index": 0,
+          "yearWithinGeneration": 0,
+          "tickWithinGeneration": 0
+        }
+      },
+      "lastObservedAt": {
+        "tick": 0,
+        "seasonTick": 0,
+        "day": 0,
+        "dayOfSeason": 0,
+        "seasonLengthDays": 90,
+        "daysPerYear": 360,
+        "year": 0,
+        "season": "spring",
+        "seasonIndex": 0,
+        "generation": {
+          "index": 0,
+          "yearWithinGeneration": 0,
+          "tickWithinGeneration": 0
+        }
+      },
+      "seasonsObserved": [
+        "spring"
+      ],
+      "visits": 5,
+      "observedRichness": 0.5,
+      "observedWaterAccess": 0.06480841499896826,
+      "observedAquaticPotential": 0,
+      "observedMovementCost": 1.2,
+      "observedRisk": 0.10343304948411461,
+      "confidence": 0.72,
+      "knowledgeSource": "personally_observed",
+      "acquisition": "returned_frontier_exploration"
+    },
+    "routeReconnaissance": {
+      "tileId": "tile:0:100",
+      "firstObservedAt": {
+        "tick": 0,
+        "seasonTick": 0,
+        "day": 0,
+        "dayOfSeason": 0,
+        "seasonLengthDays": 90,
+        "daysPerYear": 360,
+        "year": 0,
+        "season": "spring",
+        "seasonIndex": 0,
+        "generation": {
+          "index": 0,
+          "yearWithinGeneration": 0,
+          "tickWithinGeneration": 0
+        }
+      },
+      "lastObservedAt": {
+        "tick": 0,
+        "seasonTick": 0,
+        "day": 0,
+        "dayOfSeason": 0,
+        "seasonLengthDays": 90,
+        "daysPerYear": 360,
+        "year": 0,
+        "season": "spring",
+        "seasonIndex": 0,
+        "generation": {
+          "index": 0,
+          "yearWithinGeneration": 0,
+          "tickWithinGeneration": 0
+        }
+      },
+      "seasonsObserved": [
+        "spring"
+      ],
+      "visits": 1,
+      "observedRichness": 0.5,
+      "observedWaterAccess": 0.06480841499896826,
+      "observedAquaticPotential": 0,
+      "observedMovementCost": 1.2,
+      "observedRisk": 0.10343304948411461,
+      "confidence": 0.4,
+      "knowledgeSource": "personally_observed",
+      "acquisition": "returned_route_reconnaissance"
+    },
+    "residentialOnce": {
+      "tileId": "tile:0:100",
+      "firstObservedAt": {
+        "tick": 0,
+        "seasonTick": 0,
+        "day": 0,
+        "dayOfSeason": 0,
+        "seasonLengthDays": 90,
+        "daysPerYear": 360,
+        "year": 0,
+        "season": "spring",
+        "seasonIndex": 0,
+        "generation": {
+          "index": 0,
+          "yearWithinGeneration": 0,
+          "tickWithinGeneration": 0
+        }
+      },
+      "lastObservedAt": {
+        "tick": 0,
+        "seasonTick": 0,
+        "day": 0,
+        "dayOfSeason": 0,
+        "seasonLengthDays": 90,
+        "daysPerYear": 360,
+        "year": 0,
+        "season": "spring",
+        "seasonIndex": 0,
+        "generation": {
+          "index": 0,
+          "yearWithinGeneration": 0,
+          "tickWithinGeneration": 0
+        }
+      },
+      "seasonsObserved": [
+        "spring"
+      ],
+      "visits": 1,
+      "observedRichness": 0.4031245110836254,
+      "observedWaterAccess": 0.06480841499896826,
+      "observedAquaticPotential": 0,
+      "observedMovementCost": 1.2,
+      "observedRisk": 0.10343304948411461,
+      "observedStorageSuitability": 0.37665566697498903,
+      "observedSeasonalPattern": {
+        "peakSeasons": [
+          "autumn"
+        ],
+        "leanSeasons": [
+          "winter"
+        ],
+        "reliability": 0.45011809947350034,
+        "confidence": 1
+      },
+      "confidence": 1,
+      "knowledgeSource": "personally_observed",
+      "acquisition": "residential_observation"
+    },
+    "residentialTwentyTimes": {
+      "tileId": "tile:0:100",
+      "firstObservedAt": {
+        "tick": 0,
+        "seasonTick": 0,
+        "day": 0,
+        "dayOfSeason": 0,
+        "seasonLengthDays": 90,
+        "daysPerYear": 360,
+        "year": 0,
+        "season": "spring",
+        "seasonIndex": 0,
+        "generation": {
+          "index": 0,
+          "yearWithinGeneration": 0,
+          "tickWithinGeneration": 0
+        }
+      },
+      "lastObservedAt": {
+        "tick": 0,
+        "seasonTick": 0,
+        "day": 0,
+        "dayOfSeason": 0,
+        "seasonLengthDays": 90,
+        "daysPerYear": 360,
+        "year": 0,
+        "season": "spring",
+        "seasonIndex": 0,
+        "generation": {
+          "index": 0,
+          "yearWithinGeneration": 0,
+          "tickWithinGeneration": 0
+        }
+      },
+      "seasonsObserved": [
+        "spring"
+      ],
+      "visits": 20,
+      "observedRichness": 0.4031245110836254,
+      "observedWaterAccess": 0.06480841499896826,
+      "observedAquaticPotential": 0,
+      "observedMovementCost": 1.2,
+      "observedRisk": 0.10343304948411461,
+      "observedStorageSuitability": 0.37665566697498903,
+      "observedSeasonalPattern": {
+        "peakSeasons": [
+          "autumn"
+        ],
+        "leanSeasons": [
+          "winter"
+        ],
+        "reliability": 0.45011809947350034,
+        "confidence": 1
+      },
+      "confidence": 1,
+      "knowledgeSource": "personally_observed",
+      "acquisition": "residential_observation"
+    }
+  },
+  "hiddenWorldTruth": {
+    "tileBaseRichness": 0.4031245110836254,
+    "tileWaterAccess": 0.06480841499896826,
+    "tileAquaticPotential": 0,
+    "tileStorageSuitability": 0.37665566697498903,
+    "tilePeakSeasons": [
+      "autumn"
+    ],
+    "tileLeanSeasons": [
+      "winter"
+    ],
+    "tileReliability": 0.45011809947350034
+  },
+  "findings": {
+    "ecologicalFieldsIdenticalToTwentyVisitResidential": [
+      "observedWaterAccess",
+      "observedAquaticPotential"
+    ],
+    "seasonalCalendarIdentical": false,
+    "overallConfidenceIdentical": false,
+    "seasonalPatternConfidenceIdentical": false,
+    "oneCrossingReproducesHiddenWorldTruthExactly": false,
+    "fieldsThatDoDistinguish": [
+      "visits",
+      "acquisition"
+    ],
+    "traversalLegitimateFields": [
+      "tileId",
+      "observedMovementCost",
+      "observedRisk"
+    ]
+  },
+  "postRepairPreservation": {
+    "upgradeRestoresFullKnowledge": true,
+    "repeatTraversalRaisesConfidence": true,
+    "repeatTraversalStillClaimsNoSeasonalCalendar": true,
+    "traversalKeepsRouteKnowledge": true,
+    "shallowRecord": {
+      "richness": 0.5,
+      "water": 0.06480841499896826,
+      "aquatic": 0,
+      "storage": null,
+      "confidence": 0.4
+    },
+    "upgradedRecord": {
+      "richness": 0.4031245110836254,
+      "water": 0.06480841499896826,
+      "seasonalReliability": 0.45011809947350034,
+      "confidence": 1
+    }
+  },
+  "verdict": "EPISTEMIC_ADEQUACY_SEPARATED — traversal and residential evidence now yield materially different records; see postRepairPreservation for the §16 usefulness proof",
+  "shallowNeverOverstates": false
+}

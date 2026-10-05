@@ -13,6 +13,8 @@ import type {
   HistoryEvidenceRef,
   InheritedEraSummary,
   ResidentialMoveEvent,
+  SuccessorPostReturnEstablishmentEvent,
+  SuccessorStabilizationEvent,
 } from "./types";
 
 const TOTAL_EVENT_CAP = 36;
@@ -44,7 +46,9 @@ export type CanonicalEventType =
   | "recent_event"
   | "recent_pattern"
   | "residential_move"
-  | "fission_split";
+  | "fission_split"
+  | "successor_stabilized"
+  | "successor_established_after_failed_return";
 
 export type CanonicalEventMemoryScope = "recent" | "durable" | "inherited";
 
@@ -66,6 +70,8 @@ export type CanonicalEventSourceSystem =
   | "readable_event_history"
   | "residential_move_record"
   | "fission_record"
+  | "successor_stabilization_record"
+  | "successor_post_return_establishment_record"
   | "camp_movement_record";
 
 export type CanonicalEventLivedStatus = "personally_lived" | "inherited_not_personally_lived";
@@ -178,6 +184,8 @@ const EMPTY_SOURCE_COUNTS: Readonly<Record<CanonicalEventSourceSystem, number>> 
   readable_event_history: 0,
   residential_move_record: 0,
   fission_record: 0,
+  successor_stabilization_record: 0,
+  successor_post_return_establishment_record: 0,
   camp_movement_record: 0,
 };
 
@@ -188,6 +196,8 @@ export function deriveCanonicalEvents(world: WorldState, band: Band): CanonicalE
     ...deriveResidentialMoveEvents(band),
     ...deriveCampMovementEvents(band),
     ...deriveFissionEvents(band),
+    ...deriveSuccessorStabilizationEvents(band),
+    ...deriveSuccessorPostReturnEstablishmentEvents(band),
   ]);
   const drafts = [...dedupedDrafts].sort(compareDraftPriority);
   const capped = capEventDrafts(drafts);
@@ -634,24 +644,28 @@ function deriveCampMovementEvents(band: Band): readonly CanonicalEventDraft[] {
     }));
   }
 
-  for (const camp of state.temporaryTaskCamps.slice(0, 2)) {
+  // CORRECTION-26 §12 — reports a party that physically departed, never a camp. A selected
+  // investigation that nobody executed produces no draft here.
+  for (const party of state.temporaryTaskParties.slice(0, 2)) {
     drafts.push(campMovementDraft({
       band,
-      id: camp.id,
-      tick: camp.tick,
-      title: "Temporary task camp",
-      summary: `A temporary task camp supported ${humanizeKey(camp.purpose).toLowerCase()} and is ${humanizeKey(camp.status).toLowerCase()}.`,
-      consequence: "This records a short-lived task foothold, not a new residential base.",
-      severity: camp.status === "failed" ? 0.44 : 0.24,
-      significance: 0.34 + camp.confidence * 0.22,
-      tileIds: [camp.originTileId, camp.targetTileId],
-      reasonIds: camp.evidenceRefs.flatMap((entry) => entry.reasonIds),
-      eventIds: camp.evidenceRefs.flatMap((entry) => entry.eventId === undefined ? [] : [entry.eventId as EventId]),
+      id: party.id,
+      tick: party.tick,
+      title: party.status === "completed" ? "Day party returned" : "Day party turned back",
+      summary: party.status === "completed"
+        ? `${party.partyWorkers} went out ${party.routeDistanceTiles} tiles for ${humanizeKey(party.purpose).toLowerCase()} and returned the same day.`
+        : `${party.partyWorkers} set out for ${humanizeKey(party.purpose).toLowerCase()} and could not reach the place.`,
+      consequence: "This records a same-day task party, not a camp and not a new residential base.",
+      severity: party.status === "failed" ? 0.44 : 0.24,
+      significance: 0.34 + party.confidence * 0.22,
+      tileIds: [party.originTileId, party.targetTileId],
+      reasonIds: party.evidenceRefs.flatMap((entry) => entry.reasonIds),
+      eventIds: party.evidenceRefs.flatMap((entry) => entry.eventId === undefined ? [] : [entry.eventId as EventId]),
       chips: [
-        { kind: "task camp", label: humanizeKey(camp.purpose), sourceIds: [camp.id] },
-        { kind: "status", label: humanizeKey(camp.status), sourceIds: [] },
+        { kind: "task party", label: humanizeKey(party.purpose), sourceIds: [party.id] },
+        { kind: "status", label: humanizeKey(party.status), sourceIds: [] },
       ],
-      score: 628 + camp.confidence * 16,
+      score: 628 + party.confidence * 16,
     }));
   }
 
@@ -817,6 +831,108 @@ function campMovementDraft(input: {
 
 function deriveFissionEvents(band: Band): readonly CanonicalEventDraft[] {
   return band.fissionEvents.slice(-6).map((event) => fissionDraft(band, event));
+}
+
+function deriveSuccessorStabilizationEvents(band: Band): readonly CanonicalEventDraft[] {
+  // The parent retains the same objective completion record for historical agreement, but that is
+  // not evidence it observed the successor's operation. Projecting it as an inherited event would
+  // invent a communication channel and let knowledge readers consume it. Only the successor lived
+  // this event; the parent's Chronicle reads the objective record directly.
+  return (band.successorStabilizationEvents ?? [])
+    .filter((event) => String(event.successorBandId) === String(band.id))
+    .slice(-6)
+    .map((event) => successorStabilizationDraft(band, event));
+}
+
+function successorStabilizationDraft(
+  band: Band,
+  event: SuccessorStabilizationEvent,
+): CanonicalEventDraft {
+  const proof = event.independentOperation.assessmentWindow;
+  return {
+    id: canonicalId(band, "successor-stabilized", String(event.id)),
+    type: "successor_stabilized",
+    family: "origin_lineage",
+    memoryScope: "recent",
+    livedStatus: "personally_lived",
+    provenance: "direct_sim_transition",
+    sourceSystem: "successor_stabilization_record",
+    startYear: event.time.year,
+    endYear: event.time.year,
+    season: event.time.season,
+    title: "Independent band life established",
+    summary: `This group became an established band in Year ${event.time.year} after ${proof.days} measured days of independent physical operation across ${proof.tileIds.length} lived ${proof.tileIds.length === 1 ? "place" : "places"}.`,
+    consequence: "Provisional quarantine ended; departure and stabilization remain separate historical facts.",
+    actualCause: "measured independent physical operation with direct consumed-departure provenance",
+    severity: 0.62,
+    significance: 0.82,
+    grouped: false,
+    groupedCount: 1,
+    involvedBandIds: compactIds([event.parentBandId, event.successorBandId]),
+    involvedTileIds: compactIds([event.stabilizedTileId]),
+    involvedRouteIds: [],
+    sourceEventIds: [event.id, event.departureRecordId],
+    sourceReasonIds: capIds(event.reasonIds, SOURCE_ID_CAP),
+    sourceHistoryIds: [String(event.departureRecordId)],
+    evidenceChips: [
+      { kind: "successor_stabilization", label: "independent operation completed", sourceIds: [String(event.id)] },
+      { kind: "physical_subsistence", label: `${proof.daysWithAnyPhysicalTake} extraction days`, sourceIds: [] },
+      { kind: "departure_provenance", label: "spent departure permit", sourceIds: [String(event.departureRecordId)] },
+    ],
+    chronicleLinkIds: [`event:${String(event.id)}`, `year:${event.time.year}`],
+    chronicleSectionIds: ["article-history", "article-long-memory"],
+    sourceKeys: [String(event.id), String(event.departureRecordId), String(event.successorBandId)],
+    score: 675 + event.time.year * 0.01,
+  };
+}
+
+function deriveSuccessorPostReturnEstablishmentEvents(band: Band): readonly CanonicalEventDraft[] {
+  return (band.successorPostReturnEstablishmentEvents ?? [])
+    .filter((event) => String(event.successorBandId) === String(band.id))
+    .slice(-6)
+    .map((event) => successorPostReturnEstablishmentDraft(band, event));
+}
+
+function successorPostReturnEstablishmentDraft(
+  band: Band,
+  event: SuccessorPostReturnEstablishmentEvent,
+): CanonicalEventDraft {
+  const proof = event.independentOperation.assessmentWindow;
+  return {
+    id: canonicalId(band, "successor-established-after-failed-return", String(event.id)),
+    type: "successor_established_after_failed_return",
+    family: "origin_lineage",
+    memoryScope: "recent",
+    livedStatus: "personally_lived",
+    provenance: "direct_sim_transition",
+    sourceSystem: "successor_post_return_establishment_record",
+    startYear: event.time.year,
+    endYear: event.time.year,
+    season: event.time.season,
+    title: "Independent life rebuilt after a failed return",
+    summary: `After its return attempt failed, the surviving cohort made a new commitment and later established independent life through ${proof.days} measured days of fresh physical operation.`,
+    consequence: "The failed return remains in history; the new commitment, not the founder commitment, ended provisional quarantine.",
+    actualCause: "fresh post-return survivor commitment followed by post-commitment physical operation",
+    severity: 0.68,
+    significance: 0.9,
+    grouped: false,
+    groupedCount: 1,
+    involvedBandIds: compactIds([event.parentBandId, event.successorBandId]),
+    involvedTileIds: compactIds([event.establishedTileId]),
+    involvedRouteIds: [],
+    sourceEventIds: [event.id, event.departureRecordId],
+    sourceReasonIds: capIds(event.reasonIds, SOURCE_ID_CAP),
+    sourceHistoryIds: [String(event.departureRecordId), event.continuationCommitment.commitmentId],
+    evidenceChips: [
+      { kind: "failed_return", label: "return path entered and failed", sourceIds: [] },
+      { kind: "post_return_commitment", label: "current survivors chose a new course", sourceIds: [event.continuationCommitment.commitmentId] },
+      { kind: "physical_subsistence", label: `${proof.daysWithAnyPhysicalTake} fresh extraction days`, sourceIds: [] },
+    ],
+    chronicleLinkIds: [`event:${String(event.id)}`, `year:${event.time.year}`],
+    chronicleSectionIds: ["article-history", "article-long-memory"],
+    sourceKeys: [String(event.id), event.continuationCommitment.commitmentId, String(event.successorBandId)],
+    score: 710 + event.time.year * 0.01,
+  };
 }
 
 function fissionDraft(band: Band, event: BandFissionEvent): CanonicalEventDraft {
@@ -1120,6 +1236,7 @@ function episodeFamily(type: BandEpisodeType): CanonicalEventFamily {
     case "band_collapsed_end":
       return "demography";
     case "daughter_branch_formed":
+    case "successor_separation_lifecycle":
       return "origin_lineage";
     case "route_became_memory":
     case "hard_crossing_remembered":
@@ -1218,6 +1335,8 @@ function episodeTitle(type: BandEpisodeType): string {
       return "Population recovered";
     case "daughter_branch_formed":
       return "Daughter branch formed";
+    case "successor_separation_lifecycle":
+      return "Successor separation lifecycle";
     case "long_hunger_period":
       return "Long hunger period";
     case "water_caution_period":
@@ -1251,6 +1370,8 @@ function episodeConsequence(type: BandEpisodeType): string {
       return "Known country grew enough to survive compression.";
     case "daughter_branch_formed":
       return "The branch becomes a link between parent history and a new band record.";
+    case "successor_separation_lifecycle":
+      return "Physical separation and its retained outcome survive as bounded lineage history.";
     default:
       return "The episode survived compression because it had grounded evidence and enough significance.";
   }
@@ -1277,6 +1398,8 @@ function episodeActualCause(type: BandEpisodeType): string {
       return "Pressure history evidence";
     case "daughter_branch_formed":
       return "Fission record";
+    case "successor_separation_lifecycle":
+      return "Physical successor lifecycle record";
     case "band_absorbed_end":
       return "Terminal absorption record";
   }

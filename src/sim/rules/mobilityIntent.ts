@@ -927,7 +927,9 @@ function getMobilityContext(world: WorldState, band: Band): MobilityContext | un
   const knownTileCount = Object.keys(band.knowledge.observedTiles).length;
   const mobilityPressure = clamp01(
     foodPressure * 0.25 +
-      band.territorialPressure * 0.12 +
+      // CORRECTION-35 — `band.territorialPressure * 0.12` was here and is REMOVED. Same reason as
+      // `pressure.ts`: a spawn constant with no lived writer was opening and scoring movement
+      // intents. This was the THIRD reader of that field and the one the original finding missed.
       waterPressure * 0.24 +
       foodOpportunityPressure * 0.12 +
       riskPressure * 0.16 +

@@ -1,0 +1,16 @@
+{
+  "audit": "CORRECTION-29 — DIRECT ENCOUNTER PROVENANCE CONTROLLED FIXTURES",
+  "arm": "after",
+  "seed": "c29:fixtures",
+  "chain": [
+    {
+      "case": "P1",
+      "separation": 42,
+      "sharedTile": "tile:194:90",
+      "priorContact": false,
+      "newContactMemory": false,
+      "newEncounterRecords": 0,
+      "newFriction": 0
+    }
+  ]
+}

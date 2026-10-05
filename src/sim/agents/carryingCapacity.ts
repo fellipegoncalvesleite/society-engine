@@ -1,4 +1,10 @@
 import { deriveBaseHabitatPotential, deriveSeasonalEffectiveYield } from "./habitatYield";
+import { deriveDirectWaterAccess, isWaterAccessFeasible } from "./verificationEvidence";
+// CORRECTION-23H §5 — audit-only. Both are no-ops when no audit has registered a slot.
+import {
+  captureOpportunityInput,
+  isCapturingOpportunityInput,
+} from "../diagnostics/verificationValueOfInformation";
 import {
   applyResourceClassPressure,
   deriveResourceClassAvailability,
@@ -10,6 +16,10 @@ import { deriveHumanFoodSupportLedger } from "./humanFoodSupport";
 import { deriveNomadicScalePressure, getNomadicScaleDemandMultiplier } from "./nomadicScale";
 import { getLocalUsePressureValue } from "./pressure";
 import { getSalientMemorySummary, type TickContextCache } from "./contextCache";
+import {
+  getOpportunityCandidateObserver,
+  type OpportunityCandidateRecord,
+} from "../diagnostics/opportunityCandidateDiagnostics";
 import {
   getBandForagingFootprint,
   getOverlappingBandIds,
@@ -535,7 +545,7 @@ export function deriveCarryingCapacity(
     nutritionDeficit: perCapitaReturn.nutritionDeficit,
   };
 
-  const knownUnusedHabitat = deriveKnownUnusedHabitat(world, band, cache, {
+  const opportunityInput = {
     time,
     biomeCompetence,
     currentPerCapita: perCapitaValue,
@@ -543,7 +553,19 @@ export function deriveCarryingCapacity(
     sustainedOverCapacity,
     nomadicScalePressure: nomadicScalePressure.nomadicScalePressure,
     resourcePressure: resourceClassPressureLoss,
-  });
+  };
+
+  // CORRECTION-23H §5 — audit-only capture of the exact input the opportunity reader is about
+  // to receive. `biomeCompetence` and `resourcePressure` are local intermediates that no band
+  // field carries, so a value-of-information counterfactual that reconstructed them would be
+  // approximate — and an approximate counterfactual is not an orthogonal one. Capturing the
+  // real object costs one boolean test when no audit is registered, which is every production,
+  // worker and UI path. Nothing is read back into production.
+  if (isCapturingOpportunityInput()) {
+    captureOpportunityInput(String(band.id), opportunityInput, cache, Number(time.tick));
+  }
+
+  const knownUnusedHabitat = deriveKnownUnusedHabitat(world, band, cache, opportunityInput);
 
   const daughterColonization = deriveDaughterColonization(world, band, {
     time,
@@ -768,6 +790,32 @@ function deriveActivitySubsistenceSupplement(
   };
 }
 
+/**
+ * CORRECTION-23B §13 — audit-only accessor. Lets the R1-R12 seam tests call the REAL
+ * production destination evaluation instead of reimplementing it, which is the whole point
+ * of an exact-seam test. Pure; never used by simulation behaviour.
+ */
+export function deriveKnownUnusedHabitatForAudit(
+  world: WorldState,
+  band: Band,
+  input: Parameters<typeof deriveKnownUnusedHabitat>[3],
+  // CORRECTION-23H §5 — the tick context cache MUST be passed for this to reproduce
+  // production. `collectOpportunityCandidates` reads `getSalientMemorySummary(cache, …)`, so
+  // omitting the cache silently drops the salient candidate set and the audit answers a
+  // different question from the one production asked. Callers that cannot supply the cache get
+  // the old behaviour and must treat the result as unsound.
+  cache?: Parameters<typeof deriveKnownUnusedHabitat>[2],
+): KnownUnusedHabitatOpportunity | undefined {
+  return deriveKnownUnusedHabitat(world, band, cache, input);
+}
+
+/**
+ * CORRECTION-23C §6 — the observed-water level that supports a destination WITHOUT anyone
+ * having gone to check. Unchanged from the value this gate has always used; it is named here
+ * only so the feasibility question and the ranking term stop sharing a literal.
+ */
+export const WATER_ACCESS_OBSERVED_THRESHOLD = 0.32;
+
 function deriveKnownUnusedHabitat(
   world: WorldState,
   band: Band,
@@ -784,6 +832,7 @@ function deriveKnownUnusedHabitat(
 ): KnownUnusedHabitatOpportunity | undefined {
   const candidateIds = collectOpportunityCandidates(band, cache, {
     includeSideCountryCandidates: world.auditOptions?.daughterColonizationFissionBiasEnabled !== false,
+    hideFrontierDerived: world.auditOptions?.frontierKnowledgeHiddenFromFission === true,
   });
 
   if (candidateIds.length === 0) {
@@ -793,6 +842,30 @@ function deriveKnownUnusedHabitat(
   const currentTile = getTile(world, band.position);
   let best: KnownUnusedHabitatOpportunity | undefined;
   let bestScore = -Infinity;
+  // CORRECTION-18 §11 — audit-only candidate ledger. `undefined` on every production,
+  // worker and UI path, in which case nothing below it executes and behaviour is
+  // byte-identical. It exists to separate candidate STARVATION from candidate MASKING
+  // from an honest loss; see opportunityCandidateDiagnostics.ts.
+  const candidateObserver = getOpportunityCandidateObserver();
+  const candidateLedger: OpportunityCandidateRecord[] | undefined =
+    candidateObserver === undefined ? undefined : [];
+  // CORRECTION-18 §11 — ELIGIBILITY BEFORE RANKING.
+  //
+  // The loop below keeps a best-by-SCORE winner (`best`/`bestScore`) and only tests the
+  // viability predicate (`consideredAsTarget`) on whichever candidate happens to hold that
+  // slot. Measured on production ledgers (docs/evidence/correction18/candidate-ordering.json,
+  // 50,579 ledgers): the score winner FAILS viability 63.7% of the time, and in 1,336
+  // ledgers a viable candidate was sitting in the same evaluated set and was discarded
+  // untested — 6,413 viable candidates lost that way. Frontier-derived candidates are not
+  // starved (62,544 reached the list, 19,773 of them viable); they are MASKED.
+  //
+  // The repair keeps a SECOND slot for the best candidate that actually passed viability.
+  // Ranking among viable candidates uses the same unchanged score, so no threshold, margin
+  // or coefficient moves; the only change is that a viable candidate is no longer thrown
+  // away because a non-viable one scored higher. When the score winner IS viable both
+  // slots hold the same candidate and behaviour is identical to before.
+  let bestViable: KnownUnusedHabitatOpportunity | undefined;
+  let bestViableScore = -Infinity;
 
   for (const tileId of candidateIds) {
     const record = band.knowledge.observedTiles[tileId];
@@ -808,7 +881,30 @@ function deriveKnownUnusedHabitat(
     const yieldState = computeTileYield(world, band, tileId, record, input.time, input.biomeCompetence);
     // Underused = good potential, low local use. Supportable per-capita estimate.
     const expectedPerCapita = clamp01(yieldState.effectiveYield * (1 - usePressure * 0.5));
+    // CORRECTION-23C §6 — RELIABILITY IS OBSERVATION AND EXPERIENCE, AND ONLY THAT.
+    //
+    // CORRECTION-23B floored this field at 0.55 when a party physically drew water here. That
+    // was wrong in two ways at once: the field feeds the destination RANKING term below
+    // (`score += waterReliability * 0.24`) and the side-country margin relaxation, so an
+    // access answer silently made the place SCORE better; and a confirmation needs only
+    // `waterAccess >= 0.3` or an adjacent water tile, so the floor could sit above the
+    // physical value. Reaching water once is not a reliability measurement.
+    //
+    // So this term is back to exactly what the band observed, and direct access is consumed
+    // separately below, as the boolean physical question it actually answers.
     const waterReliability = clamp01(record.observedWaterAccess ?? 0.3);
+    // §6 — the PHYSICAL-ACCESS question, kept apart from the number above. A party that
+    // stood here and drew water satisfies it; a party that stood here and found nothing
+    // reachable in the area it searched fails it; anything else falls back to the
+    // observation. This is a boolean on purpose — there is no magnitude to leak into a score.
+    const waterAccessFeasible = isWaterAccessFeasible(
+      band,
+      tileId,
+      waterReliability,
+      WATER_ACCESS_OBSERVED_THRESHOLD,
+      world.auditOptions?.waterAccessEvidenceHiddenFromDestination === true,
+    );
+    const directWaterAccess = deriveDirectWaterAccess(band, tileId);
     const distance = currentTile === undefined ? 4 : gridDistance(currentTile.coord, tile.coord);
     const travelCost = clamp01(distance / 12);
     const riskPenalty = clamp01(record.observedRisk ?? 0.3);
@@ -818,6 +914,50 @@ function deriveKnownUnusedHabitat(
     const sideCountryEvidence = getSideCountryOpportunityEvidence(band, tileId);
     const score = base.foragingPotential * 0.4 + waterReliability * 0.24 + (1 - usePressure) * 0.2 -
       travelCost * 0.2 - riskPenalty * 0.18;
+
+    // CORRECTION-18 §11 — AUDIT-ONLY, and deliberately placed BEFORE the score gate
+    // below. That gate (`if (score <= bestScore) continue`) is exactly the structure under
+    // investigation: production keeps a single best-by-score winner and only ever tests
+    // the VIABILITY predicate on that winner, so a lower-scoring but perfectly viable
+    // candidate is discarded here without being evaluated at all. Recording the ledger
+    // after the gate would have hidden precisely the candidates §11 asks about.
+    //
+    // The viability terms are recomputed inside this audit-gated block rather than hoisted
+    // out of the production path, so production arithmetic and ordering are untouched.
+    if (candidateLedger !== undefined) {
+      const auditConfidence = clamp01(record.confidence * 0.8 + 0.1);
+      const auditSideRelax =
+        sideCountryEvidence > 0 && waterReliability > 0.36 && riskPenalty < 0.48
+          ? Math.min(0.1, 0.04 + sideCountryEvidence * 0.06 + input.sustainedOverCapacity * 0.08)
+          : 0;
+      const auditPressureRelax = Math.min(
+        0.12,
+        input.nomadicScalePressure * 0.08 + input.resourcePressure * 0.08,
+      );
+      const auditMargin =
+        0.08 -
+        Math.min(0.13, input.sustainedOverCapacity * 0.2) -
+        auditSideRelax -
+        auditPressureRelax;
+
+      candidateLedger.push({
+        tileId,
+        distanceTiles: distance,
+        acquisition: record.acquisition ?? "residential_observation",
+        confidence: round2(auditConfidence),
+        score: round2(score),
+        expectedPerCapita: round2(expectedPerCapita),
+        waterReliability: round2(waterReliability),
+        riskPenalty: round2(riskPenalty),
+        usePressure: round2(usePressure),
+        travelCost: round2(travelCost),
+        wouldPassViability:
+          expectedPerCapita > input.currentPerCapita + auditMargin &&
+          waterAccessFeasible &&
+          riskPenalty < 0.55,
+        isScoreWinner: false,
+      });
+    }
 
     if (score <= bestScore) {
       continue;
@@ -843,10 +983,14 @@ function deriveKnownUnusedHabitat(
       Math.min(0.13, input.sustainedOverCapacity * 0.2) -
       sideCountryMarginRelaxation -
       pressureMarginRelaxation;
-    const consideredAsTarget = expectedPerCapita > input.currentPerCapita + competitionMargin && waterReliability > 0.32 && riskPenalty < 0.55;
+    const consideredAsTarget =
+      expectedPerCapita > input.currentPerCapita + competitionMargin &&
+      waterAccessFeasible &&
+      riskPenalty < 0.55;
+
     const rejectionReason = consideredAsTarget
       ? undefined
-      : waterReliability <= 0.32
+      : !waterAccessFeasible
         ? "insufficient_water_reliability"
         : riskPenalty >= 0.55
           ? "risk_too_high"
@@ -860,8 +1004,26 @@ function deriveKnownUnusedHabitat(
       riskPenalty < 0.4 &&
       usePressure < 0.3;
 
-    bestScore = score;
-    best = {
+    // CORRECTION-23I §6.2 Case A — IS WATER THE ONLY THING STOPPING THIS PLACE?
+    //
+    // `consideredAsTarget` is a conjunction, so `rejectionReason === "insufficient_water_
+    // reliability"` says water failed but says NOTHING about whether the yield and risk
+    // conjuncts pass. A launch gate built on the rejection reason alone would send parties to
+    // places that would still be rejected after a confirmation — exactly the over-launch this
+    // checkpoint exists to remove.
+    //
+    // This states the one thing the launch gate actually needs: with a confirmed direct access
+    // and nothing else changed, would this candidate become eligible? It is computed here
+    // because this is the only place the yield term, the competition margin and the risk term
+    // are all in scope. It is a REPORTED FACT, not an authority: no score reads it, no
+    // threshold moves on it, and `consideredAsTarget` above is untouched.
+    const waterAccessIsBindingBlocker =
+      !consideredAsTarget &&
+      !waterAccessFeasible &&
+      expectedPerCapita > input.currentPerCapita + competitionMargin &&
+      riskPenalty < 0.55;
+
+    const opportunity: KnownUnusedHabitatOpportunity = {
       bandId: band.id,
       candidateTileId: tileId,
       opportunityKind: kind,
@@ -871,6 +1033,16 @@ function deriveKnownUnusedHabitat(
       currentUsePressure: round2(usePressure),
       currentCrowding: round2(crowding),
       waterReliability: round2(waterReliability),
+      // §6/§13 — reported separately so nothing downstream can confuse "a party drew water
+      // here" with "the water here is dependable".
+      waterAccessFeasible,
+      // CORRECTION-23I §6.2 — true only when a confirmed direct access would, on its own,
+      // make this candidate eligible. Read by the verification launch gate; read by nothing
+      // that scores or ranks.
+      waterAccessIsBindingBlocker,
+      directWaterAccessState: directWaterAccess.state,
+      ...(directWaterAccess.season === undefined ? {} : { directWaterAccessSeason: directWaterAccess.season }),
+      directWaterAccessSeasonsObserved: directWaterAccess.seasonsObserved,
       travelCost: round2(travelCost),
       riskPenalty: round2(riskPenalty),
       confidence: round2(confidence),
@@ -881,9 +1053,56 @@ function deriveKnownUnusedHabitat(
       basis,
       reasonIds: [makeReasonId(input.time, band.id, consideredAsTarget ? "known_unused_habitat_detected" : rejectionReasonId(rejectionReason))],
     };
+
+    // Unchanged best-by-score bookkeeping (the diagnostic fallback).
+    bestScore = score;
+    best = opportunity;
+
+    // §11 — and, separately, the best candidate that actually PASSED viability. Ranked by
+    // the same unchanged score; ties broken deterministically on tile id.
+    if (
+      consideredAsTarget &&
+      (bestViable === undefined ||
+        score > bestViableScore ||
+        (score === bestViableScore && String(tileId) < String(bestViable.candidateTileId)))
+    ) {
+      bestViableScore = score;
+      bestViable = opportunity;
+    }
   }
 
-  return best;
+  // CORRECTION-18 §11 — hand the full evaluated ledger to the audit observer, once, after
+  // the production decision is complete and unchanged. Audit-only.
+  // §11 — what the function actually returns after the repair.
+  const selected = bestViable ?? best;
+
+  if (candidateObserver !== undefined && candidateLedger !== undefined) {
+    candidateObserver({
+      tick: input.time.tick,
+      bandId: band.id,
+      currentPerCapita: round2(input.currentPerCapita),
+      competitionMargin: round2(0.08 - Math.min(0.13, input.sustainedOverCapacity * 0.2)),
+      candidateIdsCollected: candidateIds.length,
+      candidatesEvaluated: candidateLedger.length,
+      candidates: candidateLedger.map((entry) =>
+        best !== undefined && entry.tileId === best.candidateTileId
+          ? { ...entry, isScoreWinner: true }
+          : entry,
+      ),
+      ...(best === undefined ? {} : { winnerTileId: best.candidateTileId }),
+      winnerPassedViability: best?.consideredAsTarget === true,
+      ...(selected === undefined ? {} : { selectedTileId: selected.candidateTileId }),
+      selectedPassedViability: selected?.consideredAsTarget === true,
+      viableRescuedNonViableWinner:
+        bestViable !== undefined && best !== undefined && best.consideredAsTarget !== true,
+    });
+  }
+
+  // §11 — "retain best viable plus best rejected diagnostics". A viable candidate always
+  // wins over a non-viable one regardless of raw score; when none is viable the
+  // best-scoring rejected candidate is still returned so `rejectionReason`,
+  // `suspiciousOpportunityIgnored` and the pressure terms keep working exactly as before.
+  return bestViable ?? best;
 }
 
 function deriveDaughterColonization(
@@ -1032,8 +1251,16 @@ function computeTileYield(
 function collectOpportunityCandidates(
   band: Band,
   cache: TickContextCache | undefined,
-  options?: { readonly includeSideCountryCandidates?: boolean },
+  options?: {
+    readonly includeSideCountryCandidates?: boolean;
+    // CORRECTION-20 §6 — audit-only. Withhold frontier-derived tiles from the OPPORTUNITY
+    // and FISSION path while leaving them readable by every other consumer.
+    readonly hideFrontierDerived?: boolean;
+  },
 ): readonly TileId[] {
+  const hideFrontierDerived = options?.hideFrontierDerived === true;
+  const isFrontierDerived = (tileId: TileId): boolean =>
+    band.knowledge.observedTiles[tileId]?.acquisition === "returned_frontier_exploration";
   const candidates = new Set<TileId>();
   const sideCountryCandidates =
     options?.includeSideCountryCandidates === true ? collectSideCountryOpportunityCandidates(band) : [];
@@ -1061,6 +1288,7 @@ function collectOpportunityCandidates(
 
   return [...new Set<TileId>([...sideCountryCandidates, ...candidates])]
     .filter((tileId) => tileId !== band.position)
+    .filter((tileId) => !hideFrontierDerived || !isFrontierDerived(tileId))
     .slice(0, MAX_OPPORTUNITY_CANDIDATES);
 }
 

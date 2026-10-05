@@ -1,0 +1,3623 @@
+{
+  "audit": "ITEM-3-FINAL-FREEZE-CERTIFICATION",
+  "tree": "706166892d40189fc56ac7458b9e90a8ffdbddd7",
+  "seed": "audit27:natural:s1",
+  "warmDays": 3600,
+  "stayWarmDays": 180,
+  "summary": {
+    "claims": 12,
+    "failing": 0,
+    "failingIds": [],
+    "vacuous": 0,
+    "vacuousIds": [],
+    "notConstructed": 0,
+    "notConstructedIds": []
+  },
+  "verdicts": {
+    "A1_active_means_full_strength": "ACTIVE_IS_FULL_STRENGTH_CURRENT_EVIDENCE",
+    "A2_cooling_means_non_zero_contribution": "EVERY_COOLING_ROW_STILL_MOVES_BEHAVIOUR",
+    "A3_released_means_retained_with_exactly_zero_contribution": "RELEASED_IS_RETAINED_AND_EXACTLY_INERT",
+    "A4_counts_sum_to_represented_retained_evidence": "COUNTS_PARTITION_THE_REPRESENTED_EVIDENCE",
+    "A5_confidence_keeps_its_distinct_threshold": "SUB_THRESHOLD_RECORD_COUNTS_AS_ACTIVE_AND_ADDS_NOTHING_TO_CONFIDENCE",
+    "A6_day_44640_incident_shape_is_cooling": "INCIDENT_SHAPE_IS_COOLING_NOT_RELEASED",
+    "A7_zero_weight_records_remain_inspectable": "RETAINED_AND_COUNTED_AS_HISTORY",
+    "A8_fresh_reencounter_creates_a_new_event_id": "A_RELEASED_BELIEF_IS_RE_EARNED_NOT_REVIVED",
+    "B1_territorial_field_has_zero_behavioural_readers": "VARYING_THE_FIELD_CHANGES_NO_CURRENT_BEHAVIOUR",
+    "B2_no_removed_coefficient_was_re_homed": "THE_FIELD_ENTERS_NO_ARITHMETIC_OR_CONDITIONAL_EXPRESSION_ANYWHERE",
+    "B3_only_crowding_friction_and_access_create_social_pressure": "ZERO_EVIDENCE_GIVES_ZERO_SOCIAL_PRESSURE_AND_THE_THREE_REAL_AUTHORITIES_REMAIN_LIVE",
+    "B4_no_decision_explanation_reports_the_legacy_term": "NO_REASON_NAMES_TERRITORY_AND_NO_REPORTED_PRESSURE_VARIES_WITH_THE_FIELD"
+  },
+  "claims": {
+    "A1_active_means_full_strength": {
+      "verdict": "ACTIVE_IS_FULL_STRENGTH_CURRENT_EVIDENCE",
+      "vacuous": false,
+      "row": {
+        "age": 0,
+        "phase": "active",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "weight": 1,
+        "confidence": 0.64,
+        "representedRecords": 1,
+        "deltas": {
+          "strangerCaution": 0.36,
+          "sharedUsePressure": 0.22,
+          "rememberedRefusalAvoidance": 0.25,
+          "rememberedCooperationTolerance": 0.02,
+          "kinTolerance": 0,
+          "familiarTolerance": 0.12
+        },
+        "behaviourDelta": 0.97
+      },
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "a full-weight record exists and moves behaviour"
+      }
+    },
+    "A2_cooling_means_non_zero_contribution": {
+      "verdict": "EVERY_COOLING_ROW_STILL_MOVES_BEHAVIOUR",
+      "vacuous": false,
+      "rowsChecked": 24,
+      "sample": [
+        {
+          "age": 4,
+          "weight": 0.89,
+          "phase": "cooling",
+          "delta": 0.85
+        },
+        {
+          "age": 5,
+          "weight": 0.78,
+          "phase": "cooling",
+          "delta": 0.73
+        },
+        {
+          "age": 6,
+          "weight": 0.67,
+          "phase": "cooling",
+          "delta": 0.6
+        },
+        {
+          "age": 7,
+          "weight": 0.56,
+          "phase": "cooling",
+          "delta": 0.5
+        }
+      ],
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "at least one genuinely cooling row exists",
+        "rows": 24
+      }
+    },
+    "A3_released_means_retained_with_exactly_zero_contribution": {
+      "verdict": "RELEASED_IS_RETAINED_AND_EXACTLY_INERT",
+      "vacuous": false,
+      "rowsChecked": 13,
+      "sample": [
+        {
+          "age": 12,
+          "phase": "released_historical",
+          "activeCount": 0,
+          "historicalCount": 1,
+          "weight": 0,
+          "confidence": 0.59,
+          "representedRecords": 1,
+          "deltas": {
+            "strangerCaution": 0,
+            "sharedUsePressure": 0,
+            "rememberedRefusalAvoidance": 0,
+            "rememberedCooperationTolerance": 0,
+            "kinTolerance": 0,
+            "familiarTolerance": 0
+          },
+          "behaviourDelta": 0
+        },
+        {
+          "age": 13,
+          "phase": "released_historical",
+          "activeCount": 0,
+          "historicalCount": 1,
+          "weight": 0,
+          "confidence": 0.59,
+          "representedRecords": 1,
+          "deltas": {
+            "strangerCaution": 0,
+            "sharedUsePressure": 0,
+            "rememberedRefusalAvoidance": 0,
+            "rememberedCooperationTolerance": 0,
+            "kinTolerance": 0,
+            "familiarTolerance": 0
+          },
+          "behaviourDelta": 0
+        },
+        {
+          "age": 14,
+          "phase": "released_historical",
+          "activeCount": 0,
+          "historicalCount": 1,
+          "weight": 0,
+          "confidence": 0.59,
+          "representedRecords": 1,
+          "deltas": {
+            "strangerCaution": 0,
+            "sharedUsePressure": 0,
+            "rememberedRefusalAvoidance": 0,
+            "rememberedCooperationTolerance": 0,
+            "kinTolerance": 0,
+            "familiarTolerance": 0
+          },
+          "behaviourDelta": 0
+        }
+      ],
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "zero-weight rows exist AND the same construction moves behaviour when fresh, so inertness is a measured drop rather than an empty patch"
+      }
+    },
+    "A4_counts_sum_to_represented_retained_evidence": {
+      "verdict": "COUNTS_PARTITION_THE_REPRESENTED_EVIDENCE",
+      "vacuous": false,
+      "result": {
+        "phase": "active",
+        "activeCount": 2,
+        "historicalCount": 1,
+        "weight": 1,
+        "confidence": 0.69,
+        "representedRecords": 3,
+        "deltas": {
+          "strangerCaution": 0.36,
+          "sharedUsePressure": 0.22,
+          "rememberedRefusalAvoidance": 0.25,
+          "rememberedCooperationTolerance": 0.02,
+          "kinTolerance": 0,
+          "familiarTolerance": 0.12
+        },
+        "behaviourDelta": 0.97
+      },
+      "note": "represented = this tile's records inside FRICTION_RECENT_WINDOW_TICKS=48, capped at 6, which is exactly what collectTileFrictionEvidence keeps",
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "three represented records genuinely split into a live part and a released part"
+      }
+    },
+    "A5_confidence_keeps_its_distinct_threshold": {
+      "verdict": "SUB_THRESHOLD_RECORD_COUNTS_AS_ACTIVE_AND_ADDS_NOTHING_TO_CONFIDENCE",
+      "vacuous": false,
+      "subThresholdRow": {
+        "age": 15,
+        "phase": "cooling",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "weight": 0.04,
+        "confidence": 0.59,
+        "representedRecords": 1,
+        "deltas": {
+          "strangerCaution": 0.01,
+          "sharedUsePressure": 0.01,
+          "rememberedRefusalAvoidance": 0,
+          "rememberedCooperationTolerance": 0,
+          "kinTolerance": 0,
+          "familiarTolerance": 0
+        },
+        "behaviourDelta": 0.02
+      },
+      "confidenceWithNoEvidence": 0.59,
+      "confidenceWithSubThresholdEvidence": 0.59,
+      "notConstructed": false,
+      "note": "the 0.05 constant keeps its CORRECTION-31 job — retained records must not prop up the confidence that has to fall before staleness retires the memory. The lifecycle labels no longer borrow it.",
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "the record genuinely moves behaviour while contributing nothing to confidence, which is the separation being certified"
+      }
+    },
+    "A6_day_44640_incident_shape_is_cooling": {
+      "verdict": "INCIDENT_SHAPE_IS_COOLING_NOT_RELEASED",
+      "vacuous": false,
+      "row": {
+        "age": 15,
+        "phase": "cooling",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "weight": 0.04,
+        "confidence": 0.59,
+        "representedRecords": 1,
+        "deltas": {
+          "strangerCaution": 0.01,
+          "sharedUsePressure": 0.01,
+          "rememberedRefusalAvoidance": 0,
+          "rememberedCooperationTolerance": 0,
+          "kinTolerance": 0,
+          "familiarTolerance": 0
+        },
+        "behaviourDelta": 0.02
+      },
+      "underTheParentRule": "released_historical, activeEvidenceCount 0, historicalEvidenceCount 1",
+      "behaviourUnchanged": "the six-scalar delta is the SAME quantity in both trees; only the label moved. Cross-tree proof: cross-tree-release-preservation.json",
+      "notConstructed": false,
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "a record at exactly the incident's weight exists and still moves behaviour"
+      }
+    },
+    "A7_zero_weight_records_remain_inspectable": {
+      "verdict": "RETAINED_AND_COUNTED_AS_HISTORY",
+      "vacuous": false,
+      "row": {
+        "age": 12,
+        "phase": "released_historical",
+        "activeCount": 0,
+        "historicalCount": 1,
+        "weight": 0,
+        "confidence": 0.59,
+        "representedRecords": 1,
+        "deltas": {
+          "strangerCaution": 0,
+          "sharedUsePressure": 0,
+          "rememberedRefusalAvoidance": 0,
+          "rememberedCooperationTolerance": 0,
+          "kinTolerance": 0,
+          "familiarTolerance": 0
+        },
+        "behaviourDelta": 0
+      },
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "the record is genuinely still represented while contributing nothing"
+      }
+    },
+    "A8_fresh_reencounter_creates_a_new_event_id": {
+      "verdict": "A_RELEASED_BELIEF_IS_RE_EARNED_NOT_REVIVED",
+      "vacuous": false,
+      "releasedOnly": {
+        "phase": "released_historical",
+        "activeCount": 0,
+        "historicalCount": 1,
+        "weight": 0,
+        "confidence": 0.59,
+        "representedRecords": 1,
+        "deltas": {
+          "strangerCaution": 0,
+          "sharedUsePressure": 0,
+          "rememberedRefusalAvoidance": 0,
+          "rememberedCooperationTolerance": 0,
+          "kinTolerance": 0,
+          "familiarTolerance": 0
+        },
+        "behaviourDelta": 0
+      },
+      "releasedPlusFresh": {
+        "phase": "active",
+        "activeCount": 1,
+        "historicalCount": 1,
+        "weight": 1,
+        "confidence": 0.64,
+        "representedRecords": 2,
+        "deltas": {
+          "strangerCaution": 0.36,
+          "sharedUsePressure": 0.22,
+          "rememberedRefusalAvoidance": 0.25,
+          "rememberedCooperationTolerance": 0.02,
+          "kinTolerance": 0,
+          "familiarTolerance": 0.12
+        },
+        "behaviourDelta": 0.97
+      },
+      "eventIds": [
+        "c36:20:old",
+        "c36:0:fresh"
+      ],
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "the old record alone moves nothing and the pair moves something, so the new episode is what counts"
+      }
+    },
+    "B1_territorial_field_has_zero_behavioural_readers": {
+      "verdict": "VARYING_THE_FIELD_CHANGES_NO_CURRENT_BEHAVIOUR",
+      "vacuous": false,
+      "bandsMeasured": 18,
+      "bandsMoved": 0,
+      "movedBands": [],
+      "valuesCompared": [
+        0,
+        0.12,
+        0.8
+      ],
+      "quantitiesCompared": [
+        "mobilityPressure",
+        "netMovePressure",
+        "selected action",
+        "target",
+        "selected score",
+        "deliberationBreadth",
+        "candidate set",
+        "every reason's reported pressure",
+        "reason types"
+      ],
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "the bands carry real non-zero mobility pressure from other sources, so 'unchanged' is not a comparison of zeros",
+        "sampleMobilityPressure": 0.9
+      }
+    },
+    "B2_no_removed_coefficient_was_re_homed": {
+      "verdict": "THE_FIELD_ENTERS_NO_ARITHMETIC_OR_CONDITIONAL_EXPRESSION_ANYWHERE",
+      "vacuous": false,
+      "filesScanned": [
+        "src/sim/agents/pressure.ts",
+        "src/sim/rules/mobilityIntent.ts",
+        "src/sim/rules/bandDecision.ts",
+        "src/sim/agents/campMovement.ts",
+        "src/sim/runner/simRunner.ts",
+        "src/sim/agents/spawn.ts",
+        "src/sim/agents/demography.ts"
+      ],
+      "arithmeticOrConditionalUses": [],
+      "survivingSitesAndTheirKinds": [
+        {
+          "site": "src/sim/rules/bandDecision.ts:5225",
+          "kind": "record copy or declaration",
+          "line": "territorialPressure: band.territorialPressure,"
+        },
+        {
+          "site": "src/sim/agents/campMovement.ts:1708",
+          "kind": "record copy or declaration",
+          "line": "territorialPressure: band.territorialPressure,"
+        },
+        {
+          "site": "src/sim/runner/simRunner.ts:331",
+          "kind": "record copy or declaration",
+          "line": "readonly territorialPressure: Band[\"territorialPressure\"];"
+        },
+        {
+          "site": "src/sim/runner/simRunner.ts:480",
+          "kind": "record copy or declaration",
+          "line": "territorialPressure: band.territorialPressure,"
+        },
+        {
+          "site": "src/sim/agents/spawn.ts:922",
+          "kind": "constant writer",
+          "line": "territorialPressure: 0.12,"
+        },
+        {
+          "site": "src/sim/agents/spawn.ts:1266",
+          "kind": "constant writer",
+          "line": "territorialPressure: 0.08,"
+        },
+        {
+          "site": "src/sim/agents/demography.ts:1008",
+          "kind": "daughter writer",
+          "line": "territorialPressure: clamp01(parent.territorialPressure * 0.72 + 0.04),"
+        }
+      ],
+      "removedWeights": {
+        "pressure.ts": 0.08,
+        "mobilityIntent.ts": 0.12,
+        "bandDecision.ts": 0.14
+      },
+      "crowdingDecisionCostWeightUntouched": "CROWDING_DECISION_COST_WEIGHT = 0.96, unchanged since CORRECTION-32",
+      "instrumentCorrection": "the first form of this check tested for any non-comment mention and flagged the inert DecisionContextSnapshot record copy at bandDecision.ts:5225. A false UNEXPECTED is as damaging as a false pass, so the check now distinguishes a property copy from an arithmetic use, and enumerates the surviving sites with their kinds instead of merely counting them.",
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "the scan genuinely found the field's surviving sites, so 'no arithmetic use' is a statement about a field the scanner can see",
+        "survivingSites": 7
+      }
+    },
+    "B3_only_crowding_friction_and_access_create_social_pressure": {
+      "verdict": "ZERO_EVIDENCE_GIVES_ZERO_SOCIAL_PRESSURE_AND_THE_THREE_REAL_AUTHORITIES_REMAIN_LIVE",
+      "vacuous": false,
+      "withNoSocialEvidence": {
+        "phase": "none",
+        "activeCount": 0,
+        "historicalCount": 0,
+        "weight": 0,
+        "confidence": 0.59,
+        "representedRecords": 0,
+        "deltas": {
+          "strangerCaution": 0,
+          "sharedUsePressure": 0,
+          "rememberedRefusalAvoidance": 0,
+          "rememberedCooperationTolerance": 0,
+          "kinTolerance": 0,
+          "familiarTolerance": 0
+        },
+        "behaviourDelta": 0
+      },
+      "withFreshFriction": {
+        "phase": "active",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "weight": 1,
+        "confidence": 0.64,
+        "representedRecords": 1,
+        "deltas": {
+          "strangerCaution": 0.36,
+          "sharedUsePressure": 0.22,
+          "rememberedRefusalAvoidance": 0.25,
+          "rememberedCooperationTolerance": 0.02,
+          "kinTolerance": 0,
+          "familiarTolerance": 0.12
+        },
+        "behaviourDelta": 0.97
+      },
+      "physicalCrowdingWhenANeighbourStandsHere": 0.18,
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "both surviving authorities genuinely fire, so the zero for the removed one is specific"
+      }
+    },
+    "B4_no_decision_explanation_reports_the_legacy_term": {
+      "verdict": "NO_REASON_NAMES_TERRITORY_AND_NO_REPORTED_PRESSURE_VARIES_WITH_THE_FIELD",
+      "vacuous": false,
+      "distinctReasonTypesObserved": [
+        "biome_mismatch",
+        "camp_movement_response_selected",
+        "confluence_attractor",
+        "corridor_following",
+        "current_marginal_return_declined",
+        "daughter_dispersal_pressure",
+        "discovered_ford",
+        "dry_refuge_pull",
+        "environmental_risk",
+        "familiar_corridor",
+        "flood_season_crossing_risk",
+        "followed_river_corridor",
+        "food_scarcity",
+        "food_stress",
+        "frontier_probe",
+        "intent_continuation",
+        "known_site_sufficient",
+        "late_dry_refuge_mode",
+        "local_resource_pressure",
+        "logistical_probe_selected",
+        "loss_of_fallback_security",
+        "low_confidence_memory",
+        "low_mobility_pressure",
+        "low_pressure_stay",
+        "mobility_pressure",
+        "pressure_overcame_attachment",
+        "recovery_opportunity",
+        "remembered_good_place",
+        "remembered_risky_place",
+        "repeated_return",
+        "repeated_use_depletion",
+        "return_to_known_good_area",
+        "river_corridor_prospect_detected",
+        "river_crossing_cost",
+        "safe_frontier_pull",
+        "scout_before_relocation",
+        "seek_better_water",
+        "water_refuge_profile_detected",
+        "water_stress",
+        "wet_season_dispersal_mode"
+      ],
+      "territorialReasonEmitted": false,
+      "anyReportedPressureVariesWithTheField": false,
+      "vocabularyNote": "rules/types.ts:1291 declares a `territorial_pressure` reason type. It has ZERO producers anywhere in src/ — grep finds only the declaration. A THIRD inert territorial name, recorded so a future system cannot wire it up without a lived writer.",
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "a genuinely varied set of reason types was observed",
+        "distinct": 40
+      }
+    }
+  },
+  "weightSweep": [
+    {
+      "age": 0,
+      "direct": {
+        "phase": "active",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "weight": 1,
+        "confidence": 0.64,
+        "representedRecords": 1,
+        "deltas": {
+          "strangerCaution": 0.36,
+          "sharedUsePressure": 0.22,
+          "rememberedRefusalAvoidance": 0.25,
+          "rememberedCooperationTolerance": 0.02,
+          "kinTolerance": 0,
+          "familiarTolerance": 0.12
+        },
+        "behaviourDelta": 0.97
+      },
+      "reported": {
+        "phase": "cooling",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "weight": 0.56,
+        "confidence": 0.64,
+        "representedRecords": 1,
+        "deltas": {
+          "strangerCaution": 0.21,
+          "sharedUsePressure": 0.16,
+          "rememberedRefusalAvoidance": 0.12,
+          "rememberedCooperationTolerance": 0.01,
+          "kinTolerance": 0,
+          "familiarTolerance": 0.07
+        },
+        "behaviourDelta": 0.57
+      }
+    },
+    {
+      "age": 1,
+      "direct": {
+        "phase": "active",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "weight": 1,
+        "confidence": 0.64,
+        "representedRecords": 1,
+        "deltas": {
+          "strangerCaution": 0.36,
+          "sharedUsePressure": 0.22,
+          "rememberedRefusalAvoidance": 0.25,
+          "rememberedCooperationTolerance": 0.02,
+          "kinTolerance": 0,
+          "familiarTolerance": 0.12
+        },
+        "behaviourDelta": 0.97
+      },
+      "reported": {
+        "phase": "cooling",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "weight": 0.56,
+        "confidence": 0.64,
+        "representedRecords": 1,
+        "deltas": {
+          "strangerCaution": 0.21,
+          "sharedUsePressure": 0.16,
+          "rememberedRefusalAvoidance": 0.12,
+          "rememberedCooperationTolerance": 0.01,
+          "kinTolerance": 0,
+          "familiarTolerance": 0.07
+        },
+        "behaviourDelta": 0.57
+      }
+    },
+    {
+      "age": 2,
+      "direct": {
+        "phase": "active",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "weight": 1,
+        "confidence": 0.64,
+        "representedRecords": 1,
+        "deltas": {
+          "strangerCaution": 0.36,
+          "sharedUsePressure": 0.22,
+          "rememberedRefusalAvoidance": 0.25,
+          "rememberedCooperationTolerance": 0.02,
+          "kinTolerance": 0,
+          "familiarTolerance": 0.12
+        },
+        "behaviourDelta": 0.97
+      },
+      "reported": {
+        "phase": "cooling",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "weight": 0.56,
+        "confidence": 0.64,
+        "representedRecords": 1,
+        "deltas": {
+          "strangerCaution": 0.21,
+          "sharedUsePressure": 0.16,
+          "rememberedRefusalAvoidance": 0.12,
+          "rememberedCooperationTolerance": 0.01,
+          "kinTolerance": 0,
+          "familiarTolerance": 0.07
+        },
+        "behaviourDelta": 0.57
+      }
+    },
+    {
+      "age": 3,
+      "direct": {
+        "phase": "active",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "weight": 1,
+        "confidence": 0.64,
+        "representedRecords": 1,
+        "deltas": {
+          "strangerCaution": 0.36,
+          "sharedUsePressure": 0.22,
+          "rememberedRefusalAvoidance": 0.25,
+          "rememberedCooperationTolerance": 0.02,
+          "kinTolerance": 0,
+          "familiarTolerance": 0.12
+        },
+        "behaviourDelta": 0.97
+      },
+      "reported": {
+        "phase": "cooling",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "weight": 0.56,
+        "confidence": 0.64,
+        "representedRecords": 1,
+        "deltas": {
+          "strangerCaution": 0.21,
+          "sharedUsePressure": 0.16,
+          "rememberedRefusalAvoidance": 0.12,
+          "rememberedCooperationTolerance": 0.01,
+          "kinTolerance": 0,
+          "familiarTolerance": 0.07
+        },
+        "behaviourDelta": 0.57
+      }
+    },
+    {
+      "age": 4,
+      "direct": {
+        "phase": "cooling",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "weight": 0.89,
+        "confidence": 0.64,
+        "representedRecords": 1,
+        "deltas": {
+          "strangerCaution": 0.31,
+          "sharedUsePressure": 0.2,
+          "rememberedRefusalAvoidance": 0.21,
+          "rememberedCooperationTolerance": 0.02,
+          "kinTolerance": 0,
+          "familiarTolerance": 0.11
+        },
+        "behaviourDelta": 0.85
+      },
+      "reported": {
+        "phase": "cooling",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "weight": 0.52,
+        "confidence": 0.64,
+        "representedRecords": 1,
+        "deltas": {
+          "strangerCaution": 0.19,
+          "sharedUsePressure": 0.15,
+          "rememberedRefusalAvoidance": 0.11,
+          "rememberedCooperationTolerance": 0.01,
+          "kinTolerance": 0,
+          "familiarTolerance": 0.06
+        },
+        "behaviourDelta": 0.52
+      }
+    },
+    {
+      "age": 5,
+      "direct": {
+        "phase": "cooling",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "weight": 0.78,
+        "confidence": 0.64,
+        "representedRecords": 1,
+        "deltas": {
+          "strangerCaution": 0.27,
+          "sharedUsePressure": 0.17,
+          "rememberedRefusalAvoidance": 0.18,
+          "rememberedCooperationTolerance": 0.02,
+          "kinTolerance": 0,
+          "familiarTolerance": 0.09
+        },
+        "behaviourDelta": 0.73
+      },
+      "reported": {
+        "phase": "cooling",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "weight": 0.47,
+        "confidence": 0.64,
+        "representedRecords": 1,
+        "deltas": {
+          "strangerCaution": 0.17,
+          "sharedUsePressure": 0.13,
+          "rememberedRefusalAvoidance": 0.1,
+          "rememberedCooperationTolerance": 0.01,
+          "kinTolerance": 0,
+          "familiarTolerance": 0.06
+        },
+        "behaviourDelta": 0.47
+      }
+    },
+    {
+      "age": 6,
+      "direct": {
+        "phase": "cooling",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "weight": 0.67,
+        "confidence": 0.64,
+        "representedRecords": 1,
+        "deltas": {
+          "strangerCaution": 0.22,
+          "sharedUsePressure": 0.15,
+          "rememberedRefusalAvoidance": 0.14,
+          "rememberedCooperationTolerance": 0.01,
+          "kinTolerance": 0,
+          "familiarTolerance": 0.08
+        },
+        "behaviourDelta": 0.6
+      },
+      "reported": {
+        "phase": "cooling",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "weight": 0.43,
+        "confidence": 0.64,
+        "representedRecords": 1,
+        "deltas": {
+          "strangerCaution": 0.15,
+          "sharedUsePressure": 0.12,
+          "rememberedRefusalAvoidance": 0.08,
+          "rememberedCooperationTolerance": 0.01,
+          "kinTolerance": 0,
+          "familiarTolerance": 0.05
+        },
+        "behaviourDelta": 0.41
+      }
+    },
+    {
+      "age": 7,
+      "direct": {
+        "phase": "cooling",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "weight": 0.56,
+        "confidence": 0.64,
+        "representedRecords": 1,
+        "deltas": {
+          "strangerCaution": 0.18,
+          "sharedUsePressure": 0.13,
+          "rememberedRefusalAvoidance": 0.11,
+          "rememberedCooperationTolerance": 0.01,
+          "kinTolerance": 0,
+          "familiarTolerance": 0.07
+        },
+        "behaviourDelta": 0.5
+      },
+      "reported": {
+        "phase": "cooling",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "weight": 0.39,
+        "confidence": 0.64,
+        "representedRecords": 1,
+        "deltas": {
+          "strangerCaution": 0.14,
+          "sharedUsePressure": 0.11,
+          "rememberedRefusalAvoidance": 0.07,
+          "rememberedCooperationTolerance": 0.01,
+          "kinTolerance": 0,
+          "familiarTolerance": 0.05
+        },
+        "behaviourDelta": 0.38
+      }
+    },
+    {
+      "age": 8,
+      "direct": {
+        "phase": "cooling",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "weight": 0.44,
+        "confidence": 0.64,
+        "representedRecords": 1,
+        "deltas": {
+          "strangerCaution": 0.14,
+          "sharedUsePressure": 0.1,
+          "rememberedRefusalAvoidance": 0.08,
+          "rememberedCooperationTolerance": 0.01,
+          "kinTolerance": 0,
+          "familiarTolerance": 0.05
+        },
+        "behaviourDelta": 0.38
+      },
+      "reported": {
+        "phase": "cooling",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "weight": 0.34,
+        "confidence": 0.64,
+        "representedRecords": 1,
+        "deltas": {
+          "strangerCaution": 0.12,
+          "sharedUsePressure": 0.1,
+          "rememberedRefusalAvoidance": 0.06,
+          "rememberedCooperationTolerance": 0.01,
+          "kinTolerance": 0,
+          "familiarTolerance": 0.04
+        },
+        "behaviourDelta": 0.33
+      }
+    },
+    {
+      "age": 9,
+      "direct": {
+        "phase": "cooling",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "weight": 0.33,
+        "confidence": 0.64,
+        "representedRecords": 1,
+        "deltas": {
+          "strangerCaution": 0.1,
+          "sharedUsePressure": 0.08,
+          "rememberedRefusalAvoidance": 0.06,
+          "rememberedCooperationTolerance": 0.01,
+          "kinTolerance": 0,
+          "familiarTolerance": 0.04
+        },
+        "behaviourDelta": 0.29
+      },
+      "reported": {
+        "phase": "cooling",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "weight": 0.3,
+        "confidence": 0.64,
+        "representedRecords": 1,
+        "deltas": {
+          "strangerCaution": 0.1,
+          "sharedUsePressure": 0.09,
+          "rememberedRefusalAvoidance": 0.05,
+          "rememberedCooperationTolerance": 0.01,
+          "kinTolerance": 0,
+          "familiarTolerance": 0.04
+        },
+        "behaviourDelta": 0.29
+      }
+    },
+    {
+      "age": 10,
+      "direct": {
+        "phase": "cooling",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "weight": 0.22,
+        "confidence": 0.64,
+        "representedRecords": 1,
+        "deltas": {
+          "strangerCaution": 0.06,
+          "sharedUsePressure": 0.05,
+          "rememberedRefusalAvoidance": 0.03,
+          "rememberedCooperationTolerance": 0.01,
+          "kinTolerance": 0,
+          "familiarTolerance": 0.03
+        },
+        "behaviourDelta": 0.18
+      },
+      "reported": {
+        "phase": "cooling",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "weight": 0.26,
+        "confidence": 0.64,
+        "representedRecords": 1,
+        "deltas": {
+          "strangerCaution": 0.09,
+          "sharedUsePressure": 0.08,
+          "rememberedRefusalAvoidance": 0.04,
+          "rememberedCooperationTolerance": 0.01,
+          "kinTolerance": 0,
+          "familiarTolerance": 0.03
+        },
+        "behaviourDelta": 0.25
+      }
+    },
+    {
+      "age": 11,
+      "direct": {
+        "phase": "cooling",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "weight": 0.11,
+        "confidence": 0.64,
+        "representedRecords": 1,
+        "deltas": {
+          "strangerCaution": 0.03,
+          "sharedUsePressure": 0.03,
+          "rememberedRefusalAvoidance": 0.01,
+          "rememberedCooperationTolerance": 0,
+          "kinTolerance": 0,
+          "familiarTolerance": 0.01
+        },
+        "behaviourDelta": 0.08
+      },
+      "reported": {
+        "phase": "cooling",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "weight": 0.22,
+        "confidence": 0.64,
+        "representedRecords": 1,
+        "deltas": {
+          "strangerCaution": 0.07,
+          "sharedUsePressure": 0.06,
+          "rememberedRefusalAvoidance": 0.03,
+          "rememberedCooperationTolerance": 0.01,
+          "kinTolerance": 0,
+          "familiarTolerance": 0.03
+        },
+        "behaviourDelta": 0.2
+      }
+    },
+    {
+      "age": 12,
+      "direct": {
+        "phase": "released_historical",
+        "activeCount": 0,
+        "historicalCount": 1,
+        "weight": 0,
+        "confidence": 0.59,
+        "representedRecords": 1,
+        "deltas": {
+          "strangerCaution": 0,
+          "sharedUsePressure": 0,
+          "rememberedRefusalAvoidance": 0,
+          "rememberedCooperationTolerance": 0,
+          "kinTolerance": 0,
+          "familiarTolerance": 0
+        },
+        "behaviourDelta": 0
+      },
+      "reported": {
+        "phase": "cooling",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "weight": 0.17,
+        "confidence": 0.64,
+        "representedRecords": 1,
+        "deltas": {
+          "strangerCaution": 0.06,
+          "sharedUsePressure": 0.05,
+          "rememberedRefusalAvoidance": 0.02,
+          "rememberedCooperationTolerance": 0,
+          "kinTolerance": 0,
+          "familiarTolerance": 0.02
+        },
+        "behaviourDelta": 0.15
+      }
+    },
+    {
+      "age": 13,
+      "direct": {
+        "phase": "released_historical",
+        "activeCount": 0,
+        "historicalCount": 1,
+        "weight": 0,
+        "confidence": 0.59,
+        "representedRecords": 1,
+        "deltas": {
+          "strangerCaution": 0,
+          "sharedUsePressure": 0,
+          "rememberedRefusalAvoidance": 0,
+          "rememberedCooperationTolerance": 0,
+          "kinTolerance": 0,
+          "familiarTolerance": 0
+        },
+        "behaviourDelta": 0
+      },
+      "reported": {
+        "phase": "cooling",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "weight": 0.13,
+        "confidence": 0.64,
+        "representedRecords": 1,
+        "deltas": {
+          "strangerCaution": 0.04,
+          "sharedUsePressure": 0.04,
+          "rememberedRefusalAvoidance": 0.02,
+          "rememberedCooperationTolerance": 0,
+          "kinTolerance": 0,
+          "familiarTolerance": 0.02
+        },
+        "behaviourDelta": 0.12
+      }
+    },
+    {
+      "age": 14,
+      "direct": {
+        "phase": "released_historical",
+        "activeCount": 0,
+        "historicalCount": 1,
+        "weight": 0,
+        "confidence": 0.59,
+        "representedRecords": 1,
+        "deltas": {
+          "strangerCaution": 0,
+          "sharedUsePressure": 0,
+          "rememberedRefusalAvoidance": 0,
+          "rememberedCooperationTolerance": 0,
+          "kinTolerance": 0,
+          "familiarTolerance": 0
+        },
+        "behaviourDelta": 0
+      },
+      "reported": {
+        "phase": "cooling",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "weight": 0.09,
+        "confidence": 0.64,
+        "representedRecords": 1,
+        "deltas": {
+          "strangerCaution": 0.03,
+          "sharedUsePressure": 0.03,
+          "rememberedRefusalAvoidance": 0.01,
+          "rememberedCooperationTolerance": 0,
+          "kinTolerance": 0,
+          "familiarTolerance": 0.01
+        },
+        "behaviourDelta": 0.08
+      }
+    },
+    {
+      "age": 15,
+      "direct": {
+        "phase": "released_historical",
+        "activeCount": 0,
+        "historicalCount": 1,
+        "weight": 0,
+        "confidence": 0.59,
+        "representedRecords": 1,
+        "deltas": {
+          "strangerCaution": 0,
+          "sharedUsePressure": 0,
+          "rememberedRefusalAvoidance": 0,
+          "rememberedCooperationTolerance": 0,
+          "kinTolerance": 0,
+          "familiarTolerance": 0
+        },
+        "behaviourDelta": 0
+      },
+      "reported": {
+        "phase": "cooling",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "weight": 0.04,
+        "confidence": 0.59,
+        "representedRecords": 1,
+        "deltas": {
+          "strangerCaution": 0.01,
+          "sharedUsePressure": 0.01,
+          "rememberedRefusalAvoidance": 0,
+          "rememberedCooperationTolerance": 0,
+          "kinTolerance": 0,
+          "familiarTolerance": 0
+        },
+        "behaviourDelta": 0.02
+      }
+    },
+    {
+      "age": 16,
+      "direct": {
+        "phase": "released_historical",
+        "activeCount": 0,
+        "historicalCount": 1,
+        "weight": 0,
+        "confidence": 0.59,
+        "representedRecords": 1,
+        "deltas": {
+          "strangerCaution": 0,
+          "sharedUsePressure": 0,
+          "rememberedRefusalAvoidance": 0,
+          "rememberedCooperationTolerance": 0,
+          "kinTolerance": 0,
+          "familiarTolerance": 0
+        },
+        "behaviourDelta": 0
+      },
+      "reported": {
+        "phase": "released_historical",
+        "activeCount": 0,
+        "historicalCount": 1,
+        "weight": 0,
+        "confidence": 0.59,
+        "representedRecords": 1,
+        "deltas": {
+          "strangerCaution": 0,
+          "sharedUsePressure": 0,
+          "rememberedRefusalAvoidance": 0,
+          "rememberedCooperationTolerance": 0,
+          "kinTolerance": 0,
+          "familiarTolerance": 0
+        },
+        "behaviourDelta": 0
+      }
+    },
+    {
+      "age": 17,
+      "direct": {
+        "phase": "released_historical",
+        "activeCount": 0,
+        "historicalCount": 1,
+        "weight": 0,
+        "confidence": 0.59,
+        "representedRecords": 1,
+        "deltas": {
+          "strangerCaution": 0,
+          "sharedUsePressure": 0,
+          "rememberedRefusalAvoidance": 0,
+          "rememberedCooperationTolerance": 0,
+          "kinTolerance": 0,
+          "familiarTolerance": 0
+        },
+        "behaviourDelta": 0
+      },
+      "reported": {
+        "phase": "released_historical",
+        "activeCount": 0,
+        "historicalCount": 1,
+        "weight": 0,
+        "confidence": 0.59,
+        "representedRecords": 1,
+        "deltas": {
+          "strangerCaution": 0,
+          "sharedUsePressure": 0,
+          "rememberedRefusalAvoidance": 0,
+          "rememberedCooperationTolerance": 0,
+          "kinTolerance": 0,
+          "familiarTolerance": 0
+        },
+        "behaviourDelta": 0
+      }
+    },
+    {
+      "age": 18,
+      "direct": {
+        "phase": "released_historical",
+        "activeCount": 0,
+        "historicalCount": 1,
+        "weight": 0,
+        "confidence": 0.59,
+        "representedRecords": 1,
+        "deltas": {
+          "strangerCaution": 0,
+          "sharedUsePressure": 0,
+          "rememberedRefusalAvoidance": 0,
+          "rememberedCooperationTolerance": 0,
+          "kinTolerance": 0,
+          "familiarTolerance": 0
+        },
+        "behaviourDelta": 0
+      },
+      "reported": {
+        "phase": "released_historical",
+        "activeCount": 0,
+        "historicalCount": 1,
+        "weight": 0,
+        "confidence": 0.59,
+        "representedRecords": 1,
+        "deltas": {
+          "strangerCaution": 0,
+          "sharedUsePressure": 0,
+          "rememberedRefusalAvoidance": 0,
+          "rememberedCooperationTolerance": 0,
+          "kinTolerance": 0,
+          "familiarTolerance": 0
+        },
+        "behaviourDelta": 0
+      }
+    },
+    {
+      "age": 19,
+      "direct": {
+        "phase": "released_historical",
+        "activeCount": 0,
+        "historicalCount": 1,
+        "weight": 0,
+        "confidence": 0.59,
+        "representedRecords": 1,
+        "deltas": {
+          "strangerCaution": 0,
+          "sharedUsePressure": 0,
+          "rememberedRefusalAvoidance": 0,
+          "rememberedCooperationTolerance": 0,
+          "kinTolerance": 0,
+          "familiarTolerance": 0
+        },
+        "behaviourDelta": 0
+      },
+      "reported": {
+        "phase": "released_historical",
+        "activeCount": 0,
+        "historicalCount": 1,
+        "weight": 0,
+        "confidence": 0.59,
+        "representedRecords": 1,
+        "deltas": {
+          "strangerCaution": 0,
+          "sharedUsePressure": 0,
+          "rememberedRefusalAvoidance": 0,
+          "rememberedCooperationTolerance": 0,
+          "kinTolerance": 0,
+          "familiarTolerance": 0
+        },
+        "behaviourDelta": 0
+      }
+    },
+    {
+      "age": 20,
+      "direct": {
+        "phase": "released_historical",
+        "activeCount": 0,
+        "historicalCount": 1,
+        "weight": 0,
+        "confidence": 0.59,
+        "representedRecords": 1,
+        "deltas": {
+          "strangerCaution": 0,
+          "sharedUsePressure": 0,
+          "rememberedRefusalAvoidance": 0,
+          "rememberedCooperationTolerance": 0,
+          "kinTolerance": 0,
+          "familiarTolerance": 0
+        },
+        "behaviourDelta": 0
+      },
+      "reported": {
+        "phase": "released_historical",
+        "activeCount": 0,
+        "historicalCount": 1,
+        "weight": 0,
+        "confidence": 0.59,
+        "representedRecords": 1,
+        "deltas": {
+          "strangerCaution": 0,
+          "sharedUsePressure": 0,
+          "rememberedRefusalAvoidance": 0,
+          "rememberedCooperationTolerance": 0,
+          "kinTolerance": 0,
+          "familiarTolerance": 0
+        },
+        "behaviourDelta": 0
+      }
+    },
+    {
+      "age": 21,
+      "direct": {
+        "phase": "released_historical",
+        "activeCount": 0,
+        "historicalCount": 1,
+        "weight": 0,
+        "confidence": 0.59,
+        "representedRecords": 1,
+        "deltas": {
+          "strangerCaution": 0,
+          "sharedUsePressure": 0,
+          "rememberedRefusalAvoidance": 0,
+          "rememberedCooperationTolerance": 0,
+          "kinTolerance": 0,
+          "familiarTolerance": 0
+        },
+        "behaviourDelta": 0
+      },
+      "reported": {
+        "phase": "released_historical",
+        "activeCount": 0,
+        "historicalCount": 1,
+        "weight": 0,
+        "confidence": 0.59,
+        "representedRecords": 1,
+        "deltas": {
+          "strangerCaution": 0,
+          "sharedUsePressure": 0,
+          "rememberedRefusalAvoidance": 0,
+          "rememberedCooperationTolerance": 0,
+          "kinTolerance": 0,
+          "familiarTolerance": 0
+        },
+        "behaviourDelta": 0
+      }
+    },
+    {
+      "age": 22,
+      "direct": {
+        "phase": "released_historical",
+        "activeCount": 0,
+        "historicalCount": 1,
+        "weight": 0,
+        "confidence": 0.59,
+        "representedRecords": 1,
+        "deltas": {
+          "strangerCaution": 0,
+          "sharedUsePressure": 0,
+          "rememberedRefusalAvoidance": 0,
+          "rememberedCooperationTolerance": 0,
+          "kinTolerance": 0,
+          "familiarTolerance": 0
+        },
+        "behaviourDelta": 0
+      },
+      "reported": {
+        "phase": "released_historical",
+        "activeCount": 0,
+        "historicalCount": 1,
+        "weight": 0,
+        "confidence": 0.59,
+        "representedRecords": 1,
+        "deltas": {
+          "strangerCaution": 0,
+          "sharedUsePressure": 0,
+          "rememberedRefusalAvoidance": 0,
+          "rememberedCooperationTolerance": 0,
+          "kinTolerance": 0,
+          "familiarTolerance": 0
+        },
+        "behaviourDelta": 0
+      }
+    },
+    {
+      "age": 23,
+      "direct": {
+        "phase": "released_historical",
+        "activeCount": 0,
+        "historicalCount": 1,
+        "weight": 0,
+        "confidence": 0.59,
+        "representedRecords": 1,
+        "deltas": {
+          "strangerCaution": 0,
+          "sharedUsePressure": 0,
+          "rememberedRefusalAvoidance": 0,
+          "rememberedCooperationTolerance": 0,
+          "kinTolerance": 0,
+          "familiarTolerance": 0
+        },
+        "behaviourDelta": 0
+      },
+      "reported": {
+        "phase": "released_historical",
+        "activeCount": 0,
+        "historicalCount": 1,
+        "weight": 0,
+        "confidence": 0.59,
+        "representedRecords": 1,
+        "deltas": {
+          "strangerCaution": 0,
+          "sharedUsePressure": 0,
+          "rememberedRefusalAvoidance": 0,
+          "rememberedCooperationTolerance": 0,
+          "kinTolerance": 0,
+          "familiarTolerance": 0
+        },
+        "behaviourDelta": 0
+      }
+    },
+    {
+      "age": 24,
+      "direct": {
+        "phase": "released_historical",
+        "activeCount": 0,
+        "historicalCount": 1,
+        "weight": 0,
+        "confidence": 0.59,
+        "representedRecords": 1,
+        "deltas": {
+          "strangerCaution": 0,
+          "sharedUsePressure": 0,
+          "rememberedRefusalAvoidance": 0,
+          "rememberedCooperationTolerance": 0,
+          "kinTolerance": 0,
+          "familiarTolerance": 0
+        },
+        "behaviourDelta": 0
+      },
+      "reported": {
+        "phase": "released_historical",
+        "activeCount": 0,
+        "historicalCount": 1,
+        "weight": 0,
+        "confidence": 0.59,
+        "representedRecords": 1,
+        "deltas": {
+          "strangerCaution": 0,
+          "sharedUsePressure": 0,
+          "rememberedRefusalAvoidance": 0,
+          "rememberedCooperationTolerance": 0,
+          "kinTolerance": 0,
+          "familiarTolerance": 0
+        },
+        "behaviourDelta": 0
+      }
+    }
+  ],
+  "territorialArm": {
+    "bandsMeasured": 18,
+    "rows": [
+      {
+        "band": "band:varied-dry-corridor-mid",
+        "rows": [
+          {
+            "territorialPressure": 0,
+            "mobilityPressure": 0.9,
+            "netMovePressure": 1,
+            "action": "move_to_tile",
+            "target": "tile:61:108",
+            "score": 3.48,
+            "deliberationBreadth": 11,
+            "candidates": [
+              "move_to_tile:tile:58:108:0.67",
+              "move_to_tile:tile:59:108:1.39",
+              "move_to_tile:tile:59:109:-0.3",
+              "move_to_tile:tile:60:106:0.05",
+              "move_to_tile:tile:60:109:0.59",
+              "move_to_tile:tile:60:110:-0.45",
+              "move_to_tile:tile:61:108:3.48",
+              "move_to_tile:tile:61:109:0.85",
+              "move_to_tile:tile:62:108:1.48",
+              "resource_scout:tile:61:108:3.17",
+              "stay:-:0.99"
+            ],
+            "reasonPressures": [
+              "primary:seek_better_water=0.9282",
+              "sec7:daughter_dispersal_pressure=0.26",
+              "sec10:mobility_pressure=0.9"
+            ],
+            "reasonTypes": [
+              "current_marginal_return_declined",
+              "daughter_dispersal_pressure",
+              "food_scarcity",
+              "food_stress",
+              "intent_continuation",
+              "loss_of_fallback_security",
+              "mobility_pressure",
+              "recovery_opportunity",
+              "remembered_risky_place",
+              "seek_better_water",
+              "water_refuge_profile_detected",
+              "water_stress",
+              "wet_season_dispersal_mode"
+            ]
+          },
+          {
+            "territorialPressure": 0.12,
+            "mobilityPressure": 0.9,
+            "netMovePressure": 1,
+            "action": "move_to_tile",
+            "target": "tile:61:108",
+            "score": 3.48,
+            "deliberationBreadth": 11,
+            "candidates": [
+              "move_to_tile:tile:58:108:0.67",
+              "move_to_tile:tile:59:108:1.39",
+              "move_to_tile:tile:59:109:-0.3",
+              "move_to_tile:tile:60:106:0.05",
+              "move_to_tile:tile:60:109:0.59",
+              "move_to_tile:tile:60:110:-0.45",
+              "move_to_tile:tile:61:108:3.48",
+              "move_to_tile:tile:61:109:0.85",
+              "move_to_tile:tile:62:108:1.48",
+              "resource_scout:tile:61:108:3.17",
+              "stay:-:0.99"
+            ],
+            "reasonPressures": [
+              "primary:seek_better_water=0.9282",
+              "sec7:daughter_dispersal_pressure=0.26",
+              "sec10:mobility_pressure=0.9"
+            ],
+            "reasonTypes": [
+              "current_marginal_return_declined",
+              "daughter_dispersal_pressure",
+              "food_scarcity",
+              "food_stress",
+              "intent_continuation",
+              "loss_of_fallback_security",
+              "mobility_pressure",
+              "recovery_opportunity",
+              "remembered_risky_place",
+              "seek_better_water",
+              "water_refuge_profile_detected",
+              "water_stress",
+              "wet_season_dispersal_mode"
+            ]
+          },
+          {
+            "territorialPressure": 0.8,
+            "mobilityPressure": 0.9,
+            "netMovePressure": 1,
+            "action": "move_to_tile",
+            "target": "tile:61:108",
+            "score": 3.48,
+            "deliberationBreadth": 11,
+            "candidates": [
+              "move_to_tile:tile:58:108:0.67",
+              "move_to_tile:tile:59:108:1.39",
+              "move_to_tile:tile:59:109:-0.3",
+              "move_to_tile:tile:60:106:0.05",
+              "move_to_tile:tile:60:109:0.59",
+              "move_to_tile:tile:60:110:-0.45",
+              "move_to_tile:tile:61:108:3.48",
+              "move_to_tile:tile:61:109:0.85",
+              "move_to_tile:tile:62:108:1.48",
+              "resource_scout:tile:61:108:3.17",
+              "stay:-:0.99"
+            ],
+            "reasonPressures": [
+              "primary:seek_better_water=0.9282",
+              "sec7:daughter_dispersal_pressure=0.26",
+              "sec10:mobility_pressure=0.9"
+            ],
+            "reasonTypes": [
+              "current_marginal_return_declined",
+              "daughter_dispersal_pressure",
+              "food_scarcity",
+              "food_stress",
+              "intent_continuation",
+              "loss_of_fallback_security",
+              "mobility_pressure",
+              "recovery_opportunity",
+              "remembered_risky_place",
+              "seek_better_water",
+              "water_refuge_profile_detected",
+              "water_stress",
+              "wet_season_dispersal_mode"
+            ]
+          }
+        ]
+      },
+      {
+        "band": "band:varied-dry-corridor-upper",
+        "rows": [
+          {
+            "territorialPressure": 0,
+            "mobilityPressure": 0.91,
+            "netMovePressure": 1,
+            "action": "resource_scout",
+            "target": "tile:64:107",
+            "score": 2.23,
+            "deliberationBreadth": 11,
+            "candidates": [
+              "move_to_tile:tile:61:106:1.86",
+              "move_to_tile:tile:62:105:0.48",
+              "move_to_tile:tile:62:106:1.75",
+              "move_to_tile:tile:63:104:-0.18",
+              "move_to_tile:tile:63:105:0.77",
+              "move_to_tile:tile:64:105:-0.11",
+              "move_to_tile:tile:64:106:1.03",
+              "move_to_tile:tile:64:107:0.4",
+              "move_to_tile:tile:65:106:0.35",
+              "resource_scout:tile:64:107:2.23",
+              "stay:-:0.76"
+            ],
+            "reasonPressures": [],
+            "reasonTypes": [
+              "camp_movement_response_selected",
+              "current_marginal_return_declined",
+              "discovered_ford",
+              "flood_season_crossing_risk",
+              "food_scarcity",
+              "frontier_probe",
+              "intent_continuation",
+              "loss_of_fallback_security",
+              "low_confidence_memory",
+              "river_crossing_cost",
+              "wet_season_dispersal_mode"
+            ]
+          },
+          {
+            "territorialPressure": 0.12,
+            "mobilityPressure": 0.91,
+            "netMovePressure": 1,
+            "action": "resource_scout",
+            "target": "tile:64:107",
+            "score": 2.23,
+            "deliberationBreadth": 11,
+            "candidates": [
+              "move_to_tile:tile:61:106:1.86",
+              "move_to_tile:tile:62:105:0.48",
+              "move_to_tile:tile:62:106:1.75",
+              "move_to_tile:tile:63:104:-0.18",
+              "move_to_tile:tile:63:105:0.77",
+              "move_to_tile:tile:64:105:-0.11",
+              "move_to_tile:tile:64:106:1.03",
+              "move_to_tile:tile:64:107:0.4",
+              "move_to_tile:tile:65:106:0.35",
+              "resource_scout:tile:64:107:2.23",
+              "stay:-:0.76"
+            ],
+            "reasonPressures": [],
+            "reasonTypes": [
+              "camp_movement_response_selected",
+              "current_marginal_return_declined",
+              "discovered_ford",
+              "flood_season_crossing_risk",
+              "food_scarcity",
+              "frontier_probe",
+              "intent_continuation",
+              "loss_of_fallback_security",
+              "low_confidence_memory",
+              "river_crossing_cost",
+              "wet_season_dispersal_mode"
+            ]
+          },
+          {
+            "territorialPressure": 0.8,
+            "mobilityPressure": 0.91,
+            "netMovePressure": 1,
+            "action": "resource_scout",
+            "target": "tile:64:107",
+            "score": 2.23,
+            "deliberationBreadth": 11,
+            "candidates": [
+              "move_to_tile:tile:61:106:1.86",
+              "move_to_tile:tile:62:105:0.48",
+              "move_to_tile:tile:62:106:1.75",
+              "move_to_tile:tile:63:104:-0.18",
+              "move_to_tile:tile:63:105:0.77",
+              "move_to_tile:tile:64:105:-0.11",
+              "move_to_tile:tile:64:106:1.03",
+              "move_to_tile:tile:64:107:0.4",
+              "move_to_tile:tile:65:106:0.35",
+              "resource_scout:tile:64:107:2.23",
+              "stay:-:0.76"
+            ],
+            "reasonPressures": [],
+            "reasonTypes": [
+              "camp_movement_response_selected",
+              "current_marginal_return_declined",
+              "discovered_ford",
+              "flood_season_crossing_risk",
+              "food_scarcity",
+              "frontier_probe",
+              "intent_continuation",
+              "loss_of_fallback_security",
+              "low_confidence_memory",
+              "river_crossing_cost",
+              "wet_season_dispersal_mode"
+            ]
+          }
+        ]
+      },
+      {
+        "band": "band:varied-estuary",
+        "rows": [
+          {
+            "territorialPressure": 0,
+            "mobilityPressure": 0.56,
+            "netMovePressure": 0.4,
+            "action": "move_to_tile",
+            "target": "tile:192:88",
+            "score": 7,
+            "deliberationBreadth": 14,
+            "candidates": [
+              "logistical_probe:tile:191:87:4.86",
+              "move_to_tile:tile:191:88:6.64",
+              "move_to_tile:tile:192:87:5.17",
+              "move_to_tile:tile:192:88:7",
+              "move_to_tile:tile:192:89:4.57",
+              "move_to_tile:tile:193:86:4.76",
+              "move_to_tile:tile:193:87:5.66",
+              "move_to_tile:tile:193:89:4.92",
+              "move_to_tile:tile:194:87:3.91",
+              "move_to_tile:tile:194:88:4.66",
+              "move_to_tile:tile:194:89:3.42",
+              "move_to_tile:tile:195:88:4.09",
+              "resource_scout:tile:194:90:1.8",
+              "stay:-:5.01"
+            ],
+            "reasonPressures": [
+              "sec5:daughter_dispersal_pressure=0.3",
+              "sec8:mobility_pressure=0.56"
+            ],
+            "reasonTypes": [
+              "daughter_dispersal_pressure",
+              "environmental_risk",
+              "food_stress",
+              "intent_continuation",
+              "mobility_pressure",
+              "remembered_good_place",
+              "remembered_risky_place",
+              "repeated_return",
+              "return_to_known_good_area",
+              "safe_frontier_pull"
+            ]
+          },
+          {
+            "territorialPressure": 0.12,
+            "mobilityPressure": 0.56,
+            "netMovePressure": 0.4,
+            "action": "move_to_tile",
+            "target": "tile:192:88",
+            "score": 7,
+            "deliberationBreadth": 14,
+            "candidates": [
+              "logistical_probe:tile:191:87:4.86",
+              "move_to_tile:tile:191:88:6.64",
+              "move_to_tile:tile:192:87:5.17",
+              "move_to_tile:tile:192:88:7",
+              "move_to_tile:tile:192:89:4.57",
+              "move_to_tile:tile:193:86:4.76",
+              "move_to_tile:tile:193:87:5.66",
+              "move_to_tile:tile:193:89:4.92",
+              "move_to_tile:tile:194:87:3.91",
+              "move_to_tile:tile:194:88:4.66",
+              "move_to_tile:tile:194:89:3.42",
+              "move_to_tile:tile:195:88:4.09",
+              "resource_scout:tile:194:90:1.8",
+              "stay:-:5.01"
+            ],
+            "reasonPressures": [
+              "sec5:daughter_dispersal_pressure=0.3",
+              "sec8:mobility_pressure=0.56"
+            ],
+            "reasonTypes": [
+              "daughter_dispersal_pressure",
+              "environmental_risk",
+              "food_stress",
+              "intent_continuation",
+              "mobility_pressure",
+              "remembered_good_place",
+              "remembered_risky_place",
+              "repeated_return",
+              "return_to_known_good_area",
+              "safe_frontier_pull"
+            ]
+          },
+          {
+            "territorialPressure": 0.8,
+            "mobilityPressure": 0.56,
+            "netMovePressure": 0.4,
+            "action": "move_to_tile",
+            "target": "tile:192:88",
+            "score": 7,
+            "deliberationBreadth": 14,
+            "candidates": [
+              "logistical_probe:tile:191:87:4.86",
+              "move_to_tile:tile:191:88:6.64",
+              "move_to_tile:tile:192:87:5.17",
+              "move_to_tile:tile:192:88:7",
+              "move_to_tile:tile:192:89:4.57",
+              "move_to_tile:tile:193:86:4.76",
+              "move_to_tile:tile:193:87:5.66",
+              "move_to_tile:tile:193:89:4.92",
+              "move_to_tile:tile:194:87:3.91",
+              "move_to_tile:tile:194:88:4.66",
+              "move_to_tile:tile:194:89:3.42",
+              "move_to_tile:tile:195:88:4.09",
+              "resource_scout:tile:194:90:1.8",
+              "stay:-:5.01"
+            ],
+            "reasonPressures": [
+              "sec5:daughter_dispersal_pressure=0.3",
+              "sec8:mobility_pressure=0.56"
+            ],
+            "reasonTypes": [
+              "daughter_dispersal_pressure",
+              "environmental_risk",
+              "food_stress",
+              "intent_continuation",
+              "mobility_pressure",
+              "remembered_good_place",
+              "remembered_risky_place",
+              "repeated_return",
+              "return_to_known_good_area",
+              "safe_frontier_pull"
+            ]
+          }
+        ]
+      },
+      {
+        "band": "band:varied-lake-east",
+        "rows": [
+          {
+            "territorialPressure": 0,
+            "mobilityPressure": 0.75,
+            "netMovePressure": 0.66,
+            "action": "logistical_probe",
+            "target": "tile:87:75",
+            "score": 5.63,
+            "deliberationBreadth": 10,
+            "candidates": [
+              "logistical_probe:tile:87:75:5.63",
+              "move_to_tile:tile:86:73:3.85",
+              "move_to_tile:tile:86:76:2.75",
+              "move_to_tile:tile:86:77:2.44",
+              "move_to_tile:tile:87:74:4.13",
+              "move_to_tile:tile:87:75:5.27",
+              "move_to_tile:tile:87:76:2.97",
+              "move_to_tile:tile:88:75:3.39",
+              "resource_scout:tile:86:80:1.66",
+              "stay:-:3.11"
+            ],
+            "reasonPressures": [
+              "sec13:mobility_pressure=0.75",
+              "sec14:pressure_overcame_attachment=0.66"
+            ],
+            "reasonTypes": [
+              "camp_movement_response_selected",
+              "current_marginal_return_declined",
+              "dry_refuge_pull",
+              "familiar_corridor",
+              "food_scarcity",
+              "food_stress",
+              "intent_continuation",
+              "logistical_probe_selected",
+              "loss_of_fallback_security",
+              "mobility_pressure",
+              "pressure_overcame_attachment",
+              "remembered_risky_place",
+              "repeated_return",
+              "river_corridor_prospect_detected",
+              "scout_before_relocation",
+              "water_refuge_profile_detected"
+            ]
+          },
+          {
+            "territorialPressure": 0.12,
+            "mobilityPressure": 0.75,
+            "netMovePressure": 0.66,
+            "action": "logistical_probe",
+            "target": "tile:87:75",
+            "score": 5.63,
+            "deliberationBreadth": 10,
+            "candidates": [
+              "logistical_probe:tile:87:75:5.63",
+              "move_to_tile:tile:86:73:3.85",
+              "move_to_tile:tile:86:76:2.75",
+              "move_to_tile:tile:86:77:2.44",
+              "move_to_tile:tile:87:74:4.13",
+              "move_to_tile:tile:87:75:5.27",
+              "move_to_tile:tile:87:76:2.97",
+              "move_to_tile:tile:88:75:3.39",
+              "resource_scout:tile:86:80:1.66",
+              "stay:-:3.11"
+            ],
+            "reasonPressures": [
+              "sec13:mobility_pressure=0.75",
+              "sec14:pressure_overcame_attachment=0.66"
+            ],
+            "reasonTypes": [
+              "camp_movement_response_selected",
+              "current_marginal_return_declined",
+              "dry_refuge_pull",
+              "familiar_corridor",
+              "food_scarcity",
+              "food_stress",
+              "intent_continuation",
+              "logistical_probe_selected",
+              "loss_of_fallback_security",
+              "mobility_pressure",
+              "pressure_overcame_attachment",
+              "remembered_risky_place",
+              "repeated_return",
+              "river_corridor_prospect_detected",
+              "scout_before_relocation",
+              "water_refuge_profile_detected"
+            ]
+          },
+          {
+            "territorialPressure": 0.8,
+            "mobilityPressure": 0.75,
+            "netMovePressure": 0.66,
+            "action": "logistical_probe",
+            "target": "tile:87:75",
+            "score": 5.63,
+            "deliberationBreadth": 10,
+            "candidates": [
+              "logistical_probe:tile:87:75:5.63",
+              "move_to_tile:tile:86:73:3.85",
+              "move_to_tile:tile:86:76:2.75",
+              "move_to_tile:tile:86:77:2.44",
+              "move_to_tile:tile:87:74:4.13",
+              "move_to_tile:tile:87:75:5.27",
+              "move_to_tile:tile:87:76:2.97",
+              "move_to_tile:tile:88:75:3.39",
+              "resource_scout:tile:86:80:1.66",
+              "stay:-:3.11"
+            ],
+            "reasonPressures": [
+              "sec13:mobility_pressure=0.75",
+              "sec14:pressure_overcame_attachment=0.66"
+            ],
+            "reasonTypes": [
+              "camp_movement_response_selected",
+              "current_marginal_return_declined",
+              "dry_refuge_pull",
+              "familiar_corridor",
+              "food_scarcity",
+              "food_stress",
+              "intent_continuation",
+              "logistical_probe_selected",
+              "loss_of_fallback_security",
+              "mobility_pressure",
+              "pressure_overcame_attachment",
+              "remembered_risky_place",
+              "repeated_return",
+              "river_corridor_prospect_detected",
+              "scout_before_relocation",
+              "water_refuge_profile_detected"
+            ]
+          }
+        ]
+      },
+      {
+        "band": "band:varied-lake-north",
+        "rows": [
+          {
+            "territorialPressure": 0,
+            "mobilityPressure": 0.77,
+            "netMovePressure": 0.67,
+            "action": "move_to_tile",
+            "target": "tile:74:60",
+            "score": 6.88,
+            "deliberationBreadth": 13,
+            "candidates": [
+              "move_to_tile:tile:71:60:2.3",
+              "move_to_tile:tile:72:59:2.87",
+              "move_to_tile:tile:72:60:3.67",
+              "move_to_tile:tile:72:61:2.91",
+              "move_to_tile:tile:73:58:3.26",
+              "move_to_tile:tile:73:59:3.86",
+              "move_to_tile:tile:73:61:3.58",
+              "move_to_tile:tile:74:59:3.8",
+              "move_to_tile:tile:74:60:6.88",
+              "move_to_tile:tile:74:61:3.03",
+              "move_to_tile:tile:75:60:3.92",
+              "resource_scout:tile:76:60:2.95",
+              "stay:-:3.98"
+            ],
+            "reasonPressures": [
+              "sec7:daughter_dispersal_pressure=0.28",
+              "sec10:mobility_pressure=0.77",
+              "sec12:pressure_overcame_attachment=0.3516"
+            ],
+            "reasonTypes": [
+              "camp_movement_response_selected",
+              "daughter_dispersal_pressure",
+              "familiar_corridor",
+              "food_scarcity",
+              "food_stress",
+              "frontier_probe",
+              "intent_continuation",
+              "mobility_pressure",
+              "pressure_overcame_attachment",
+              "recovery_opportunity",
+              "remembered_good_place",
+              "remembered_risky_place",
+              "repeated_return",
+              "safe_frontier_pull"
+            ]
+          },
+          {
+            "territorialPressure": 0.12,
+            "mobilityPressure": 0.77,
+            "netMovePressure": 0.67,
+            "action": "move_to_tile",
+            "target": "tile:74:60",
+            "score": 6.88,
+            "deliberationBreadth": 13,
+            "candidates": [
+              "move_to_tile:tile:71:60:2.3",
+              "move_to_tile:tile:72:59:2.87",
+              "move_to_tile:tile:72:60:3.67",
+              "move_to_tile:tile:72:61:2.91",
+              "move_to_tile:tile:73:58:3.26",
+              "move_to_tile:tile:73:59:3.86",
+              "move_to_tile:tile:73:61:3.58",
+              "move_to_tile:tile:74:59:3.8",
+              "move_to_tile:tile:74:60:6.88",
+              "move_to_tile:tile:74:61:3.03",
+              "move_to_tile:tile:75:60:3.92",
+              "resource_scout:tile:76:60:2.95",
+              "stay:-:3.98"
+            ],
+            "reasonPressures": [
+              "sec7:daughter_dispersal_pressure=0.28",
+              "sec10:mobility_pressure=0.77",
+              "sec12:pressure_overcame_attachment=0.3516"
+            ],
+            "reasonTypes": [
+              "camp_movement_response_selected",
+              "daughter_dispersal_pressure",
+              "familiar_corridor",
+              "food_scarcity",
+              "food_stress",
+              "frontier_probe",
+              "intent_continuation",
+              "mobility_pressure",
+              "pressure_overcame_attachment",
+              "recovery_opportunity",
+              "remembered_good_place",
+              "remembered_risky_place",
+              "repeated_return",
+              "safe_frontier_pull"
+            ]
+          },
+          {
+            "territorialPressure": 0.8,
+            "mobilityPressure": 0.77,
+            "netMovePressure": 0.67,
+            "action": "move_to_tile",
+            "target": "tile:74:60",
+            "score": 6.88,
+            "deliberationBreadth": 13,
+            "candidates": [
+              "move_to_tile:tile:71:60:2.3",
+              "move_to_tile:tile:72:59:2.87",
+              "move_to_tile:tile:72:60:3.67",
+              "move_to_tile:tile:72:61:2.91",
+              "move_to_tile:tile:73:58:3.26",
+              "move_to_tile:tile:73:59:3.86",
+              "move_to_tile:tile:73:61:3.58",
+              "move_to_tile:tile:74:59:3.8",
+              "move_to_tile:tile:74:60:6.88",
+              "move_to_tile:tile:74:61:3.03",
+              "move_to_tile:tile:75:60:3.92",
+              "resource_scout:tile:76:60:2.95",
+              "stay:-:3.98"
+            ],
+            "reasonPressures": [
+              "sec7:daughter_dispersal_pressure=0.28",
+              "sec10:mobility_pressure=0.77",
+              "sec12:pressure_overcame_attachment=0.3516"
+            ],
+            "reasonTypes": [
+              "camp_movement_response_selected",
+              "daughter_dispersal_pressure",
+              "familiar_corridor",
+              "food_scarcity",
+              "food_stress",
+              "frontier_probe",
+              "intent_continuation",
+              "mobility_pressure",
+              "pressure_overcame_attachment",
+              "recovery_opportunity",
+              "remembered_good_place",
+              "remembered_risky_place",
+              "repeated_return",
+              "safe_frontier_pull"
+            ]
+          }
+        ]
+      },
+      {
+        "band": "band:varied-lake-west",
+        "rows": [
+          {
+            "territorialPressure": 0,
+            "mobilityPressure": 0.77,
+            "netMovePressure": 0.69,
+            "action": "move_to_tile",
+            "target": "tile:71:80",
+            "score": 5.83,
+            "deliberationBreadth": 10,
+            "candidates": [
+              "move_to_tile:tile:69:78:0.94",
+              "move_to_tile:tile:70:77:3.88",
+              "move_to_tile:tile:70:78:2.53",
+              "move_to_tile:tile:70:79:2.6",
+              "move_to_tile:tile:71:76:3.59",
+              "move_to_tile:tile:71:77:3.54",
+              "move_to_tile:tile:71:79:5.55",
+              "move_to_tile:tile:71:80:5.83",
+              "resource_scout:tile:69:76:1.21",
+              "stay:-:4.69"
+            ],
+            "reasonPressures": [
+              "sec9:daughter_dispersal_pressure=0.28",
+              "sec12:mobility_pressure=0.77",
+              "sec14:pressure_overcame_attachment=0.3818"
+            ],
+            "reasonTypes": [
+              "camp_movement_response_selected",
+              "current_marginal_return_declined",
+              "daughter_dispersal_pressure",
+              "dry_refuge_pull",
+              "food_scarcity",
+              "food_stress",
+              "frontier_probe",
+              "intent_continuation",
+              "loss_of_fallback_security",
+              "mobility_pressure",
+              "pressure_overcame_attachment",
+              "recovery_opportunity",
+              "remembered_risky_place",
+              "repeated_return",
+              "safe_frontier_pull",
+              "water_refuge_profile_detected"
+            ]
+          },
+          {
+            "territorialPressure": 0.12,
+            "mobilityPressure": 0.77,
+            "netMovePressure": 0.69,
+            "action": "move_to_tile",
+            "target": "tile:71:80",
+            "score": 5.83,
+            "deliberationBreadth": 10,
+            "candidates": [
+              "move_to_tile:tile:69:78:0.94",
+              "move_to_tile:tile:70:77:3.88",
+              "move_to_tile:tile:70:78:2.53",
+              "move_to_tile:tile:70:79:2.6",
+              "move_to_tile:tile:71:76:3.59",
+              "move_to_tile:tile:71:77:3.54",
+              "move_to_tile:tile:71:79:5.55",
+              "move_to_tile:tile:71:80:5.83",
+              "resource_scout:tile:69:76:1.21",
+              "stay:-:4.69"
+            ],
+            "reasonPressures": [
+              "sec9:daughter_dispersal_pressure=0.28",
+              "sec12:mobility_pressure=0.77",
+              "sec14:pressure_overcame_attachment=0.3818"
+            ],
+            "reasonTypes": [
+              "camp_movement_response_selected",
+              "current_marginal_return_declined",
+              "daughter_dispersal_pressure",
+              "dry_refuge_pull",
+              "food_scarcity",
+              "food_stress",
+              "frontier_probe",
+              "intent_continuation",
+              "loss_of_fallback_security",
+              "mobility_pressure",
+              "pressure_overcame_attachment",
+              "recovery_opportunity",
+              "remembered_risky_place",
+              "repeated_return",
+              "safe_frontier_pull",
+              "water_refuge_profile_detected"
+            ]
+          },
+          {
+            "territorialPressure": 0.8,
+            "mobilityPressure": 0.77,
+            "netMovePressure": 0.69,
+            "action": "move_to_tile",
+            "target": "tile:71:80",
+            "score": 5.83,
+            "deliberationBreadth": 10,
+            "candidates": [
+              "move_to_tile:tile:69:78:0.94",
+              "move_to_tile:tile:70:77:3.88",
+              "move_to_tile:tile:70:78:2.53",
+              "move_to_tile:tile:70:79:2.6",
+              "move_to_tile:tile:71:76:3.59",
+              "move_to_tile:tile:71:77:3.54",
+              "move_to_tile:tile:71:79:5.55",
+              "move_to_tile:tile:71:80:5.83",
+              "resource_scout:tile:69:76:1.21",
+              "stay:-:4.69"
+            ],
+            "reasonPressures": [
+              "sec9:daughter_dispersal_pressure=0.28",
+              "sec12:mobility_pressure=0.77",
+              "sec14:pressure_overcame_attachment=0.3818"
+            ],
+            "reasonTypes": [
+              "camp_movement_response_selected",
+              "current_marginal_return_declined",
+              "daughter_dispersal_pressure",
+              "dry_refuge_pull",
+              "food_scarcity",
+              "food_stress",
+              "frontier_probe",
+              "intent_continuation",
+              "loss_of_fallback_security",
+              "mobility_pressure",
+              "pressure_overcame_attachment",
+              "recovery_opportunity",
+              "remembered_risky_place",
+              "repeated_return",
+              "safe_frontier_pull",
+              "water_refuge_profile_detected"
+            ]
+          }
+        ]
+      },
+      {
+        "band": "band:varied-pass-frontier",
+        "rows": [
+          {
+            "territorialPressure": 0,
+            "mobilityPressure": 0.89,
+            "netMovePressure": 1,
+            "action": "move_to_tile",
+            "target": "tile:133:44",
+            "score": 2.26,
+            "deliberationBreadth": 10,
+            "candidates": [
+              "logistical_probe:tile:134:44:2.05",
+              "move_to_tile:tile:131:45:1.05",
+              "move_to_tile:tile:132:44:0.97",
+              "move_to_tile:tile:132:45:2.26",
+              "move_to_tile:tile:132:46:0.52",
+              "move_to_tile:tile:133:43:0.88",
+              "move_to_tile:tile:133:44:2.26",
+              "move_to_tile:tile:134:44:0.48",
+              "resource_scout:tile:134:44:2.03",
+              "stay:-:1"
+            ],
+            "reasonPressures": [
+              "primary:seek_better_water=0.8726",
+              "sec8:daughter_dispersal_pressure=0.3",
+              "sec10:mobility_pressure=0.89",
+              "sec11:repeated_use_depletion=0.43"
+            ],
+            "reasonTypes": [
+              "current_marginal_return_declined",
+              "daughter_dispersal_pressure",
+              "food_scarcity",
+              "food_stress",
+              "local_resource_pressure",
+              "loss_of_fallback_security",
+              "mobility_pressure",
+              "recovery_opportunity",
+              "remembered_good_place",
+              "remembered_risky_place",
+              "repeated_return",
+              "repeated_use_depletion",
+              "seek_better_water",
+              "wet_season_dispersal_mode"
+            ]
+          },
+          {
+            "territorialPressure": 0.12,
+            "mobilityPressure": 0.89,
+            "netMovePressure": 1,
+            "action": "move_to_tile",
+            "target": "tile:133:44",
+            "score": 2.26,
+            "deliberationBreadth": 10,
+            "candidates": [
+              "logistical_probe:tile:134:44:2.05",
+              "move_to_tile:tile:131:45:1.05",
+              "move_to_tile:tile:132:44:0.97",
+              "move_to_tile:tile:132:45:2.26",
+              "move_to_tile:tile:132:46:0.52",
+              "move_to_tile:tile:133:43:0.88",
+              "move_to_tile:tile:133:44:2.26",
+              "move_to_tile:tile:134:44:0.48",
+              "resource_scout:tile:134:44:2.03",
+              "stay:-:1"
+            ],
+            "reasonPressures": [
+              "primary:seek_better_water=0.8726",
+              "sec8:daughter_dispersal_pressure=0.3",
+              "sec10:mobility_pressure=0.89",
+              "sec11:repeated_use_depletion=0.43"
+            ],
+            "reasonTypes": [
+              "current_marginal_return_declined",
+              "daughter_dispersal_pressure",
+              "food_scarcity",
+              "food_stress",
+              "local_resource_pressure",
+              "loss_of_fallback_security",
+              "mobility_pressure",
+              "recovery_opportunity",
+              "remembered_good_place",
+              "remembered_risky_place",
+              "repeated_return",
+              "repeated_use_depletion",
+              "seek_better_water",
+              "wet_season_dispersal_mode"
+            ]
+          },
+          {
+            "territorialPressure": 0.8,
+            "mobilityPressure": 0.89,
+            "netMovePressure": 1,
+            "action": "move_to_tile",
+            "target": "tile:133:44",
+            "score": 2.26,
+            "deliberationBreadth": 10,
+            "candidates": [
+              "logistical_probe:tile:134:44:2.05",
+              "move_to_tile:tile:131:45:1.05",
+              "move_to_tile:tile:132:44:0.97",
+              "move_to_tile:tile:132:45:2.26",
+              "move_to_tile:tile:132:46:0.52",
+              "move_to_tile:tile:133:43:0.88",
+              "move_to_tile:tile:133:44:2.26",
+              "move_to_tile:tile:134:44:0.48",
+              "resource_scout:tile:134:44:2.03",
+              "stay:-:1"
+            ],
+            "reasonPressures": [
+              "primary:seek_better_water=0.8726",
+              "sec8:daughter_dispersal_pressure=0.3",
+              "sec10:mobility_pressure=0.89",
+              "sec11:repeated_use_depletion=0.43"
+            ],
+            "reasonTypes": [
+              "current_marginal_return_declined",
+              "daughter_dispersal_pressure",
+              "food_scarcity",
+              "food_stress",
+              "local_resource_pressure",
+              "loss_of_fallback_security",
+              "mobility_pressure",
+              "recovery_opportunity",
+              "remembered_good_place",
+              "remembered_risky_place",
+              "repeated_return",
+              "repeated_use_depletion",
+              "seek_better_water",
+              "wet_season_dispersal_mode"
+            ]
+          }
+        ]
+      },
+      {
+        "band": "band:varied-plains-creek",
+        "rows": [
+          {
+            "territorialPressure": 0,
+            "mobilityPressure": 0.78,
+            "netMovePressure": 0.88,
+            "action": "move_to_tile",
+            "target": "tile:103:47",
+            "score": 4.41,
+            "deliberationBreadth": 13,
+            "candidates": [
+              "logistical_probe:tile:103:47:3.95",
+              "move_to_tile:tile:100:47:2.33",
+              "move_to_tile:tile:101:46:2.65",
+              "move_to_tile:tile:101:47:2.69",
+              "move_to_tile:tile:101:48:1.71",
+              "move_to_tile:tile:102:45:4",
+              "move_to_tile:tile:102:46:3.8",
+              "move_to_tile:tile:102:48:2.12",
+              "move_to_tile:tile:102:49:1.39",
+              "move_to_tile:tile:103:47:4.41",
+              "move_to_tile:tile:103:48:1.78",
+              "resource_scout:tile:100:44:2.52",
+              "stay:-:3"
+            ],
+            "reasonPressures": [
+              "sec12:daughter_dispersal_pressure=0.32",
+              "sec16:mobility_pressure=0.78"
+            ],
+            "reasonTypes": [
+              "camp_movement_response_selected",
+              "corridor_following",
+              "current_marginal_return_declined",
+              "daughter_dispersal_pressure",
+              "dry_refuge_pull",
+              "familiar_corridor",
+              "food_stress",
+              "intent_continuation",
+              "local_resource_pressure",
+              "loss_of_fallback_security",
+              "mobility_pressure",
+              "recovery_opportunity",
+              "remembered_good_place",
+              "remembered_risky_place",
+              "repeated_return",
+              "river_corridor_prospect_detected",
+              "safe_frontier_pull",
+              "water_refuge_profile_detected",
+              "water_stress"
+            ]
+          },
+          {
+            "territorialPressure": 0.12,
+            "mobilityPressure": 0.78,
+            "netMovePressure": 0.88,
+            "action": "move_to_tile",
+            "target": "tile:103:47",
+            "score": 4.41,
+            "deliberationBreadth": 13,
+            "candidates": [
+              "logistical_probe:tile:103:47:3.95",
+              "move_to_tile:tile:100:47:2.33",
+              "move_to_tile:tile:101:46:2.65",
+              "move_to_tile:tile:101:47:2.69",
+              "move_to_tile:tile:101:48:1.71",
+              "move_to_tile:tile:102:45:4",
+              "move_to_tile:tile:102:46:3.8",
+              "move_to_tile:tile:102:48:2.12",
+              "move_to_tile:tile:102:49:1.39",
+              "move_to_tile:tile:103:47:4.41",
+              "move_to_tile:tile:103:48:1.78",
+              "resource_scout:tile:100:44:2.52",
+              "stay:-:3"
+            ],
+            "reasonPressures": [
+              "sec12:daughter_dispersal_pressure=0.32",
+              "sec16:mobility_pressure=0.78"
+            ],
+            "reasonTypes": [
+              "camp_movement_response_selected",
+              "corridor_following",
+              "current_marginal_return_declined",
+              "daughter_dispersal_pressure",
+              "dry_refuge_pull",
+              "familiar_corridor",
+              "food_stress",
+              "intent_continuation",
+              "local_resource_pressure",
+              "loss_of_fallback_security",
+              "mobility_pressure",
+              "recovery_opportunity",
+              "remembered_good_place",
+              "remembered_risky_place",
+              "repeated_return",
+              "river_corridor_prospect_detected",
+              "safe_frontier_pull",
+              "water_refuge_profile_detected",
+              "water_stress"
+            ]
+          },
+          {
+            "territorialPressure": 0.8,
+            "mobilityPressure": 0.78,
+            "netMovePressure": 0.88,
+            "action": "move_to_tile",
+            "target": "tile:103:47",
+            "score": 4.41,
+            "deliberationBreadth": 13,
+            "candidates": [
+              "logistical_probe:tile:103:47:3.95",
+              "move_to_tile:tile:100:47:2.33",
+              "move_to_tile:tile:101:46:2.65",
+              "move_to_tile:tile:101:47:2.69",
+              "move_to_tile:tile:101:48:1.71",
+              "move_to_tile:tile:102:45:4",
+              "move_to_tile:tile:102:46:3.8",
+              "move_to_tile:tile:102:48:2.12",
+              "move_to_tile:tile:102:49:1.39",
+              "move_to_tile:tile:103:47:4.41",
+              "move_to_tile:tile:103:48:1.78",
+              "resource_scout:tile:100:44:2.52",
+              "stay:-:3"
+            ],
+            "reasonPressures": [
+              "sec12:daughter_dispersal_pressure=0.32",
+              "sec16:mobility_pressure=0.78"
+            ],
+            "reasonTypes": [
+              "camp_movement_response_selected",
+              "corridor_following",
+              "current_marginal_return_declined",
+              "daughter_dispersal_pressure",
+              "dry_refuge_pull",
+              "familiar_corridor",
+              "food_stress",
+              "intent_continuation",
+              "local_resource_pressure",
+              "loss_of_fallback_security",
+              "mobility_pressure",
+              "recovery_opportunity",
+              "remembered_good_place",
+              "remembered_risky_place",
+              "repeated_return",
+              "river_corridor_prospect_detected",
+              "safe_frontier_pull",
+              "water_refuge_profile_detected",
+              "water_stress"
+            ]
+          }
+        ]
+      },
+      {
+        "band": "band:varied-river-mid",
+        "rows": [
+          {
+            "territorialPressure": 0,
+            "mobilityPressure": 0.75,
+            "netMovePressure": 0.67,
+            "action": "move_to_tile",
+            "target": "tile:112:57",
+            "score": 6.09,
+            "deliberationBreadth": 12,
+            "candidates": [
+              "logistical_probe:tile:110:60:3.44",
+              "logistical_probe:tile:111:53:4.18",
+              "logistical_probe:tile:112:57:5.09",
+              "move_to_tile:tile:109:57:2.83",
+              "move_to_tile:tile:110:56:2.16",
+              "move_to_tile:tile:110:57:3.34",
+              "move_to_tile:tile:111:55:2.36",
+              "move_to_tile:tile:111:56:3.16",
+              "move_to_tile:tile:112:56:3.03",
+              "move_to_tile:tile:112:57:6.09",
+              "move_to_tile:tile:113:57:3.19",
+              "resource_scout:tile:111:55:2.93",
+              "stay:-:2.83"
+            ],
+            "reasonPressures": [
+              "sec9:daughter_dispersal_pressure=0.28",
+              "sec12:mobility_pressure=0.75"
+            ],
+            "reasonTypes": [
+              "camp_movement_response_selected",
+              "confluence_attractor",
+              "corridor_following",
+              "current_marginal_return_declined",
+              "daughter_dispersal_pressure",
+              "dry_refuge_pull",
+              "followed_river_corridor",
+              "food_scarcity",
+              "food_stress",
+              "intent_continuation",
+              "loss_of_fallback_security",
+              "mobility_pressure",
+              "recovery_opportunity",
+              "remembered_risky_place",
+              "river_corridor_prospect_detected",
+              "safe_frontier_pull",
+              "water_refuge_profile_detected"
+            ]
+          },
+          {
+            "territorialPressure": 0.12,
+            "mobilityPressure": 0.75,
+            "netMovePressure": 0.67,
+            "action": "move_to_tile",
+            "target": "tile:112:57",
+            "score": 6.09,
+            "deliberationBreadth": 12,
+            "candidates": [
+              "logistical_probe:tile:110:60:3.44",
+              "logistical_probe:tile:111:53:4.18",
+              "logistical_probe:tile:112:57:5.09",
+              "move_to_tile:tile:109:57:2.83",
+              "move_to_tile:tile:110:56:2.16",
+              "move_to_tile:tile:110:57:3.34",
+              "move_to_tile:tile:111:55:2.36",
+              "move_to_tile:tile:111:56:3.16",
+              "move_to_tile:tile:112:56:3.03",
+              "move_to_tile:tile:112:57:6.09",
+              "move_to_tile:tile:113:57:3.19",
+              "resource_scout:tile:111:55:2.93",
+              "stay:-:2.83"
+            ],
+            "reasonPressures": [
+              "sec9:daughter_dispersal_pressure=0.28",
+              "sec12:mobility_pressure=0.75"
+            ],
+            "reasonTypes": [
+              "camp_movement_response_selected",
+              "confluence_attractor",
+              "corridor_following",
+              "current_marginal_return_declined",
+              "daughter_dispersal_pressure",
+              "dry_refuge_pull",
+              "followed_river_corridor",
+              "food_scarcity",
+              "food_stress",
+              "intent_continuation",
+              "loss_of_fallback_security",
+              "mobility_pressure",
+              "recovery_opportunity",
+              "remembered_risky_place",
+              "river_corridor_prospect_detected",
+              "safe_frontier_pull",
+              "water_refuge_profile_detected"
+            ]
+          },
+          {
+            "territorialPressure": 0.8,
+            "mobilityPressure": 0.75,
+            "netMovePressure": 0.67,
+            "action": "move_to_tile",
+            "target": "tile:112:57",
+            "score": 6.09,
+            "deliberationBreadth": 12,
+            "candidates": [
+              "logistical_probe:tile:110:60:3.44",
+              "logistical_probe:tile:111:53:4.18",
+              "logistical_probe:tile:112:57:5.09",
+              "move_to_tile:tile:109:57:2.83",
+              "move_to_tile:tile:110:56:2.16",
+              "move_to_tile:tile:110:57:3.34",
+              "move_to_tile:tile:111:55:2.36",
+              "move_to_tile:tile:111:56:3.16",
+              "move_to_tile:tile:112:56:3.03",
+              "move_to_tile:tile:112:57:6.09",
+              "move_to_tile:tile:113:57:3.19",
+              "resource_scout:tile:111:55:2.93",
+              "stay:-:2.83"
+            ],
+            "reasonPressures": [
+              "sec9:daughter_dispersal_pressure=0.28",
+              "sec12:mobility_pressure=0.75"
+            ],
+            "reasonTypes": [
+              "camp_movement_response_selected",
+              "confluence_attractor",
+              "corridor_following",
+              "current_marginal_return_declined",
+              "daughter_dispersal_pressure",
+              "dry_refuge_pull",
+              "followed_river_corridor",
+              "food_scarcity",
+              "food_stress",
+              "intent_continuation",
+              "loss_of_fallback_security",
+              "mobility_pressure",
+              "recovery_opportunity",
+              "remembered_risky_place",
+              "river_corridor_prospect_detected",
+              "safe_frontier_pull",
+              "water_refuge_profile_detected"
+            ]
+          }
+        ]
+      },
+      {
+        "band": "band:varied-dry-corridor-mid",
+        "rows": [
+          {
+            "territorialPressure": 0,
+            "mobilityPressure": 0.71,
+            "netMovePressure": 0.96,
+            "action": "move_to_tile",
+            "target": "tile:78:111",
+            "score": 2.42,
+            "deliberationBreadth": 9,
+            "candidates": [
+              "move_to_tile:tile:75:111:0.45",
+              "move_to_tile:tile:76:111:1.51",
+              "move_to_tile:tile:76:112:-0.18",
+              "move_to_tile:tile:77:109:0.71",
+              "move_to_tile:tile:77:112:0.5",
+              "move_to_tile:tile:77:113:-0.37",
+              "move_to_tile:tile:78:111:2.42",
+              "move_to_tile:tile:78:112:0.37",
+              "stay:-:0.98"
+            ],
+            "reasonPressures": [
+              "primary:seek_better_water=0.4247",
+              "sec6:daughter_dispersal_pressure=0.25",
+              "sec9:mobility_pressure=0.71"
+            ],
+            "reasonTypes": [
+              "biome_mismatch",
+              "current_marginal_return_declined",
+              "daughter_dispersal_pressure",
+              "food_scarcity",
+              "food_stress",
+              "intent_continuation",
+              "late_dry_refuge_mode",
+              "loss_of_fallback_security",
+              "mobility_pressure",
+              "recovery_opportunity",
+              "seek_better_water",
+              "water_stress"
+            ]
+          },
+          {
+            "territorialPressure": 0.12,
+            "mobilityPressure": 0.71,
+            "netMovePressure": 0.96,
+            "action": "move_to_tile",
+            "target": "tile:78:111",
+            "score": 2.42,
+            "deliberationBreadth": 9,
+            "candidates": [
+              "move_to_tile:tile:75:111:0.45",
+              "move_to_tile:tile:76:111:1.51",
+              "move_to_tile:tile:76:112:-0.18",
+              "move_to_tile:tile:77:109:0.71",
+              "move_to_tile:tile:77:112:0.5",
+              "move_to_tile:tile:77:113:-0.37",
+              "move_to_tile:tile:78:111:2.42",
+              "move_to_tile:tile:78:112:0.37",
+              "stay:-:0.98"
+            ],
+            "reasonPressures": [
+              "primary:seek_better_water=0.4247",
+              "sec6:daughter_dispersal_pressure=0.25",
+              "sec9:mobility_pressure=0.71"
+            ],
+            "reasonTypes": [
+              "biome_mismatch",
+              "current_marginal_return_declined",
+              "daughter_dispersal_pressure",
+              "food_scarcity",
+              "food_stress",
+              "intent_continuation",
+              "late_dry_refuge_mode",
+              "loss_of_fallback_security",
+              "mobility_pressure",
+              "recovery_opportunity",
+              "seek_better_water",
+              "water_stress"
+            ]
+          },
+          {
+            "territorialPressure": 0.8,
+            "mobilityPressure": 0.71,
+            "netMovePressure": 0.96,
+            "action": "move_to_tile",
+            "target": "tile:78:111",
+            "score": 2.42,
+            "deliberationBreadth": 9,
+            "candidates": [
+              "move_to_tile:tile:75:111:0.45",
+              "move_to_tile:tile:76:111:1.51",
+              "move_to_tile:tile:76:112:-0.18",
+              "move_to_tile:tile:77:109:0.71",
+              "move_to_tile:tile:77:112:0.5",
+              "move_to_tile:tile:77:113:-0.37",
+              "move_to_tile:tile:78:111:2.42",
+              "move_to_tile:tile:78:112:0.37",
+              "stay:-:0.98"
+            ],
+            "reasonPressures": [
+              "primary:seek_better_water=0.4247",
+              "sec6:daughter_dispersal_pressure=0.25",
+              "sec9:mobility_pressure=0.71"
+            ],
+            "reasonTypes": [
+              "biome_mismatch",
+              "current_marginal_return_declined",
+              "daughter_dispersal_pressure",
+              "food_scarcity",
+              "food_stress",
+              "intent_continuation",
+              "late_dry_refuge_mode",
+              "loss_of_fallback_security",
+              "mobility_pressure",
+              "recovery_opportunity",
+              "seek_better_water",
+              "water_stress"
+            ]
+          }
+        ]
+      },
+      {
+        "band": "band:varied-dry-corridor-upper",
+        "rows": [
+          {
+            "territorialPressure": 0,
+            "mobilityPressure": 0.65,
+            "netMovePressure": 0.91,
+            "action": "resource_scout",
+            "target": "tile:54:105",
+            "score": 2.38,
+            "deliberationBreadth": 11,
+            "candidates": [
+              "logistical_probe:tile:53:105:0.36",
+              "move_to_tile:tile:54:105:1.64",
+              "move_to_tile:tile:55:104:0.71",
+              "move_to_tile:tile:55:105:2.1",
+              "move_to_tile:tile:56:103:0.29",
+              "move_to_tile:tile:56:104:1.24",
+              "move_to_tile:tile:56:107:2.25",
+              "move_to_tile:tile:57:104:0.85",
+              "move_to_tile:tile:57:105:2.27",
+              "move_to_tile:tile:58:105:1.78",
+              "resource_scout:tile:54:105:2.38",
+              "stay:-:1.13"
+            ],
+            "reasonPressures": [],
+            "reasonTypes": [
+              "camp_movement_response_selected",
+              "current_marginal_return_declined",
+              "food_scarcity",
+              "frontier_probe",
+              "intent_continuation",
+              "late_dry_refuge_mode",
+              "loss_of_fallback_security"
+            ]
+          },
+          {
+            "territorialPressure": 0.12,
+            "mobilityPressure": 0.65,
+            "netMovePressure": 0.91,
+            "action": "resource_scout",
+            "target": "tile:54:105",
+            "score": 2.38,
+            "deliberationBreadth": 11,
+            "candidates": [
+              "logistical_probe:tile:53:105:0.36",
+              "move_to_tile:tile:54:105:1.64",
+              "move_to_tile:tile:55:104:0.71",
+              "move_to_tile:tile:55:105:2.1",
+              "move_to_tile:tile:56:103:0.29",
+              "move_to_tile:tile:56:104:1.24",
+              "move_to_tile:tile:56:107:2.25",
+              "move_to_tile:tile:57:104:0.85",
+              "move_to_tile:tile:57:105:2.27",
+              "move_to_tile:tile:58:105:1.78",
+              "resource_scout:tile:54:105:2.38",
+              "stay:-:1.13"
+            ],
+            "reasonPressures": [],
+            "reasonTypes": [
+              "camp_movement_response_selected",
+              "current_marginal_return_declined",
+              "food_scarcity",
+              "frontier_probe",
+              "intent_continuation",
+              "late_dry_refuge_mode",
+              "loss_of_fallback_security"
+            ]
+          },
+          {
+            "territorialPressure": 0.8,
+            "mobilityPressure": 0.65,
+            "netMovePressure": 0.91,
+            "action": "resource_scout",
+            "target": "tile:54:105",
+            "score": 2.38,
+            "deliberationBreadth": 11,
+            "candidates": [
+              "logistical_probe:tile:53:105:0.36",
+              "move_to_tile:tile:54:105:1.64",
+              "move_to_tile:tile:55:104:0.71",
+              "move_to_tile:tile:55:105:2.1",
+              "move_to_tile:tile:56:103:0.29",
+              "move_to_tile:tile:56:104:1.24",
+              "move_to_tile:tile:56:107:2.25",
+              "move_to_tile:tile:57:104:0.85",
+              "move_to_tile:tile:57:105:2.27",
+              "move_to_tile:tile:58:105:1.78",
+              "resource_scout:tile:54:105:2.38",
+              "stay:-:1.13"
+            ],
+            "reasonPressures": [],
+            "reasonTypes": [
+              "camp_movement_response_selected",
+              "current_marginal_return_declined",
+              "food_scarcity",
+              "frontier_probe",
+              "intent_continuation",
+              "late_dry_refuge_mode",
+              "loss_of_fallback_security"
+            ]
+          }
+        ]
+      },
+      {
+        "band": "band:varied-estuary",
+        "rows": [
+          {
+            "territorialPressure": 0,
+            "mobilityPressure": 0.17,
+            "netMovePressure": 0.11,
+            "action": "stay",
+            "target": "-",
+            "score": 5,
+            "deliberationBreadth": 15,
+            "candidates": [
+              "logistical_probe:tile:197:87:3.15",
+              "move_to_tile:tile:192:88:3.88",
+              "move_to_tile:tile:193:87:3.29",
+              "move_to_tile:tile:193:88:4.29",
+              "move_to_tile:tile:193:89:4.22",
+              "move_to_tile:tile:194:86:2.98",
+              "move_to_tile:tile:194:87:3.77",
+              "move_to_tile:tile:194:89:5.09",
+              "move_to_tile:tile:194:90:5.16",
+              "move_to_tile:tile:195:87:3.26",
+              "move_to_tile:tile:195:88:4.14",
+              "move_to_tile:tile:195:89:4.02",
+              "move_to_tile:tile:196:88:3.38",
+              "resource_scout:tile:194:89:3.06",
+              "stay:-:5"
+            ],
+            "reasonPressures": [
+              "primary:low_mobility_pressure=0.1523"
+            ],
+            "reasonTypes": [
+              "environmental_risk",
+              "low_mobility_pressure",
+              "low_pressure_stay",
+              "repeated_return"
+            ]
+          },
+          {
+            "territorialPressure": 0.12,
+            "mobilityPressure": 0.17,
+            "netMovePressure": 0.11,
+            "action": "stay",
+            "target": "-",
+            "score": 5,
+            "deliberationBreadth": 15,
+            "candidates": [
+              "logistical_probe:tile:197:87:3.15",
+              "move_to_tile:tile:192:88:3.88",
+              "move_to_tile:tile:193:87:3.29",
+              "move_to_tile:tile:193:88:4.29",
+              "move_to_tile:tile:193:89:4.22",
+              "move_to_tile:tile:194:86:2.98",
+              "move_to_tile:tile:194:87:3.77",
+              "move_to_tile:tile:194:89:5.09",
+              "move_to_tile:tile:194:90:5.16",
+              "move_to_tile:tile:195:87:3.26",
+              "move_to_tile:tile:195:88:4.14",
+              "move_to_tile:tile:195:89:4.02",
+              "move_to_tile:tile:196:88:3.38",
+              "resource_scout:tile:194:89:3.06",
+              "stay:-:5"
+            ],
+            "reasonPressures": [
+              "primary:low_mobility_pressure=0.1523"
+            ],
+            "reasonTypes": [
+              "environmental_risk",
+              "low_mobility_pressure",
+              "low_pressure_stay",
+              "repeated_return"
+            ]
+          },
+          {
+            "territorialPressure": 0.8,
+            "mobilityPressure": 0.17,
+            "netMovePressure": 0.11,
+            "action": "stay",
+            "target": "-",
+            "score": 5,
+            "deliberationBreadth": 15,
+            "candidates": [
+              "logistical_probe:tile:197:87:3.15",
+              "move_to_tile:tile:192:88:3.88",
+              "move_to_tile:tile:193:87:3.29",
+              "move_to_tile:tile:193:88:4.29",
+              "move_to_tile:tile:193:89:4.22",
+              "move_to_tile:tile:194:86:2.98",
+              "move_to_tile:tile:194:87:3.77",
+              "move_to_tile:tile:194:89:5.09",
+              "move_to_tile:tile:194:90:5.16",
+              "move_to_tile:tile:195:87:3.26",
+              "move_to_tile:tile:195:88:4.14",
+              "move_to_tile:tile:195:89:4.02",
+              "move_to_tile:tile:196:88:3.38",
+              "resource_scout:tile:194:89:3.06",
+              "stay:-:5"
+            ],
+            "reasonPressures": [
+              "primary:low_mobility_pressure=0.1523"
+            ],
+            "reasonTypes": [
+              "environmental_risk",
+              "low_mobility_pressure",
+              "low_pressure_stay",
+              "repeated_return"
+            ]
+          }
+        ]
+      },
+      {
+        "band": "band:varied-lake-east",
+        "rows": [
+          {
+            "territorialPressure": 0,
+            "mobilityPressure": 0.46,
+            "netMovePressure": 0.61,
+            "action": "move_to_tile",
+            "target": "tile:87:77",
+            "score": 3.65,
+            "deliberationBreadth": 14,
+            "candidates": [
+              "move_to_tile:tile:86:78:3.2",
+              "move_to_tile:tile:87:77:3.65",
+              "move_to_tile:tile:87:78:3.57",
+              "move_to_tile:tile:87:79:2.14",
+              "move_to_tile:tile:88:76:3.44",
+              "move_to_tile:tile:88:77:3.63",
+              "move_to_tile:tile:88:79:2",
+              "move_to_tile:tile:88:80:1.29",
+              "move_to_tile:tile:89:77:2.27",
+              "move_to_tile:tile:89:78:2.09",
+              "move_to_tile:tile:89:79:0.91",
+              "move_to_tile:tile:90:78:1.3",
+              "resource_scout:tile:89:80:1.3",
+              "stay:-:2.67"
+            ],
+            "reasonPressures": [
+              "primary:seek_better_water=0.4596",
+              "sec2:daughter_dispersal_pressure=0.27",
+              "sec4:mobility_pressure=0.46"
+            ],
+            "reasonTypes": [
+              "daughter_dispersal_pressure",
+              "intent_continuation",
+              "low_confidence_memory",
+              "mobility_pressure",
+              "safe_frontier_pull",
+              "seek_better_water"
+            ]
+          },
+          {
+            "territorialPressure": 0.12,
+            "mobilityPressure": 0.46,
+            "netMovePressure": 0.61,
+            "action": "move_to_tile",
+            "target": "tile:87:77",
+            "score": 3.65,
+            "deliberationBreadth": 14,
+            "candidates": [
+              "move_to_tile:tile:86:78:3.2",
+              "move_to_tile:tile:87:77:3.65",
+              "move_to_tile:tile:87:78:3.57",
+              "move_to_tile:tile:87:79:2.14",
+              "move_to_tile:tile:88:76:3.44",
+              "move_to_tile:tile:88:77:3.63",
+              "move_to_tile:tile:88:79:2",
+              "move_to_tile:tile:88:80:1.29",
+              "move_to_tile:tile:89:77:2.27",
+              "move_to_tile:tile:89:78:2.09",
+              "move_to_tile:tile:89:79:0.91",
+              "move_to_tile:tile:90:78:1.3",
+              "resource_scout:tile:89:80:1.3",
+              "stay:-:2.67"
+            ],
+            "reasonPressures": [
+              "primary:seek_better_water=0.4596",
+              "sec2:daughter_dispersal_pressure=0.27",
+              "sec4:mobility_pressure=0.46"
+            ],
+            "reasonTypes": [
+              "daughter_dispersal_pressure",
+              "intent_continuation",
+              "low_confidence_memory",
+              "mobility_pressure",
+              "safe_frontier_pull",
+              "seek_better_water"
+            ]
+          },
+          {
+            "territorialPressure": 0.8,
+            "mobilityPressure": 0.46,
+            "netMovePressure": 0.61,
+            "action": "move_to_tile",
+            "target": "tile:87:77",
+            "score": 3.65,
+            "deliberationBreadth": 14,
+            "candidates": [
+              "move_to_tile:tile:86:78:3.2",
+              "move_to_tile:tile:87:77:3.65",
+              "move_to_tile:tile:87:78:3.57",
+              "move_to_tile:tile:87:79:2.14",
+              "move_to_tile:tile:88:76:3.44",
+              "move_to_tile:tile:88:77:3.63",
+              "move_to_tile:tile:88:79:2",
+              "move_to_tile:tile:88:80:1.29",
+              "move_to_tile:tile:89:77:2.27",
+              "move_to_tile:tile:89:78:2.09",
+              "move_to_tile:tile:89:79:0.91",
+              "move_to_tile:tile:90:78:1.3",
+              "resource_scout:tile:89:80:1.3",
+              "stay:-:2.67"
+            ],
+            "reasonPressures": [
+              "primary:seek_better_water=0.4596",
+              "sec2:daughter_dispersal_pressure=0.27",
+              "sec4:mobility_pressure=0.46"
+            ],
+            "reasonTypes": [
+              "daughter_dispersal_pressure",
+              "intent_continuation",
+              "low_confidence_memory",
+              "mobility_pressure",
+              "safe_frontier_pull",
+              "seek_better_water"
+            ]
+          }
+        ]
+      },
+      {
+        "band": "band:varied-lake-north",
+        "rows": [
+          {
+            "territorialPressure": 0,
+            "mobilityPressure": 0.52,
+            "netMovePressure": 0.74,
+            "action": "move_to_tile",
+            "target": "tile:76:60",
+            "score": 3.88,
+            "deliberationBreadth": 12,
+            "candidates": [
+              "move_to_tile:tile:75:60:2.51",
+              "move_to_tile:tile:76:59:2.37",
+              "move_to_tile:tile:76:60:3.88",
+              "move_to_tile:tile:77:58:1.91",
+              "move_to_tile:tile:77:59:2.68",
+              "move_to_tile:tile:77:61:2.63",
+              "move_to_tile:tile:78:59:1.64",
+              "move_to_tile:tile:78:60:2.73",
+              "move_to_tile:tile:78:61:1.76",
+              "move_to_tile:tile:79:60:1.44",
+              "resource_scout:tile:77:59:2.17",
+              "stay:-:2.79"
+            ],
+            "reasonPressures": [
+              "sec1:daughter_dispersal_pressure=0.27",
+              "sec4:mobility_pressure=0.52"
+            ],
+            "reasonTypes": [
+              "camp_movement_response_selected",
+              "daughter_dispersal_pressure",
+              "food_stress",
+              "frontier_probe",
+              "mobility_pressure",
+              "safe_frontier_pull"
+            ]
+          },
+          {
+            "territorialPressure": 0.12,
+            "mobilityPressure": 0.52,
+            "netMovePressure": 0.74,
+            "action": "move_to_tile",
+            "target": "tile:76:60",
+            "score": 3.88,
+            "deliberationBreadth": 12,
+            "candidates": [
+              "move_to_tile:tile:75:60:2.51",
+              "move_to_tile:tile:76:59:2.37",
+              "move_to_tile:tile:76:60:3.88",
+              "move_to_tile:tile:77:58:1.91",
+              "move_to_tile:tile:77:59:2.68",
+              "move_to_tile:tile:77:61:2.63",
+              "move_to_tile:tile:78:59:1.64",
+              "move_to_tile:tile:78:60:2.73",
+              "move_to_tile:tile:78:61:1.76",
+              "move_to_tile:tile:79:60:1.44",
+              "resource_scout:tile:77:59:2.17",
+              "stay:-:2.79"
+            ],
+            "reasonPressures": [
+              "sec1:daughter_dispersal_pressure=0.27",
+              "sec4:mobility_pressure=0.52"
+            ],
+            "reasonTypes": [
+              "camp_movement_response_selected",
+              "daughter_dispersal_pressure",
+              "food_stress",
+              "frontier_probe",
+              "mobility_pressure",
+              "safe_frontier_pull"
+            ]
+          },
+          {
+            "territorialPressure": 0.8,
+            "mobilityPressure": 0.52,
+            "netMovePressure": 0.74,
+            "action": "move_to_tile",
+            "target": "tile:76:60",
+            "score": 3.88,
+            "deliberationBreadth": 12,
+            "candidates": [
+              "move_to_tile:tile:75:60:2.51",
+              "move_to_tile:tile:76:59:2.37",
+              "move_to_tile:tile:76:60:3.88",
+              "move_to_tile:tile:77:58:1.91",
+              "move_to_tile:tile:77:59:2.68",
+              "move_to_tile:tile:77:61:2.63",
+              "move_to_tile:tile:78:59:1.64",
+              "move_to_tile:tile:78:60:2.73",
+              "move_to_tile:tile:78:61:1.76",
+              "move_to_tile:tile:79:60:1.44",
+              "resource_scout:tile:77:59:2.17",
+              "stay:-:2.79"
+            ],
+            "reasonPressures": [
+              "sec1:daughter_dispersal_pressure=0.27",
+              "sec4:mobility_pressure=0.52"
+            ],
+            "reasonTypes": [
+              "camp_movement_response_selected",
+              "daughter_dispersal_pressure",
+              "food_stress",
+              "frontier_probe",
+              "mobility_pressure",
+              "safe_frontier_pull"
+            ]
+          }
+        ]
+      },
+      {
+        "band": "band:varied-lake-west",
+        "rows": [
+          {
+            "territorialPressure": 0,
+            "mobilityPressure": 0.42,
+            "netMovePressure": 0.56,
+            "action": "logistical_probe",
+            "target": "tile:70:75",
+            "score": 3.74,
+            "deliberationBreadth": 15,
+            "candidates": [
+              "logistical_probe:tile:66:79:-0.3",
+              "logistical_probe:tile:70:75:3.74",
+              "move_to_tile:tile:66:78:1.69",
+              "move_to_tile:tile:67:77:1.7",
+              "move_to_tile:tile:67:78:2.53",
+              "move_to_tile:tile:67:79:1.91",
+              "move_to_tile:tile:68:76:1.81",
+              "move_to_tile:tile:68:77:2.9",
+              "move_to_tile:tile:68:79:2.52",
+              "move_to_tile:tile:68:80:1.74",
+              "move_to_tile:tile:69:77:3.07",
+              "move_to_tile:tile:69:78:3.47",
+              "move_to_tile:tile:69:79:2.1",
+              "move_to_tile:tile:70:78:3.47",
+              "resource_scout:tile:67:78:1.91",
+              "stay:-:2.57"
+            ],
+            "reasonPressures": [
+              "sec4:mobility_pressure=0.42"
+            ],
+            "reasonTypes": [
+              "camp_movement_response_selected",
+              "food_scarcity",
+              "intent_continuation",
+              "logistical_probe_selected",
+              "mobility_pressure",
+              "scout_before_relocation"
+            ]
+          },
+          {
+            "territorialPressure": 0.12,
+            "mobilityPressure": 0.42,
+            "netMovePressure": 0.56,
+            "action": "logistical_probe",
+            "target": "tile:70:75",
+            "score": 3.74,
+            "deliberationBreadth": 15,
+            "candidates": [
+              "logistical_probe:tile:66:79:-0.3",
+              "logistical_probe:tile:70:75:3.74",
+              "move_to_tile:tile:66:78:1.69",
+              "move_to_tile:tile:67:77:1.7",
+              "move_to_tile:tile:67:78:2.53",
+              "move_to_tile:tile:67:79:1.91",
+              "move_to_tile:tile:68:76:1.81",
+              "move_to_tile:tile:68:77:2.9",
+              "move_to_tile:tile:68:79:2.52",
+              "move_to_tile:tile:68:80:1.74",
+              "move_to_tile:tile:69:77:3.07",
+              "move_to_tile:tile:69:78:3.47",
+              "move_to_tile:tile:69:79:2.1",
+              "move_to_tile:tile:70:78:3.47",
+              "resource_scout:tile:67:78:1.91",
+              "stay:-:2.57"
+            ],
+            "reasonPressures": [
+              "sec4:mobility_pressure=0.42"
+            ],
+            "reasonTypes": [
+              "camp_movement_response_selected",
+              "food_scarcity",
+              "intent_continuation",
+              "logistical_probe_selected",
+              "mobility_pressure",
+              "scout_before_relocation"
+            ]
+          },
+          {
+            "territorialPressure": 0.8,
+            "mobilityPressure": 0.42,
+            "netMovePressure": 0.56,
+            "action": "logistical_probe",
+            "target": "tile:70:75",
+            "score": 3.74,
+            "deliberationBreadth": 15,
+            "candidates": [
+              "logistical_probe:tile:66:79:-0.3",
+              "logistical_probe:tile:70:75:3.74",
+              "move_to_tile:tile:66:78:1.69",
+              "move_to_tile:tile:67:77:1.7",
+              "move_to_tile:tile:67:78:2.53",
+              "move_to_tile:tile:67:79:1.91",
+              "move_to_tile:tile:68:76:1.81",
+              "move_to_tile:tile:68:77:2.9",
+              "move_to_tile:tile:68:79:2.52",
+              "move_to_tile:tile:68:80:1.74",
+              "move_to_tile:tile:69:77:3.07",
+              "move_to_tile:tile:69:78:3.47",
+              "move_to_tile:tile:69:79:2.1",
+              "move_to_tile:tile:70:78:3.47",
+              "resource_scout:tile:67:78:1.91",
+              "stay:-:2.57"
+            ],
+            "reasonPressures": [
+              "sec4:mobility_pressure=0.42"
+            ],
+            "reasonTypes": [
+              "camp_movement_response_selected",
+              "food_scarcity",
+              "intent_continuation",
+              "logistical_probe_selected",
+              "mobility_pressure",
+              "scout_before_relocation"
+            ]
+          }
+        ]
+      },
+      {
+        "band": "band:varied-pass-frontier",
+        "rows": [
+          {
+            "territorialPressure": 0,
+            "mobilityPressure": 0.21,
+            "netMovePressure": 0.24,
+            "action": "stay",
+            "target": "-",
+            "score": 2.12,
+            "deliberationBreadth": 10,
+            "candidates": [
+              "move_to_tile:tile:133:44:1.19",
+              "move_to_tile:tile:134:43:1.06",
+              "move_to_tile:tile:134:44:2.24",
+              "move_to_tile:tile:135:42:1.36",
+              "move_to_tile:tile:135:43:2.14",
+              "move_to_tile:tile:135:46:1.62",
+              "move_to_tile:tile:136:43:1.17",
+              "move_to_tile:tile:136:45:1.92",
+              "move_to_tile:tile:137:44:1.68",
+              "stay:-:2.12"
+            ],
+            "reasonPressures": [
+              "primary:known_site_sufficient=0.2272"
+            ],
+            "reasonTypes": [
+              "known_site_sufficient",
+              "low_pressure_stay",
+              "river_crossing_cost"
+            ]
+          },
+          {
+            "territorialPressure": 0.12,
+            "mobilityPressure": 0.21,
+            "netMovePressure": 0.24,
+            "action": "stay",
+            "target": "-",
+            "score": 2.12,
+            "deliberationBreadth": 10,
+            "candidates": [
+              "move_to_tile:tile:133:44:1.19",
+              "move_to_tile:tile:134:43:1.06",
+              "move_to_tile:tile:134:44:2.24",
+              "move_to_tile:tile:135:42:1.36",
+              "move_to_tile:tile:135:43:2.14",
+              "move_to_tile:tile:135:46:1.62",
+              "move_to_tile:tile:136:43:1.17",
+              "move_to_tile:tile:136:45:1.92",
+              "move_to_tile:tile:137:44:1.68",
+              "stay:-:2.12"
+            ],
+            "reasonPressures": [
+              "primary:known_site_sufficient=0.2272"
+            ],
+            "reasonTypes": [
+              "known_site_sufficient",
+              "low_pressure_stay",
+              "river_crossing_cost"
+            ]
+          },
+          {
+            "territorialPressure": 0.8,
+            "mobilityPressure": 0.21,
+            "netMovePressure": 0.24,
+            "action": "stay",
+            "target": "-",
+            "score": 2.12,
+            "deliberationBreadth": 10,
+            "candidates": [
+              "move_to_tile:tile:133:44:1.19",
+              "move_to_tile:tile:134:43:1.06",
+              "move_to_tile:tile:134:44:2.24",
+              "move_to_tile:tile:135:42:1.36",
+              "move_to_tile:tile:135:43:2.14",
+              "move_to_tile:tile:135:46:1.62",
+              "move_to_tile:tile:136:43:1.17",
+              "move_to_tile:tile:136:45:1.92",
+              "move_to_tile:tile:137:44:1.68",
+              "stay:-:2.12"
+            ],
+            "reasonPressures": [
+              "primary:known_site_sufficient=0.2272"
+            ],
+            "reasonTypes": [
+              "known_site_sufficient",
+              "low_pressure_stay",
+              "river_crossing_cost"
+            ]
+          }
+        ]
+      },
+      {
+        "band": "band:varied-plains-creek",
+        "rows": [
+          {
+            "territorialPressure": 0,
+            "mobilityPressure": 0.29,
+            "netMovePressure": 0.29,
+            "action": "stay",
+            "target": "-",
+            "score": 3.78,
+            "deliberationBreadth": 14,
+            "candidates": [
+              "logistical_probe:tile:101:48:0.43",
+              "move_to_tile:tile:100:44:2.49",
+              "move_to_tile:tile:100:45:3.14",
+              "move_to_tile:tile:100:47:2.93",
+              "move_to_tile:tile:100:48:2.1",
+              "move_to_tile:tile:101:45:2.69",
+              "move_to_tile:tile:101:46:3.46",
+              "move_to_tile:tile:101:47:2.67",
+              "move_to_tile:tile:102:46:3.44",
+              "move_to_tile:tile:98:46:1.06",
+              "move_to_tile:tile:99:45:1.84",
+              "move_to_tile:tile:99:46:2",
+              "move_to_tile:tile:99:47:1.36",
+              "resource_scout:tile:100:45:2.45",
+              "stay:-:3.78"
+            ],
+            "reasonPressures": [
+              "primary:low_mobility_pressure=0.2236"
+            ],
+            "reasonTypes": [
+              "low_mobility_pressure",
+              "repeated_return"
+            ]
+          },
+          {
+            "territorialPressure": 0.12,
+            "mobilityPressure": 0.29,
+            "netMovePressure": 0.29,
+            "action": "stay",
+            "target": "-",
+            "score": 3.78,
+            "deliberationBreadth": 14,
+            "candidates": [
+              "logistical_probe:tile:101:48:0.43",
+              "move_to_tile:tile:100:44:2.49",
+              "move_to_tile:tile:100:45:3.14",
+              "move_to_tile:tile:100:47:2.93",
+              "move_to_tile:tile:100:48:2.1",
+              "move_to_tile:tile:101:45:2.69",
+              "move_to_tile:tile:101:46:3.46",
+              "move_to_tile:tile:101:47:2.67",
+              "move_to_tile:tile:102:46:3.44",
+              "move_to_tile:tile:98:46:1.06",
+              "move_to_tile:tile:99:45:1.84",
+              "move_to_tile:tile:99:46:2",
+              "move_to_tile:tile:99:47:1.36",
+              "resource_scout:tile:100:45:2.45",
+              "stay:-:3.78"
+            ],
+            "reasonPressures": [
+              "primary:low_mobility_pressure=0.2236"
+            ],
+            "reasonTypes": [
+              "low_mobility_pressure",
+              "repeated_return"
+            ]
+          },
+          {
+            "territorialPressure": 0.8,
+            "mobilityPressure": 0.29,
+            "netMovePressure": 0.29,
+            "action": "stay",
+            "target": "-",
+            "score": 3.78,
+            "deliberationBreadth": 14,
+            "candidates": [
+              "logistical_probe:tile:101:48:0.43",
+              "move_to_tile:tile:100:44:2.49",
+              "move_to_tile:tile:100:45:3.14",
+              "move_to_tile:tile:100:47:2.93",
+              "move_to_tile:tile:100:48:2.1",
+              "move_to_tile:tile:101:45:2.69",
+              "move_to_tile:tile:101:46:3.46",
+              "move_to_tile:tile:101:47:2.67",
+              "move_to_tile:tile:102:46:3.44",
+              "move_to_tile:tile:98:46:1.06",
+              "move_to_tile:tile:99:45:1.84",
+              "move_to_tile:tile:99:46:2",
+              "move_to_tile:tile:99:47:1.36",
+              "resource_scout:tile:100:45:2.45",
+              "stay:-:3.78"
+            ],
+            "reasonPressures": [
+              "primary:low_mobility_pressure=0.2236"
+            ],
+            "reasonTypes": [
+              "low_mobility_pressure",
+              "repeated_return"
+            ]
+          }
+        ]
+      },
+      {
+        "band": "band:varied-river-mid",
+        "rows": [
+          {
+            "territorialPressure": 0,
+            "mobilityPressure": 0.22,
+            "netMovePressure": 0.24,
+            "action": "move_to_tile",
+            "target": "tile:108:54",
+            "score": 2.76,
+            "deliberationBreadth": 10,
+            "candidates": [
+              "logistical_probe:tile:110:57:-0.34",
+              "logistical_probe:tile:110:57:2.77",
+              "move_to_tile:tile:106:56:2.11",
+              "move_to_tile:tile:108:54:2.76",
+              "move_to_tile:tile:108:55:2.64",
+              "move_to_tile:tile:109:55:1.55",
+              "move_to_tile:tile:109:56:2.26",
+              "move_to_tile:tile:109:57:1.42",
+              "move_to_tile:tile:110:56:1.63",
+              "resource_scout:tile:108:54:2.21",
+              "stay:-:2.17"
+            ],
+            "reasonPressures": [],
+            "reasonTypes": [
+              "corridor_following",
+              "followed_river_corridor",
+              "intent_continuation",
+              "safe_frontier_pull"
+            ]
+          },
+          {
+            "territorialPressure": 0.12,
+            "mobilityPressure": 0.22,
+            "netMovePressure": 0.24,
+            "action": "move_to_tile",
+            "target": "tile:108:54",
+            "score": 2.76,
+            "deliberationBreadth": 10,
+            "candidates": [
+              "logistical_probe:tile:110:57:-0.34",
+              "logistical_probe:tile:110:57:2.77",
+              "move_to_tile:tile:106:56:2.11",
+              "move_to_tile:tile:108:54:2.76",
+              "move_to_tile:tile:108:55:2.64",
+              "move_to_tile:tile:109:55:1.55",
+              "move_to_tile:tile:109:56:2.26",
+              "move_to_tile:tile:109:57:1.42",
+              "move_to_tile:tile:110:56:1.63",
+              "resource_scout:tile:108:54:2.21",
+              "stay:-:2.17"
+            ],
+            "reasonPressures": [],
+            "reasonTypes": [
+              "corridor_following",
+              "followed_river_corridor",
+              "intent_continuation",
+              "safe_frontier_pull"
+            ]
+          },
+          {
+            "territorialPressure": 0.8,
+            "mobilityPressure": 0.22,
+            "netMovePressure": 0.24,
+            "action": "move_to_tile",
+            "target": "tile:108:54",
+            "score": 2.76,
+            "deliberationBreadth": 10,
+            "candidates": [
+              "logistical_probe:tile:110:57:-0.34",
+              "logistical_probe:tile:110:57:2.77",
+              "move_to_tile:tile:106:56:2.11",
+              "move_to_tile:tile:108:54:2.76",
+              "move_to_tile:tile:108:55:2.64",
+              "move_to_tile:tile:109:55:1.55",
+              "move_to_tile:tile:109:56:2.26",
+              "move_to_tile:tile:109:57:1.42",
+              "move_to_tile:tile:110:56:1.63",
+              "resource_scout:tile:108:54:2.21",
+              "stay:-:2.17"
+            ],
+            "reasonPressures": [],
+            "reasonTypes": [
+              "corridor_following",
+              "followed_river_corridor",
+              "intent_continuation",
+              "safe_frontier_pull"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

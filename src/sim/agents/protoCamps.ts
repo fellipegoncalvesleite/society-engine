@@ -18,6 +18,7 @@ import type {
   SeasonalHungerClassification,
 } from "./types";
 import { deriveProtoCampResourceReasonFactors } from "./resourceEcologyFoundation";
+import { isBandTerminal, isProvisionalSuccessor } from "./bandLifecycle";
 
 const PROTO_CAMP_MEMORY_CAP = 8;
 const MAX_CANDIDATE_TILE_IDS = 18;
@@ -37,10 +38,16 @@ export function applyProtoCampContext(world: WorldState): WorldState {
   const bands = Object.values(world.bands)
     .sort(compareBands)
     .reduce<Record<string, Band>>((bandsById, band) => {
-      bandsById[String(band.id)] = {
-        ...band,
-        protoCampMemory: advanceProtoCampMemory(world, band),
-      };
+      // ROADMAP ITEM 4 — a proto-camp is the beginning of an ESTABLISHED residence. A provisional
+      // successor is precisely the group that has not established one, and the admission audit
+      // measured a newborn group acquiring proto-camp state anyway. Its establishment is the
+      // provisional lifecycle's to decide, not this pass's. Inert today.
+      bandsById[String(band.id)] = isProvisionalSuccessor(band)
+        ? band
+        : {
+            ...band,
+            protoCampMemory: advanceProtoCampMemory(world, band),
+          };
 
       return bandsById;
     }, {});
@@ -976,7 +983,10 @@ function getKnownKinContactNearby(
 
   let best = 0;
   for (const other of Object.values(world.bands)) {
-    if (other.id === band.id || other.status === "dispersed" || other.viability?.status === "absorbed" || other.viability?.status === "extinct") {
+    // Routed through the canonical predicate rather than re-inlining the three terminal values.
+    // Behaviour-identical — `isBandTerminal` is exactly this disjunction — and it is what keeps the
+    // module inside the lifecycle boundary now that it is migrated.
+    if (other.id === band.id || isBandTerminal(other)) {
       continue;
     }
     const otherTile = getTile(world, other.position);

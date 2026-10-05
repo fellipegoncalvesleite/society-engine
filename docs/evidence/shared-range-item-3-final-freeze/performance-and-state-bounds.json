@@ -1,0 +1,84 @@
+{
+  "audit": "ROADMAP-ITEM-3-PERFORMANCE-AND-STATE-BOUNDS",
+  "machineNote": "wall clock on a shared developer machine. Comparable within this file; NOT comparable across machines and NOT compared against an earlier checkpoint, because no before/after timing arm was built.",
+  "perDayCost": {
+    "fromTheCheckpointPerformanceAudit": [
+      {
+        "years": 20,
+        "msPerSimulatedDay": 0.8043,
+        "stateMB": 73.38,
+        "stateBytes": 76945569,
+        "livingBands": 9
+      },
+      {
+        "years": 50,
+        "msPerSimulatedDay": 0.8028,
+        "stateMB": 74.34,
+        "stateBytes": 77949576,
+        "livingBands": 9
+      }
+    ],
+    "fromTheIntegratedNaturalRuns": [
+      {
+        "years": 20,
+        "msPerSimulatedDay": 0.9026,
+        "bandDays": 64800,
+        "livingBandsAtEnd": 9
+      },
+      {
+        "years": 50,
+        "msPerSimulatedDay": 0.9011,
+        "bandDays": 162000,
+        "livingBandsAtEnd": 9
+      },
+      {
+        "years": 200,
+        "msPerSimulatedDay": 0.9212,
+        "bandDays": 628560,
+        "livingBandsAtEnd": 9
+      }
+    ],
+    "observation": "per-simulated-day cost is FLAT from 20 to 200 years (0.90 -> 0.92 ms in the integrated probe), so Item 3 adds no super-linear term."
+  },
+  "stateBounds": {
+    "note": "every cap is production-enforced, not incidental. Measured maxima over the integrated 200-year run and the checkpoint performance audit.",
+    "presenceSourcesPerBand": {
+      "cap": "1 residential + EXPEDITION_ACTIVE_CAP",
+      "observedMax": 3
+    },
+    "activePartiesPerBand": {
+      "cap": "EXPEDITION_ACTIVE_CAP = 2",
+      "observedMax": 2
+    },
+    "tripRecordsPerBand": {
+      "cap": "RECENT_TRIP_RECORD_CAP = 24",
+      "observedMax": 24
+    },
+    "expeditionOutcomeRecordsPerBand": {
+      "cap": "EXPEDITION_OUTCOME_CAP = 6",
+      "observedMax": 6
+    },
+    "rangeFrictionRecordsPerBand": {
+      "cap": "RANGE_FRICTION_RING_LIMIT = 8",
+      "observedMax": 8
+    },
+    "encounterRecordsPerBand": {
+      "observedMax": 24
+    },
+    "accessMemoryPlacesPerBand": {
+      "cap": "ProtoAccessMemoryState.memoryCap = 8",
+      "observedMax": 8
+    },
+    "crowdingContributorsOnOneTile": {
+      "observedMax": 2
+    },
+    "stateSizeBetweenHorizons": "73.38 MB at 20 y -> 74.34 MB at 50 y (+0.96 MB), from the checkpoint performance audit"
+  },
+  "boundedStateVerdict": "BOUNDED — no Item 3 store grows without a cap, and every observed maximum sits at or below its production cap across 200 simulated years.",
+  "notMeasured": [
+    "no before/after timing arm against a pre-Item-3 tree",
+    "no multi-machine comparison",
+    "no 500-year horizon",
+    "no memory profile beyond serialized state size"
+  ]
+}

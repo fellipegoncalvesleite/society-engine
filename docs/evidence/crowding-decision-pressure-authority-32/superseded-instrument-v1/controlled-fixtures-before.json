@@ -1,0 +1,5237 @@
+{
+  "audit": "crowdingDecisionAuthorityFixturesAudit",
+  "checkpoint": "CORRECTION-32",
+  "arm": "before",
+  "seed": "c32:fixtures",
+  "warmSeasons": 14,
+  "summary": {
+    "fixtures": 21,
+    "vacuous": 0,
+    "vacuousIds": [],
+    "verdicts": {
+      "P1_zero_crowding_control": "ZERO_CROWDING_IS_ZERO",
+      "P2_one_neutral_non_kin_neighbour": "MULTIPLE_CROWDING_PATHS",
+      "P3_residence_crowded_target_clear": "TARGET_KEEPS_NO_RESIDENCE_COST",
+      "P4_residence_clear_target_crowded": "TARGET_COSTED_AND_NO_FALSE_HOME_PUSH",
+      "P5_residence_and_target_crowded": "SYMMETRIC_NO_ARTIFICIAL_PREFERENCE",
+      "P6_terrain_capacity_comparison": "CAPACITY_TRANSFORM_EXPLAINS_DIFFERENCE",
+      "P7_crowding_without_depletion": "MEASURED",
+      "P8_depletion_without_current_crowding": "MEASURED",
+      "P9_crowding_plus_depletion": "MEASURED",
+      "P10_crowding_plus_social_friction": "MEASURED",
+      "P11_kin_crowding": "KIN_DISCOUNTED_BUT_STILL_CONSUME_SPACE",
+      "P12_tolerated_aggregation": "PHYSICAL_AND_SOCIAL_COEXIST",
+      "P13_range_saturation_overlap": "SATURATION_STILL_CARRIES_CROWDING_INTO_SCORE",
+      "P14_crowding_driven_exploration": "EXPLORATION_RESPONSE_MULTIPLIED",
+      "P15_repeated_nearby_seasons": "BOUNDED",
+      "P16_departure": "PHYSICAL_RELEASES_IMMEDIATELY",
+      "P17_several_nearby_bands": "MONOTONE_AND_BOUNDED",
+      "P18_candidate_family_parity": "A_FAMILY_DUPLICATES",
+      "P19_order_invariance": "ORDER_INVARIANT",
+      "P20_step_mode_invariance": "STEP_MODE_EQUIVALENT",
+      "P21_long_horizon": "NO_RESIDUAL_AFTER_DEPARTURE"
+    }
+  },
+  "fixtures": {
+    "P1_zero_crowding_control": {
+      "intent": "one band, no nearby bands: every crowding-specific score contribution must be zero",
+      "syntheticState": true,
+      "probe": {
+        "bandId": "band:custom:0",
+        "position": "tile:195:90",
+        "terrain": "river_valley",
+        "droughtRisk": 0,
+        "weightedCrowding": 0,
+        "nearbyBandCount": 0,
+        "crowdingBandIds": [],
+        "crowdingPenalty": 0,
+        "parentOverlap": 0,
+        "daughterOverlap": 0,
+        "riskPressure": {
+          "full": 0.62,
+          "zeroCrowding": 0.62
+        },
+        "placeAttachmentPull": {
+          "full": 0.55,
+          "zeroCrowding": 0.55
+        },
+        "mobilityPressure": {
+          "full": 0.29,
+          "zeroCrowding": 0.29
+        },
+        "netMovePressure": {
+          "full": 0.14,
+          "zeroCrowding": 0.14
+        },
+        "decisionSaturation": {
+          "full": 0.03,
+          "zeroCrowding": 0.03
+        },
+        "fullSaturationPressure": 0.03,
+        "daughterDispersalPressure": 0,
+        "overlappingBandIds": [],
+        "localUsePressure": 0.0656,
+        "tileDepletion": 0,
+        "perCapitaReturn": 1,
+        "encounterRecords": 0,
+        "contactMemories": 0,
+        "frictionRecords": 0,
+        "accessState": "familiar_use",
+        "selected": "move_to_tile:tile:194:90",
+        "selectedZeroCrowding": "move_to_tile:tile:194:90",
+        "candidateFamilies": [
+          "logistical_probe",
+          "move_to_tile",
+          "stay"
+        ],
+        "maxCrowdingPathCount": 0,
+        "stay": {
+          "action": "stay:tile:195:90",
+          "actionType": "stay",
+          "score": 5.47,
+          "totalCrowdingInfluence": 0,
+          "charges": {
+            "directNearbyBandPressure": 0,
+            "directCrowdingPenalty": 0,
+            "pressureState": 0,
+            "rangeSaturation": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDerivative": 0
+          },
+          "crowdingPathCount": 0,
+          "targetCrowdingPenalty": 0,
+          "targetNearbyBandPressure": 0,
+          "rangeSaturationScored": 0.03,
+          "crowdingExploreBoost": 0,
+          "daughterDispersalExploreBoost": 0
+        },
+        "bestMove": {
+          "action": "move_to_tile:tile:194:90",
+          "actionType": "move_to_tile",
+          "score": 5.82,
+          "totalCrowdingInfluence": 0,
+          "charges": {
+            "directNearbyBandPressure": 0,
+            "directCrowdingPenalty": 0,
+            "pressureState": 0,
+            "rangeSaturation": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDerivative": 0
+          },
+          "crowdingPathCount": 0,
+          "targetCrowdingPenalty": 0,
+          "targetNearbyBandPressure": 0,
+          "rangeSaturationScored": 0,
+          "crowdingExploreBoost": 0,
+          "daughterDispersalExploreBoost": 0
+        },
+        "exploration": null,
+        "logisticalProbe": {
+          "action": "logistical_probe:tile:192:85",
+          "actionType": "logistical_probe",
+          "score": 3.58,
+          "totalCrowdingInfluence": 0,
+          "charges": {
+            "directNearbyBandPressure": 0,
+            "directCrowdingPenalty": 0,
+            "pressureState": 0,
+            "rangeSaturation": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDerivative": 0
+          },
+          "crowdingPathCount": 0,
+          "targetCrowdingPenalty": 0,
+          "targetNearbyBandPressure": 0,
+          "rangeSaturationScored": 0,
+          "crowdingExploreBoost": 0,
+          "daughterDispersalExploreBoost": 0
+        },
+        "resourceScout": null,
+        "candidates": [
+          {
+            "action": "move_to_tile:tile:194:90",
+            "actionType": "move_to_tile",
+            "score": 5.82,
+            "totalCrowdingInfluence": 0,
+            "charges": {
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 0,
+            "targetCrowdingPenalty": 0,
+            "targetNearbyBandPressure": 0,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "stay:tile:195:90",
+            "actionType": "stay",
+            "score": 5.47,
+            "totalCrowdingInfluence": 0,
+            "charges": {
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 0,
+            "targetCrowdingPenalty": 0,
+            "targetNearbyBandPressure": 0,
+            "rangeSaturationScored": 0.03,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:195:89",
+            "actionType": "move_to_tile",
+            "score": 4.92,
+            "totalCrowdingInfluence": 0,
+            "charges": {
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 0,
+            "targetCrowdingPenalty": 0,
+            "targetNearbyBandPressure": 0,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:194:89",
+            "actionType": "move_to_tile",
+            "score": 4.6,
+            "totalCrowdingInfluence": 0,
+            "charges": {
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 0,
+            "targetCrowdingPenalty": 0,
+            "targetNearbyBandPressure": 0,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:196:90",
+            "actionType": "move_to_tile",
+            "score": 4.59,
+            "totalCrowdingInfluence": -3.39,
+            "charges": {
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 0,
+            "targetCrowdingPenalty": 0,
+            "targetNearbyBandPressure": 0,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:195:88",
+            "actionType": "move_to_tile",
+            "score": 4.3,
+            "totalCrowdingInfluence": 0,
+            "charges": {
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 0,
+            "targetCrowdingPenalty": 0,
+            "targetNearbyBandPressure": 0,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:197:90",
+            "actionType": "move_to_tile",
+            "score": 4.27,
+            "totalCrowdingInfluence": 0,
+            "charges": {
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 0,
+            "targetCrowdingPenalty": 0,
+            "targetNearbyBandPressure": 0,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:195:91",
+            "actionType": "move_to_tile",
+            "score": 4.14,
+            "totalCrowdingInfluence": 0,
+            "charges": {
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 0,
+            "targetCrowdingPenalty": 0,
+            "targetNearbyBandPressure": 0,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:196:89",
+            "actionType": "move_to_tile",
+            "score": 3.95,
+            "totalCrowdingInfluence": 0,
+            "charges": {
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 0,
+            "targetCrowdingPenalty": 0,
+            "targetNearbyBandPressure": 0,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:196:91",
+            "actionType": "move_to_tile",
+            "score": 3.84,
+            "totalCrowdingInfluence": 0,
+            "charges": {
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 0,
+            "targetCrowdingPenalty": 0,
+            "targetNearbyBandPressure": 0,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "logistical_probe:tile:197:88",
+            "actionType": "logistical_probe",
+            "score": 3.57,
+            "totalCrowdingInfluence": 0,
+            "charges": {
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 0,
+            "targetCrowdingPenalty": 0,
+            "targetNearbyBandPressure": 0,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "logistical_probe:tile:192:85",
+            "actionType": "logistical_probe",
+            "score": 3.58,
+            "totalCrowdingInfluence": 0,
+            "charges": {
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 0,
+            "targetCrowdingPenalty": 0,
+            "targetNearbyBandPressure": 0,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:196:90",
+            "actionType": "move_to_tile",
+            "score": 1.2,
+            "totalCrowdingInfluence": 0,
+            "charges": {
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 0,
+            "targetCrowdingPenalty": 0,
+            "targetNearbyBandPressure": 0,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "logistical_probe:tile:197:89",
+            "actionType": "logistical_probe",
+            "score": 0.39,
+            "totalCrowdingInfluence": 0,
+            "charges": {
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 0,
+            "targetCrowdingPenalty": 0,
+            "targetNearbyBandPressure": 0,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          }
+        ]
+      },
+      "verdict": "ZERO_CROWDING_IS_ZERO"
+    },
+    "P2_one_neutral_non_kin_neighbour": {
+      "intent": "one nearby non-kin band, no friction/report/encounter/kin: the complete influence graph",
+      "syntheticState": true,
+      "preconditions": {
+        "nonKin": true,
+        "noFriction": true,
+        "noContactMemory": false
+      },
+      "probe": {
+        "bandId": "band:custom:0",
+        "position": "tile:195:90",
+        "terrain": "river_valley",
+        "droughtRisk": 0,
+        "weightedCrowding": 0.15,
+        "nearbyBandCount": 1,
+        "crowdingBandIds": [
+          "band:custom:1"
+        ],
+        "crowdingPenalty": 0.06,
+        "parentOverlap": 0,
+        "daughterOverlap": 0,
+        "riskPressure": {
+          "full": 0.53,
+          "zeroCrowding": 0.53
+        },
+        "placeAttachmentPull": {
+          "full": 0.55,
+          "zeroCrowding": 0.56
+        },
+        "mobilityPressure": {
+          "full": 0.35,
+          "zeroCrowding": 0.34
+        },
+        "netMovePressure": {
+          "full": 0.22,
+          "zeroCrowding": 0.2
+        },
+        "decisionSaturation": {
+          "full": 0.17,
+          "zeroCrowding": 0.11
+        },
+        "fullSaturationPressure": 0.17,
+        "daughterDispersalPressure": 0,
+        "overlappingBandIds": [
+          "band:custom:1"
+        ],
+        "localUsePressure": 0.0656,
+        "tileDepletion": 0,
+        "perCapitaReturn": 1,
+        "encounterRecords": 19,
+        "contactMemories": 1,
+        "frictionRecords": 0,
+        "accessState": "familiar_use",
+        "selected": "stay:tile:195:90",
+        "selectedZeroCrowding": "stay:tile:195:90",
+        "candidateFamilies": [
+          "logistical_probe",
+          "move_to_tile",
+          "resource_scout",
+          "stay"
+        ],
+        "maxCrowdingPathCount": 4,
+        "stay": {
+          "action": "stay:tile:195:90",
+          "actionType": "stay",
+          "score": 5.01,
+          "totalCrowdingInfluence": 0.14,
+          "charges": {
+            "directNearbyBandPressure": 0.04,
+            "directCrowdingPenalty": 0.05,
+            "pressureState": 0.01,
+            "rangeSaturation": 0.02,
+            "crowdingExploreBoost": 0,
+            "daughterDerivative": 0
+          },
+          "crowdingPathCount": 4,
+          "targetCrowdingPenalty": 0.06,
+          "targetNearbyBandPressure": 0.15,
+          "rangeSaturationScored": 0.17,
+          "crowdingExploreBoost": 0,
+          "daughterDispersalExploreBoost": 0
+        },
+        "bestMove": {
+          "action": "move_to_tile:tile:194:90",
+          "actionType": "move_to_tile",
+          "score": 5.32,
+          "totalCrowdingInfluence": -4.06,
+          "charges": {
+            "directNearbyBandPressure": 0.02,
+            "directCrowdingPenalty": 0.02,
+            "pressureState": -0.01,
+            "rangeSaturation": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDerivative": 0.01
+          },
+          "crowdingPathCount": 4,
+          "targetCrowdingPenalty": 0.04,
+          "targetNearbyBandPressure": 0.11,
+          "rangeSaturationScored": 0,
+          "crowdingExploreBoost": 0,
+          "daughterDispersalExploreBoost": 0
+        },
+        "exploration": null,
+        "logisticalProbe": {
+          "action": "logistical_probe:tile:198:86",
+          "actionType": "logistical_probe",
+          "score": 3.66,
+          "totalCrowdingInfluence": 0,
+          "charges": {
+            "directNearbyBandPressure": 0,
+            "directCrowdingPenalty": 0,
+            "pressureState": 0,
+            "rangeSaturation": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDerivative": 0
+          },
+          "crowdingPathCount": 0,
+          "targetCrowdingPenalty": 0,
+          "targetNearbyBandPressure": 0,
+          "rangeSaturationScored": 0,
+          "crowdingExploreBoost": 0,
+          "daughterDispersalExploreBoost": 0
+        },
+        "resourceScout": {
+          "action": "resource_scout:tile:194:90",
+          "actionType": "resource_scout",
+          "score": 2.42,
+          "totalCrowdingInfluence": 0,
+          "charges": {
+            "directNearbyBandPressure": 0,
+            "directCrowdingPenalty": 0,
+            "pressureState": 0,
+            "rangeSaturation": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDerivative": 0
+          },
+          "crowdingPathCount": 0,
+          "targetCrowdingPenalty": 0,
+          "targetNearbyBandPressure": 0,
+          "rangeSaturationScored": 0,
+          "crowdingExploreBoost": 0,
+          "daughterDispersalExploreBoost": 0
+        },
+        "candidates": [
+          {
+            "action": "stay:tile:195:90",
+            "actionType": "stay",
+            "score": 5.01,
+            "totalCrowdingInfluence": 0.14,
+            "charges": {
+              "directNearbyBandPressure": 0.04,
+              "directCrowdingPenalty": 0.05,
+              "pressureState": 0.01,
+              "rangeSaturation": 0.02,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 4,
+            "targetCrowdingPenalty": 0.06,
+            "targetNearbyBandPressure": 0.15,
+            "rangeSaturationScored": 0.17,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:194:90",
+            "actionType": "move_to_tile",
+            "score": 5.32,
+            "totalCrowdingInfluence": -4.06,
+            "charges": {
+              "directNearbyBandPressure": 0.02,
+              "directCrowdingPenalty": 0.02,
+              "pressureState": -0.01,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0.01
+            },
+            "crowdingPathCount": 4,
+            "targetCrowdingPenalty": 0.04,
+            "targetNearbyBandPressure": 0.11,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:196:90",
+            "actionType": "move_to_tile",
+            "score": 4.42,
+            "totalCrowdingInfluence": 0.15,
+            "charges": {
+              "directNearbyBandPressure": 0.05,
+              "directCrowdingPenalty": 0.05,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0.02
+            },
+            "crowdingPathCount": 3,
+            "targetCrowdingPenalty": 0.07,
+            "targetNearbyBandPressure": 0.19,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:195:89",
+            "actionType": "move_to_tile",
+            "score": 4.31,
+            "totalCrowdingInfluence": 0.09,
+            "charges": {
+              "directNearbyBandPressure": 0.03,
+              "directCrowdingPenalty": 0.03,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0.02
+            },
+            "crowdingPathCount": 3,
+            "targetCrowdingPenalty": 0.04,
+            "targetNearbyBandPressure": 0.11,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:194:89",
+            "actionType": "move_to_tile",
+            "score": 4.08,
+            "totalCrowdingInfluence": 0.04,
+            "charges": {
+              "directNearbyBandPressure": 0.01,
+              "directCrowdingPenalty": 0.01,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0.01
+            },
+            "crowdingPathCount": 3,
+            "targetCrowdingPenalty": 0.02,
+            "targetNearbyBandPressure": 0.05,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:197:90",
+            "actionType": "move_to_tile",
+            "score": 3.97,
+            "totalCrowdingInfluence": 0.15,
+            "charges": {
+              "directNearbyBandPressure": 0.04,
+              "directCrowdingPenalty": 0.05,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0.03
+            },
+            "crowdingPathCount": 3,
+            "targetCrowdingPenalty": 0.07,
+            "targetNearbyBandPressure": 0.16,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:195:88",
+            "actionType": "move_to_tile",
+            "score": 3.83,
+            "totalCrowdingInfluence": 0.04,
+            "charges": {
+              "directNearbyBandPressure": 0.02,
+              "directCrowdingPenalty": 0.02,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0.01
+            },
+            "crowdingPathCount": 3,
+            "targetCrowdingPenalty": 0.02,
+            "targetNearbyBandPressure": 0.05,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:196:89",
+            "actionType": "move_to_tile",
+            "score": 3.66,
+            "totalCrowdingInfluence": 0.13,
+            "charges": {
+              "directNearbyBandPressure": 0.04,
+              "directCrowdingPenalty": 0.04,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0.02
+            },
+            "crowdingPathCount": 3,
+            "targetCrowdingPenalty": 0.06,
+            "targetNearbyBandPressure": 0.15,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "logistical_probe:tile:198:86",
+            "actionType": "logistical_probe",
+            "score": 3.66,
+            "totalCrowdingInfluence": 0,
+            "charges": {
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 0,
+            "targetCrowdingPenalty": 0,
+            "targetNearbyBandPressure": 0,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:195:91",
+            "actionType": "move_to_tile",
+            "score": 3.48,
+            "totalCrowdingInfluence": 0.08,
+            "charges": {
+              "directNearbyBandPressure": 0.02,
+              "directCrowdingPenalty": 0.03,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0.01
+            },
+            "crowdingPathCount": 3,
+            "targetCrowdingPenalty": 0.04,
+            "targetNearbyBandPressure": 0.11,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:196:91",
+            "actionType": "move_to_tile",
+            "score": 3.12,
+            "totalCrowdingInfluence": 0.12,
+            "charges": {
+              "directNearbyBandPressure": 0.03,
+              "directCrowdingPenalty": 0.04,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0.02
+            },
+            "crowdingPathCount": 3,
+            "targetCrowdingPenalty": 0.06,
+            "targetNearbyBandPressure": 0.15,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "resource_scout:tile:194:90",
+            "actionType": "resource_scout",
+            "score": 2.42,
+            "totalCrowdingInfluence": 0,
+            "charges": {
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 0,
+            "targetCrowdingPenalty": 0,
+            "targetNearbyBandPressure": 0,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:194:90",
+            "actionType": "move_to_tile",
+            "score": 1.26,
+            "totalCrowdingInfluence": 0,
+            "charges": {
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 0,
+            "targetCrowdingPenalty": 0,
+            "targetNearbyBandPressure": 0,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "logistical_probe:tile:192:89",
+            "actionType": "logistical_probe",
+            "score": 0.1,
+            "totalCrowdingInfluence": 0,
+            "charges": {
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 0,
+            "targetCrowdingPenalty": 0,
+            "targetNearbyBandPressure": 0,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          }
+        ]
+      },
+      "verdict": "MULTIPLE_CROWDING_PATHS"
+    },
+    "P3_residence_crowded_target_clear": {
+      "intent": "crowding only around the residence: a dispersal motive may exist, but the clear target must not inherit the residence's cost",
+      "syntheticState": true,
+      "structuralNote": "known-move candidates are capped at Manhattan distance <= 2; CROWDING_RADIUS = 4",
+      "geometry": {
+        "home": "tile:195:90",
+        "nHome": "tile:192:89",
+        "away": "tile:197:90"
+      },
+      "distances": {
+        "homeToAway": 2,
+        "nHomeToHome": 4,
+        "nHomeToAway": 6,
+        "nAwayToAway": null,
+        "nAwayToHome": null
+      },
+      "residenceCrowding": {
+        "weightedCrowding": 0.02,
+        "crowdingPenalty": 0.01
+      },
+      "targetCrowding": {
+        "weightedCrowding": 0,
+        "crowdingPenalty": 0
+      },
+      "stay": {
+        "action": "stay:tile:195:90",
+        "actionType": "stay",
+        "score": 5.23,
+        "totalCrowdingInfluence": 0.02,
+        "charges": {
+          "directNearbyBandPressure": 0.01,
+          "directCrowdingPenalty": 0.01,
+          "pressureState": 0,
+          "rangeSaturation": 0.01,
+          "crowdingExploreBoost": 0,
+          "daughterDerivative": 0
+        },
+        "crowdingPathCount": 3,
+        "targetCrowdingPenalty": 0.01,
+        "targetNearbyBandPressure": 0.02,
+        "rangeSaturationScored": 0.06,
+        "crowdingExploreBoost": 0,
+        "daughterDispersalExploreBoost": 0
+      },
+      "targetCandidate": {
+        "action": "move_to_tile:tile:197:90",
+        "actionType": "move_to_tile",
+        "score": 4.07,
+        "totalCrowdingInfluence": 0,
+        "charges": {
+          "directNearbyBandPressure": 0,
+          "directCrowdingPenalty": 0,
+          "pressureState": 0,
+          "rangeSaturation": 0,
+          "crowdingExploreBoost": 0,
+          "daughterDerivative": 0
+        },
+        "crowdingPathCount": 0,
+        "targetCrowdingPenalty": 0,
+        "targetNearbyBandPressure": 0,
+        "rangeSaturationScored": 0,
+        "crowdingExploreBoost": 0,
+        "daughterDispersalExploreBoost": 0
+      },
+      "knownMoveCandidates": [
+        {
+          "action": "move_to_tile:tile:194:90",
+          "targetCrowdingPenalty": 0.02,
+          "totalCrowdingInfluence": 0.03,
+          "paths": 3
+        },
+        {
+          "action": "move_to_tile:tile:195:89",
+          "targetCrowdingPenalty": 0.02,
+          "totalCrowdingInfluence": 0.05,
+          "paths": 3
+        },
+        {
+          "action": "move_to_tile:tile:196:90",
+          "targetCrowdingPenalty": 0,
+          "totalCrowdingInfluence": -2.97,
+          "paths": 0
+        },
+        {
+          "action": "move_to_tile:tile:195:88",
+          "targetCrowdingPenalty": 0.01,
+          "totalCrowdingInfluence": 0.02,
+          "paths": 2
+        },
+        {
+          "action": "move_to_tile:tile:194:89",
+          "targetCrowdingPenalty": 0.04,
+          "totalCrowdingInfluence": 0.09,
+          "paths": 3
+        },
+        {
+          "action": "move_to_tile:tile:197:90",
+          "targetCrowdingPenalty": 0,
+          "totalCrowdingInfluence": 0,
+          "paths": 0
+        },
+        {
+          "action": "move_to_tile:tile:195:91",
+          "targetCrowdingPenalty": 0,
+          "totalCrowdingInfluence": -0.01,
+          "paths": 1
+        },
+        {
+          "action": "move_to_tile:tile:196:89",
+          "targetCrowdingPenalty": 0.01,
+          "totalCrowdingInfluence": 0.01,
+          "paths": 2
+        },
+        {
+          "action": "move_to_tile:tile:196:91",
+          "targetCrowdingPenalty": 0,
+          "totalCrowdingInfluence": 0,
+          "paths": 0
+        },
+        {
+          "action": "move_to_tile:tile:196:90",
+          "targetCrowdingPenalty": 0,
+          "totalCrowdingInfluence": 0,
+          "paths": 0
+        }
+      ],
+      "netMovePressureCrowdingContribution": 0.01,
+      "probe": {
+        "bandId": "band:custom:0",
+        "position": "tile:195:90",
+        "terrain": "river_valley",
+        "droughtRisk": 0,
+        "weightedCrowding": 0.02,
+        "nearbyBandCount": 1,
+        "crowdingBandIds": [
+          "band:custom:1"
+        ],
+        "crowdingPenalty": 0.01,
+        "parentOverlap": 0,
+        "daughterOverlap": 0,
+        "riskPressure": {
+          "full": 0.63,
+          "zeroCrowding": 0.63
+        },
+        "placeAttachmentPull": {
+          "full": 0.61,
+          "zeroCrowding": 0.61
+        },
+        "mobilityPressure": {
+          "full": 0.3,
+          "zeroCrowding": 0.3
+        },
+        "netMovePressure": {
+          "full": 0.12,
+          "zeroCrowding": 0.11
+        },
+        "decisionSaturation": {
+          "full": 0.06,
+          "zeroCrowding": 0.05
+        },
+        "fullSaturationPressure": 0.06,
+        "daughterDispersalPressure": 0,
+        "overlappingBandIds": [
+          "band:custom:1"
+        ],
+        "localUsePressure": 0.0902,
+        "tileDepletion": 0,
+        "perCapitaReturn": 1,
+        "encounterRecords": 12,
+        "contactMemories": 1,
+        "frictionRecords": 0,
+        "accessState": "familiar_use",
+        "selected": "stay:tile:195:90",
+        "selectedZeroCrowding": "stay:tile:195:90",
+        "candidateFamilies": [
+          "logistical_probe",
+          "move_to_tile",
+          "stay"
+        ],
+        "maxCrowdingPathCount": 3,
+        "stay": {
+          "action": "stay:tile:195:90",
+          "actionType": "stay",
+          "score": 5.23,
+          "totalCrowdingInfluence": 0.02,
+          "charges": {
+            "directNearbyBandPressure": 0.01,
+            "directCrowdingPenalty": 0.01,
+            "pressureState": 0,
+            "rangeSaturation": 0.01,
+            "crowdingExploreBoost": 0,
+            "daughterDerivative": 0
+          },
+          "crowdingPathCount": 3,
+          "targetCrowdingPenalty": 0.01,
+          "targetNearbyBandPressure": 0.02,
+          "rangeSaturationScored": 0.06,
+          "crowdingExploreBoost": 0,
+          "daughterDispersalExploreBoost": 0
+        },
+        "bestMove": {
+          "action": "move_to_tile:tile:194:90",
+          "actionType": "move_to_tile",
+          "score": 5.39,
+          "totalCrowdingInfluence": 0.03,
+          "charges": {
+            "directNearbyBandPressure": 0.01,
+            "directCrowdingPenalty": 0.01,
+            "pressureState": 0,
+            "rangeSaturation": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDerivative": 0.01
+          },
+          "crowdingPathCount": 3,
+          "targetCrowdingPenalty": 0.02,
+          "targetNearbyBandPressure": 0.05,
+          "rangeSaturationScored": 0,
+          "crowdingExploreBoost": 0,
+          "daughterDispersalExploreBoost": 0
+        },
+        "exploration": null,
+        "logisticalProbe": {
+          "action": "logistical_probe:tile:198:87",
+          "actionType": "logistical_probe",
+          "score": 3.64,
+          "totalCrowdingInfluence": 0,
+          "charges": {
+            "directNearbyBandPressure": 0,
+            "directCrowdingPenalty": 0,
+            "pressureState": 0,
+            "rangeSaturation": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDerivative": 0
+          },
+          "crowdingPathCount": 0,
+          "targetCrowdingPenalty": 0,
+          "targetNearbyBandPressure": 0,
+          "rangeSaturationScored": 0,
+          "crowdingExploreBoost": 0,
+          "daughterDispersalExploreBoost": 0
+        },
+        "resourceScout": null,
+        "candidates": [
+          {
+            "action": "stay:tile:195:90",
+            "actionType": "stay",
+            "score": 5.23,
+            "totalCrowdingInfluence": 0.02,
+            "charges": {
+              "directNearbyBandPressure": 0.01,
+              "directCrowdingPenalty": 0.01,
+              "pressureState": 0,
+              "rangeSaturation": 0.01,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 3,
+            "targetCrowdingPenalty": 0.01,
+            "targetNearbyBandPressure": 0.02,
+            "rangeSaturationScored": 0.06,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:194:90",
+            "actionType": "move_to_tile",
+            "score": 5.39,
+            "totalCrowdingInfluence": 0.03,
+            "charges": {
+              "directNearbyBandPressure": 0.01,
+              "directCrowdingPenalty": 0.01,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0.01
+            },
+            "crowdingPathCount": 3,
+            "targetCrowdingPenalty": 0.02,
+            "targetNearbyBandPressure": 0.05,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:195:89",
+            "actionType": "move_to_tile",
+            "score": 4.44,
+            "totalCrowdingInfluence": 0.05,
+            "charges": {
+              "directNearbyBandPressure": 0.02,
+              "directCrowdingPenalty": 0.02,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0.01
+            },
+            "crowdingPathCount": 3,
+            "targetCrowdingPenalty": 0.02,
+            "targetNearbyBandPressure": 0.05,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:196:90",
+            "actionType": "move_to_tile",
+            "score": 4.17,
+            "totalCrowdingInfluence": -2.97,
+            "charges": {
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 0,
+            "targetCrowdingPenalty": 0,
+            "targetNearbyBandPressure": 0,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:195:88",
+            "actionType": "move_to_tile",
+            "score": 4.19,
+            "totalCrowdingInfluence": 0.02,
+            "charges": {
+              "directNearbyBandPressure": 0.01,
+              "directCrowdingPenalty": 0.01,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 2,
+            "targetCrowdingPenalty": 0.01,
+            "targetNearbyBandPressure": 0.02,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:194:89",
+            "actionType": "move_to_tile",
+            "score": 4.09,
+            "totalCrowdingInfluence": 0.09,
+            "charges": {
+              "directNearbyBandPressure": 0.03,
+              "directCrowdingPenalty": 0.03,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0.02
+            },
+            "crowdingPathCount": 3,
+            "targetCrowdingPenalty": 0.04,
+            "targetNearbyBandPressure": 0.11,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:197:90",
+            "actionType": "move_to_tile",
+            "score": 4.07,
+            "totalCrowdingInfluence": 0,
+            "charges": {
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 0,
+            "targetCrowdingPenalty": 0,
+            "targetNearbyBandPressure": 0,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:195:91",
+            "actionType": "move_to_tile",
+            "score": 3.73,
+            "totalCrowdingInfluence": -0.01,
+            "charges": {
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0,
+              "pressureState": -0.01,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 1,
+            "targetCrowdingPenalty": 0,
+            "targetNearbyBandPressure": 0,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "logistical_probe:tile:198:87",
+            "actionType": "logistical_probe",
+            "score": 3.64,
+            "totalCrowdingInfluence": 0,
+            "charges": {
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 0,
+            "targetCrowdingPenalty": 0,
+            "targetNearbyBandPressure": 0,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:196:89",
+            "actionType": "move_to_tile",
+            "score": 3.56,
+            "totalCrowdingInfluence": 0.01,
+            "charges": {
+              "directNearbyBandPressure": 0.01,
+              "directCrowdingPenalty": 0.01,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 2,
+            "targetCrowdingPenalty": 0.01,
+            "targetNearbyBandPressure": 0.02,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:196:91",
+            "actionType": "move_to_tile",
+            "score": 3.46,
+            "totalCrowdingInfluence": 0,
+            "charges": {
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 0,
+            "targetCrowdingPenalty": 0,
+            "targetNearbyBandPressure": 0,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:196:90",
+            "actionType": "move_to_tile",
+            "score": 1.2,
+            "totalCrowdingInfluence": 0,
+            "charges": {
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 0,
+            "targetCrowdingPenalty": 0,
+            "targetNearbyBandPressure": 0,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "logistical_probe:tile:197:89",
+            "actionType": "logistical_probe",
+            "score": 0.39,
+            "totalCrowdingInfluence": 0,
+            "charges": {
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 0,
+            "targetCrowdingPenalty": 0,
+            "targetNearbyBandPressure": 0,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          }
+        ]
+      },
+      "verdict": "TARGET_KEEPS_NO_RESIDENCE_COST"
+    },
+    "P4_residence_clear_target_crowded": {
+      "intent": "crowding only at the destination: one explicit bounded target cost, and no false move-away pressure at home",
+      "syntheticState": true,
+      "structuralNote": "known-move candidates are capped at Manhattan distance <= 2; CROWDING_RADIUS = 4",
+      "geometry": {
+        "home": "tile:195:90",
+        "away": "tile:195:88",
+        "nAway": "tile:195:85"
+      },
+      "distances": {
+        "homeToAway": 2,
+        "nHomeToHome": null,
+        "nHomeToAway": null,
+        "nAwayToAway": 3,
+        "nAwayToHome": 5
+      },
+      "residenceCrowding": {
+        "weightedCrowding": 0,
+        "crowdingPenalty": 0
+      },
+      "targetCrowding": {
+        "weightedCrowding": 0.05,
+        "crowdingPenalty": 0.02
+      },
+      "stay": {
+        "action": "stay:tile:195:90",
+        "actionType": "stay",
+        "score": 5.19,
+        "totalCrowdingInfluence": 0,
+        "charges": {
+          "directNearbyBandPressure": 0,
+          "directCrowdingPenalty": 0,
+          "pressureState": 0,
+          "rangeSaturation": 0,
+          "crowdingExploreBoost": 0,
+          "daughterDerivative": 0
+        },
+        "crowdingPathCount": 0,
+        "targetCrowdingPenalty": 0,
+        "targetNearbyBandPressure": 0,
+        "rangeSaturationScored": 0.14,
+        "crowdingExploreBoost": 0,
+        "daughterDispersalExploreBoost": 0
+      },
+      "targetCandidate": {
+        "action": "move_to_tile:tile:195:88",
+        "actionType": "move_to_tile",
+        "score": 3.54,
+        "totalCrowdingInfluence": 0.04,
+        "charges": {
+          "directNearbyBandPressure": 0.01,
+          "directCrowdingPenalty": 0.01,
+          "pressureState": 0,
+          "rangeSaturation": 0,
+          "crowdingExploreBoost": 0,
+          "daughterDerivative": 0
+        },
+        "crowdingPathCount": 2,
+        "targetCrowdingPenalty": 0.02,
+        "targetNearbyBandPressure": 0.05,
+        "rangeSaturationScored": 0,
+        "crowdingExploreBoost": 0,
+        "daughterDispersalExploreBoost": 0
+      },
+      "knownMoveCandidates": [
+        {
+          "action": "move_to_tile:tile:194:90",
+          "targetCrowdingPenalty": 0,
+          "totalCrowdingInfluence": 0,
+          "paths": 0
+        },
+        {
+          "action": "move_to_tile:tile:195:91",
+          "targetCrowdingPenalty": 0,
+          "totalCrowdingInfluence": -3.18,
+          "paths": 0
+        },
+        {
+          "action": "move_to_tile:tile:194:89",
+          "targetCrowdingPenalty": 0,
+          "totalCrowdingInfluence": 0,
+          "paths": 0
+        },
+        {
+          "action": "move_to_tile:tile:195:89",
+          "targetCrowdingPenalty": 0.01,
+          "totalCrowdingInfluence": 0.02,
+          "paths": 2
+        },
+        {
+          "action": "move_to_tile:tile:196:90",
+          "targetCrowdingPenalty": 0,
+          "totalCrowdingInfluence": 0,
+          "paths": 0
+        },
+        {
+          "action": "move_to_tile:tile:196:91",
+          "targetCrowdingPenalty": 0,
+          "totalCrowdingInfluence": 0,
+          "paths": 0
+        },
+        {
+          "action": "move_to_tile:tile:195:88",
+          "targetCrowdingPenalty": 0.02,
+          "totalCrowdingInfluence": 0.04,
+          "paths": 2
+        },
+        {
+          "action": "move_to_tile:tile:197:90",
+          "targetCrowdingPenalty": 0,
+          "totalCrowdingInfluence": 0,
+          "paths": 0
+        },
+        {
+          "action": "move_to_tile:tile:196:89",
+          "targetCrowdingPenalty": 0,
+          "totalCrowdingInfluence": 0,
+          "paths": 0
+        },
+        {
+          "action": "move_to_tile:tile:195:91",
+          "targetCrowdingPenalty": 0,
+          "totalCrowdingInfluence": 0,
+          "paths": 0
+        }
+      ],
+      "netMovePressureCrowdingContribution": 0,
+      "probe": {
+        "bandId": "band:custom:0",
+        "position": "tile:195:90",
+        "terrain": "river_valley",
+        "droughtRisk": 0,
+        "weightedCrowding": 0,
+        "nearbyBandCount": 0,
+        "crowdingBandIds": [],
+        "crowdingPenalty": 0,
+        "parentOverlap": 0,
+        "daughterOverlap": 0,
+        "riskPressure": {
+          "full": 0.67,
+          "zeroCrowding": 0.67
+        },
+        "placeAttachmentPull": {
+          "full": 0.73,
+          "zeroCrowding": 0.73
+        },
+        "mobilityPressure": {
+          "full": 0.38,
+          "zeroCrowding": 0.38
+        },
+        "netMovePressure": {
+          "full": 0.14,
+          "zeroCrowding": 0.14
+        },
+        "decisionSaturation": {
+          "full": 0.14,
+          "zeroCrowding": 0.14
+        },
+        "fullSaturationPressure": 0.14,
+        "daughterDispersalPressure": 0,
+        "overlappingBandIds": [],
+        "localUsePressure": 0.369,
+        "tileDepletion": 0,
+        "perCapitaReturn": 1,
+        "encounterRecords": 21,
+        "contactMemories": 1,
+        "frictionRecords": 0,
+        "accessState": "expected_return",
+        "selected": "move_to_tile:tile:194:90",
+        "selectedZeroCrowding": "move_to_tile:tile:194:90",
+        "candidateFamilies": [
+          "logistical_probe",
+          "move_to_tile",
+          "stay"
+        ],
+        "maxCrowdingPathCount": 2,
+        "stay": {
+          "action": "stay:tile:195:90",
+          "actionType": "stay",
+          "score": 5.19,
+          "totalCrowdingInfluence": 0,
+          "charges": {
+            "directNearbyBandPressure": 0,
+            "directCrowdingPenalty": 0,
+            "pressureState": 0,
+            "rangeSaturation": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDerivative": 0
+          },
+          "crowdingPathCount": 0,
+          "targetCrowdingPenalty": 0,
+          "targetNearbyBandPressure": 0,
+          "rangeSaturationScored": 0.14,
+          "crowdingExploreBoost": 0,
+          "daughterDispersalExploreBoost": 0
+        },
+        "bestMove": {
+          "action": "move_to_tile:tile:194:90",
+          "actionType": "move_to_tile",
+          "score": 6.52,
+          "totalCrowdingInfluence": 0,
+          "charges": {
+            "directNearbyBandPressure": 0,
+            "directCrowdingPenalty": 0,
+            "pressureState": 0,
+            "rangeSaturation": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDerivative": 0
+          },
+          "crowdingPathCount": 0,
+          "targetCrowdingPenalty": 0,
+          "targetNearbyBandPressure": 0,
+          "rangeSaturationScored": 0,
+          "crowdingExploreBoost": 0,
+          "daughterDispersalExploreBoost": 0
+        },
+        "exploration": null,
+        "logisticalProbe": {
+          "action": "logistical_probe:tile:197:87",
+          "actionType": "logistical_probe",
+          "score": 2.67,
+          "totalCrowdingInfluence": 0,
+          "charges": {
+            "directNearbyBandPressure": 0,
+            "directCrowdingPenalty": 0,
+            "pressureState": 0,
+            "rangeSaturation": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDerivative": 0
+          },
+          "crowdingPathCount": 0,
+          "targetCrowdingPenalty": 0,
+          "targetNearbyBandPressure": 0,
+          "rangeSaturationScored": 0,
+          "crowdingExploreBoost": 0,
+          "daughterDispersalExploreBoost": 0
+        },
+        "resourceScout": null,
+        "candidates": [
+          {
+            "action": "move_to_tile:tile:194:90",
+            "actionType": "move_to_tile",
+            "score": 6.52,
+            "totalCrowdingInfluence": 0,
+            "charges": {
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 0,
+            "targetCrowdingPenalty": 0,
+            "targetNearbyBandPressure": 0,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "stay:tile:195:90",
+            "actionType": "stay",
+            "score": 5.19,
+            "totalCrowdingInfluence": 0,
+            "charges": {
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 0,
+            "targetCrowdingPenalty": 0,
+            "targetNearbyBandPressure": 0,
+            "rangeSaturationScored": 0.14,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:195:91",
+            "actionType": "move_to_tile",
+            "score": 5.13,
+            "totalCrowdingInfluence": -3.18,
+            "charges": {
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 0,
+            "targetCrowdingPenalty": 0,
+            "targetNearbyBandPressure": 0,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:194:89",
+            "actionType": "move_to_tile",
+            "score": 4.3,
+            "totalCrowdingInfluence": 0,
+            "charges": {
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 0,
+            "targetCrowdingPenalty": 0,
+            "targetNearbyBandPressure": 0,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:195:89",
+            "actionType": "move_to_tile",
+            "score": 4,
+            "totalCrowdingInfluence": 0.02,
+            "charges": {
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0.01,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0.01
+            },
+            "crowdingPathCount": 2,
+            "targetCrowdingPenalty": 0.01,
+            "targetNearbyBandPressure": 0.02,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:196:90",
+            "actionType": "move_to_tile",
+            "score": 3.87,
+            "totalCrowdingInfluence": 0,
+            "charges": {
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 0,
+            "targetCrowdingPenalty": 0,
+            "targetNearbyBandPressure": 0,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:196:91",
+            "actionType": "move_to_tile",
+            "score": 3.75,
+            "totalCrowdingInfluence": 0,
+            "charges": {
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 0,
+            "targetCrowdingPenalty": 0,
+            "targetNearbyBandPressure": 0,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:195:88",
+            "actionType": "move_to_tile",
+            "score": 3.54,
+            "totalCrowdingInfluence": 0.04,
+            "charges": {
+              "directNearbyBandPressure": 0.01,
+              "directCrowdingPenalty": 0.01,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 2,
+            "targetCrowdingPenalty": 0.02,
+            "targetNearbyBandPressure": 0.05,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:197:90",
+            "actionType": "move_to_tile",
+            "score": 3.23,
+            "totalCrowdingInfluence": 0,
+            "charges": {
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 0,
+            "targetCrowdingPenalty": 0,
+            "targetNearbyBandPressure": 0,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:196:89",
+            "actionType": "move_to_tile",
+            "score": 2.77,
+            "totalCrowdingInfluence": 0,
+            "charges": {
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 0,
+            "targetCrowdingPenalty": 0,
+            "targetNearbyBandPressure": 0,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "logistical_probe:tile:197:87",
+            "actionType": "logistical_probe",
+            "score": 2.67,
+            "totalCrowdingInfluence": 0,
+            "charges": {
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 0,
+            "targetCrowdingPenalty": 0,
+            "targetNearbyBandPressure": 0,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "logistical_probe:tile:197:88",
+            "actionType": "logistical_probe",
+            "score": 2.39,
+            "totalCrowdingInfluence": -3.16,
+            "charges": {
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 0,
+            "targetCrowdingPenalty": 0,
+            "targetNearbyBandPressure": 0,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:195:91",
+            "actionType": "move_to_tile",
+            "score": 1.95,
+            "totalCrowdingInfluence": 0,
+            "charges": {
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 0,
+            "targetCrowdingPenalty": 0,
+            "targetNearbyBandPressure": 0,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "logistical_probe:tile:197:88",
+            "actionType": "logistical_probe",
+            "score": -0.77,
+            "totalCrowdingInfluence": 0,
+            "charges": {
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 0,
+            "targetCrowdingPenalty": 0,
+            "targetNearbyBandPressure": 0,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          }
+        ]
+      },
+      "verdict": "TARGET_COSTED_AND_NO_FALSE_HOME_PUSH"
+    },
+    "P5_residence_and_target_crowded": {
+      "intent": "both crowded equally: crowding must not create an artificial preference for moving between equally crowded sites",
+      "syntheticState": true,
+      "structuralNote": "known-move candidates are capped at Manhattan distance <= 2; CROWDING_RADIUS = 4",
+      "geometry": {
+        "home": "tile:195:90",
+        "away": "tile:197:90",
+        "nHome": "tile:196:91"
+      },
+      "distances": {
+        "homeToAway": 2,
+        "nHomeToHome": 2,
+        "nHomeToAway": 2,
+        "nAwayToAway": null,
+        "nAwayToHome": null
+      },
+      "residenceCrowding": {
+        "weightedCrowding": 0.11,
+        "crowdingPenalty": 0.04
+      },
+      "targetCrowding": {
+        "weightedCrowding": 0.12,
+        "crowdingPenalty": 0.05
+      },
+      "stay": {
+        "action": "stay:tile:195:90",
+        "actionType": "stay",
+        "score": 5.43,
+        "totalCrowdingInfluence": 0.1,
+        "charges": {
+          "directNearbyBandPressure": 0.03,
+          "directCrowdingPenalty": 0.03,
+          "pressureState": 0.01,
+          "rangeSaturation": 0.01,
+          "crowdingExploreBoost": 0,
+          "daughterDerivative": 0
+        },
+        "crowdingPathCount": 4,
+        "targetCrowdingPenalty": 0.04,
+        "targetNearbyBandPressure": 0.11,
+        "rangeSaturationScored": 0.16,
+        "crowdingExploreBoost": 0,
+        "daughterDispersalExploreBoost": 0
+      },
+      "targetCandidate": {
+        "action": "move_to_tile:tile:197:90",
+        "actionType": "move_to_tile",
+        "score": 5.05,
+        "totalCrowdingInfluence": 0.11,
+        "charges": {
+          "directNearbyBandPressure": 0.03,
+          "directCrowdingPenalty": 0.03,
+          "pressureState": 0,
+          "rangeSaturation": 0,
+          "crowdingExploreBoost": 0,
+          "daughterDerivative": 0.02
+        },
+        "crowdingPathCount": 3,
+        "targetCrowdingPenalty": 0.05,
+        "targetNearbyBandPressure": 0.12,
+        "rangeSaturationScored": 0,
+        "crowdingExploreBoost": 0,
+        "daughterDispersalExploreBoost": 0
+      },
+      "knownMoveCandidates": [
+        {
+          "action": "move_to_tile:tile:196:90",
+          "targetCrowdingPenalty": 0.06,
+          "totalCrowdingInfluence": 0.14,
+          "paths": 3
+        },
+        {
+          "action": "move_to_tile:tile:197:90",
+          "targetCrowdingPenalty": 0.05,
+          "totalCrowdingInfluence": 0.11,
+          "paths": 3
+        },
+        {
+          "action": "move_to_tile:tile:194:90",
+          "targetCrowdingPenalty": 0.02,
+          "totalCrowdingInfluence": 0.03,
+          "paths": 2
+        },
+        {
+          "action": "move_to_tile:tile:195:88",
+          "targetCrowdingPenalty": 0.01,
+          "totalCrowdingInfluence": 0.01,
+          "paths": 0
+        },
+        {
+          "action": "move_to_tile:tile:195:91",
+          "targetCrowdingPenalty": 0.06,
+          "totalCrowdingInfluence": 0.14,
+          "paths": 3
+        },
+        {
+          "action": "move_to_tile:tile:195:89",
+          "targetCrowdingPenalty": 0.02,
+          "totalCrowdingInfluence": 0.05,
+          "paths": 3
+        },
+        {
+          "action": "move_to_tile:tile:196:89",
+          "targetCrowdingPenalty": 0.04,
+          "totalCrowdingInfluence": 0.08,
+          "paths": 4
+        },
+        {
+          "action": "move_to_tile:tile:196:91",
+          "targetCrowdingPenalty": 0.07,
+          "totalCrowdingInfluence": 0.16,
+          "paths": 3
+        },
+        {
+          "action": "move_to_tile:tile:194:89",
+          "targetCrowdingPenalty": 0.01,
+          "totalCrowdingInfluence": 0.02,
+          "paths": 3
+        }
+      ],
+      "netMovePressureCrowdingContribution": 0.01,
+      "probe": {
+        "bandId": "band:custom:0",
+        "position": "tile:195:90",
+        "terrain": "river_valley",
+        "droughtRisk": 0,
+        "weightedCrowding": 0.11,
+        "nearbyBandCount": 1,
+        "crowdingBandIds": [
+          "band:custom:1"
+        ],
+        "crowdingPenalty": 0.04,
+        "parentOverlap": 0,
+        "daughterOverlap": 0,
+        "riskPressure": {
+          "full": 0.68,
+          "zeroCrowding": 0.68
+        },
+        "placeAttachmentPull": {
+          "full": 0.79,
+          "zeroCrowding": 0.8
+        },
+        "mobilityPressure": {
+          "full": 0.4,
+          "zeroCrowding": 0.39
+        },
+        "netMovePressure": {
+          "full": 0.16,
+          "zeroCrowding": 0.15
+        },
+        "decisionSaturation": {
+          "full": 0.16,
+          "zeroCrowding": 0.13
+        },
+        "fullSaturationPressure": 0.16,
+        "daughterDispersalPressure": 0,
+        "overlappingBandIds": [
+          "band:custom:1"
+        ],
+        "localUsePressure": 0.1148,
+        "tileDepletion": 0,
+        "perCapitaReturn": 1,
+        "encounterRecords": 24,
+        "contactMemories": 1,
+        "frictionRecords": 0,
+        "accessState": "familiar_use",
+        "selected": "stay:tile:195:90",
+        "selectedZeroCrowding": "stay:tile:195:90",
+        "candidateFamilies": [
+          "move_to_tile",
+          "resource_scout",
+          "stay"
+        ],
+        "maxCrowdingPathCount": 4,
+        "stay": {
+          "action": "stay:tile:195:90",
+          "actionType": "stay",
+          "score": 5.43,
+          "totalCrowdingInfluence": 0.1,
+          "charges": {
+            "directNearbyBandPressure": 0.03,
+            "directCrowdingPenalty": 0.03,
+            "pressureState": 0.01,
+            "rangeSaturation": 0.01,
+            "crowdingExploreBoost": 0,
+            "daughterDerivative": 0
+          },
+          "crowdingPathCount": 4,
+          "targetCrowdingPenalty": 0.04,
+          "targetNearbyBandPressure": 0.11,
+          "rangeSaturationScored": 0.16,
+          "crowdingExploreBoost": 0,
+          "daughterDispersalExploreBoost": 0
+        },
+        "bestMove": {
+          "action": "move_to_tile:tile:197:90",
+          "actionType": "move_to_tile",
+          "score": 5.05,
+          "totalCrowdingInfluence": 0.11,
+          "charges": {
+            "directNearbyBandPressure": 0.03,
+            "directCrowdingPenalty": 0.03,
+            "pressureState": 0,
+            "rangeSaturation": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDerivative": 0.02
+          },
+          "crowdingPathCount": 3,
+          "targetCrowdingPenalty": 0.05,
+          "targetNearbyBandPressure": 0.12,
+          "rangeSaturationScored": 0,
+          "crowdingExploreBoost": 0,
+          "daughterDispersalExploreBoost": 0
+        },
+        "exploration": null,
+        "logisticalProbe": null,
+        "resourceScout": {
+          "action": "resource_scout:tile:195:89",
+          "actionType": "resource_scout",
+          "score": 2.77,
+          "totalCrowdingInfluence": 0,
+          "charges": {
+            "directNearbyBandPressure": 0,
+            "directCrowdingPenalty": 0,
+            "pressureState": 0,
+            "rangeSaturation": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDerivative": 0
+          },
+          "crowdingPathCount": 0,
+          "targetCrowdingPenalty": 0,
+          "targetNearbyBandPressure": 0,
+          "rangeSaturationScored": 0,
+          "crowdingExploreBoost": 0,
+          "daughterDispersalExploreBoost": 0
+        },
+        "candidates": [
+          {
+            "action": "stay:tile:195:90",
+            "actionType": "stay",
+            "score": 5.43,
+            "totalCrowdingInfluence": 0.1,
+            "charges": {
+              "directNearbyBandPressure": 0.03,
+              "directCrowdingPenalty": 0.03,
+              "pressureState": 0.01,
+              "rangeSaturation": 0.01,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 4,
+            "targetCrowdingPenalty": 0.04,
+            "targetNearbyBandPressure": 0.11,
+            "rangeSaturationScored": 0.16,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:196:90",
+            "actionType": "move_to_tile",
+            "score": 5.04,
+            "totalCrowdingInfluence": 0.14,
+            "charges": {
+              "directNearbyBandPressure": 0.04,
+              "directCrowdingPenalty": 0.05,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0.03
+            },
+            "crowdingPathCount": 3,
+            "targetCrowdingPenalty": 0.06,
+            "targetNearbyBandPressure": 0.15,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:197:90",
+            "actionType": "move_to_tile",
+            "score": 5.05,
+            "totalCrowdingInfluence": 0.11,
+            "charges": {
+              "directNearbyBandPressure": 0.03,
+              "directCrowdingPenalty": 0.03,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0.02
+            },
+            "crowdingPathCount": 3,
+            "targetCrowdingPenalty": 0.05,
+            "targetNearbyBandPressure": 0.12,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:194:90",
+            "actionType": "move_to_tile",
+            "score": 4.77,
+            "totalCrowdingInfluence": 0.03,
+            "charges": {
+              "directNearbyBandPressure": 0.01,
+              "directCrowdingPenalty": 0.01,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 2,
+            "targetCrowdingPenalty": 0.02,
+            "targetNearbyBandPressure": 0.05,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:195:88",
+            "actionType": "move_to_tile",
+            "score": 4.3,
+            "totalCrowdingInfluence": 0.01,
+            "charges": {
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 0,
+            "targetCrowdingPenalty": 0.01,
+            "targetNearbyBandPressure": 0.02,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:195:91",
+            "actionType": "move_to_tile",
+            "score": 4.18,
+            "totalCrowdingInfluence": 0.14,
+            "charges": {
+              "directNearbyBandPressure": 0.04,
+              "directCrowdingPenalty": 0.05,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0.03
+            },
+            "crowdingPathCount": 3,
+            "targetCrowdingPenalty": 0.06,
+            "targetNearbyBandPressure": 0.15,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:195:89",
+            "actionType": "move_to_tile",
+            "score": 4.12,
+            "totalCrowdingInfluence": 0.05,
+            "charges": {
+              "directNearbyBandPressure": 0.02,
+              "directCrowdingPenalty": 0.02,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0.02
+            },
+            "crowdingPathCount": 3,
+            "targetCrowdingPenalty": 0.02,
+            "targetNearbyBandPressure": 0.05,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:196:89",
+            "actionType": "move_to_tile",
+            "score": 4.09,
+            "totalCrowdingInfluence": 0.08,
+            "charges": {
+              "directNearbyBandPressure": 0.02,
+              "directCrowdingPenalty": 0.02,
+              "pressureState": -0.01,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0.01
+            },
+            "crowdingPathCount": 4,
+            "targetCrowdingPenalty": 0.04,
+            "targetNearbyBandPressure": 0.11,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:196:91",
+            "actionType": "move_to_tile",
+            "score": 3.98,
+            "totalCrowdingInfluence": 0.16,
+            "charges": {
+              "directNearbyBandPressure": 0.04,
+              "directCrowdingPenalty": 0.05,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0.03
+            },
+            "crowdingPathCount": 3,
+            "targetCrowdingPenalty": 0.07,
+            "targetNearbyBandPressure": 0.19,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:194:89",
+            "actionType": "move_to_tile",
+            "score": 3.35,
+            "totalCrowdingInfluence": 0.02,
+            "charges": {
+              "directNearbyBandPressure": 0.01,
+              "directCrowdingPenalty": 0.01,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0.01
+            },
+            "crowdingPathCount": 3,
+            "targetCrowdingPenalty": 0.01,
+            "targetNearbyBandPressure": 0.02,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "resource_scout:tile:195:89",
+            "actionType": "resource_scout",
+            "score": 2.77,
+            "totalCrowdingInfluence": 0,
+            "charges": {
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 0,
+            "targetCrowdingPenalty": 0,
+            "targetNearbyBandPressure": 0,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          }
+        ]
+      },
+      "verdict": "SYMMETRIC_NO_ARTIFICIAL_PREFERENCE"
+    },
+    "P6_terrain_capacity_comparison": {
+      "intent": "identical nearby populations on spacious vs constrained ground: ONE explicit capacity transformation explains the difference",
+      "syntheticState": true,
+      "arms": {
+        "spacious_rich": {
+          "terrain": "river_valley",
+          "droughtRisk": 0,
+          "weightedCrowding": 0.15,
+          "crowdingPenalty": 0.06,
+          "capacityTransformRatio": 0.4,
+          "stayTotalCrowdingInfluence": 0.14,
+          "stayPaths": 4
+        },
+        "constrained_dry": {
+          "terrain": "plains",
+          "droughtRisk": 0.2445,
+          "weightedCrowding": 0.21,
+          "crowdingPenalty": 0.14,
+          "capacityTransformRatio": 0.6667,
+          "stayTotalCrowdingInfluence": 0.26,
+          "stayPaths": 4
+        }
+      },
+      "verdict": "CAPACITY_TRANSFORM_EXPLAINS_DIFFERENCE"
+    },
+    "P7_crowding_without_depletion": {
+      "intent": "nearby people, minimal realized depletion: crowding must not manufacture depletion",
+      "syntheticState": true,
+      "warmSeasons": 2,
+      "crowding": {
+        "weightedCrowding": 0.15,
+        "crowdingPenalty": 0.06,
+        "bandIds": [
+          "band:custom:1"
+        ]
+      },
+      "depletion": {
+        "tileDepletion": 0,
+        "localUsePressure": 0.0506,
+        "perCapitaReturn": 1
+      },
+      "stay": {
+        "action": "stay:tile:195:90",
+        "actionType": "stay",
+        "score": 4.76,
+        "totalCrowdingInfluence": 0.13,
+        "charges": {
+          "directNearbyBandPressure": 0.04,
+          "directCrowdingPenalty": 0.04,
+          "pressureState": 0.01,
+          "rangeSaturation": 0.02,
+          "crowdingExploreBoost": 0,
+          "daughterDerivative": 0
+        },
+        "crowdingPathCount": 4,
+        "targetCrowdingPenalty": 0.06,
+        "targetNearbyBandPressure": 0.15,
+        "rangeSaturationScored": 0.12,
+        "crowdingExploreBoost": 0,
+        "daughterDispersalExploreBoost": 0
+      },
+      "probe": {
+        "bandId": "band:custom:0",
+        "position": "tile:195:90",
+        "terrain": "river_valley",
+        "droughtRisk": 0,
+        "weightedCrowding": 0.15,
+        "nearbyBandCount": 1,
+        "crowdingBandIds": [
+          "band:custom:1"
+        ],
+        "crowdingPenalty": 0.06,
+        "parentOverlap": 0,
+        "daughterOverlap": 0,
+        "riskPressure": {
+          "full": 0.44,
+          "zeroCrowding": 0.44
+        },
+        "placeAttachmentPull": {
+          "full": 0.06,
+          "zeroCrowding": 0.07
+        },
+        "mobilityPressure": {
+          "full": 0.2,
+          "zeroCrowding": 0.19
+        },
+        "netMovePressure": {
+          "full": 0.25,
+          "zeroCrowding": 0.23
+        },
+        "decisionSaturation": {
+          "full": 0.12,
+          "zeroCrowding": 0.07
+        },
+        "fullSaturationPressure": 0.12,
+        "daughterDispersalPressure": 0,
+        "overlappingBandIds": [
+          "band:custom:1"
+        ],
+        "localUsePressure": 0.0506,
+        "tileDepletion": 0,
+        "perCapitaReturn": 1,
+        "encounterRecords": 6,
+        "contactMemories": 1,
+        "frictionRecords": 0,
+        "accessState": "familiar_use",
+        "selected": "stay:tile:195:90",
+        "selectedZeroCrowding": "stay:tile:195:90",
+        "candidateFamilies": [
+          "logistical_probe",
+          "move_to_tile",
+          "resource_scout",
+          "stay"
+        ],
+        "maxCrowdingPathCount": 4,
+        "stay": {
+          "action": "stay:tile:195:90",
+          "actionType": "stay",
+          "score": 4.76,
+          "totalCrowdingInfluence": 0.13,
+          "charges": {
+            "directNearbyBandPressure": 0.04,
+            "directCrowdingPenalty": 0.04,
+            "pressureState": 0.01,
+            "rangeSaturation": 0.02,
+            "crowdingExploreBoost": 0,
+            "daughterDerivative": 0
+          },
+          "crowdingPathCount": 4,
+          "targetCrowdingPenalty": 0.06,
+          "targetNearbyBandPressure": 0.15,
+          "rangeSaturationScored": 0.12,
+          "crowdingExploreBoost": 0,
+          "daughterDispersalExploreBoost": 0
+        },
+        "bestMove": {
+          "action": "move_to_tile:tile:195:91",
+          "actionType": "move_to_tile",
+          "score": 4.88,
+          "totalCrowdingInfluence": 0.09,
+          "charges": {
+            "directNearbyBandPressure": 0.03,
+            "directCrowdingPenalty": 0.03,
+            "pressureState": 0,
+            "rangeSaturation": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDerivative": 0.02
+          },
+          "crowdingPathCount": 3,
+          "targetCrowdingPenalty": 0.04,
+          "targetNearbyBandPressure": 0.11,
+          "rangeSaturationScored": 0,
+          "crowdingExploreBoost": 0,
+          "daughterDispersalExploreBoost": 0
+        },
+        "exploration": null,
+        "logisticalProbe": {
+          "action": "logistical_probe:tile:197:87",
+          "actionType": "logistical_probe",
+          "score": 3.02,
+          "totalCrowdingInfluence": 0,
+          "charges": {
+            "directNearbyBandPressure": 0,
+            "directCrowdingPenalty": 0,
+            "pressureState": 0,
+            "rangeSaturation": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDerivative": 0
+          },
+          "crowdingPathCount": 0,
+          "targetCrowdingPenalty": 0,
+          "targetNearbyBandPressure": 0,
+          "rangeSaturationScored": 0,
+          "crowdingExploreBoost": 0,
+          "daughterDispersalExploreBoost": 0
+        },
+        "resourceScout": {
+          "action": "resource_scout:tile:195:89",
+          "actionType": "resource_scout",
+          "score": 2.29,
+          "totalCrowdingInfluence": 0,
+          "charges": {
+            "directNearbyBandPressure": 0,
+            "directCrowdingPenalty": 0,
+            "pressureState": 0,
+            "rangeSaturation": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDerivative": 0
+          },
+          "crowdingPathCount": 0,
+          "targetCrowdingPenalty": 0,
+          "targetNearbyBandPressure": 0,
+          "rangeSaturationScored": 0,
+          "crowdingExploreBoost": 0,
+          "daughterDispersalExploreBoost": 0
+        },
+        "candidates": [
+          {
+            "action": "stay:tile:195:90",
+            "actionType": "stay",
+            "score": 4.76,
+            "totalCrowdingInfluence": 0.13,
+            "charges": {
+              "directNearbyBandPressure": 0.04,
+              "directCrowdingPenalty": 0.04,
+              "pressureState": 0.01,
+              "rangeSaturation": 0.02,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 4,
+            "targetCrowdingPenalty": 0.06,
+            "targetNearbyBandPressure": 0.15,
+            "rangeSaturationScored": 0.12,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:195:91",
+            "actionType": "move_to_tile",
+            "score": 4.88,
+            "totalCrowdingInfluence": 0.09,
+            "charges": {
+              "directNearbyBandPressure": 0.03,
+              "directCrowdingPenalty": 0.03,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0.02
+            },
+            "crowdingPathCount": 3,
+            "targetCrowdingPenalty": 0.04,
+            "targetNearbyBandPressure": 0.11,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:194:90",
+            "actionType": "move_to_tile",
+            "score": 4.64,
+            "totalCrowdingInfluence": 0.08,
+            "charges": {
+              "directNearbyBandPressure": 0.03,
+              "directCrowdingPenalty": 0.03,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0.01
+            },
+            "crowdingPathCount": 3,
+            "targetCrowdingPenalty": 0.04,
+            "targetNearbyBandPressure": 0.11,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:196:90",
+            "actionType": "move_to_tile",
+            "score": 4.3,
+            "totalCrowdingInfluence": 0.16,
+            "charges": {
+              "directNearbyBandPressure": 0.05,
+              "directCrowdingPenalty": 0.06,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0.04
+            },
+            "crowdingPathCount": 3,
+            "targetCrowdingPenalty": 0.07,
+            "targetNearbyBandPressure": 0.19,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:196:91",
+            "actionType": "move_to_tile",
+            "score": 3.92,
+            "totalCrowdingInfluence": 0.13,
+            "charges": {
+              "directNearbyBandPressure": 0.04,
+              "directCrowdingPenalty": 0.05,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0.03
+            },
+            "crowdingPathCount": 3,
+            "targetCrowdingPenalty": 0.06,
+            "targetNearbyBandPressure": 0.15,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:195:89",
+            "actionType": "move_to_tile",
+            "score": 3.88,
+            "totalCrowdingInfluence": 0.08,
+            "charges": {
+              "directNearbyBandPressure": 0.02,
+              "directCrowdingPenalty": 0.03,
+              "pressureState": -0.01,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0.01
+            },
+            "crowdingPathCount": 4,
+            "targetCrowdingPenalty": 0.04,
+            "targetNearbyBandPressure": 0.11,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:197:90",
+            "actionType": "move_to_tile",
+            "score": 3.55,
+            "totalCrowdingInfluence": 0.11,
+            "charges": {
+              "directNearbyBandPressure": 0.04,
+              "directCrowdingPenalty": 0.05,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 2,
+            "targetCrowdingPenalty": 0.07,
+            "targetNearbyBandPressure": 0.16,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:194:89",
+            "actionType": "move_to_tile",
+            "score": 3.49,
+            "totalCrowdingInfluence": 0.03,
+            "charges": {
+              "directNearbyBandPressure": 0.01,
+              "directCrowdingPenalty": 0.01,
+              "pressureState": -0.01,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 3,
+            "targetCrowdingPenalty": 0.02,
+            "targetNearbyBandPressure": 0.05,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:195:88",
+            "actionType": "move_to_tile",
+            "score": 3.3,
+            "totalCrowdingInfluence": 0.04,
+            "charges": {
+              "directNearbyBandPressure": 0.01,
+              "directCrowdingPenalty": 0.01,
+              "pressureState": -0.01,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0.01
+            },
+            "crowdingPathCount": 4,
+            "targetCrowdingPenalty": 0.02,
+            "targetNearbyBandPressure": 0.05,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:196:89",
+            "actionType": "move_to_tile",
+            "score": 3.12,
+            "totalCrowdingInfluence": 0.12,
+            "charges": {
+              "directNearbyBandPressure": 0.03,
+              "directCrowdingPenalty": 0.04,
+              "pressureState": -0.01,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0.02
+            },
+            "crowdingPathCount": 4,
+            "targetCrowdingPenalty": 0.06,
+            "targetNearbyBandPressure": 0.15,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "logistical_probe:tile:197:87",
+            "actionType": "logistical_probe",
+            "score": 3.02,
+            "totalCrowdingInfluence": 0,
+            "charges": {
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 0,
+            "targetCrowdingPenalty": 0,
+            "targetNearbyBandPressure": 0,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "resource_scout:tile:195:89",
+            "actionType": "resource_scout",
+            "score": 2.29,
+            "totalCrowdingInfluence": 0,
+            "charges": {
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 0,
+            "targetCrowdingPenalty": 0,
+            "targetNearbyBandPressure": 0,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          }
+        ]
+      }
+    },
+    "P8_depletion_without_current_crowding": {
+      "intent": "a long occupation created real depletion and the other band has LEFT: current crowding 0, depletion may remain",
+      "syntheticState": true,
+      "warmSeasons": 24,
+      "crowding": {
+        "weightedCrowding": 0,
+        "crowdingPenalty": 0,
+        "bandIds": []
+      },
+      "depletion": {
+        "tileDepletion": 0,
+        "localUsePressure": 0,
+        "perCapitaReturn": 0.05
+      },
+      "stay": {
+        "action": "stay:tile:195:90",
+        "actionType": "stay",
+        "score": 4.38,
+        "totalCrowdingInfluence": 0,
+        "charges": {
+          "directNearbyBandPressure": 0,
+          "directCrowdingPenalty": 0,
+          "pressureState": 0,
+          "rangeSaturation": 0,
+          "crowdingExploreBoost": 0,
+          "daughterDerivative": 0
+        },
+        "crowdingPathCount": 0,
+        "targetCrowdingPenalty": 0,
+        "targetNearbyBandPressure": 0,
+        "rangeSaturationScored": 0.13,
+        "crowdingExploreBoost": 0,
+        "daughterDispersalExploreBoost": 0
+      },
+      "probe": {
+        "bandId": "band:custom:0",
+        "position": "tile:195:90",
+        "terrain": "river_valley",
+        "droughtRisk": 0,
+        "weightedCrowding": 0,
+        "nearbyBandCount": 0,
+        "crowdingBandIds": [],
+        "crowdingPenalty": 0,
+        "parentOverlap": 0,
+        "daughterOverlap": 0,
+        "riskPressure": {
+          "full": 0.63,
+          "zeroCrowding": 0.63
+        },
+        "placeAttachmentPull": {
+          "full": 0.57,
+          "zeroCrowding": 0.57
+        },
+        "mobilityPressure": {
+          "full": 0.59,
+          "zeroCrowding": 0.59
+        },
+        "netMovePressure": {
+          "full": 0.58,
+          "zeroCrowding": 0.58
+        },
+        "decisionSaturation": {
+          "full": 0.13,
+          "zeroCrowding": 0.13
+        },
+        "fullSaturationPressure": 0.13,
+        "daughterDispersalPressure": 0.3,
+        "overlappingBandIds": [],
+        "localUsePressure": 0,
+        "tileDepletion": 0,
+        "perCapitaReturn": 0.05,
+        "encounterRecords": 19,
+        "contactMemories": 1,
+        "frictionRecords": 0,
+        "accessState": "familiar_use",
+        "selected": "move_to_tile:tile:196:91",
+        "selectedZeroCrowding": "move_to_tile:tile:196:91",
+        "candidateFamilies": [
+          "move_to_tile",
+          "resource_scout",
+          "stay"
+        ],
+        "maxCrowdingPathCount": 0,
+        "stay": {
+          "action": "stay:tile:195:90",
+          "actionType": "stay",
+          "score": 4.38,
+          "totalCrowdingInfluence": 0,
+          "charges": {
+            "directNearbyBandPressure": 0,
+            "directCrowdingPenalty": 0,
+            "pressureState": 0,
+            "rangeSaturation": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDerivative": 0
+          },
+          "crowdingPathCount": 0,
+          "targetCrowdingPenalty": 0,
+          "targetNearbyBandPressure": 0,
+          "rangeSaturationScored": 0.13,
+          "crowdingExploreBoost": 0,
+          "daughterDispersalExploreBoost": 0
+        },
+        "bestMove": {
+          "action": "move_to_tile:tile:196:91",
+          "actionType": "move_to_tile",
+          "score": 5.97,
+          "totalCrowdingInfluence": 0,
+          "charges": {
+            "directNearbyBandPressure": 0,
+            "directCrowdingPenalty": 0,
+            "pressureState": 0,
+            "rangeSaturation": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDerivative": 0
+          },
+          "crowdingPathCount": 0,
+          "targetCrowdingPenalty": 0,
+          "targetNearbyBandPressure": 0,
+          "rangeSaturationScored": 0,
+          "crowdingExploreBoost": 0,
+          "daughterDispersalExploreBoost": 0
+        },
+        "exploration": null,
+        "logisticalProbe": null,
+        "resourceScout": {
+          "action": "resource_scout:tile:194:90",
+          "actionType": "resource_scout",
+          "score": 2.78,
+          "totalCrowdingInfluence": 0,
+          "charges": {
+            "directNearbyBandPressure": 0,
+            "directCrowdingPenalty": 0,
+            "pressureState": 0,
+            "rangeSaturation": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDerivative": 0
+          },
+          "crowdingPathCount": 0,
+          "targetCrowdingPenalty": 0,
+          "targetNearbyBandPressure": 0,
+          "rangeSaturationScored": 0,
+          "crowdingExploreBoost": 0,
+          "daughterDispersalExploreBoost": 0
+        },
+        "candidates": [
+          {
+            "action": "move_to_tile:tile:196:91",
+            "actionType": "move_to_tile",
+            "score": 5.97,
+            "totalCrowdingInfluence": 0,
+            "charges": {
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 0,
+            "targetCrowdingPenalty": 0,
+            "targetNearbyBandPressure": 0,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:194:90",
+            "actionType": "move_to_tile",
+            "score": 5.81,
+            "totalCrowdingInfluence": 0,
+            "charges": {
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 0,
+            "targetCrowdingPenalty": 0,
+            "targetNearbyBandPressure": 0,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:195:91",
+            "actionType": "move_to_tile",
+            "score": 5.36,
+            "totalCrowdingInfluence": 0,
+            "charges": {
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 0,
+            "targetCrowdingPenalty": 0,
+            "targetNearbyBandPressure": 0,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:196:90",
+            "actionType": "move_to_tile",
+            "score": 5.07,
+            "totalCrowdingInfluence": 0,
+            "charges": {
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 0,
+            "targetCrowdingPenalty": 0,
+            "targetNearbyBandPressure": 0,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:197:90",
+            "actionType": "move_to_tile",
+            "score": 4.6,
+            "totalCrowdingInfluence": 0,
+            "charges": {
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 0,
+            "targetCrowdingPenalty": 0,
+            "targetNearbyBandPressure": 0,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "stay:tile:195:90",
+            "actionType": "stay",
+            "score": 4.38,
+            "totalCrowdingInfluence": 0,
+            "charges": {
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 0,
+            "targetCrowdingPenalty": 0,
+            "targetNearbyBandPressure": 0,
+            "rangeSaturationScored": 0.13,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:194:89",
+            "actionType": "move_to_tile",
+            "score": 3.5,
+            "totalCrowdingInfluence": 0,
+            "charges": {
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 0,
+            "targetCrowdingPenalty": 0,
+            "targetNearbyBandPressure": 0,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:195:89",
+            "actionType": "move_to_tile",
+            "score": 3.25,
+            "totalCrowdingInfluence": 0,
+            "charges": {
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 0,
+            "targetCrowdingPenalty": 0,
+            "targetNearbyBandPressure": 0,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:196:89",
+            "actionType": "move_to_tile",
+            "score": 3.05,
+            "totalCrowdingInfluence": 0,
+            "charges": {
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 0,
+            "targetCrowdingPenalty": 0,
+            "targetNearbyBandPressure": 0,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "resource_scout:tile:194:90",
+            "actionType": "resource_scout",
+            "score": 2.78,
+            "totalCrowdingInfluence": 0,
+            "charges": {
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 0,
+            "targetCrowdingPenalty": 0,
+            "targetNearbyBandPressure": 0,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:195:88",
+            "actionType": "move_to_tile",
+            "score": 2.7,
+            "totalCrowdingInfluence": 0,
+            "charges": {
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 0,
+            "targetCrowdingPenalty": 0,
+            "targetNearbyBandPressure": 0,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          }
+        ]
+      }
+    },
+    "P9_crowding_plus_depletion": {
+      "intent": "both facts present: they coexist without either being counted through the other",
+      "syntheticState": true,
+      "warmSeasons": 24,
+      "crowding": {
+        "weightedCrowding": 0.15,
+        "crowdingPenalty": 0.06,
+        "bandIds": [
+          "band:custom:1"
+        ]
+      },
+      "depletion": {
+        "tileDepletion": 0,
+        "localUsePressure": 0,
+        "perCapitaReturn": 0.05
+      },
+      "stay": {
+        "action": "stay:tile:195:90",
+        "actionType": "stay",
+        "score": 4.16,
+        "totalCrowdingInfluence": 0.15,
+        "charges": {
+          "directNearbyBandPressure": 0.04,
+          "directCrowdingPenalty": 0.05,
+          "pressureState": 0.01,
+          "rangeSaturation": 0.02,
+          "crowdingExploreBoost": 0,
+          "daughterDerivative": 0
+        },
+        "crowdingPathCount": 4,
+        "targetCrowdingPenalty": 0.06,
+        "targetNearbyBandPressure": 0.15,
+        "rangeSaturationScored": 0.24,
+        "crowdingExploreBoost": 0,
+        "daughterDispersalExploreBoost": 0
+      },
+      "probe": {
+        "bandId": "band:custom:0",
+        "position": "tile:195:90",
+        "terrain": "river_valley",
+        "droughtRisk": 0,
+        "weightedCrowding": 0.15,
+        "nearbyBandCount": 1,
+        "crowdingBandIds": [
+          "band:custom:1"
+        ],
+        "crowdingPenalty": 0.06,
+        "parentOverlap": 0,
+        "daughterOverlap": 0,
+        "riskPressure": {
+          "full": 0.64,
+          "zeroCrowding": 0.63
+        },
+        "placeAttachmentPull": {
+          "full": 0.56,
+          "zeroCrowding": 0.57
+        },
+        "mobilityPressure": {
+          "full": 0.61,
+          "zeroCrowding": 0.59
+        },
+        "netMovePressure": {
+          "full": 0.61,
+          "zeroCrowding": 0.58
+        },
+        "decisionSaturation": {
+          "full": 0.24,
+          "zeroCrowding": 0.19
+        },
+        "fullSaturationPressure": 0.24,
+        "daughterDispersalPressure": 0.33,
+        "overlappingBandIds": [
+          "band:custom:1"
+        ],
+        "localUsePressure": 0,
+        "tileDepletion": 0,
+        "perCapitaReturn": 0.05,
+        "encounterRecords": 19,
+        "contactMemories": 1,
+        "frictionRecords": 0,
+        "accessState": "familiar_use",
+        "selected": "move_to_tile:tile:196:91",
+        "selectedZeroCrowding": "move_to_tile:tile:196:91",
+        "candidateFamilies": [
+          "move_to_tile",
+          "resource_scout",
+          "stay"
+        ],
+        "maxCrowdingPathCount": 4,
+        "stay": {
+          "action": "stay:tile:195:90",
+          "actionType": "stay",
+          "score": 4.16,
+          "totalCrowdingInfluence": 0.15,
+          "charges": {
+            "directNearbyBandPressure": 0.04,
+            "directCrowdingPenalty": 0.05,
+            "pressureState": 0.01,
+            "rangeSaturation": 0.02,
+            "crowdingExploreBoost": 0,
+            "daughterDerivative": 0
+          },
+          "crowdingPathCount": 4,
+          "targetCrowdingPenalty": 0.06,
+          "targetNearbyBandPressure": 0.15,
+          "rangeSaturationScored": 0.24,
+          "crowdingExploreBoost": 0,
+          "daughterDispersalExploreBoost": 0
+        },
+        "bestMove": {
+          "action": "move_to_tile:tile:196:91",
+          "actionType": "move_to_tile",
+          "score": 5.89,
+          "totalCrowdingInfluence": 0.09,
+          "charges": {
+            "directNearbyBandPressure": 0.03,
+            "directCrowdingPenalty": 0.04,
+            "pressureState": -0.01,
+            "rangeSaturation": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDerivative": 0.02
+          },
+          "crowdingPathCount": 4,
+          "targetCrowdingPenalty": 0.06,
+          "targetNearbyBandPressure": 0.15,
+          "rangeSaturationScored": 0,
+          "crowdingExploreBoost": 0,
+          "daughterDispersalExploreBoost": 0
+        },
+        "exploration": null,
+        "logisticalProbe": null,
+        "resourceScout": {
+          "action": "resource_scout:tile:194:90",
+          "actionType": "resource_scout",
+          "score": 2.78,
+          "totalCrowdingInfluence": 0,
+          "charges": {
+            "directNearbyBandPressure": 0,
+            "directCrowdingPenalty": 0,
+            "pressureState": 0,
+            "rangeSaturation": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDerivative": 0
+          },
+          "crowdingPathCount": 0,
+          "targetCrowdingPenalty": 0,
+          "targetNearbyBandPressure": 0,
+          "rangeSaturationScored": 0,
+          "crowdingExploreBoost": 0,
+          "daughterDispersalExploreBoost": 0
+        },
+        "candidates": [
+          {
+            "action": "move_to_tile:tile:196:91",
+            "actionType": "move_to_tile",
+            "score": 5.89,
+            "totalCrowdingInfluence": 0.09,
+            "charges": {
+              "directNearbyBandPressure": 0.03,
+              "directCrowdingPenalty": 0.04,
+              "pressureState": -0.01,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0.02
+            },
+            "crowdingPathCount": 4,
+            "targetCrowdingPenalty": 0.06,
+            "targetNearbyBandPressure": 0.15,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:194:90",
+            "actionType": "move_to_tile",
+            "score": 5.76,
+            "totalCrowdingInfluence": 0.06,
+            "charges": {
+              "directNearbyBandPressure": 0.02,
+              "directCrowdingPenalty": 0.02,
+              "pressureState": -0.01,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0.01
+            },
+            "crowdingPathCount": 4,
+            "targetCrowdingPenalty": 0.04,
+            "targetNearbyBandPressure": 0.11,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:195:91",
+            "actionType": "move_to_tile",
+            "score": 5.3,
+            "totalCrowdingInfluence": 0.08,
+            "charges": {
+              "directNearbyBandPressure": 0.03,
+              "directCrowdingPenalty": 0.03,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0.02
+            },
+            "crowdingPathCount": 3,
+            "targetCrowdingPenalty": 0.04,
+            "targetNearbyBandPressure": 0.11,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:196:90",
+            "actionType": "move_to_tile",
+            "score": 4.95,
+            "totalCrowdingInfluence": 0.14,
+            "charges": {
+              "directNearbyBandPressure": 0.05,
+              "directCrowdingPenalty": 0.05,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0.03
+            },
+            "crowdingPathCount": 3,
+            "targetCrowdingPenalty": 0.07,
+            "targetNearbyBandPressure": 0.19,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:197:90",
+            "actionType": "move_to_tile",
+            "score": 4.49,
+            "totalCrowdingInfluence": 0.13,
+            "charges": {
+              "directNearbyBandPressure": 0.04,
+              "directCrowdingPenalty": 0.05,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0.03
+            },
+            "crowdingPathCount": 3,
+            "targetCrowdingPenalty": 0.07,
+            "targetNearbyBandPressure": 0.16,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "stay:tile:195:90",
+            "actionType": "stay",
+            "score": 4.16,
+            "totalCrowdingInfluence": 0.15,
+            "charges": {
+              "directNearbyBandPressure": 0.04,
+              "directCrowdingPenalty": 0.05,
+              "pressureState": 0.01,
+              "rangeSaturation": 0.02,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 4,
+            "targetCrowdingPenalty": 0.06,
+            "targetNearbyBandPressure": 0.15,
+            "rangeSaturationScored": 0.24,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:194:89",
+            "actionType": "move_to_tile",
+            "score": 3.49,
+            "totalCrowdingInfluence": 0.03,
+            "charges": {
+              "directNearbyBandPressure": 0.01,
+              "directCrowdingPenalty": 0.01,
+              "pressureState": -0.01,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 3,
+            "targetCrowdingPenalty": 0.02,
+            "targetNearbyBandPressure": 0.05,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:195:89",
+            "actionType": "move_to_tile",
+            "score": 3.19,
+            "totalCrowdingInfluence": 0.08,
+            "charges": {
+              "directNearbyBandPressure": 0.03,
+              "directCrowdingPenalty": 0.03,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0.02
+            },
+            "crowdingPathCount": 3,
+            "targetCrowdingPenalty": 0.04,
+            "targetNearbyBandPressure": 0.11,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:196:89",
+            "actionType": "move_to_tile",
+            "score": 2.95,
+            "totalCrowdingInfluence": 0.11,
+            "charges": {
+              "directNearbyBandPressure": 0.04,
+              "directCrowdingPenalty": 0.05,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0.02
+            },
+            "crowdingPathCount": 3,
+            "targetCrowdingPenalty": 0.06,
+            "targetNearbyBandPressure": 0.15,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "resource_scout:tile:194:90",
+            "actionType": "resource_scout",
+            "score": 2.78,
+            "totalCrowdingInfluence": 0,
+            "charges": {
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 0,
+            "targetCrowdingPenalty": 0,
+            "targetNearbyBandPressure": 0,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:195:88",
+            "actionType": "move_to_tile",
+            "score": 2.69,
+            "totalCrowdingInfluence": 0.03,
+            "charges": {
+              "directNearbyBandPressure": 0.01,
+              "directCrowdingPenalty": 0.01,
+              "pressureState": -0.01,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 3,
+            "targetCrowdingPenalty": 0.02,
+            "targetNearbyBandPressure": 0.05,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          }
+        ]
+      }
+    },
+    "P10_crowding_plus_social_friction": {
+      "intent": "physical proximity plus genuine social evidence: the two channels stay distinguishable and social tension is not duplicated from proximity",
+      "syntheticState": true,
+      "physicalChannel": {
+        "weightedCrowding": 0.15,
+        "crowdingPenalty": 0.06,
+        "paths": 4
+      },
+      "socialChannel": {
+        "frictionRecords": 0,
+        "contactMemories": 1,
+        "encounterRecords": 24,
+        "accessState": "expected_return"
+      },
+      "riskPressureCrowdingContribution": 0.01,
+      "probe": {
+        "bandId": "band:custom:0",
+        "position": "tile:195:90",
+        "terrain": "river_valley",
+        "droughtRisk": 0,
+        "weightedCrowding": 0.15,
+        "nearbyBandCount": 1,
+        "crowdingBandIds": [
+          "band:custom:1"
+        ],
+        "crowdingPenalty": 0.06,
+        "parentOverlap": 0,
+        "daughterOverlap": 0,
+        "riskPressure": {
+          "full": 0.69,
+          "zeroCrowding": 0.68
+        },
+        "placeAttachmentPull": {
+          "full": 0.86,
+          "zeroCrowding": 0.87
+        },
+        "mobilityPressure": {
+          "full": 0.46,
+          "zeroCrowding": 0.44
+        },
+        "netMovePressure": {
+          "full": 0.23,
+          "zeroCrowding": 0.2
+        },
+        "decisionSaturation": {
+          "full": 0.22,
+          "zeroCrowding": 0.16
+        },
+        "fullSaturationPressure": 0.22,
+        "daughterDispersalPressure": 0.21,
+        "overlappingBandIds": [
+          "band:custom:1"
+        ],
+        "localUsePressure": 0.1066,
+        "tileDepletion": 0,
+        "perCapitaReturn": 1,
+        "encounterRecords": 24,
+        "contactMemories": 1,
+        "frictionRecords": 0,
+        "accessState": "expected_return",
+        "selected": "stay:tile:195:90",
+        "selectedZeroCrowding": "stay:tile:195:90",
+        "candidateFamilies": [
+          "logistical_probe",
+          "move_to_tile",
+          "stay"
+        ],
+        "maxCrowdingPathCount": 4,
+        "stay": {
+          "action": "stay:tile:195:90",
+          "actionType": "stay",
+          "score": 5.35,
+          "totalCrowdingInfluence": 0.14,
+          "charges": {
+            "directNearbyBandPressure": 0.03,
+            "directCrowdingPenalty": 0.04,
+            "pressureState": 0,
+            "rangeSaturation": 0.02,
+            "crowdingExploreBoost": 0,
+            "daughterDerivative": 0
+          },
+          "crowdingPathCount": 3,
+          "targetCrowdingPenalty": 0.06,
+          "targetNearbyBandPressure": 0.15,
+          "rangeSaturationScored": 0.22,
+          "crowdingExploreBoost": 0,
+          "daughterDispersalExploreBoost": 0
+        },
+        "bestMove": {
+          "action": "move_to_tile:tile:194:90",
+          "actionType": "move_to_tile",
+          "score": 5.76,
+          "totalCrowdingInfluence": 0.07,
+          "charges": {
+            "directNearbyBandPressure": 0.02,
+            "directCrowdingPenalty": 0.03,
+            "pressureState": -0.01,
+            "rangeSaturation": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDerivative": 0.01
+          },
+          "crowdingPathCount": 4,
+          "targetCrowdingPenalty": 0.04,
+          "targetNearbyBandPressure": 0.11,
+          "rangeSaturationScored": 0,
+          "crowdingExploreBoost": 0,
+          "daughterDispersalExploreBoost": 0
+        },
+        "exploration": null,
+        "logisticalProbe": {
+          "action": "logistical_probe:tile:198:91",
+          "actionType": "logistical_probe",
+          "score": 2.82,
+          "totalCrowdingInfluence": 0,
+          "charges": {
+            "directNearbyBandPressure": 0,
+            "directCrowdingPenalty": 0,
+            "pressureState": 0,
+            "rangeSaturation": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDerivative": 0
+          },
+          "crowdingPathCount": 0,
+          "targetCrowdingPenalty": 0,
+          "targetNearbyBandPressure": 0,
+          "rangeSaturationScored": 0,
+          "crowdingExploreBoost": 0,
+          "daughterDispersalExploreBoost": 0
+        },
+        "resourceScout": null,
+        "candidates": [
+          {
+            "action": "stay:tile:195:90",
+            "actionType": "stay",
+            "score": 5.35,
+            "totalCrowdingInfluence": 0.14,
+            "charges": {
+              "directNearbyBandPressure": 0.03,
+              "directCrowdingPenalty": 0.04,
+              "pressureState": 0,
+              "rangeSaturation": 0.02,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 3,
+            "targetCrowdingPenalty": 0.06,
+            "targetNearbyBandPressure": 0.15,
+            "rangeSaturationScored": 0.22,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:194:90",
+            "actionType": "move_to_tile",
+            "score": 5.76,
+            "totalCrowdingInfluence": 0.07,
+            "charges": {
+              "directNearbyBandPressure": 0.02,
+              "directCrowdingPenalty": 0.03,
+              "pressureState": -0.01,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0.01
+            },
+            "crowdingPathCount": 4,
+            "targetCrowdingPenalty": 0.04,
+            "targetNearbyBandPressure": 0.11,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:194:89",
+            "actionType": "move_to_tile",
+            "score": 4.25,
+            "totalCrowdingInfluence": 0.04,
+            "charges": {
+              "directNearbyBandPressure": 0.02,
+              "directCrowdingPenalty": 0.02,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0.01
+            },
+            "crowdingPathCount": 3,
+            "targetCrowdingPenalty": 0.02,
+            "targetNearbyBandPressure": 0.05,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:195:91",
+            "actionType": "move_to_tile",
+            "score": 4.19,
+            "totalCrowdingInfluence": 0.07,
+            "charges": {
+              "directNearbyBandPressure": 0.03,
+              "directCrowdingPenalty": 0.03,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0.01
+            },
+            "crowdingPathCount": 3,
+            "targetCrowdingPenalty": 0.04,
+            "targetNearbyBandPressure": 0.11,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:195:89",
+            "actionType": "move_to_tile",
+            "score": 4.06,
+            "totalCrowdingInfluence": 0.08,
+            "charges": {
+              "directNearbyBandPressure": 0.03,
+              "directCrowdingPenalty": 0.03,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0.02
+            },
+            "crowdingPathCount": 3,
+            "targetCrowdingPenalty": 0.04,
+            "targetNearbyBandPressure": 0.11,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:195:88",
+            "actionType": "move_to_tile",
+            "score": 3.66,
+            "totalCrowdingInfluence": 0.04,
+            "charges": {
+              "directNearbyBandPressure": 0.01,
+              "directCrowdingPenalty": 0.01,
+              "pressureState": -0.01,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0.01
+            },
+            "crowdingPathCount": 4,
+            "targetCrowdingPenalty": 0.02,
+            "targetNearbyBandPressure": 0.05,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:196:90",
+            "actionType": "move_to_tile",
+            "score": 3.02,
+            "totalCrowdingInfluence": 0.14,
+            "charges": {
+              "directNearbyBandPressure": 0.04,
+              "directCrowdingPenalty": 0.05,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0.02
+            },
+            "crowdingPathCount": 3,
+            "targetCrowdingPenalty": 0.07,
+            "targetNearbyBandPressure": 0.19,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "logistical_probe:tile:198:91",
+            "actionType": "logistical_probe",
+            "score": 2.82,
+            "totalCrowdingInfluence": 0,
+            "charges": {
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 0,
+            "targetCrowdingPenalty": 0,
+            "targetNearbyBandPressure": 0,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:196:91",
+            "actionType": "move_to_tile",
+            "score": 2.78,
+            "totalCrowdingInfluence": 0.12,
+            "charges": {
+              "directNearbyBandPressure": 0.03,
+              "directCrowdingPenalty": 0.04,
+              "pressureState": -0.01,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0.02
+            },
+            "crowdingPathCount": 4,
+            "targetCrowdingPenalty": 0.06,
+            "targetNearbyBandPressure": 0.15,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:196:89",
+            "actionType": "move_to_tile",
+            "score": 2.67,
+            "totalCrowdingInfluence": 0.12,
+            "charges": {
+              "directNearbyBandPressure": 0.03,
+              "directCrowdingPenalty": 0.04,
+              "pressureState": -0.01,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0.02
+            },
+            "crowdingPathCount": 4,
+            "targetCrowdingPenalty": 0.06,
+            "targetNearbyBandPressure": 0.15,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:197:90",
+            "actionType": "move_to_tile",
+            "score": 2.53,
+            "totalCrowdingInfluence": 0.1,
+            "charges": {
+              "directNearbyBandPressure": 0.04,
+              "directCrowdingPenalty": 0.05,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 2,
+            "targetCrowdingPenalty": 0.07,
+            "targetNearbyBandPressure": 0.16,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          }
+        ]
+      },
+      "verdict": "MEASURED"
+    },
+    "P11_kin_crowding": {
+      "intent": "kin bands nearby: physical use remains, kin modifiers bounded, kinship does not remove spatial pressure, no fission redesign",
+      "syntheticState": true,
+      "syntheticNote": "no natural fission occurs in 30 simulated years; the parent/daughter link is written with production's own fields",
+      "naturalOccurrence": "kinOverlapPairs = 0 (AUDIT-27); fissions = 0 here",
+      "nonKinArm": {
+        "weightedCrowding": 0.15,
+        "crowdingPenalty": 0.06,
+        "parentOverlap": 0,
+        "daughterDispersalPressure": 0,
+        "stayPaths": 4
+      },
+      "kinArm": {
+        "weightedCrowding": 0.11,
+        "crowdingPenalty": 0.04,
+        "parentOverlap": 0.31,
+        "daughterDispersalPressure": 0.58,
+        "stayPaths": 4
+      },
+      "kinDiscountObserved": 0.04,
+      "probe": {
+        "bandId": "band:custom:0",
+        "position": "tile:195:90",
+        "terrain": "river_valley",
+        "droughtRisk": 0,
+        "weightedCrowding": 0.11,
+        "nearbyBandCount": 1,
+        "crowdingBandIds": [
+          "band:custom:1"
+        ],
+        "crowdingPenalty": 0.04,
+        "parentOverlap": 0.31,
+        "daughterOverlap": 0,
+        "riskPressure": {
+          "full": 0.53,
+          "zeroCrowding": 0.53
+        },
+        "placeAttachmentPull": {
+          "full": 0.55,
+          "zeroCrowding": 0.56
+        },
+        "mobilityPressure": {
+          "full": 0.44,
+          "zeroCrowding": 0.42
+        },
+        "netMovePressure": {
+          "full": 0.41,
+          "zeroCrowding": 0.37
+        },
+        "decisionSaturation": {
+          "full": 0.15,
+          "zeroCrowding": 0.11
+        },
+        "fullSaturationPressure": 0.15,
+        "daughterDispersalPressure": 0.58,
+        "overlappingBandIds": [
+          "band:custom:1"
+        ],
+        "localUsePressure": 0.0656,
+        "tileDepletion": 0,
+        "perCapitaReturn": 1,
+        "encounterRecords": 19,
+        "contactMemories": 1,
+        "frictionRecords": 0,
+        "accessState": "familiar_use",
+        "selected": "move_to_tile:tile:194:90",
+        "selectedZeroCrowding": "move_to_tile:tile:194:90",
+        "candidateFamilies": [
+          "logistical_probe",
+          "move_to_tile",
+          "resource_scout",
+          "stay"
+        ],
+        "maxCrowdingPathCount": 4,
+        "stay": {
+          "action": "stay:tile:195:90",
+          "actionType": "stay",
+          "score": 4.56,
+          "totalCrowdingInfluence": 0.12,
+          "charges": {
+            "directNearbyBandPressure": 0.03,
+            "directCrowdingPenalty": 0.03,
+            "pressureState": 0.01,
+            "rangeSaturation": 0.01,
+            "crowdingExploreBoost": 0,
+            "daughterDerivative": 0
+          },
+          "crowdingPathCount": 4,
+          "targetCrowdingPenalty": 0.04,
+          "targetNearbyBandPressure": 0.11,
+          "rangeSaturationScored": 0.15,
+          "crowdingExploreBoost": 0,
+          "daughterDispersalExploreBoost": 0
+        },
+        "bestMove": {
+          "action": "move_to_tile:tile:194:90",
+          "actionType": "move_to_tile",
+          "score": 5.33,
+          "totalCrowdingInfluence": -4.08,
+          "charges": {
+            "directNearbyBandPressure": 0.01,
+            "directCrowdingPenalty": 0.02,
+            "pressureState": -0.01,
+            "rangeSaturation": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDerivative": 0.01
+          },
+          "crowdingPathCount": 4,
+          "targetCrowdingPenalty": 0.03,
+          "targetNearbyBandPressure": 0.08,
+          "rangeSaturationScored": 0,
+          "crowdingExploreBoost": 0,
+          "daughterDispersalExploreBoost": 0
+        },
+        "exploration": null,
+        "logisticalProbe": {
+          "action": "logistical_probe:tile:198:86",
+          "actionType": "logistical_probe",
+          "score": 3.64,
+          "totalCrowdingInfluence": 0,
+          "charges": {
+            "directNearbyBandPressure": 0,
+            "directCrowdingPenalty": 0,
+            "pressureState": 0,
+            "rangeSaturation": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDerivative": 0
+          },
+          "crowdingPathCount": 0,
+          "targetCrowdingPenalty": 0,
+          "targetNearbyBandPressure": 0,
+          "rangeSaturationScored": 0,
+          "crowdingExploreBoost": 0,
+          "daughterDispersalExploreBoost": 0
+        },
+        "resourceScout": {
+          "action": "resource_scout:tile:194:90",
+          "actionType": "resource_scout",
+          "score": 2.41,
+          "totalCrowdingInfluence": 0,
+          "charges": {
+            "directNearbyBandPressure": 0,
+            "directCrowdingPenalty": 0,
+            "pressureState": 0,
+            "rangeSaturation": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDerivative": 0
+          },
+          "crowdingPathCount": 0,
+          "targetCrowdingPenalty": 0,
+          "targetNearbyBandPressure": 0,
+          "rangeSaturationScored": 0,
+          "crowdingExploreBoost": 0,
+          "daughterDispersalExploreBoost": 0
+        },
+        "candidates": [
+          {
+            "action": "move_to_tile:tile:194:90",
+            "actionType": "move_to_tile",
+            "score": 5.33,
+            "totalCrowdingInfluence": -4.08,
+            "charges": {
+              "directNearbyBandPressure": 0.01,
+              "directCrowdingPenalty": 0.02,
+              "pressureState": -0.01,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0.01
+            },
+            "crowdingPathCount": 4,
+            "targetCrowdingPenalty": 0.03,
+            "targetNearbyBandPressure": 0.08,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "stay:tile:195:90",
+            "actionType": "stay",
+            "score": 4.56,
+            "totalCrowdingInfluence": 0.12,
+            "charges": {
+              "directNearbyBandPressure": 0.03,
+              "directCrowdingPenalty": 0.03,
+              "pressureState": 0.01,
+              "rangeSaturation": 0.01,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 4,
+            "targetCrowdingPenalty": 0.04,
+            "targetNearbyBandPressure": 0.11,
+            "rangeSaturationScored": 0.15,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:196:90",
+            "actionType": "move_to_tile",
+            "score": 4.48,
+            "totalCrowdingInfluence": 0.08,
+            "charges": {
+              "directNearbyBandPressure": 0.03,
+              "directCrowdingPenalty": 0.03,
+              "pressureState": -0.01,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0.01
+            },
+            "crowdingPathCount": 4,
+            "targetCrowdingPenalty": 0.05,
+            "targetNearbyBandPressure": 0.14,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:195:89",
+            "actionType": "move_to_tile",
+            "score": 4.42,
+            "totalCrowdingInfluence": 0.04,
+            "charges": {
+              "directNearbyBandPressure": 0.02,
+              "directCrowdingPenalty": 0.02,
+              "pressureState": -0.01,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0.01
+            },
+            "crowdingPathCount": 4,
+            "targetCrowdingPenalty": 0.03,
+            "targetNearbyBandPressure": 0.08,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:194:89",
+            "actionType": "move_to_tile",
+            "score": 4.21,
+            "totalCrowdingInfluence": 0,
+            "charges": {
+              "directNearbyBandPressure": 0.01,
+              "directCrowdingPenalty": 0.01,
+              "pressureState": -0.01,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 3,
+            "targetCrowdingPenalty": 0.01,
+            "targetNearbyBandPressure": 0.03,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:197:90",
+            "actionType": "move_to_tile",
+            "score": 4.05,
+            "totalCrowdingInfluence": 0.08,
+            "charges": {
+              "directNearbyBandPressure": 0.03,
+              "directCrowdingPenalty": 0.04,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0.02
+            },
+            "crowdingPathCount": 3,
+            "targetCrowdingPenalty": 0.05,
+            "targetNearbyBandPressure": 0.12,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:195:88",
+            "actionType": "move_to_tile",
+            "score": 3.94,
+            "totalCrowdingInfluence": 0.01,
+            "charges": {
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0,
+              "pressureState": -0.01,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 1,
+            "targetCrowdingPenalty": 0.01,
+            "targetNearbyBandPressure": 0.03,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:196:89",
+            "actionType": "move_to_tile",
+            "score": 3.74,
+            "totalCrowdingInfluence": 0.06,
+            "charges": {
+              "directNearbyBandPressure": 0.03,
+              "directCrowdingPenalty": 0.03,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0.02
+            },
+            "crowdingPathCount": 3,
+            "targetCrowdingPenalty": 0.04,
+            "targetNearbyBandPressure": 0.11,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "logistical_probe:tile:198:86",
+            "actionType": "logistical_probe",
+            "score": 3.64,
+            "totalCrowdingInfluence": 0,
+            "charges": {
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 0,
+            "targetCrowdingPenalty": 0,
+            "targetNearbyBandPressure": 0,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:195:91",
+            "actionType": "move_to_tile",
+            "score": 3.59,
+            "totalCrowdingInfluence": 0.04,
+            "charges": {
+              "directNearbyBandPressure": 0.02,
+              "directCrowdingPenalty": 0.02,
+              "pressureState": -0.01,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0.01
+            },
+            "crowdingPathCount": 4,
+            "targetCrowdingPenalty": 0.03,
+            "targetNearbyBandPressure": 0.08,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:196:91",
+            "actionType": "move_to_tile",
+            "score": 3.21,
+            "totalCrowdingInfluence": 0.06,
+            "charges": {
+              "directNearbyBandPressure": 0.03,
+              "directCrowdingPenalty": 0.03,
+              "pressureState": -0.01,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0.01
+            },
+            "crowdingPathCount": 4,
+            "targetCrowdingPenalty": 0.04,
+            "targetNearbyBandPressure": 0.11,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "resource_scout:tile:194:90",
+            "actionType": "resource_scout",
+            "score": 2.41,
+            "totalCrowdingInfluence": 0,
+            "charges": {
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 0,
+            "targetCrowdingPenalty": 0,
+            "targetNearbyBandPressure": 0,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:194:90",
+            "actionType": "move_to_tile",
+            "score": 1.25,
+            "totalCrowdingInfluence": 0,
+            "charges": {
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 0,
+            "targetCrowdingPenalty": 0,
+            "targetNearbyBandPressure": 0,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "logistical_probe:tile:192:89",
+            "actionType": "logistical_probe",
+            "score": 0.09,
+            "totalCrowdingInfluence": 0,
+            "charges": {
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 0,
+            "targetCrowdingPenalty": 0,
+            "targetNearbyBandPressure": 0,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          }
+        ]
+      },
+      "verdict": "KIN_DISCOUNTED_BUT_STILL_CONSUME_SPACE"
+    },
+    "P12_tolerated_aggregation": {
+      "intent": "physical crowding can coexist with social tolerance",
+      "syntheticState": true,
+      "physicalCrowding": {
+        "weightedCrowding": 0.15,
+        "crowdingPenalty": 0.06
+      },
+      "socialTolerance": {
+        "contactMemories": [
+          {
+            "bandId": "undefined",
+            "contactCount": 36,
+            "trustLikeTolerance": 0.98
+          }
+        ],
+        "accessState": "expected_return"
+      },
+      "probe": {
+        "bandId": "band:custom:0",
+        "position": "tile:195:90",
+        "terrain": "river_valley",
+        "droughtRisk": 0,
+        "weightedCrowding": 0.15,
+        "nearbyBandCount": 1,
+        "crowdingBandIds": [
+          "band:custom:1"
+        ],
+        "crowdingPenalty": 0.06,
+        "parentOverlap": 0,
+        "daughterOverlap": 0,
+        "riskPressure": {
+          "full": 0.65,
+          "zeroCrowding": 0.65
+        },
+        "placeAttachmentPull": {
+          "full": 0.74,
+          "zeroCrowding": 0.76
+        },
+        "mobilityPressure": {
+          "full": 0.66,
+          "zeroCrowding": 0.64
+        },
+        "netMovePressure": {
+          "full": 0.58,
+          "zeroCrowding": 0.55
+        },
+        "decisionSaturation": {
+          "full": 0.31,
+          "zeroCrowding": 0.25
+        },
+        "fullSaturationPressure": 0.31,
+        "daughterDispersalPressure": 0.34,
+        "overlappingBandIds": [
+          "band:custom:1"
+        ],
+        "localUsePressure": 0.1066,
+        "tileDepletion": 0,
+        "perCapitaReturn": 0.03,
+        "encounterRecords": 24,
+        "contactMemories": 1,
+        "frictionRecords": 0,
+        "accessState": "expected_return",
+        "selected": "move_to_tile:tile:194:90",
+        "selectedZeroCrowding": "move_to_tile:tile:194:90",
+        "candidateFamilies": [
+          "logistical_probe",
+          "move_to_tile",
+          "stay"
+        ],
+        "maxCrowdingPathCount": 4,
+        "stay": {
+          "action": "stay:tile:195:90",
+          "actionType": "stay",
+          "score": 3.8,
+          "totalCrowdingInfluence": 0.15,
+          "charges": {
+            "directNearbyBandPressure": 0.03,
+            "directCrowdingPenalty": 0.04,
+            "pressureState": 0.01,
+            "rangeSaturation": 0.02,
+            "crowdingExploreBoost": 0,
+            "daughterDerivative": 0
+          },
+          "crowdingPathCount": 4,
+          "targetCrowdingPenalty": 0.06,
+          "targetNearbyBandPressure": 0.15,
+          "rangeSaturationScored": 0.31,
+          "crowdingExploreBoost": 0,
+          "daughterDispersalExploreBoost": 0
+        },
+        "bestMove": {
+          "action": "move_to_tile:tile:194:90",
+          "actionType": "move_to_tile",
+          "score": 6.04,
+          "totalCrowdingInfluence": 0.06,
+          "charges": {
+            "directNearbyBandPressure": 0.03,
+            "directCrowdingPenalty": 0.03,
+            "pressureState": 0,
+            "rangeSaturation": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDerivative": 0.02
+          },
+          "crowdingPathCount": 3,
+          "targetCrowdingPenalty": 0.04,
+          "targetNearbyBandPressure": 0.11,
+          "rangeSaturationScored": 0,
+          "crowdingExploreBoost": 0,
+          "daughterDispersalExploreBoost": 0
+        },
+        "exploration": null,
+        "logisticalProbe": {
+          "action": "logistical_probe:tile:197:87",
+          "actionType": "logistical_probe",
+          "score": 3.48,
+          "totalCrowdingInfluence": 0,
+          "charges": {
+            "directNearbyBandPressure": 0,
+            "directCrowdingPenalty": 0,
+            "pressureState": 0,
+            "rangeSaturation": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDerivative": 0
+          },
+          "crowdingPathCount": 0,
+          "targetCrowdingPenalty": 0,
+          "targetNearbyBandPressure": 0,
+          "rangeSaturationScored": 0,
+          "crowdingExploreBoost": 0,
+          "daughterDispersalExploreBoost": 0
+        },
+        "resourceScout": null,
+        "candidates": [
+          {
+            "action": "move_to_tile:tile:194:90",
+            "actionType": "move_to_tile",
+            "score": 6.04,
+            "totalCrowdingInfluence": 0.06,
+            "charges": {
+              "directNearbyBandPressure": 0.03,
+              "directCrowdingPenalty": 0.03,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0.02
+            },
+            "crowdingPathCount": 3,
+            "targetCrowdingPenalty": 0.04,
+            "targetNearbyBandPressure": 0.11,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:195:88",
+            "actionType": "move_to_tile",
+            "score": 4.94,
+            "totalCrowdingInfluence": 0.03,
+            "charges": {
+              "directNearbyBandPressure": 0.01,
+              "directCrowdingPenalty": 0.01,
+              "pressureState": -0.01,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0.01
+            },
+            "crowdingPathCount": 4,
+            "targetCrowdingPenalty": 0.02,
+            "targetNearbyBandPressure": 0.05,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:194:89",
+            "actionType": "move_to_tile",
+            "score": 4.31,
+            "totalCrowdingInfluence": 0.03,
+            "charges": {
+              "directNearbyBandPressure": 0.01,
+              "directCrowdingPenalty": 0.01,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0.01
+            },
+            "crowdingPathCount": 3,
+            "targetCrowdingPenalty": 0.02,
+            "targetNearbyBandPressure": 0.05,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:195:91",
+            "actionType": "move_to_tile",
+            "score": 4.3,
+            "totalCrowdingInfluence": 0.08,
+            "charges": {
+              "directNearbyBandPressure": 0.03,
+              "directCrowdingPenalty": 0.03,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0.01
+            },
+            "crowdingPathCount": 3,
+            "targetCrowdingPenalty": 0.04,
+            "targetNearbyBandPressure": 0.11,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:195:89",
+            "actionType": "move_to_tile",
+            "score": 4.13,
+            "totalCrowdingInfluence": 0.08,
+            "charges": {
+              "directNearbyBandPressure": 0.03,
+              "directCrowdingPenalty": 0.03,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0.02
+            },
+            "crowdingPathCount": 3,
+            "targetCrowdingPenalty": 0.04,
+            "targetNearbyBandPressure": 0.11,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "stay:tile:195:90",
+            "actionType": "stay",
+            "score": 3.8,
+            "totalCrowdingInfluence": 0.15,
+            "charges": {
+              "directNearbyBandPressure": 0.03,
+              "directCrowdingPenalty": 0.04,
+              "pressureState": 0.01,
+              "rangeSaturation": 0.02,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 4,
+            "targetCrowdingPenalty": 0.06,
+            "targetNearbyBandPressure": 0.15,
+            "rangeSaturationScored": 0.31,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "logistical_probe:tile:197:87",
+            "actionType": "logistical_probe",
+            "score": 3.48,
+            "totalCrowdingInfluence": 0,
+            "charges": {
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 0,
+            "targetCrowdingPenalty": 0,
+            "targetNearbyBandPressure": 0,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:196:90",
+            "actionType": "move_to_tile",
+            "score": 3.14,
+            "totalCrowdingInfluence": 0.13,
+            "charges": {
+              "directNearbyBandPressure": 0.05,
+              "directCrowdingPenalty": 0.05,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0.03
+            },
+            "crowdingPathCount": 3,
+            "targetCrowdingPenalty": 0.07,
+            "targetNearbyBandPressure": 0.19,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:196:91",
+            "actionType": "move_to_tile",
+            "score": 2.86,
+            "totalCrowdingInfluence": 0.11,
+            "charges": {
+              "directNearbyBandPressure": 0.03,
+              "directCrowdingPenalty": 0.04,
+              "pressureState": -0.01,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0.02
+            },
+            "crowdingPathCount": 4,
+            "targetCrowdingPenalty": 0.06,
+            "targetNearbyBandPressure": 0.15,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:196:89",
+            "actionType": "move_to_tile",
+            "score": 2.7,
+            "totalCrowdingInfluence": 0.12,
+            "charges": {
+              "directNearbyBandPressure": 0.04,
+              "directCrowdingPenalty": 0.05,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0.03
+            },
+            "crowdingPathCount": 3,
+            "targetCrowdingPenalty": 0.06,
+            "targetNearbyBandPressure": 0.15,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:197:90",
+            "actionType": "move_to_tile",
+            "score": 2.59,
+            "totalCrowdingInfluence": 0.1,
+            "charges": {
+              "directNearbyBandPressure": 0.04,
+              "directCrowdingPenalty": 0.05,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 2,
+            "targetCrowdingPenalty": 0.07,
+            "targetNearbyBandPressure": 0.16,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          }
+        ]
+      },
+      "verdict": "PHYSICAL_AND_SOCIAL_COEXIST"
+    },
+    "P13_range_saturation_overlap": {
+      "intent": "saturation WITH nearby crowding vs saturation from non-crowding causes only: is nearby crowding charged again?",
+      "syntheticState": true,
+      "arms": {
+        "withCrowding": {
+          "weightedCrowding": 0.15,
+          "fullSaturationPressure": 0.17,
+          "decisionSaturationScored": 0.17,
+          "saturationChargedOnStay": 0.02,
+          "crowdingChargedOnStay": 0.05,
+          "stayPaths": 4
+        },
+        "withoutCrowding": {
+          "weightedCrowding": 0,
+          "fullSaturationPressure": 0.05,
+          "decisionSaturationScored": 0.05,
+          "saturationChargedOnStay": 0,
+          "crowdingChargedOnStay": 0,
+          "stayPaths": 0
+        }
+      },
+      "saturationCrowdingComponent": 0.12,
+      "decisionSaturationCrowdingComponent": 0.12,
+      "verdict": "SATURATION_STILL_CARRIES_CROWDING_INTO_SCORE"
+    },
+    "P14_crowding_driven_exploration": {
+      "intent": "crowded residence with an uncertain alternative: exploration motivation is bounded and counted once",
+      "syntheticState": true,
+      "arms": {
+        "crowded": {
+          "weightedCrowding": 0.15,
+          "crowdingPenalty": 0.06,
+          "exploration": {
+            "action": "explore_unknown_neighbor:tile:195:89",
+            "actionType": "explore_unknown_neighbor",
+            "score": 4.31,
+            "totalCrowdingInfluence": 0,
+            "charges": {
+              "directNearbyBandPressure": 0.04,
+              "directCrowdingPenalty": 0.05,
+              "pressureState": -0.01,
+              "rangeSaturation": 0.02,
+              "crowdingExploreBoost": -0.01,
+              "daughterDerivative": 0.02
+            },
+            "crowdingPathCount": 6,
+            "targetCrowdingPenalty": 0.06,
+            "targetNearbyBandPressure": 0.15,
+            "rangeSaturationScored": 0.17,
+            "crowdingExploreBoost": 0.027,
+            "daughterDispersalExploreBoost": 0
+          },
+          "stay": {
+            "action": "stay:tile:195:90",
+            "actionType": "stay",
+            "score": 5.02,
+            "totalCrowdingInfluence": 0.14,
+            "charges": {
+              "directNearbyBandPressure": 0.03,
+              "directCrowdingPenalty": 0.04,
+              "pressureState": 0,
+              "rangeSaturation": 0.02,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 3,
+            "targetCrowdingPenalty": 0.06,
+            "targetNearbyBandPressure": 0.15,
+            "rangeSaturationScored": 0.17,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          "explorationPaths": 6,
+          "explorationBoost": 0.027,
+          "explorationTargetPenalty": 0.06,
+          "explorationTotal": 0
+        },
+        "clear": {
+          "weightedCrowding": 0,
+          "crowdingPenalty": 0,
+          "exploration": {
+            "action": "explore_unknown_neighbor:tile:195:89",
+            "actionType": "explore_unknown_neighbor",
+            "score": 4.3,
+            "totalCrowdingInfluence": 0,
+            "charges": {
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 0,
+            "targetCrowdingPenalty": 0,
+            "targetNearbyBandPressure": 0,
+            "rangeSaturationScored": 0.05,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          "stay": {
+            "action": "stay:tile:195:90",
+            "actionType": "stay",
+            "score": 5.23,
+            "totalCrowdingInfluence": 0,
+            "charges": {
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 0,
+            "targetCrowdingPenalty": 0,
+            "targetNearbyBandPressure": 0,
+            "rangeSaturationScored": 0.05,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          "explorationPaths": 0,
+          "explorationBoost": 0,
+          "explorationTargetPenalty": 0,
+          "explorationTotal": 0
+        }
+      },
+      "explorationScoreDelta": 0.01,
+      "stayScoreDelta": -0.21,
+      "verdict": "EXPLORATION_RESPONSE_MULTIPLIED"
+    },
+    "P15_repeated_nearby_seasons": {
+      "intent": "sustained proximity: physical pressure stays bounded and a static source does not multiply; accumulated depletion stays separate",
+      "syntheticState": true,
+      "series": [
+        {
+          "season": 0,
+          "weightedCrowding": 0.15,
+          "crowdingPenalty": 0.06,
+          "stayCrowdingInfluence": 0.13,
+          "stayPaths": 4,
+          "tileDepletion": 0,
+          "localUsePressure": 0.0506
+        },
+        {
+          "season": 1,
+          "weightedCrowding": 0.15,
+          "crowdingPenalty": 0.06,
+          "stayCrowdingInfluence": 0.15,
+          "stayPaths": 4,
+          "tileDepletion": 0,
+          "localUsePressure": 0.1166
+        },
+        {
+          "season": 2,
+          "weightedCrowding": 0.15,
+          "crowdingPenalty": 0.06,
+          "stayCrowdingInfluence": 0.14,
+          "stayPaths": 3,
+          "tileDepletion": 0,
+          "localUsePressure": 0.1066
+        },
+        {
+          "season": 3,
+          "weightedCrowding": 0.15,
+          "crowdingPenalty": 0.06,
+          "stayCrowdingInfluence": 0.15,
+          "stayPaths": 4,
+          "tileDepletion": 0,
+          "localUsePressure": 0.1066
+        },
+        {
+          "season": 4,
+          "weightedCrowding": 0.15,
+          "crowdingPenalty": 0.06,
+          "stayCrowdingInfluence": 0.15,
+          "stayPaths": 4,
+          "tileDepletion": 0,
+          "localUsePressure": 0.1066
+        },
+        {
+          "season": 5,
+          "weightedCrowding": 0.15,
+          "crowdingPenalty": 0.06,
+          "stayCrowdingInfluence": 0.15,
+          "stayPaths": 4,
+          "tileDepletion": 0,
+          "localUsePressure": 0.1066
+        },
+        {
+          "season": 6,
+          "weightedCrowding": 0.15,
+          "crowdingPenalty": 0.06,
+          "stayCrowdingInfluence": 0.14,
+          "stayPaths": 4,
+          "tileDepletion": 0,
+          "localUsePressure": 0.1066
+        },
+        {
+          "season": 7,
+          "weightedCrowding": 0.15,
+          "crowdingPenalty": 0.06,
+          "stayCrowdingInfluence": 0.14,
+          "stayPaths": 4,
+          "tileDepletion": 0,
+          "localUsePressure": 0.1066
+        },
+        {
+          "season": 8,
+          "weightedCrowding": 0.15,
+          "crowdingPenalty": 0.06,
+          "stayCrowdingInfluence": 0.13,
+          "stayPaths": 3,
+          "tileDepletion": 0,
+          "localUsePressure": 0.1066
+        },
+        {
+          "season": 9,
+          "weightedCrowding": 0.15,
+          "crowdingPenalty": 0.06,
+          "stayCrowdingInfluence": 0.15,
+          "stayPaths": 3,
+          "tileDepletion": 0,
+          "localUsePressure": 0.1066
+        },
+        {
+          "season": 10,
+          "weightedCrowding": 0.15,
+          "crowdingPenalty": 0.06,
+          "stayCrowdingInfluence": 0.14,
+          "stayPaths": 3,
+          "tileDepletion": 0,
+          "localUsePressure": 0.1066
+        },
+        {
+          "season": 11,
+          "weightedCrowding": 0.15,
+          "crowdingPenalty": 0.06,
+          "stayCrowdingInfluence": 0.14,
+          "stayPaths": 3,
+          "tileDepletion": 0,
+          "localUsePressure": 0.1066
+        },
+        {
+          "season": 12,
+          "weightedCrowding": 0.15,
+          "crowdingPenalty": 0.06,
+          "stayCrowdingInfluence": 0.14,
+          "stayPaths": 4,
+          "tileDepletion": 0,
+          "localUsePressure": 0.1722
+        },
+        {
+          "season": 13,
+          "weightedCrowding": 0.15,
+          "crowdingPenalty": 0.06,
+          "stayCrowdingInfluence": 0.14,
+          "stayPaths": 3,
+          "tileDepletion": 0,
+          "localUsePressure": 0.1722
+        }
+      ],
+      "crowdingPenaltyRange": {
+        "min": 0.06,
+        "max": 0.06
+      },
+      "depletionRange": {
+        "first": 0,
+        "last": 0
+      },
+      "verdict": "BOUNDED"
+    },
+    "P16_departure": {
+      "intent": "the other band leaves: every current physical-crowding score path releases immediately; CORRECTION-31 historical social memory remains",
+      "syntheticState": true,
+      "present": {
+        "weightedCrowding": 0.15,
+        "crowdingPenalty": 0.06,
+        "crowdingBandIds": [
+          "band:custom:1"
+        ],
+        "stayPaths": 4,
+        "stayCrowdingInfluence": 0.14,
+        "riskPressure": 0.53,
+        "placeAttachmentPull": 0.55,
+        "decisionSaturation": 0.17,
+        "frictionRecords": 0,
+        "contactMemories": 1
+      },
+      "departed": {
+        "weightedCrowding": 0,
+        "crowdingPenalty": 0,
+        "crowdingBandIds": [],
+        "stayPaths": 0,
+        "stayCrowdingInfluence": 0,
+        "riskPressure": 0.53,
+        "placeAttachmentPull": 0.56,
+        "decisionSaturation": 0.05,
+        "frictionRecords": 0,
+        "contactMemories": 1
+      },
+      "verdict": "PHYSICAL_RELEASES_IMMEDIATELY"
+    },
+    "P17_several_nearby_bands": {
+      "intent": "more and larger neighbours: monotone where expected, bounded, no explosive coefficient chain",
+      "syntheticState": true,
+      "series": [
+        {
+          "neighbours": 1,
+          "nearbyBandCount": 1,
+          "weightedCrowding": 0.15,
+          "crowdingPenalty": 0.06,
+          "stayCrowdingInfluence": 0.14,
+          "stayPaths": 4,
+          "stayScore": 5.01
+        },
+        {
+          "neighbours": 2,
+          "nearbyBandCount": 2,
+          "weightedCrowding": 0.3,
+          "crowdingPenalty": 0.11,
+          "stayCrowdingInfluence": 0.28,
+          "stayPaths": 4,
+          "stayScore": 4.14
+        },
+        {
+          "neighbours": 3,
+          "nearbyBandCount": 3,
+          "weightedCrowding": 0.44,
+          "crowdingPenalty": 0.17,
+          "stayCrowdingInfluence": 0.44,
+          "stayPaths": 4,
+          "stayScore": 4.08
+        },
+        {
+          "neighbours": 4,
+          "nearbyBandCount": 4,
+          "weightedCrowding": 0.59,
+          "crowdingPenalty": 0.23,
+          "stayCrowdingInfluence": 0.59,
+          "stayPaths": 4,
+          "stayScore": 3.88
+        }
+      ],
+      "verdict": "MONOTONE_AND_BOUNDED"
+    },
+    "P18_candidate_family_parity": {
+      "intent": "every candidate family under the same crowding evidence: no family bypasses or duplicates the canonical authority",
+      "syntheticState": true,
+      "weightedCrowding": 0.15,
+      "crowdingPenalty": 0.06,
+      "byFamily": {
+        "stay": {
+          "count": 1,
+          "maxPaths": 3,
+          "maxTargetPenalty": 0.06,
+          "totals": [
+            0.14
+          ]
+        },
+        "move_to_tile": {
+          "count": 5,
+          "maxPaths": 4,
+          "maxTargetPenalty": 0.07,
+          "totals": [
+            0.04,
+            0.14,
+            0.04,
+            0.12,
+            0.13
+          ]
+        },
+        "explore_unknown_neighbor": {
+          "count": 1,
+          "maxPaths": 6,
+          "maxTargetPenalty": 0.06,
+          "totals": [
+            0
+          ]
+        },
+        "logistical_probe": {
+          "count": 1,
+          "maxPaths": 0,
+          "maxTargetPenalty": 0,
+          "totals": [
+            0
+          ]
+        },
+        "resource_scout": {
+          "count": 1,
+          "maxPaths": 0,
+          "maxTargetPenalty": 0,
+          "totals": [
+            0
+          ]
+        }
+      },
+      "familiesPresent": [
+        "explore_unknown_neighbor",
+        "logistical_probe",
+        "move_to_tile",
+        "resource_scout",
+        "stay"
+      ],
+      "verdict": "A_FAMILY_DUPLICATES"
+    },
+    "P19_order_invariance": {
+      "intent": "permuted band processing order leaves canonical crowding outputs invariant",
+      "syntheticState": true,
+      "ascending": [
+        {
+          "bandId": "band:custom:0",
+          "weightedCrowding": 0.3,
+          "count": 2,
+          "contributors": [
+            "band:custom:1",
+            "band:custom:2"
+          ],
+          "crowdingPenalty": 0.11
+        },
+        {
+          "bandId": "band:custom:1",
+          "weightedCrowding": 0.25,
+          "count": 2,
+          "contributors": [
+            "band:custom:0",
+            "band:custom:2"
+          ],
+          "crowdingPenalty": 0.1
+        },
+        {
+          "bandId": "band:custom:2",
+          "weightedCrowding": 0.25,
+          "count": 2,
+          "contributors": [
+            "band:custom:0",
+            "band:custom:1"
+          ],
+          "crowdingPenalty": 0.1
+        }
+      ],
+      "identicalDescending": true,
+      "identicalRotated": true,
+      "verdict": "ORDER_INVARIANT"
+    },
+    "P20_step_mode_invariance": {
+      "intent": "daily and seasonal batching over the same span are canonically equivalent; the four internal modes are retained",
+      "dailySnapshot": [
+        {
+          "bandId": "band:custom:0",
+          "position": "tile:197:89",
+          "population": 30,
+          "weightedCrowding": 0,
+          "crowdingPenalty": 0,
+          "saturationPressure": 0.06,
+          "decisionSaturation": 0.06,
+          "riskPressure": 0.5,
+          "netMovePressure": 0.36
+        },
+        {
+          "bandId": "band:custom:1",
+          "position": "tile:192:88",
+          "population": 30,
+          "weightedCrowding": 0,
+          "crowdingPenalty": 0,
+          "saturationPressure": 0.05,
+          "decisionSaturation": 0.05,
+          "riskPressure": 0.51,
+          "netMovePressure": 0.13
+        }
+      ],
+      "seasonalSnapshot": [
+        {
+          "bandId": "band:custom:0",
+          "position": "tile:197:89",
+          "population": 30,
+          "weightedCrowding": 0,
+          "crowdingPenalty": 0,
+          "saturationPressure": 0.06,
+          "decisionSaturation": 0.06,
+          "riskPressure": 0.5,
+          "netMovePressure": 0.36
+        },
+        {
+          "bandId": "band:custom:1",
+          "position": "tile:192:88",
+          "population": 30,
+          "weightedCrowding": 0,
+          "crowdingPenalty": 0,
+          "saturationPressure": 0.05,
+          "decisionSaturation": 0.05,
+          "riskPressure": 0.51,
+          "netMovePressure": 0.13
+        }
+      ],
+      "identical": true,
+      "verdict": "STEP_MODE_EQUIVALENT"
+    },
+    "P21_long_horizon": {
+      "intent": "30 seasons of proximity, departure and reaggregation: no residual physical-crowding influence after departure",
+      "syntheticState": true,
+      "timeline": [
+        {
+          "phase": "together",
+          "season": 0,
+          "weightedCrowding": 0.15,
+          "crowdingPenalty": 0.06,
+          "stayPaths": 4,
+          "stayCrowdingInfluence": 0.15,
+          "riskPressure": 0.63,
+          "placeAttachmentPull": 0.8,
+          "decisionSaturation": 0.29,
+          "frictionRecords": 0,
+          "contactMemories": 1,
+          "tileDepletion": 0
+        },
+        {
+          "phase": "departed",
+          "season": 1,
+          "weightedCrowding": 0,
+          "crowdingPenalty": 0,
+          "stayPaths": 0,
+          "stayCrowdingInfluence": 0,
+          "riskPressure": 0.71,
+          "placeAttachmentPull": 0.77,
+          "decisionSaturation": 0.15,
+          "frictionRecords": 0,
+          "contactMemories": 1,
+          "tileDepletion": 0
+        },
+        {
+          "phase": "reaggregated",
+          "season": 2,
+          "weightedCrowding": 0.15,
+          "crowdingPenalty": 0.06,
+          "stayPaths": 3,
+          "stayCrowdingInfluence": 0.14,
+          "riskPressure": 0.72,
+          "placeAttachmentPull": 0.76,
+          "decisionSaturation": 0.39,
+          "frictionRecords": 0,
+          "contactMemories": 1,
+          "tileDepletion": 0
+        }
+      ],
+      "verdict": "NO_RESIDUAL_AFTER_DEPARTURE"
+    }
+  }
+}

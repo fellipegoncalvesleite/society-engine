@@ -1,0 +1,141 @@
+{
+  "targetTileId": "tile:204:72",
+  "otherTileId": "tile:204:71",
+  "passed": 14,
+  "total": 14,
+  "results": [
+    {
+      "fixture": "I1",
+      "intent": "water confirmation unlocks the selected candidate, and the question is asked",
+      "passed": true,
+      "checks": {
+        "questionIsAsked": true,
+        "gateBlockedBefore": true,
+        "gateOpenedByConfirmation": true,
+        "notReAskedOnceSettled": true
+      }
+    },
+    {
+      "fixture": "I2",
+      "intent": "a bounded negative cancels an imminent selected candidate",
+      "passed": true,
+      "checks": {
+        "questionIsAsked": true,
+        "permittedOnObservationAlone": true,
+        "cancelledByNegative": true
+      }
+    },
+    {
+      "fixture": "I3",
+      "intent": "a non-selected list candidate does not generate a water launch",
+      "passed": true,
+      "checks": {
+        "notAsked": true
+      }
+    },
+    {
+      "fixture": "I4",
+      "intent": "a settled direct answer is not re-asked, confirmed or negative",
+      "passed": true,
+      "checks": {
+        "confirmedNotReAsked": true,
+        "negativeNotReAsked": true
+      }
+    },
+    {
+      "fixture": "I5",
+      "intent": "a temporary-use negative refuses a bounded camp that was otherwise permitted",
+      "passed": true,
+      "checks": {
+        "campPermittedWithoutEvidence": true,
+        "campRefusedByNegative": true
+      },
+      "notes": "The natural end-to-end chain is measured by temporaryUseCampPreventionAudit.mjs: 10,724 of 59,286 ACTUALLY ATTEMPTED camps are prevented across eleven worlds x five seeds x 40 y."
+    },
+    {
+      "fixture": "I6",
+      "intent": "a temporary-use question is not asked where no operation is pending",
+      "passed": true,
+      "checks": {
+        "notAsked": true
+      }
+    },
+    {
+      "fixture": "I7",
+      "intent": "positive temporary-use evidence grants nothing beyond the camp",
+      "passed": true,
+      "checks": {
+        "waterGateUnchanged": true,
+        "resourceEligibilityUnchanged": true,
+        "campStillMerelyPermitted": true
+      }
+    },
+    {
+      "fixture": "I8",
+      "intent": "resource_presence is dormant — zero production launches",
+      "passed": true,
+      "checks": {
+        "zeroEligibleCandidates": true,
+        "suspensionIsDeclared": true
+      }
+    },
+    {
+      "fixture": "I9",
+      "intent": "resource_test_possible is dormant — zero production launches",
+      "passed": true,
+      "checks": {
+        "zeroEligibleCandidates": true,
+        "suspensionIsDeclared": true
+      }
+    },
+    {
+      "fixture": "I10",
+      "intent": "seasonal_persistence is dormant — zero production launches",
+      "passed": true,
+      "checks": {
+        "zeroEligibleCandidates": true,
+        "suspensionIsDeclared": true
+      }
+    },
+    {
+      "fixture": "I11",
+      "intent": "ordinary broad exploration still works after the inert questions are suspended",
+      "passed": true,
+      "checks": {
+        "eligibilityStillDerivable": true,
+        "headingStillDerivable": true
+      },
+      "notes": "The natural matrix additionally shows exploration launch counts before and after."
+    },
+    {
+      "fixture": "I12",
+      "intent": "a party that did not physically return transfers no evidence",
+      "passed": true,
+      "checks": {
+        "noEvidenceWithoutAReturn": true
+      },
+      "notes": "The runtime invariant C3_lost_party_knowledge_transferred = 0 is asserted separately by frontierAntiOmniscienceAudit over real lost parties."
+    },
+    {
+      "fixture": "I13",
+      "intent": "the water launch dependency is invariant to hidden tile truth",
+      "passed": true,
+      "checks": {
+        "launchDecisionUnchangedByHiddenWater": true,
+        "stillAsksInBothWorlds": true
+      },
+      "notes": "Hidden waterAccess/aquaticPotential/baseRichness at the target are driven from 0 to 1 with band state, opportunity and evidence held identical. The launch decision is unchanged, so no hidden ecology reaches the gate."
+    },
+    {
+      "fixture": "I14",
+      "intent": "every remaining launch names a real consuming reader and a blocked action",
+      "passed": true,
+      "checks": {
+        "everyRowNamesAConsumingReader": true,
+        "everyRowNamesABlockedAction": true,
+        "noSuspendedQuestionLaunches": true
+      },
+      "notes": "The horizon is one season by construction: both named readers run every season, and the destination reader is re-derived each tick. A launch naming any other reader would be a contract violation."
+    }
+  ]
+}

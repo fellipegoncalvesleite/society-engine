@@ -1,0 +1,304 @@
+{
+  "audit": "epistemicRepairPopulation",
+  "checkpoint": "CORRECTION-21 continuation §9/§10/§11",
+  "years": 300,
+  "seeds": [
+    "c18:a",
+    "c18:b",
+    "c18:c",
+    "c18:d",
+    "c18:e"
+  ],
+  "note": "P0/P1/P2/P4 are taken from CORRECTION-20's reader-isolation audit, measured on these exact seeds with this exact methodology. Only P3 was run fresh.",
+  "perMap": {
+    "map1": {
+      "P0_disabled": 244.6,
+      "P1_noTransfer": 241.6,
+      "P2_preRepair": 188.4,
+      "P3_postRepair": 228.2,
+      "P4_hiddenFromFission": 181.4,
+      "comparisons": {
+        "effectOfRepair_P3_minus_P2": 39.8,
+        "remainingKnowledgeEffect_P3_minus_P1": -13.4,
+        "remainingNonFissionEffect_P3_minus_P4": 46.8,
+        "physicalExplorationCost_P1_minus_P0": -3
+      },
+      "harmBefore": 53.2,
+      "harmAfter": 13.4,
+      "fractionOfHarmRemoved": 0.75,
+      "p3Detail": [
+        {
+          "map": "map1",
+          "seed": "c18:a",
+          "arm": "P3_post_repair",
+          "population": 173,
+          "bands": 6,
+          "populationPerBand": 28.83,
+          "fissions": 1,
+          "firstFissionYear": 84,
+          "meanRawSupportRatio": 0.3123,
+          "usableSupportPerWorkingAdultYear": 0.006,
+          "frontierDerivedRecords": 218
+        },
+        {
+          "map": "map1",
+          "seed": "c18:b",
+          "arm": "P3_post_repair",
+          "population": 236,
+          "bands": 8,
+          "populationPerBand": 29.5,
+          "fissions": 3,
+          "firstFissionYear": 66,
+          "meanRawSupportRatio": 0.2967,
+          "usableSupportPerWorkingAdultYear": 0.0047,
+          "frontierDerivedRecords": 259
+        },
+        {
+          "map": "map1",
+          "seed": "c18:c",
+          "arm": "P3_post_repair",
+          "population": 237,
+          "bands": 9,
+          "populationPerBand": 26.33,
+          "fissions": 4,
+          "firstFissionYear": 54,
+          "meanRawSupportRatio": 0.2256,
+          "usableSupportPerWorkingAdultYear": 0.0039,
+          "frontierDerivedRecords": 256
+        },
+        {
+          "map": "map1",
+          "seed": "c18:d",
+          "arm": "P3_post_repair",
+          "population": 246,
+          "bands": 8,
+          "populationPerBand": 30.75,
+          "fissions": 3,
+          "firstFissionYear": 68,
+          "meanRawSupportRatio": 0.2797,
+          "usableSupportPerWorkingAdultYear": 0.0046,
+          "frontierDerivedRecords": 315
+        },
+        {
+          "map": "map1",
+          "seed": "c18:e",
+          "arm": "P3_post_repair",
+          "population": 249,
+          "bands": 8,
+          "populationPerBand": 31.13,
+          "fissions": 3,
+          "firstFissionYear": 54,
+          "meanRawSupportRatio": 0.2853,
+          "usableSupportPerWorkingAdultYear": 0.0045,
+          "frontierDerivedRecords": 328
+        }
+      ]
+    },
+    "map2": {
+      "P0_disabled": 226,
+      "P1_noTransfer": 231.6,
+      "P2_preRepair": 196.4,
+      "P3_postRepair": 210.2,
+      "P4_hiddenFromFission": 201.2,
+      "comparisons": {
+        "effectOfRepair_P3_minus_P2": 13.8,
+        "remainingKnowledgeEffect_P3_minus_P1": -21.4,
+        "remainingNonFissionEffect_P3_minus_P4": 9,
+        "physicalExplorationCost_P1_minus_P0": 5.6
+      },
+      "harmBefore": 35.2,
+      "harmAfter": 21.4,
+      "fractionOfHarmRemoved": 0.39,
+      "p3Detail": [
+        {
+          "map": "map2",
+          "seed": "c18:a",
+          "arm": "P3_post_repair",
+          "population": 208,
+          "bands": 11,
+          "populationPerBand": 18.91,
+          "fissions": 2,
+          "firstFissionYear": 95,
+          "meanRawSupportRatio": 0.1509,
+          "usableSupportPerWorkingAdultYear": 0.0046,
+          "frontierDerivedRecords": 292
+        },
+        {
+          "map": "map2",
+          "seed": "c18:b",
+          "arm": "P3_post_repair",
+          "population": 222,
+          "bands": 11,
+          "populationPerBand": 20.18,
+          "fissions": 2,
+          "firstFissionYear": 111,
+          "meanRawSupportRatio": 0.1725,
+          "usableSupportPerWorkingAdultYear": 0.0044,
+          "frontierDerivedRecords": 278
+        },
+        {
+          "map": "map2",
+          "seed": "c18:c",
+          "arm": "P3_post_repair",
+          "population": 209,
+          "bands": 12,
+          "populationPerBand": 17.42,
+          "fissions": 3,
+          "firstFissionYear": 96,
+          "meanRawSupportRatio": 0.1672,
+          "usableSupportPerWorkingAdultYear": 0.0046,
+          "frontierDerivedRecords": 272
+        },
+        {
+          "map": "map2",
+          "seed": "c18:d",
+          "arm": "P3_post_repair",
+          "population": 192,
+          "bands": 12,
+          "populationPerBand": 16,
+          "fissions": 3,
+          "firstFissionYear": 113,
+          "meanRawSupportRatio": 0.1524,
+          "usableSupportPerWorkingAdultYear": 0.0042,
+          "frontierDerivedRecords": 343
+        },
+        {
+          "map": "map2",
+          "seed": "c18:e",
+          "arm": "P3_post_repair",
+          "population": 220,
+          "bands": 11,
+          "populationPerBand": 20,
+          "fissions": 2,
+          "firstFissionYear": 108,
+          "meanRawSupportRatio": 0.1595,
+          "usableSupportPerWorkingAdultYear": 0.0041,
+          "frontierDerivedRecords": 245
+        }
+      ]
+    }
+  },
+  "perSeedClassification": [
+    {
+      "map": "map1",
+      "seed": "c18:a",
+      "P1_noTransfer": 217,
+      "P2_preRepair": 204,
+      "P3_postRepair": 173,
+      "harmBefore": 13,
+      "harmAfter": 44,
+      "fractionOfHarmRemoved": -2.38,
+      "classification": "repair_introduces_new_regression"
+    },
+    {
+      "map": "map1",
+      "seed": "c18:b",
+      "P1_noTransfer": 259,
+      "P2_preRepair": 206,
+      "P3_postRepair": 236,
+      "harmBefore": 53,
+      "harmAfter": 23,
+      "fractionOfHarmRemoved": 0.57,
+      "classification": "repair_removes_most_harm"
+    },
+    {
+      "map": "map1",
+      "seed": "c18:c",
+      "P1_noTransfer": 237,
+      "P2_preRepair": 190,
+      "P3_postRepair": 237,
+      "harmBefore": 47,
+      "harmAfter": 0,
+      "fractionOfHarmRemoved": 1,
+      "classification": "repair_removes_most_harm"
+    },
+    {
+      "map": "map1",
+      "seed": "c18:d",
+      "P1_noTransfer": 195,
+      "P2_preRepair": 138,
+      "P3_postRepair": 246,
+      "harmBefore": 57,
+      "harmAfter": -51,
+      "fractionOfHarmRemoved": 1.89,
+      "classification": "repair_removes_most_harm"
+    },
+    {
+      "map": "map1",
+      "seed": "c18:e",
+      "P1_noTransfer": 300,
+      "P2_preRepair": 204,
+      "P3_postRepair": 249,
+      "harmBefore": 96,
+      "harmAfter": 51,
+      "fractionOfHarmRemoved": 0.47,
+      "classification": "repair_removes_a_minority"
+    },
+    {
+      "map": "map2",
+      "seed": "c18:a",
+      "P1_noTransfer": 245,
+      "P2_preRepair": 210,
+      "P3_postRepair": 208,
+      "harmBefore": 35,
+      "harmAfter": 37,
+      "fractionOfHarmRemoved": -0.06,
+      "classification": "repair_has_no_population_effect"
+    },
+    {
+      "map": "map2",
+      "seed": "c18:b",
+      "P1_noTransfer": 237,
+      "P2_preRepair": 167,
+      "P3_postRepair": 222,
+      "harmBefore": 70,
+      "harmAfter": 15,
+      "fractionOfHarmRemoved": 0.79,
+      "classification": "repair_removes_most_harm"
+    },
+    {
+      "map": "map2",
+      "seed": "c18:c",
+      "P1_noTransfer": 235,
+      "P2_preRepair": 201,
+      "P3_postRepair": 209,
+      "harmBefore": 34,
+      "harmAfter": 26,
+      "fractionOfHarmRemoved": 0.24,
+      "classification": "repair_removes_a_minority"
+    },
+    {
+      "map": "map2",
+      "seed": "c18:d",
+      "P1_noTransfer": 218,
+      "P2_preRepair": 201,
+      "P3_postRepair": 192,
+      "harmBefore": 17,
+      "harmAfter": 26,
+      "fractionOfHarmRemoved": -0.53,
+      "classification": "repair_introduces_new_regression"
+    },
+    {
+      "map": "map2",
+      "seed": "c18:e",
+      "P1_noTransfer": 223,
+      "P2_preRepair": 203,
+      "P3_postRepair": 220,
+      "harmBefore": 20,
+      "harmAfter": 3,
+      "fractionOfHarmRemoved": 0.85,
+      "classification": "repair_removes_most_harm"
+    }
+  ],
+  "classificationTally": {
+    "repair_introduces_new_regression": 2,
+    "repair_removes_most_harm": 5,
+    "repair_removes_a_minority": 2,
+    "repair_has_no_population_effect": 1
+  },
+  "sectionElevenThreshold": {
+    "harmfulGapReproduced": true,
+    "repairMateriallyReducesGapAcrossSeeds": true,
+    "note": "filled from perMap/perSeed below; §11 also requires a traced decision->action->support chain, which this script does not attempt"
+  }
+}

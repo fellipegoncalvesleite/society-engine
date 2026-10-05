@@ -10,6 +10,7 @@ import {
   type KnowledgePracticalStatus,
 } from "../../sim/agents/knowledgeEcology";
 import { deriveBandChronicle } from "../../sim/agents/bandChronicle";
+import { derivePlaceEvidenceProjection } from "../../sim/agents/placeEvidenceProjection";
 import type { Band } from "../../sim/agents/types";
 import type { WorldState } from "../../sim/world/types";
 
@@ -65,6 +66,8 @@ export function Knowledge({
       <p className="condition-note">
         What the band knows, who carries it, and whether it comes from practice, returning parties, older memory, or inheritance.
       </p>
+
+      <PlaceEvidence band={band} world={world} />
 
       <article className="knowledge-overview">
         <span className="knowledge-kicker">Learning record</span>
@@ -294,4 +297,345 @@ function iconForEvidence(kind: KnowledgeEvidenceKind): IconName {
     case "route_memory":
       return "route";
   }
+}
+
+
+/**
+ * CORRECTION-21 continuation §13 — PLACE EVIDENCE.
+ *
+ * Renders the epistemic distinctions the observation writer now makes, so they are visible
+ * in the selected-band panel rather than living only in audit JSON. Pure projection: it
+ * reads canonical band state through `derivePlaceEvidenceProjection`, never world ecology,
+ * and changes no behaviour.
+ *
+ * Normal mode stays a one-line summary. The per-place evidence table — including the uses a
+ * record does NOT authorise and why — is technical detail and is rendered inside a
+ * collapsed <details>, matching how the rest of this panel treats deep state.
+ */
+function PlaceEvidence({
+  band,
+  world,
+}: {
+  readonly band: Band;
+  readonly world: WorldState | null;
+}) {
+  const evidence = useMemo(
+    () => (world === null ? null : derivePlaceEvidenceProjection(world, band)),
+    [world, band],
+  );
+
+  if (evidence === null || evidence.totalKnownPlaces === 0) {
+    return null;
+  }
+
+  return (
+    <article className="knowledge-overview">
+      <span className="knowledge-kicker">Place evidence</span>
+      <p>
+        {evidence.totalKnownPlaces} known place{evidence.totalKnownPlaces === 1 ? "" : "s"}
+        {evidence.shallowTraversalPlaces > 0
+          ? ` — ${evidence.shallowTraversalPlaces} known only from walking through, ${evidence.residentiallyKnownPlaces} from living or working there.`
+          : ` — all from living or working there.`}
+      </p>
+      {evidence.shallowTraversalPlaces > 0 ? (
+        <p className="condition-note">
+          Country a party only crossed is remembered as terrain and a route. It does not carry
+          resource, seasonal or camp knowledge until someone goes back and finds out.
+        </p>
+      ) : null}
+
+      <details className="knowledge-technical">
+        <summary>Evidence by place (technical)</summary>
+        <ul className="knowledge-evidence-list">
+          {evidence.entries.map((entry) => (
+            <li key={String(entry.tileId)}>
+              <div className="knowledge-evidence-head">
+                <strong>{String(entry.tileId)}</strong>
+                {entry.distanceTiles === undefined ? null : <Chip>{entry.distanceTiles} tiles</Chip>}
+                <Chip>{entry.provenance}</Chip>
+                <Chip>
+                  {entry.visits} visit{entry.visits === 1 ? "" : "s"}
+                </Chip>
+                <Chip>{entry.seasonsObserved} season(s)</Chip>
+              </div>
+              <ul className="knowledge-evidence-domains">
+                {entry.domains.map((domain) => (
+                  <li key={domain.domain}>
+                    <span className="knowledge-domain-name">{domain.domain.replace(/_/g, " ")}</span>
+                    <Chip>{domain.strength}</Chip>
+                    <span className="knowledge-domain-basis">{domain.basis}</span>
+                  </li>
+                ))}
+              </ul>
+              {entry.blockedUses.length > 0 ? (
+                <ul className="knowledge-evidence-blocked">
+                  {entry.blockedUses.map((blocked) => (
+                    <li key={blocked.use}>
+                      <span className="knowledge-blocked-use">not used for {blocked.use}</span>
+                      <span className="knowledge-domain-basis">{blocked.reason}</span>
+                    </li>
+                  ))}
+                </ul>
+              ) : null}
+            </li>
+          ))}
+        </ul>
+      </details>
+
+      <GoingBackToFindOut verification={evidence.verification} />
+      <WhatThisBandIsAboutToForget retention={evidence.retention} />
+    </article>
+  );
+}
+
+/**
+ * CORRECTION-23E §17 — what this band is about to forget, and why.
+ *
+ * The diagnostic found that place records are dropped wholesale on a capacity rule whose
+ * salience ranking never actually runs, and that a settled verification conclusion disappears
+ * with the place that carries it. Neither was visible anywhere. This section is read-only and
+ * derives entirely from canonical band knowledge and the production retention scorer.
+ */
+function WhatThisBandIsAboutToForget({
+  retention,
+}: {
+  readonly retention: ReturnType<typeof derivePlaceEvidenceProjection>["retention"];
+}) {
+  if (retention.atRisk.length === 0 && !retention.overCapacity) {
+    return null;
+  }
+
+  return (
+    <>
+      <span className="knowledge-kicker">What this band is about to forget</span>
+      <p className="condition-note">
+        The band can hold {retention.capacity} places in detail and currently holds{" "}
+        {retention.knownPlaces}. {retention.mandatoryPlaces} of them are kept unconditionally —
+        where it is standing, the ground immediately around it, river crossings, water it depends
+        on, and places it has learned to return to or avoid. That is{" "}
+        {retention.mandatoryShareOfCapacityPercent}% of what it can hold.
+      </p>
+      {retention.scoredRankingHasEffect ? null : (
+        <p className="condition-note">
+          Those unconditional places already fill the whole memory, so nothing else survives the
+          next compression however useful it is — how recently a place was used, how often it was
+          visited, and what was established there make no difference while this holds.
+        </p>
+      )}
+      {retention.settledConclusionsAtRisk === 0 ? null : (
+        <p className="condition-note">
+          {retention.settledConclusionsAtRisk} of the places below carry a settled answer that will
+          be lost with the place itself. If the band goes back there later, it will have to ask
+          again.
+        </p>
+      )}
+      <ul className="knowledge-evidence-list">
+        {retention.atRisk.map((place) => (
+          <li key={`r:${String(place.tileId)}`}>
+            <div className="knowledge-evidence-head">
+              <strong>{String(place.tileId)}</strong>
+              {place.distanceTiles === undefined ? null : (
+                <Chip>{place.distanceTiles} tiles away</Chip>
+              )}
+              <Chip>{place.wouldBeRetained ? "kept" : "dropped next compression"}</Chip>
+              {place.evidenceClasses.map((className) => (
+                <Chip key={className}>{className}</Chip>
+              ))}
+              {place.activeRoute ? <Chip>on a route being walked now</Chip> : null}
+              {place.currentCandidate ? <Chip>current destination candidate</Chip> : null}
+            </div>
+            <span className="knowledge-domain-basis">
+              salience {place.salience} (rank {place.retentionPriorityRank} of{" "}
+              {retention.knownPlaces}); last seen {place.seasonsSinceLastUse} seasons ago
+            </span>
+            {place.evictionReason === undefined ? null : (
+              <span className="knowledge-domain-basis">why: {place.evictionReason}</span>
+            )}
+            {place.dispositionWillDisappearWithRecord ? (
+              <span className="knowledge-domain-basis">
+                will forget what it established here: {place.settledQuestionsHeld
+                  .map((question) => question.replace(/_/g, " "))
+                  .join(", ")}
+              </span>
+            ) : null}
+          </li>
+        ))}
+      </ul>
+    </>
+  );
+}
+
+/**
+ * CORRECTION-23 CONTINUATION §14 — the verification mechanism, in the panel.
+ *
+ * Shows what the band thinks is worth a second visit, what it has already written off, the
+ * party currently out asking, and what came back — including the failures. It renders only
+ * the projection, which reads band state and never world ecology.
+ */
+function GoingBackToFindOut({
+  verification,
+}: {
+  readonly verification: ReturnType<typeof derivePlaceEvidenceProjection>["verification"];
+}) {
+  const {
+    water,
+    retainedBeyondHistory,
+    promisingUnverified,
+    knownPoor,
+    activeParties,
+    answered,
+    failedOrInconclusive,
+  } = verification;
+
+  if (
+    water.length === 0 &&
+    retainedBeyondHistory.length === 0 &&
+    promisingUnverified.length === 0 &&
+    knownPoor.length === 0 &&
+    activeParties.length === 0 &&
+    answered.length === 0 &&
+    failedOrInconclusive.length === 0
+  ) {
+    return null;
+  }
+
+  return (
+    <>
+      <span className="knowledge-kicker">Going back to find out</span>
+      {activeParties.length === 0 ? (
+        <p>No party is out asking a question about a place right now.</p>
+      ) : (
+        activeParties.map((party) => (
+          <p key={`${String(party.tileId)}:${party.question}`}>
+            A party is {party.phase} on the way to <strong>{String(party.tileId)}</strong> to find out{" "}
+            {party.question.replace(/_/g, " ")} — {party.routeTiles} tiles of route,{" "}
+            {party.onSiteBudgetDays} day(s) of work there ({party.workDaysElapsed} done). It went because{" "}
+            {party.selectionReason}.
+          </p>
+        ))
+      )}
+
+      {water.length === 0 ? null : (
+        <details className="knowledge-technical">
+          <summary>Water: presence, physical access and reliability ({water.length} places)</summary>
+          <ul className="knowledge-evidence-list">
+            {water.map((row) => (
+              <li key={`w:${String(row.tileId)}`}>
+                <div className="knowledge-evidence-head">
+                  <strong>{String(row.tileId)}</strong>
+                  {row.distanceTiles === undefined ? null : <Chip>{row.distanceTiles} tiles</Chip>}
+                </div>
+                <span className="knowledge-domain-basis">Water presence: {row.presence}</span>
+                <span className="knowledge-domain-basis">Physical access: {row.physicalAccess}</span>
+                <span className="knowledge-domain-basis">Reliability: {row.reliability}</span>
+                <span className="knowledge-domain-basis">Other seasons: {row.otherSeasons}</span>
+                <span className="knowledge-domain-basis">
+                  Destination effect: {row.destinationEffect}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </details>
+      )}
+
+      <details className="knowledge-technical">
+        <summary>
+          Verification state (technical) — {promisingUnverified.length} promising, {knownPoor.length} written
+          off, {answered.length} answered, {failedOrInconclusive.length} unresolved
+        </summary>
+        <ul className="knowledge-evidence-list">
+          {promisingUnverified.map((target) => (
+            <li key={`p:${String(target.tileId)}:${target.question}`}>
+              <div className="knowledge-evidence-head">
+                <strong>{String(target.tileId)}</strong>
+                {target.distanceTiles === undefined ? null : <Chip>{target.distanceTiles} tiles</Chip>}
+                <Chip>{target.question.replace(/_/g, " ")}</Chip>
+                <Chip>{target.state.replace(/_/g, " ")}</Chip>
+                {target.blockedReason === undefined ? null : <Chip>blocked</Chip>}
+              </div>
+              <span className="knowledge-domain-basis">
+                {target.promisingSignal}; missing: {target.missingEvidence}
+                {target.blockedReason === undefined ? "" : ` — ${target.blockedReason}`}
+              </span>
+            </li>
+          ))}
+          {knownPoor.map((target) => (
+            <li key={`k:${String(target.tileId)}:${target.question}`}>
+              <div className="knowledge-evidence-head">
+                <strong>{String(target.tileId)}</strong>
+                {target.distanceTiles === undefined ? null : <Chip>{target.distanceTiles} tiles</Chip>}
+                <Chip>{target.question.replace(/_/g, " ")}</Chip>
+                <Chip>known poor</Chip>
+              </div>
+              <span className="knowledge-domain-basis">{target.blockedReason}</span>
+            </li>
+          ))}
+          {[...answered, ...failedOrInconclusive].map((attempt) => (
+            <li key={`a:${String(attempt.tileId)}:${attempt.question}:${attempt.outcome}`}>
+              <div className="knowledge-evidence-head">
+                <strong>{String(attempt.tileId)}</strong>
+                <Chip>{attempt.question.replace(/_/g, " ")}</Chip>
+                <Chip>{attempt.outcome}</Chip>
+                <Chip>{attempt.season}</Chip>
+                <Chip>
+                  {attempt.behaviourallyActionable ? "changes a decision" : "not actionable yet"}
+                </Chip>
+                {attempt.seasonsAnswered.length > 1 ? (
+                  <Chip>{attempt.seasonsAnswered.length} seasons</Chip>
+                ) : null}
+              </div>
+              <span className="knowledge-domain-basis">
+                now permitted: {attempt.nowPermitted}; still missing: {attempt.stillMissing}
+              </span>
+              <span className="knowledge-domain-basis">read by: {attempt.consumedBy}</span>
+              {attempt.repeatBlockedReason === undefined ? null : (
+                <>
+                  <span className="knowledge-domain-basis">
+                    will not ask again: {attempt.repeatBlockedReason}
+                  </span>
+                  <span className="knowledge-domain-basis">
+                    may reopen on: {attempt.mayReopenOn}
+                  </span>
+                </>
+              )}
+            </li>
+          ))}
+        </ul>
+      </details>
+
+      {retainedBeyondHistory.length === 0 ? null : (
+        <details className="knowledge-technical">
+          <summary>
+            Still known, no longer in recent history ({retainedBeyondHistory.length})
+          </summary>
+          <p className="condition-note">
+            These attempts have aged out of the recent list above. The band has not forgotten
+            them — the conclusion is held against the place itself.
+          </p>
+          <ul className="knowledge-evidence-list">
+            {retainedBeyondHistory.map((attempt) => (
+              <li key={`h:${String(attempt.tileId)}:${attempt.question}`}>
+                <div className="knowledge-evidence-head">
+                  <strong>{String(attempt.tileId)}</strong>
+                  <Chip>{attempt.question.replace(/_/g, " ")}</Chip>
+                  <Chip>{attempt.outcome}</Chip>
+                  <Chip>{attempt.season}</Chip>
+                  <Chip>{attempt.settled ? "settled" : "open"}</Chip>
+                </div>
+                <span className="knowledge-domain-basis">
+                  recent attempt no longer displayed: authoritative result retained
+                </span>
+                {attempt.repeatBlockedReason === undefined ? null : (
+                  <span className="knowledge-domain-basis">
+                    repeat blocked: {attempt.repeatBlockedReason}
+                  </span>
+                )}
+                <span className="knowledge-domain-basis">may reopen on: {attempt.mayReopenOn}</span>
+              </li>
+            ))}
+          </ul>
+        </details>
+      )}
+    </>
+  );
 }

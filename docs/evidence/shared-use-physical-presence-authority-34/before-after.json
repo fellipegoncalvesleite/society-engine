@@ -1,0 +1,65 @@
+{
+  "audit": "CORRECTION-34A-BEFORE-AFTER",
+  "scenario": "map2",
+  "seed": "audit27:natural:map2:s1",
+  "years": 6,
+  "samplingResolution": "DAILY",
+  "armProduction": {
+    "before": "reconstructed: pre-34 production scattered demography.population from band.position and nothing from expedition.positionTileId",
+    "intermediate": "presence authority as shipped at 4042210; catchment draw recomputed with FULL workingAdults and the same published weights; no reconciliation",
+    "after": "production functions on this branch tip",
+    "caveat": "the BEFORE and INTERMEDIATE arms are exact reconstructions of the two changed expressions, not checkouts of those commits. The world advanced is the CURRENT world in all three arms, so these isolate the READ-MODEL and ACCOUNTING differences, not downstream world divergence."
+  },
+  "presence": {
+    "partyDays": 202,
+    "bandDaysWithWorkersAway": 202,
+    "before": {
+      "ghostedAtHomeWorkerDays": 505,
+      "representedNowhereWorkerDays": 505,
+      "awayWorkerDaysAtOwnPosition": 0
+    },
+    "intermediate": {
+      "ghostedAtHomeWorkerDays": 0,
+      "representedNowhereWorkerDays": 0,
+      "awayWorkerDaysAtOwnPosition": 505
+    },
+    "after": {
+      "ghostedAtHomeWorkerDays": 0,
+      "representedNowhereWorkerDays": 0,
+      "awayWorkerDaysAtOwnPosition": 505
+    },
+    "interpretation": "BEFORE: every away worker-day is ghosted at home AND represented nowhere. INTERMEDIATE and AFTER: the same worker-days stand at their own position, 0 ghosted, 0 nowhere. 34A did not change the presence authority, so intermediate and after are identical here — that is the point."
+  },
+  "catchment": {
+    "claimSumIntermediate": 446633.3,
+    "claimSumAfter": 446128.3,
+    "absoluteReduction": 505,
+    "bandDaysWhereClaimDiffers": 202,
+    "interpretation": "the claim falls only on band-days with workers away; every other band-day is byte-identical, which is what shows the change is scoped to away workers and is not a global recalibration"
+  },
+  "reconciliation": {
+    "before_5ebb5e98": {
+      "note": "no presence authority: the whole population renders at home regardless of parties",
+      "represented": 2,
+      "population": 2,
+      "conserved": true
+    },
+    "intermediate_4042210": {
+      "note": "presence authority present, no reconciliation: the invalid state is rendered faithfully",
+      "represented": 6,
+      "population": 2,
+      "committedAwayWorkers": 6,
+      "conserved": false
+    },
+    "after_tip": {
+      "note": "reconciled at source: the party the band can no longer staff is declared lost",
+      "represented": 2,
+      "population": 2,
+      "committedAwayWorkers": 0,
+      "conserved": true,
+      "partyPhases": [
+        "lost"
+      ]
+    }
+  }
+}

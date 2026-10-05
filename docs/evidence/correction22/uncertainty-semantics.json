@@ -1,0 +1,244 @@
+{
+  "audit": "uncertaintySemantics",
+  "checkpoint": "CORRECTION-22 §7/§8",
+  "candidatesSampled": 60,
+  "gradient": {
+    "distinctTruthValues": 59,
+    "distinctShallowObservedValues": 4,
+    "distinctShallowEffectiveYields": 7,
+    "distinctResidentialEffectiveYields": 29,
+    "tiesCreatedByQuantization": 55,
+    "rankConcordanceShallowVsTruth": 0.8559,
+    "rankConcordanceResidentialVsTruth": 0.9469,
+    "comparablePairs": 1769
+  },
+  "threeStateDistinctness": {
+    "poorestTile": {
+      "tileId": "tile:101:89",
+      "truthRichness": 0.0522,
+      "truthWater": 0,
+      "shallowObservedRichness": 0,
+      "shallowObservedWater": 0,
+      "shallowEffectiveYield": 0.03,
+      "residentialEffectiveYield": 0.04,
+      "yieldRatioShallowOverResidential": 0.75
+    },
+    "richestTile": {
+      "tileId": "tile:127:65",
+      "truthRichness": 0.7943,
+      "truthWater": 0.652,
+      "shallowObservedRichness": 0.75,
+      "shallowObservedWater": 0.5,
+      "shallowEffectiveYield": 0.38,
+      "residentialEffectiveYield": 0.46,
+      "yieldRatioShallowOverResidential": 0.8261
+    },
+    "promisingVsPoorTruthGap": 0.7421,
+    "promisingVsPoorShallowYieldGap": 0.35,
+    "signalRetentionVsResidential": 0.8333,
+    "promisingDistinguishableFromPoor": true
+  },
+  "meanYieldRatioShallowOverResidential": 0.9512,
+  "rows": [
+    {
+      "tileId": "tile:0:0",
+      "truthRichness": 0.1763,
+      "truthWater": 0.0504,
+      "shallowObservedRichness": 0.25,
+      "shallowObservedWater": 0,
+      "shallowEffectiveYield": 0.1,
+      "residentialEffectiveYield": 0.09,
+      "yieldRatioShallowOverResidential": 1.1111
+    },
+    {
+      "tileId": "tile:10:126",
+      "truthRichness": 0.2765,
+      "truthWater": 0.0721,
+      "shallowObservedRichness": 0.25,
+      "shallowObservedWater": 0,
+      "shallowEffectiveYield": 0.1,
+      "residentialEffectiveYield": 0.12,
+      "yieldRatioShallowOverResidential": 0.8333
+    },
+    {
+      "tileId": "tile:101:89",
+      "truthRichness": 0.0522,
+      "truthWater": 0,
+      "shallowObservedRichness": 0,
+      "shallowObservedWater": 0,
+      "shallowEffectiveYield": 0.03,
+      "residentialEffectiveYield": 0.04,
+      "yieldRatioShallowOverResidential": 0.75
+    },
+    {
+      "tileId": "tile:105:10",
+      "truthRichness": 0.3029,
+      "truthWater": 0.0344,
+      "shallowObservedRichness": 0.25,
+      "shallowObservedWater": 0,
+      "shallowEffectiveYield": 0.1,
+      "residentialEffectiveYield": 0.13,
+      "yieldRatioShallowOverResidential": 0.7692
+    },
+    {
+      "tileId": "tile:108:124",
+      "truthRichness": 0.1327,
+      "truthWater": 0,
+      "shallowObservedRichness": 0.25,
+      "shallowObservedWater": 0,
+      "shallowEffectiveYield": 0.1,
+      "residentialEffectiveYield": 0.07,
+      "yieldRatioShallowOverResidential": 1.4286
+    },
+    {
+      "tileId": "tile:11:64",
+      "truthRichness": 0.3437,
+      "truthWater": 0.0612,
+      "shallowObservedRichness": 0.25,
+      "shallowObservedWater": 0,
+      "shallowEffectiveYield": 0.1,
+      "residentialEffectiveYield": 0.15,
+      "yieldRatioShallowOverResidential": 0.6667
+    },
+    {
+      "tileId": "tile:112:29",
+      "truthRichness": 0.3394,
+      "truthWater": 0.1039,
+      "shallowObservedRichness": 0.25,
+      "shallowObservedWater": 0,
+      "shallowEffectiveYield": 0.1,
+      "residentialEffectiveYield": 0.15,
+      "yieldRatioShallowOverResidential": 0.6667
+    },
+    {
+      "tileId": "tile:115:130",
+      "truthRichness": 0.2968,
+      "truthWater": 0.0837,
+      "shallowObservedRichness": 0.25,
+      "shallowObservedWater": 0,
+      "shallowEffectiveYield": 0.1,
+      "residentialEffectiveYield": 0.12,
+      "yieldRatioShallowOverResidential": 0.8333
+    },
+    {
+      "tileId": "tile:117:95",
+      "truthRichness": 0.1057,
+      "truthWater": 0,
+      "shallowObservedRichness": 0,
+      "shallowObservedWater": 0,
+      "shallowEffectiveYield": 0.03,
+      "residentialEffectiveYield": 0.06,
+      "yieldRatioShallowOverResidential": 0.5
+    },
+    {
+      "tileId": "tile:12:55",
+      "truthRichness": 0.271,
+      "truthWater": 0.0644,
+      "shallowObservedRichness": 0.25,
+      "shallowObservedWater": 0,
+      "shallowEffectiveYield": 0.1,
+      "residentialEffectiveYield": 0.11,
+      "yieldRatioShallowOverResidential": 0.9091
+    },
+    {
+      "tileId": "tile:122:44",
+      "truthRichness": 0.3721,
+      "truthWater": 0.1097,
+      "shallowObservedRichness": 0.25,
+      "shallowObservedWater": 0,
+      "shallowEffectiveYield": 0.1,
+      "residentialEffectiveYield": 0.16,
+      "yieldRatioShallowOverResidential": 0.625
+    },
+    {
+      "tileId": "tile:125:120",
+      "truthRichness": 0.4588,
+      "truthWater": 0.3331,
+      "shallowObservedRichness": 0.5,
+      "shallowObservedWater": 0.25,
+      "shallowEffectiveYield": 0.23,
+      "residentialEffectiveYield": 0.24,
+      "yieldRatioShallowOverResidential": 0.9583
+    },
+    {
+      "tileId": "tile:127:65",
+      "truthRichness": 0.7943,
+      "truthWater": 0.652,
+      "shallowObservedRichness": 0.75,
+      "shallowObservedWater": 0.5,
+      "shallowEffectiveYield": 0.38,
+      "residentialEffectiveYield": 0.46,
+      "yieldRatioShallowOverResidential": 0.8261
+    },
+    {
+      "tileId": "tile:13:11",
+      "truthRichness": 0.4184,
+      "truthWater": 0.0738,
+      "shallowObservedRichness": 0.5,
+      "shallowObservedWater": 0,
+      "shallowEffectiveYield": 0.2,
+      "residentialEffectiveYield": 0.18,
+      "yieldRatioShallowOverResidential": 1.1111
+    },
+    {
+      "tileId": "tile:131:24",
+      "truthRichness": 0.1676,
+      "truthWater": 0.0631,
+      "shallowObservedRichness": 0.25,
+      "shallowObservedWater": 0,
+      "shallowEffectiveYield": 0.1,
+      "residentialEffectiveYield": 0.08,
+      "yieldRatioShallowOverResidential": 1.25
+    },
+    {
+      "tileId": "tile:133:77",
+      "truthRichness": 0.368,
+      "truthWater": 0.1159,
+      "shallowObservedRichness": 0.25,
+      "shallowObservedWater": 0,
+      "shallowEffectiveYield": 0.1,
+      "residentialEffectiveYield": 0.16,
+      "yieldRatioShallowOverResidential": 0.625
+    },
+    {
+      "tileId": "tile:136:121",
+      "truthRichness": 0.5152,
+      "truthWater": 0.3191,
+      "shallowObservedRichness": 0.5,
+      "shallowObservedWater": 0.25,
+      "shallowEffectiveYield": 0.23,
+      "residentialEffectiveYield": 0.26,
+      "yieldRatioShallowOverResidential": 0.8846
+    },
+    {
+      "tileId": "tile:138:38",
+      "truthRichness": 0.2331,
+      "truthWater": 0.0721,
+      "shallowObservedRichness": 0.25,
+      "shallowObservedWater": 0,
+      "shallowEffectiveYield": 0.1,
+      "residentialEffectiveYield": 0.1,
+      "yieldRatioShallowOverResidential": 1
+    },
+    {
+      "tileId": "tile:14:82",
+      "truthRichness": 0.2688,
+      "truthWater": 0.0679,
+      "shallowObservedRichness": 0.25,
+      "shallowObservedWater": 0,
+      "shallowEffectiveYield": 0.1,
+      "residentialEffectiveYield": 0.12,
+      "yieldRatioShallowOverResidential": 0.8333
+    },
+    {
+      "tileId": "tile:142:135",
+      "truthRichness": 0.4314,
+      "truthWater": 0.1241,
+      "shallowObservedRichness": 0.5,
+      "shallowObservedWater": 0,
+      "shallowEffectiveYield": 0.2,
+      "residentialEffectiveYield": 0.19,
+      "yieldRatioShallowOverResidential": 1.0526
+    }
+  ]
+}

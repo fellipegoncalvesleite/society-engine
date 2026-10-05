@@ -1,0 +1,2898 @@
+{
+  "audit": "frontierRegressionReproduction",
+  "checkpoint": "CORRECTION-18 §5",
+  "years": 300,
+  "seeds": [
+    "c18:a",
+    "c18:b",
+    "c18:c",
+    "c18:d",
+    "c18:e"
+  ],
+  "results": [
+    {
+      "map": "map1",
+      "seed": "c18:a",
+      "explorationEnabled": true,
+      "world": {
+        "population": 215,
+        "bands": 7,
+        "births": 0,
+        "deaths": 0,
+        "netBirthsMinusDeaths": 0,
+        "starvationDeaths": 0,
+        "waterStressDeaths": 0,
+        "crisisDeaths": 0,
+        "migrationHardshipDeaths": 0,
+        "meanNetDemographicRate": 0.001,
+        "meanCurrentFoodStress": 0.761,
+        "physicalReceiptSeasons": 1647,
+        "meanReceiptUsableSupport": 0.09,
+        "frontierExpeditions": 495,
+        "otherExpeditions": 1645,
+        "intraSeasonTrips": 39491,
+        "residentialMoves": 1425,
+        "fissions": 2,
+        "daughterFailures": 0,
+        "extinctions": 0,
+        "knownTilesMax": 228,
+        "knownTilesFinalMean": 126.29,
+        "resourceMemoriesFinalMean": 48
+      },
+      "byRootLineage": [
+        {
+          "root": "band:delta-coastal-foragers",
+          "population": 74,
+          "bands": 3,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 2,
+          "extinct": false
+        },
+        {
+          "root": "band:dry-margin-foragers",
+          "population": 45,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:highland-edge-foragers",
+          "population": 29,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:lake-wetland-foragers",
+          "population": 43,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:river-valley-foragers",
+          "population": 24,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        }
+      ]
+    },
+    {
+      "map": "map1",
+      "seed": "c18:a",
+      "explorationEnabled": false,
+      "world": {
+        "population": 264,
+        "bands": 10,
+        "births": 0,
+        "deaths": 0,
+        "netBirthsMinusDeaths": 0,
+        "starvationDeaths": 0,
+        "waterStressDeaths": 0,
+        "crisisDeaths": 0,
+        "migrationHardshipDeaths": 0,
+        "meanNetDemographicRate": 0.002,
+        "meanCurrentFoodStress": 0.763,
+        "physicalReceiptSeasons": 2113,
+        "meanReceiptUsableSupport": 0.083,
+        "frontierExpeditions": 0,
+        "otherExpeditions": 1473,
+        "intraSeasonTrips": 50706,
+        "residentialMoves": 1839,
+        "fissions": 5,
+        "daughterFailures": 0,
+        "extinctions": 0,
+        "knownTilesMax": 152,
+        "knownTilesFinalMean": 78.9,
+        "resourceMemoriesFinalMean": 48
+      },
+      "byRootLineage": [
+        {
+          "root": "band:delta-coastal-foragers",
+          "population": 88,
+          "bands": 3,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 2,
+          "extinct": false
+        },
+        {
+          "root": "band:dry-margin-foragers",
+          "population": 21,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:highland-edge-foragers",
+          "population": 24,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:lake-wetland-foragers",
+          "population": 48,
+          "bands": 2,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 1,
+          "extinct": false
+        },
+        {
+          "root": "band:river-valley-foragers",
+          "population": 83,
+          "bands": 3,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 2,
+          "extinct": false
+        }
+      ]
+    },
+    {
+      "map": "map1",
+      "seed": "c18:b",
+      "explorationEnabled": true,
+      "world": {
+        "population": 178,
+        "bands": 7,
+        "births": 0,
+        "deaths": 0,
+        "netBirthsMinusDeaths": 0,
+        "starvationDeaths": 0,
+        "waterStressDeaths": 0,
+        "crisisDeaths": 0,
+        "migrationHardshipDeaths": 0,
+        "meanNetDemographicRate": 0,
+        "meanCurrentFoodStress": 0.792,
+        "physicalReceiptSeasons": 1834,
+        "meanReceiptUsableSupport": 0.073,
+        "frontierExpeditions": 533,
+        "otherExpeditions": 2528,
+        "intraSeasonTrips": 43947,
+        "residentialMoves": 1566,
+        "fissions": 2,
+        "daughterFailures": 36,
+        "extinctions": 0,
+        "knownTilesMax": 209,
+        "knownTilesFinalMean": 148.57,
+        "resourceMemoriesFinalMean": 48
+      },
+      "byRootLineage": [
+        {
+          "root": "band:delta-coastal-foragers",
+          "population": 61,
+          "bands": 2,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 1,
+          "extinct": false
+        },
+        {
+          "root": "band:dry-margin-foragers",
+          "population": 20,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:highland-edge-foragers",
+          "population": 15,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:lake-wetland-foragers",
+          "population": 36,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:river-valley-foragers",
+          "population": 46,
+          "bands": 2,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 1,
+          "extinct": false
+        }
+      ]
+    },
+    {
+      "map": "map1",
+      "seed": "c18:b",
+      "explorationEnabled": false,
+      "world": {
+        "population": 230,
+        "bands": 9,
+        "births": 0,
+        "deaths": 0,
+        "netBirthsMinusDeaths": 0,
+        "starvationDeaths": 0,
+        "waterStressDeaths": 0,
+        "crisisDeaths": 0,
+        "migrationHardshipDeaths": 0,
+        "meanNetDemographicRate": 0.001,
+        "meanCurrentFoodStress": 0.778,
+        "physicalReceiptSeasons": 2009,
+        "meanReceiptUsableSupport": 0.078,
+        "frontierExpeditions": 0,
+        "otherExpeditions": 1355,
+        "intraSeasonTrips": 48194,
+        "residentialMoves": 1672,
+        "fissions": 4,
+        "daughterFailures": 10,
+        "extinctions": 0,
+        "knownTilesMax": 153,
+        "knownTilesFinalMean": 81.78,
+        "resourceMemoriesFinalMean": 48
+      },
+      "byRootLineage": [
+        {
+          "root": "band:delta-coastal-foragers",
+          "population": 73,
+          "bands": 2,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 1,
+          "extinct": false
+        },
+        {
+          "root": "band:dry-margin-foragers",
+          "population": 14,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:highland-edge-foragers",
+          "population": 14,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:lake-wetland-foragers",
+          "population": 49,
+          "bands": 2,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 1,
+          "extinct": false
+        },
+        {
+          "root": "band:river-valley-foragers",
+          "population": 80,
+          "bands": 3,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 2,
+          "extinct": false
+        }
+      ]
+    },
+    {
+      "map": "map1",
+      "seed": "c18:c",
+      "explorationEnabled": true,
+      "world": {
+        "population": 174,
+        "bands": 7,
+        "births": 0,
+        "deaths": 0,
+        "netBirthsMinusDeaths": 0,
+        "starvationDeaths": 0,
+        "waterStressDeaths": 0,
+        "crisisDeaths": 0,
+        "migrationHardshipDeaths": 0,
+        "meanNetDemographicRate": 0,
+        "meanCurrentFoodStress": 0.788,
+        "physicalReceiptSeasons": 1580,
+        "meanReceiptUsableSupport": 0.085,
+        "frontierExpeditions": 457,
+        "otherExpeditions": 2120,
+        "intraSeasonTrips": 37366,
+        "residentialMoves": 1300,
+        "fissions": 2,
+        "daughterFailures": 0,
+        "extinctions": 0,
+        "knownTilesMax": 180,
+        "knownTilesFinalMean": 110.14,
+        "resourceMemoriesFinalMean": 47.86
+      },
+      "byRootLineage": [
+        {
+          "root": "band:delta-coastal-foragers",
+          "population": 49,
+          "bands": 2,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 1,
+          "extinct": false
+        },
+        {
+          "root": "band:dry-margin-foragers",
+          "population": 0,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:highland-edge-foragers",
+          "population": 28,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:lake-wetland-foragers",
+          "population": 39,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:river-valley-foragers",
+          "population": 58,
+          "bands": 2,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 1,
+          "extinct": false
+        }
+      ]
+    },
+    {
+      "map": "map1",
+      "seed": "c18:c",
+      "explorationEnabled": false,
+      "world": {
+        "population": 265,
+        "bands": 9,
+        "births": 0,
+        "deaths": 0,
+        "netBirthsMinusDeaths": 0,
+        "starvationDeaths": 0,
+        "waterStressDeaths": 0,
+        "crisisDeaths": 0,
+        "migrationHardshipDeaths": 0,
+        "meanNetDemographicRate": 0.001,
+        "meanCurrentFoodStress": 0.768,
+        "physicalReceiptSeasons": 2059,
+        "meanReceiptUsableSupport": 0.077,
+        "frontierExpeditions": 0,
+        "otherExpeditions": 1322,
+        "intraSeasonTrips": 49391,
+        "residentialMoves": 1838,
+        "fissions": 4,
+        "daughterFailures": 0,
+        "extinctions": 0,
+        "knownTilesMax": 191,
+        "knownTilesFinalMean": 84.22,
+        "resourceMemoriesFinalMean": 48
+      },
+      "byRootLineage": [
+        {
+          "root": "band:delta-coastal-foragers",
+          "population": 96,
+          "bands": 3,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 2,
+          "extinct": false
+        },
+        {
+          "root": "band:dry-margin-foragers",
+          "population": 11,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:highland-edge-foragers",
+          "population": 28,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:lake-wetland-foragers",
+          "population": 42,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:river-valley-foragers",
+          "population": 88,
+          "bands": 3,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 2,
+          "extinct": false
+        }
+      ]
+    },
+    {
+      "map": "map1",
+      "seed": "c18:d",
+      "explorationEnabled": true,
+      "world": {
+        "population": 192,
+        "bands": 7,
+        "births": 0,
+        "deaths": 0,
+        "netBirthsMinusDeaths": 0,
+        "starvationDeaths": 0,
+        "waterStressDeaths": 0,
+        "crisisDeaths": 0,
+        "migrationHardshipDeaths": 0,
+        "meanNetDemographicRate": 0.001,
+        "meanCurrentFoodStress": 0.787,
+        "physicalReceiptSeasons": 1798,
+        "meanReceiptUsableSupport": 0.072,
+        "frontierExpeditions": 459,
+        "otherExpeditions": 2346,
+        "intraSeasonTrips": 43119,
+        "residentialMoves": 1494,
+        "fissions": 2,
+        "daughterFailures": 0,
+        "extinctions": 0,
+        "knownTilesMax": 231,
+        "knownTilesFinalMean": 145.57,
+        "resourceMemoriesFinalMean": 48
+      },
+      "byRootLineage": [
+        {
+          "root": "band:delta-coastal-foragers",
+          "population": 74,
+          "bands": 2,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 1,
+          "extinct": false
+        },
+        {
+          "root": "band:dry-margin-foragers",
+          "population": 22,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:highland-edge-foragers",
+          "population": 18,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:lake-wetland-foragers",
+          "population": 20,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:river-valley-foragers",
+          "population": 58,
+          "bands": 2,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 1,
+          "extinct": false
+        }
+      ]
+    },
+    {
+      "map": "map1",
+      "seed": "c18:d",
+      "explorationEnabled": false,
+      "world": {
+        "population": 273,
+        "bands": 10,
+        "births": 0,
+        "deaths": 0,
+        "netBirthsMinusDeaths": 0,
+        "starvationDeaths": 0,
+        "waterStressDeaths": 0,
+        "crisisDeaths": 0,
+        "migrationHardshipDeaths": 0,
+        "meanNetDemographicRate": 0.002,
+        "meanCurrentFoodStress": 0.779,
+        "physicalReceiptSeasons": 2115,
+        "meanReceiptUsableSupport": 0.075,
+        "frontierExpeditions": 0,
+        "otherExpeditions": 1155,
+        "intraSeasonTrips": 50760,
+        "residentialMoves": 1907,
+        "fissions": 5,
+        "daughterFailures": 6,
+        "extinctions": 0,
+        "knownTilesMax": 146,
+        "knownTilesFinalMean": 77.3,
+        "resourceMemoriesFinalMean": 48
+      },
+      "byRootLineage": [
+        {
+          "root": "band:delta-coastal-foragers",
+          "population": 100,
+          "bands": 3,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 2,
+          "extinct": false
+        },
+        {
+          "root": "band:dry-margin-foragers",
+          "population": 12,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:highland-edge-foragers",
+          "population": 27,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:lake-wetland-foragers",
+          "population": 39,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:river-valley-foragers",
+          "population": 95,
+          "bands": 4,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 3,
+          "extinct": false
+        }
+      ]
+    },
+    {
+      "map": "map1",
+      "seed": "c18:e",
+      "explorationEnabled": true,
+      "world": {
+        "population": 195,
+        "bands": 8,
+        "births": 0,
+        "deaths": 0,
+        "netBirthsMinusDeaths": 0,
+        "starvationDeaths": 0,
+        "waterStressDeaths": 0,
+        "crisisDeaths": 0,
+        "migrationHardshipDeaths": 0,
+        "meanNetDemographicRate": -0.001,
+        "meanCurrentFoodStress": 0.814,
+        "physicalReceiptSeasons": 1837,
+        "meanReceiptUsableSupport": 0.061,
+        "frontierExpeditions": 517,
+        "otherExpeditions": 2080,
+        "intraSeasonTrips": 41467,
+        "residentialMoves": 1404,
+        "fissions": 3,
+        "daughterFailures": 0,
+        "extinctions": 0,
+        "knownTilesMax": 181,
+        "knownTilesFinalMean": 126,
+        "resourceMemoriesFinalMean": 48
+      },
+      "byRootLineage": [
+        {
+          "root": "band:delta-coastal-foragers",
+          "population": 75,
+          "bands": 3,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 2,
+          "extinct": false
+        },
+        {
+          "root": "band:dry-margin-foragers",
+          "population": 0,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:highland-edge-foragers",
+          "population": 20,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:lake-wetland-foragers",
+          "population": 37,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:river-valley-foragers",
+          "population": 63,
+          "bands": 2,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 1,
+          "extinct": false
+        }
+      ]
+    },
+    {
+      "map": "map1",
+      "seed": "c18:e",
+      "explorationEnabled": false,
+      "world": {
+        "population": 223,
+        "bands": 9,
+        "births": 0,
+        "deaths": 0,
+        "netBirthsMinusDeaths": 0,
+        "starvationDeaths": 0,
+        "waterStressDeaths": 0,
+        "crisisDeaths": 0,
+        "migrationHardshipDeaths": 0,
+        "meanNetDemographicRate": 0,
+        "meanCurrentFoodStress": 0.771,
+        "physicalReceiptSeasons": 2047,
+        "meanReceiptUsableSupport": 0.07,
+        "frontierExpeditions": 0,
+        "otherExpeditions": 1856,
+        "intraSeasonTrips": 46680,
+        "residentialMoves": 1603,
+        "fissions": 4,
+        "daughterFailures": 17,
+        "extinctions": 0,
+        "knownTilesMax": 133,
+        "knownTilesFinalMean": 82,
+        "resourceMemoriesFinalMean": 48
+      },
+      "byRootLineage": [
+        {
+          "root": "band:delta-coastal-foragers",
+          "population": 91,
+          "bands": 3,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 2,
+          "extinct": false
+        },
+        {
+          "root": "band:dry-margin-foragers",
+          "population": 0,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:highland-edge-foragers",
+          "population": 18,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:lake-wetland-foragers",
+          "population": 45,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:river-valley-foragers",
+          "population": 69,
+          "bands": 3,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 2,
+          "extinct": false
+        }
+      ]
+    },
+    {
+      "map": "map2",
+      "seed": "c18:a",
+      "explorationEnabled": true,
+      "world": {
+        "population": 213,
+        "bands": 11,
+        "births": 0,
+        "deaths": 0,
+        "netBirthsMinusDeaths": 0,
+        "starvationDeaths": 0,
+        "waterStressDeaths": 0,
+        "crisisDeaths": 0,
+        "migrationHardshipDeaths": 0,
+        "meanNetDemographicRate": -0.002,
+        "meanCurrentFoodStress": 0.868,
+        "physicalReceiptSeasons": 2893,
+        "meanReceiptUsableSupport": 0.048,
+        "frontierExpeditions": 718,
+        "otherExpeditions": 2201,
+        "intraSeasonTrips": 61488,
+        "residentialMoves": 2130,
+        "fissions": 2,
+        "daughterFailures": 0,
+        "extinctions": 0,
+        "knownTilesMax": 178,
+        "knownTilesFinalMean": 110.82,
+        "resourceMemoriesFinalMean": 48
+      },
+      "byRootLineage": [
+        {
+          "root": "band:varied-dry-corridor-mid",
+          "population": 0,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:varied-dry-corridor-upper",
+          "population": 0,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:varied-estuary",
+          "population": 68,
+          "bands": 2,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 1,
+          "extinct": false
+        },
+        {
+          "root": "band:varied-lake-east",
+          "population": 39,
+          "bands": 2,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 1,
+          "extinct": false
+        },
+        {
+          "root": "band:varied-lake-north",
+          "population": 16,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:varied-lake-west",
+          "population": 21,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:varied-pass-frontier",
+          "population": 9,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:varied-plains-creek",
+          "population": 23,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:varied-river-mid",
+          "population": 37,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        }
+      ]
+    },
+    {
+      "map": "map2",
+      "seed": "c18:a",
+      "explorationEnabled": false,
+      "world": {
+        "population": 229,
+        "bands": 11,
+        "births": 0,
+        "deaths": 0,
+        "netBirthsMinusDeaths": 0,
+        "starvationDeaths": 0,
+        "waterStressDeaths": 0,
+        "crisisDeaths": 0,
+        "migrationHardshipDeaths": 0,
+        "meanNetDemographicRate": -0.001,
+        "meanCurrentFoodStress": 0.834,
+        "physicalReceiptSeasons": 2971,
+        "meanReceiptUsableSupport": 0.061,
+        "frontierExpeditions": 0,
+        "otherExpeditions": 1175,
+        "intraSeasonTrips": 63090,
+        "residentialMoves": 2285,
+        "fissions": 2,
+        "daughterFailures": 0,
+        "extinctions": 0,
+        "knownTilesMax": 106,
+        "knownTilesFinalMean": 76.82,
+        "resourceMemoriesFinalMean": 48
+      },
+      "byRootLineage": [
+        {
+          "root": "band:varied-dry-corridor-mid",
+          "population": 0,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:varied-dry-corridor-upper",
+          "population": 0,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:varied-estuary",
+          "population": 93,
+          "bands": 3,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 2,
+          "extinct": false
+        },
+        {
+          "root": "band:varied-lake-east",
+          "population": 38,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:varied-lake-north",
+          "population": 16,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:varied-lake-west",
+          "population": 10,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:varied-pass-frontier",
+          "population": 10,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:varied-plains-creek",
+          "population": 24,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:varied-river-mid",
+          "population": 38,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        }
+      ]
+    },
+    {
+      "map": "map2",
+      "seed": "c18:b",
+      "explorationEnabled": true,
+      "world": {
+        "population": 197,
+        "bands": 12,
+        "births": 0,
+        "deaths": 0,
+        "netBirthsMinusDeaths": 0,
+        "starvationDeaths": 0,
+        "waterStressDeaths": 0,
+        "crisisDeaths": 0,
+        "migrationHardshipDeaths": 0,
+        "meanNetDemographicRate": -0.002,
+        "meanCurrentFoodStress": 0.864,
+        "physicalReceiptSeasons": 3001,
+        "meanReceiptUsableSupport": 0.048,
+        "frontierExpeditions": 763,
+        "otherExpeditions": 1948,
+        "intraSeasonTrips": 63529,
+        "residentialMoves": 2270,
+        "fissions": 3,
+        "daughterFailures": 0,
+        "extinctions": 0,
+        "knownTilesMax": 176,
+        "knownTilesFinalMean": 115.67,
+        "resourceMemoriesFinalMean": 48
+      },
+      "byRootLineage": [
+        {
+          "root": "band:varied-dry-corridor-mid",
+          "population": 0,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:varied-dry-corridor-upper",
+          "population": 0,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:varied-estuary",
+          "population": 75,
+          "bands": 3,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 2,
+          "extinct": false
+        },
+        {
+          "root": "band:varied-lake-east",
+          "population": 31,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:varied-lake-north",
+          "population": 16,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:varied-lake-west",
+          "population": 12,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:varied-pass-frontier",
+          "population": 0,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:varied-plains-creek",
+          "population": 23,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:varied-river-mid",
+          "population": 40,
+          "bands": 2,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 1,
+          "extinct": false
+        }
+      ]
+    },
+    {
+      "map": "map2",
+      "seed": "c18:b",
+      "explorationEnabled": false,
+      "world": {
+        "population": 206,
+        "bands": 11,
+        "births": 0,
+        "deaths": 0,
+        "netBirthsMinusDeaths": 0,
+        "starvationDeaths": 0,
+        "waterStressDeaths": 0,
+        "crisisDeaths": 0,
+        "migrationHardshipDeaths": 0,
+        "meanNetDemographicRate": -0.002,
+        "meanCurrentFoodStress": 0.85,
+        "physicalReceiptSeasons": 2921,
+        "meanReceiptUsableSupport": 0.068,
+        "frontierExpeditions": 0,
+        "otherExpeditions": 771,
+        "intraSeasonTrips": 61344,
+        "residentialMoves": 2200,
+        "fissions": 2,
+        "daughterFailures": 0,
+        "extinctions": 0,
+        "knownTilesMax": 153,
+        "knownTilesFinalMean": 83.55,
+        "resourceMemoriesFinalMean": 48
+      },
+      "byRootLineage": [
+        {
+          "root": "band:varied-dry-corridor-mid",
+          "population": 0,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:varied-dry-corridor-upper",
+          "population": 0,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:varied-estuary",
+          "population": 86,
+          "bands": 3,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 2,
+          "extinct": false
+        },
+        {
+          "root": "band:varied-lake-east",
+          "population": 33,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:varied-lake-north",
+          "population": 0,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:varied-lake-west",
+          "population": 16,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:varied-pass-frontier",
+          "population": 9,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:varied-plains-creek",
+          "population": 24,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:varied-river-mid",
+          "population": 38,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        }
+      ]
+    },
+    {
+      "map": "map2",
+      "seed": "c18:c",
+      "explorationEnabled": true,
+      "world": {
+        "population": 180,
+        "bands": 10,
+        "births": 0,
+        "deaths": 0,
+        "netBirthsMinusDeaths": 0,
+        "starvationDeaths": 0,
+        "waterStressDeaths": 0,
+        "crisisDeaths": 0,
+        "migrationHardshipDeaths": 0,
+        "meanNetDemographicRate": -0.003,
+        "meanCurrentFoodStress": 0.857,
+        "physicalReceiptSeasons": 2890,
+        "meanReceiptUsableSupport": 0.051,
+        "frontierExpeditions": 754,
+        "otherExpeditions": 1628,
+        "intraSeasonTrips": 61764,
+        "residentialMoves": 2215,
+        "fissions": 1,
+        "daughterFailures": 0,
+        "extinctions": 0,
+        "knownTilesMax": 184,
+        "knownTilesFinalMean": 116.4,
+        "resourceMemoriesFinalMean": 48
+      },
+      "byRootLineage": [
+        {
+          "root": "band:varied-dry-corridor-mid",
+          "population": 0,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:varied-dry-corridor-upper",
+          "population": 0,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:varied-estuary",
+          "population": 67,
+          "bands": 2,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 1,
+          "extinct": false
+        },
+        {
+          "root": "band:varied-lake-east",
+          "population": 26,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:varied-lake-north",
+          "population": 10,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:varied-lake-west",
+          "population": 13,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:varied-pass-frontier",
+          "population": 10,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:varied-plains-creek",
+          "population": 16,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:varied-river-mid",
+          "population": 38,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        }
+      ]
+    },
+    {
+      "map": "map2",
+      "seed": "c18:c",
+      "explorationEnabled": false,
+      "world": {
+        "population": 224,
+        "bands": 11,
+        "births": 0,
+        "deaths": 0,
+        "netBirthsMinusDeaths": 0,
+        "starvationDeaths": 0,
+        "waterStressDeaths": 0,
+        "crisisDeaths": 0,
+        "migrationHardshipDeaths": 0,
+        "meanNetDemographicRate": -0.003,
+        "meanCurrentFoodStress": 0.858,
+        "physicalReceiptSeasons": 2993,
+        "meanReceiptUsableSupport": 0.055,
+        "frontierExpeditions": 0,
+        "otherExpeditions": 1196,
+        "intraSeasonTrips": 61358,
+        "residentialMoves": 2215,
+        "fissions": 2,
+        "daughterFailures": 0,
+        "extinctions": 0,
+        "knownTilesMax": 141,
+        "knownTilesFinalMean": 78.18,
+        "resourceMemoriesFinalMean": 48
+      },
+      "byRootLineage": [
+        {
+          "root": "band:varied-dry-corridor-mid",
+          "population": 0,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:varied-dry-corridor-upper",
+          "population": 0,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:varied-estuary",
+          "population": 84,
+          "bands": 3,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 2,
+          "extinct": false
+        },
+        {
+          "root": "band:varied-lake-east",
+          "population": 31,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:varied-lake-north",
+          "population": 21,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:varied-lake-west",
+          "population": 18,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:varied-pass-frontier",
+          "population": 10,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:varied-plains-creek",
+          "population": 21,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:varied-river-mid",
+          "population": 39,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        }
+      ]
+    },
+    {
+      "map": "map2",
+      "seed": "c18:d",
+      "explorationEnabled": true,
+      "world": {
+        "population": 164,
+        "bands": 11,
+        "births": 0,
+        "deaths": 0,
+        "netBirthsMinusDeaths": 0,
+        "starvationDeaths": 0,
+        "waterStressDeaths": 0,
+        "crisisDeaths": 0,
+        "migrationHardshipDeaths": 0,
+        "meanNetDemographicRate": -0.004,
+        "meanCurrentFoodStress": 0.886,
+        "physicalReceiptSeasons": 2863,
+        "meanReceiptUsableSupport": 0.054,
+        "frontierExpeditions": 670,
+        "otherExpeditions": 1386,
+        "intraSeasonTrips": 56868,
+        "residentialMoves": 1945,
+        "fissions": 2,
+        "daughterFailures": 0,
+        "extinctions": 0,
+        "knownTilesMax": 189,
+        "knownTilesFinalMean": 102.45,
+        "resourceMemoriesFinalMean": 48
+      },
+      "byRootLineage": [
+        {
+          "root": "band:varied-dry-corridor-mid",
+          "population": 0,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:varied-dry-corridor-upper",
+          "population": 0,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:varied-estuary",
+          "population": 68,
+          "bands": 3,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 2,
+          "extinct": false
+        },
+        {
+          "root": "band:varied-lake-east",
+          "population": 0,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:varied-lake-north",
+          "population": 12,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:varied-lake-west",
+          "population": 11,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:varied-pass-frontier",
+          "population": 9,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:varied-plains-creek",
+          "population": 24,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:varied-river-mid",
+          "population": 40,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        }
+      ]
+    },
+    {
+      "map": "map2",
+      "seed": "c18:d",
+      "explorationEnabled": false,
+      "world": {
+        "population": 235,
+        "bands": 11,
+        "births": 0,
+        "deaths": 0,
+        "netBirthsMinusDeaths": 0,
+        "starvationDeaths": 0,
+        "waterStressDeaths": 0,
+        "crisisDeaths": 0,
+        "migrationHardshipDeaths": 0,
+        "meanNetDemographicRate": -0.002,
+        "meanCurrentFoodStress": 0.853,
+        "physicalReceiptSeasons": 2994,
+        "meanReceiptUsableSupport": 0.058,
+        "frontierExpeditions": 0,
+        "otherExpeditions": 1428,
+        "intraSeasonTrips": 63067,
+        "residentialMoves": 2317,
+        "fissions": 2,
+        "daughterFailures": 0,
+        "extinctions": 0,
+        "knownTilesMax": 137,
+        "knownTilesFinalMean": 76.91,
+        "resourceMemoriesFinalMean": 48
+      },
+      "byRootLineage": [
+        {
+          "root": "band:varied-dry-corridor-mid",
+          "population": 0,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:varied-dry-corridor-upper",
+          "population": 0,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:varied-estuary",
+          "population": 92,
+          "bands": 3,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 2,
+          "extinct": false
+        },
+        {
+          "root": "band:varied-lake-east",
+          "population": 31,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:varied-lake-north",
+          "population": 21,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:varied-lake-west",
+          "population": 20,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:varied-pass-frontier",
+          "population": 9,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:varied-plains-creek",
+          "population": 22,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:varied-river-mid",
+          "population": 40,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        }
+      ]
+    },
+    {
+      "map": "map2",
+      "seed": "c18:e",
+      "explorationEnabled": true,
+      "world": {
+        "population": 205,
+        "bands": 10,
+        "births": 0,
+        "deaths": 0,
+        "netBirthsMinusDeaths": 0,
+        "starvationDeaths": 0,
+        "waterStressDeaths": 0,
+        "crisisDeaths": 0,
+        "migrationHardshipDeaths": 0,
+        "meanNetDemographicRate": -0.002,
+        "meanCurrentFoodStress": 0.87,
+        "physicalReceiptSeasons": 2781,
+        "meanReceiptUsableSupport": 0.058,
+        "frontierExpeditions": 723,
+        "otherExpeditions": 1575,
+        "intraSeasonTrips": 58159,
+        "residentialMoves": 2074,
+        "fissions": 1,
+        "daughterFailures": 0,
+        "extinctions": 0,
+        "knownTilesMax": 163,
+        "knownTilesFinalMean": 97,
+        "resourceMemoriesFinalMean": 48
+      },
+      "byRootLineage": [
+        {
+          "root": "band:varied-dry-corridor-mid",
+          "population": 0,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:varied-dry-corridor-upper",
+          "population": 0,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:varied-estuary",
+          "population": 63,
+          "bands": 2,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 1,
+          "extinct": false
+        },
+        {
+          "root": "band:varied-lake-east",
+          "population": 39,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:varied-lake-north",
+          "population": 16,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:varied-lake-west",
+          "population": 11,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:varied-pass-frontier",
+          "population": 10,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:varied-plains-creek",
+          "population": 25,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:varied-river-mid",
+          "population": 41,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        }
+      ]
+    },
+    {
+      "map": "map2",
+      "seed": "c18:e",
+      "explorationEnabled": false,
+      "world": {
+        "population": 236,
+        "bands": 11,
+        "births": 0,
+        "deaths": 0,
+        "netBirthsMinusDeaths": 0,
+        "starvationDeaths": 0,
+        "waterStressDeaths": 0,
+        "crisisDeaths": 0,
+        "migrationHardshipDeaths": 0,
+        "meanNetDemographicRate": -0.002,
+        "meanCurrentFoodStress": 0.881,
+        "physicalReceiptSeasons": 2994,
+        "meanReceiptUsableSupport": 0.055,
+        "frontierExpeditions": 0,
+        "otherExpeditions": 1070,
+        "intraSeasonTrips": 62832,
+        "residentialMoves": 2315,
+        "fissions": 2,
+        "daughterFailures": 0,
+        "extinctions": 0,
+        "knownTilesMax": 74,
+        "knownTilesFinalMean": 71.18,
+        "resourceMemoriesFinalMean": 48
+      },
+      "byRootLineage": [
+        {
+          "root": "band:varied-dry-corridor-mid",
+          "population": 0,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:varied-dry-corridor-upper",
+          "population": 0,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:varied-estuary",
+          "population": 92,
+          "bands": 3,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 2,
+          "extinct": false
+        },
+        {
+          "root": "band:varied-lake-east",
+          "population": 40,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:varied-lake-north",
+          "population": 21,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:varied-lake-west",
+          "population": 18,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:varied-pass-frontier",
+          "population": 10,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:varied-plains-creek",
+          "population": 19,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        },
+        {
+          "root": "band:varied-river-mid",
+          "population": 36,
+          "bands": 1,
+          "births": 0,
+          "deaths": 0,
+          "fissions": 0,
+          "extinct": false
+        }
+      ]
+    }
+  ],
+  "perMap": {
+    "map1": {
+      "population": {
+        "enabledMedian": 192,
+        "disabledMedian": 264,
+        "enabledMean": 190.8,
+        "disabledMean": 251,
+        "deltaMean": -60.2,
+        "pctDeltaMean": -23.98,
+        "perSeedEnabled": [
+          215,
+          178,
+          174,
+          192,
+          195
+        ],
+        "perSeedDisabled": [
+          264,
+          230,
+          265,
+          273,
+          223
+        ]
+      },
+      "populationSeedsWhereEnabledIsLower": "5/5",
+      "bands": {
+        "enabledMedian": 7,
+        "disabledMedian": 9,
+        "enabledMean": 7.2,
+        "disabledMean": 9.4,
+        "deltaMean": -2.2,
+        "pctDeltaMean": -23.4,
+        "perSeedEnabled": [
+          7,
+          7,
+          7,
+          7,
+          8
+        ],
+        "perSeedDisabled": [
+          10,
+          9,
+          9,
+          10,
+          9
+        ]
+      },
+      "births": {
+        "enabledMedian": 0,
+        "disabledMedian": 0,
+        "enabledMean": 0,
+        "disabledMean": 0,
+        "deltaMean": 0,
+        "pctDeltaMean": null,
+        "perSeedEnabled": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "perSeedDisabled": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "deaths": {
+        "enabledMedian": 0,
+        "disabledMedian": 0,
+        "enabledMean": 0,
+        "disabledMean": 0,
+        "deltaMean": 0,
+        "pctDeltaMean": null,
+        "perSeedEnabled": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "perSeedDisabled": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "netBirthsMinusDeaths": {
+        "enabledMedian": 0,
+        "disabledMedian": 0,
+        "enabledMean": 0,
+        "disabledMean": 0,
+        "deltaMean": 0,
+        "pctDeltaMean": null,
+        "perSeedEnabled": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "perSeedDisabled": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "starvationDeaths": {
+        "enabledMedian": 0,
+        "disabledMedian": 0,
+        "enabledMean": 0,
+        "disabledMean": 0,
+        "deltaMean": 0,
+        "pctDeltaMean": null,
+        "perSeedEnabled": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "perSeedDisabled": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "waterStressDeaths": {
+        "enabledMedian": 0,
+        "disabledMedian": 0,
+        "enabledMean": 0,
+        "disabledMean": 0,
+        "deltaMean": 0,
+        "pctDeltaMean": null,
+        "perSeedEnabled": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "perSeedDisabled": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "crisisDeaths": {
+        "enabledMedian": 0,
+        "disabledMedian": 0,
+        "enabledMean": 0,
+        "disabledMean": 0,
+        "deltaMean": 0,
+        "pctDeltaMean": null,
+        "perSeedEnabled": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "perSeedDisabled": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "migrationHardshipDeaths": {
+        "enabledMedian": 0,
+        "disabledMedian": 0,
+        "enabledMean": 0,
+        "disabledMean": 0,
+        "deltaMean": 0,
+        "pctDeltaMean": null,
+        "perSeedEnabled": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "perSeedDisabled": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "meanNetDemographicRate": {
+        "enabledMedian": 0,
+        "disabledMedian": 0,
+        "enabledMean": 0,
+        "disabledMean": 0,
+        "deltaMean": 0,
+        "pctDeltaMean": -83.33,
+        "perSeedEnabled": [
+          0.001,
+          0,
+          0,
+          0.001,
+          -0.001
+        ],
+        "perSeedDisabled": [
+          0.002,
+          0.001,
+          0.001,
+          0.002,
+          0
+        ]
+      },
+      "meanCurrentFoodStress": {
+        "enabledMedian": 0.79,
+        "disabledMedian": 0.77,
+        "enabledMean": 0.79,
+        "disabledMean": 0.77,
+        "deltaMean": 0.02,
+        "pctDeltaMean": 2.15,
+        "perSeedEnabled": [
+          0.761,
+          0.792,
+          0.788,
+          0.787,
+          0.814
+        ],
+        "perSeedDisabled": [
+          0.763,
+          0.778,
+          0.768,
+          0.779,
+          0.771
+        ]
+      },
+      "physicalReceiptSeasons": {
+        "enabledMedian": 1798,
+        "disabledMedian": 2059,
+        "enabledMean": 1739.2,
+        "disabledMean": 2068.6,
+        "deltaMean": -329.4,
+        "pctDeltaMean": -15.92,
+        "perSeedEnabled": [
+          1647,
+          1834,
+          1580,
+          1798,
+          1837
+        ],
+        "perSeedDisabled": [
+          2113,
+          2009,
+          2059,
+          2115,
+          2047
+        ]
+      },
+      "meanReceiptUsableSupport": {
+        "enabledMedian": 0.07,
+        "disabledMedian": 0.08,
+        "enabledMean": 0.08,
+        "disabledMean": 0.08,
+        "deltaMean": 0,
+        "pctDeltaMean": -0.52,
+        "perSeedEnabled": [
+          0.09,
+          0.073,
+          0.085,
+          0.072,
+          0.061
+        ],
+        "perSeedDisabled": [
+          0.083,
+          0.078,
+          0.077,
+          0.075,
+          0.07
+        ]
+      },
+      "intraSeasonTrips": {
+        "enabledMedian": 41467,
+        "disabledMedian": 49391,
+        "enabledMean": 41078,
+        "disabledMean": 49146.2,
+        "deltaMean": -8068.2,
+        "pctDeltaMean": -16.42,
+        "perSeedEnabled": [
+          39491,
+          43947,
+          37366,
+          43119,
+          41467
+        ],
+        "perSeedDisabled": [
+          50706,
+          48194,
+          49391,
+          50760,
+          46680
+        ]
+      },
+      "otherExpeditions": {
+        "enabledMedian": 2120,
+        "disabledMedian": 1355,
+        "enabledMean": 2143.8,
+        "disabledMean": 1432.2,
+        "deltaMean": 711.6,
+        "pctDeltaMean": 49.69,
+        "perSeedEnabled": [
+          1645,
+          2528,
+          2120,
+          2346,
+          2080
+        ],
+        "perSeedDisabled": [
+          1473,
+          1355,
+          1322,
+          1155,
+          1856
+        ]
+      },
+      "frontierExpeditions": {
+        "enabledMedian": 495,
+        "disabledMedian": 0,
+        "enabledMean": 492.2,
+        "disabledMean": 0,
+        "deltaMean": 492.2,
+        "pctDeltaMean": null,
+        "perSeedEnabled": [
+          495,
+          533,
+          457,
+          459,
+          517
+        ],
+        "perSeedDisabled": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "residentialMoves": {
+        "enabledMedian": 1425,
+        "disabledMedian": 1838,
+        "enabledMean": 1437.8,
+        "disabledMean": 1771.8,
+        "deltaMean": -334,
+        "pctDeltaMean": -18.85,
+        "perSeedEnabled": [
+          1425,
+          1566,
+          1300,
+          1494,
+          1404
+        ],
+        "perSeedDisabled": [
+          1839,
+          1672,
+          1838,
+          1907,
+          1603
+        ]
+      },
+      "fissions": {
+        "enabledMedian": 2,
+        "disabledMedian": 4,
+        "enabledMean": 2.2,
+        "disabledMean": 4.4,
+        "deltaMean": -2.2,
+        "pctDeltaMean": -50,
+        "perSeedEnabled": [
+          2,
+          2,
+          2,
+          2,
+          3
+        ],
+        "perSeedDisabled": [
+          5,
+          4,
+          4,
+          5,
+          4
+        ]
+      },
+      "daughterFailures": {
+        "enabledMedian": 0,
+        "disabledMedian": 6,
+        "enabledMean": 7.2,
+        "disabledMean": 6.6,
+        "deltaMean": 0.6,
+        "pctDeltaMean": 9.09,
+        "perSeedEnabled": [
+          0,
+          36,
+          0,
+          0,
+          0
+        ],
+        "perSeedDisabled": [
+          0,
+          10,
+          0,
+          6,
+          17
+        ]
+      },
+      "extinctions": {
+        "enabledMedian": 0,
+        "disabledMedian": 0,
+        "enabledMean": 0,
+        "disabledMean": 0,
+        "deltaMean": 0,
+        "pctDeltaMean": null,
+        "perSeedEnabled": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "perSeedDisabled": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "knownTilesFinalMean": {
+        "enabledMedian": 126.29,
+        "disabledMedian": 81.78,
+        "enabledMean": 131.31,
+        "disabledMean": 80.84,
+        "deltaMean": 50.47,
+        "pctDeltaMean": 62.44,
+        "perSeedEnabled": [
+          126.29,
+          148.57,
+          110.14,
+          145.57,
+          126
+        ],
+        "perSeedDisabled": [
+          78.9,
+          81.78,
+          84.22,
+          77.3,
+          82
+        ]
+      },
+      "resourceMemoriesFinalMean": {
+        "enabledMedian": 48,
+        "disabledMedian": 48,
+        "enabledMean": 47.97,
+        "disabledMean": 48,
+        "deltaMean": -0.03,
+        "pctDeltaMean": -0.06,
+        "perSeedEnabled": [
+          48,
+          48,
+          47.86,
+          48,
+          48
+        ],
+        "perSeedDisabled": [
+          48,
+          48,
+          48,
+          48,
+          48
+        ]
+      }
+    },
+    "map2": {
+      "population": {
+        "enabledMedian": 197,
+        "disabledMedian": 229,
+        "enabledMean": 191.8,
+        "disabledMean": 226,
+        "deltaMean": -34.2,
+        "pctDeltaMean": -15.13,
+        "perSeedEnabled": [
+          213,
+          197,
+          180,
+          164,
+          205
+        ],
+        "perSeedDisabled": [
+          229,
+          206,
+          224,
+          235,
+          236
+        ]
+      },
+      "populationSeedsWhereEnabledIsLower": "5/5",
+      "bands": {
+        "enabledMedian": 11,
+        "disabledMedian": 11,
+        "enabledMean": 10.8,
+        "disabledMean": 11,
+        "deltaMean": -0.2,
+        "pctDeltaMean": -1.82,
+        "perSeedEnabled": [
+          11,
+          12,
+          10,
+          11,
+          10
+        ],
+        "perSeedDisabled": [
+          11,
+          11,
+          11,
+          11,
+          11
+        ]
+      },
+      "births": {
+        "enabledMedian": 0,
+        "disabledMedian": 0,
+        "enabledMean": 0,
+        "disabledMean": 0,
+        "deltaMean": 0,
+        "pctDeltaMean": null,
+        "perSeedEnabled": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "perSeedDisabled": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "deaths": {
+        "enabledMedian": 0,
+        "disabledMedian": 0,
+        "enabledMean": 0,
+        "disabledMean": 0,
+        "deltaMean": 0,
+        "pctDeltaMean": null,
+        "perSeedEnabled": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "perSeedDisabled": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "netBirthsMinusDeaths": {
+        "enabledMedian": 0,
+        "disabledMedian": 0,
+        "enabledMean": 0,
+        "disabledMean": 0,
+        "deltaMean": 0,
+        "pctDeltaMean": null,
+        "perSeedEnabled": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "perSeedDisabled": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "starvationDeaths": {
+        "enabledMedian": 0,
+        "disabledMedian": 0,
+        "enabledMean": 0,
+        "disabledMean": 0,
+        "deltaMean": 0,
+        "pctDeltaMean": null,
+        "perSeedEnabled": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "perSeedDisabled": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "waterStressDeaths": {
+        "enabledMedian": 0,
+        "disabledMedian": 0,
+        "enabledMean": 0,
+        "disabledMean": 0,
+        "deltaMean": 0,
+        "pctDeltaMean": null,
+        "perSeedEnabled": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "perSeedDisabled": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "crisisDeaths": {
+        "enabledMedian": 0,
+        "disabledMedian": 0,
+        "enabledMean": 0,
+        "disabledMean": 0,
+        "deltaMean": 0,
+        "pctDeltaMean": null,
+        "perSeedEnabled": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "perSeedDisabled": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "migrationHardshipDeaths": {
+        "enabledMedian": 0,
+        "disabledMedian": 0,
+        "enabledMean": 0,
+        "disabledMean": 0,
+        "deltaMean": 0,
+        "pctDeltaMean": null,
+        "perSeedEnabled": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "perSeedDisabled": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "meanNetDemographicRate": {
+        "enabledMedian": 0,
+        "disabledMedian": 0,
+        "enabledMean": 0,
+        "disabledMean": 0,
+        "deltaMean": 0,
+        "pctDeltaMean": 30,
+        "perSeedEnabled": [
+          -0.002,
+          -0.002,
+          -0.003,
+          -0.004,
+          -0.002
+        ],
+        "perSeedDisabled": [
+          -0.001,
+          -0.002,
+          -0.003,
+          -0.002,
+          -0.002
+        ]
+      },
+      "meanCurrentFoodStress": {
+        "enabledMedian": 0.87,
+        "disabledMedian": 0.85,
+        "enabledMean": 0.87,
+        "disabledMean": 0.86,
+        "deltaMean": 0.01,
+        "pctDeltaMean": 1.61,
+        "perSeedEnabled": [
+          0.868,
+          0.864,
+          0.857,
+          0.886,
+          0.87
+        ],
+        "perSeedDisabled": [
+          0.834,
+          0.85,
+          0.858,
+          0.853,
+          0.881
+        ]
+      },
+      "physicalReceiptSeasons": {
+        "enabledMedian": 2890,
+        "disabledMedian": 2993,
+        "enabledMean": 2885.6,
+        "disabledMean": 2974.6,
+        "deltaMean": -89,
+        "pctDeltaMean": -2.99,
+        "perSeedEnabled": [
+          2893,
+          3001,
+          2890,
+          2863,
+          2781
+        ],
+        "perSeedDisabled": [
+          2971,
+          2921,
+          2993,
+          2994,
+          2994
+        ]
+      },
+      "meanReceiptUsableSupport": {
+        "enabledMedian": 0.05,
+        "disabledMedian": 0.06,
+        "enabledMean": 0.05,
+        "disabledMean": 0.06,
+        "deltaMean": -0.01,
+        "pctDeltaMean": -12.79,
+        "perSeedEnabled": [
+          0.048,
+          0.048,
+          0.051,
+          0.054,
+          0.058
+        ],
+        "perSeedDisabled": [
+          0.061,
+          0.068,
+          0.055,
+          0.058,
+          0.055
+        ]
+      },
+      "intraSeasonTrips": {
+        "enabledMedian": 61488,
+        "disabledMedian": 62832,
+        "enabledMean": 60361.6,
+        "disabledMean": 62338.2,
+        "deltaMean": -1976.6,
+        "pctDeltaMean": -3.17,
+        "perSeedEnabled": [
+          61488,
+          63529,
+          61764,
+          56868,
+          58159
+        ],
+        "perSeedDisabled": [
+          63090,
+          61344,
+          61358,
+          63067,
+          62832
+        ]
+      },
+      "otherExpeditions": {
+        "enabledMedian": 1628,
+        "disabledMedian": 1175,
+        "enabledMean": 1747.6,
+        "disabledMean": 1128,
+        "deltaMean": 619.6,
+        "pctDeltaMean": 54.93,
+        "perSeedEnabled": [
+          2201,
+          1948,
+          1628,
+          1386,
+          1575
+        ],
+        "perSeedDisabled": [
+          1175,
+          771,
+          1196,
+          1428,
+          1070
+        ]
+      },
+      "frontierExpeditions": {
+        "enabledMedian": 723,
+        "disabledMedian": 0,
+        "enabledMean": 725.6,
+        "disabledMean": 0,
+        "deltaMean": 725.6,
+        "pctDeltaMean": null,
+        "perSeedEnabled": [
+          718,
+          763,
+          754,
+          670,
+          723
+        ],
+        "perSeedDisabled": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "residentialMoves": {
+        "enabledMedian": 2130,
+        "disabledMedian": 2285,
+        "enabledMean": 2126.8,
+        "disabledMean": 2266.4,
+        "deltaMean": -139.6,
+        "pctDeltaMean": -6.16,
+        "perSeedEnabled": [
+          2130,
+          2270,
+          2215,
+          1945,
+          2074
+        ],
+        "perSeedDisabled": [
+          2285,
+          2200,
+          2215,
+          2317,
+          2315
+        ]
+      },
+      "fissions": {
+        "enabledMedian": 2,
+        "disabledMedian": 2,
+        "enabledMean": 1.8,
+        "disabledMean": 2,
+        "deltaMean": -0.2,
+        "pctDeltaMean": -10,
+        "perSeedEnabled": [
+          2,
+          3,
+          1,
+          2,
+          1
+        ],
+        "perSeedDisabled": [
+          2,
+          2,
+          2,
+          2,
+          2
+        ]
+      },
+      "daughterFailures": {
+        "enabledMedian": 0,
+        "disabledMedian": 0,
+        "enabledMean": 0,
+        "disabledMean": 0,
+        "deltaMean": 0,
+        "pctDeltaMean": null,
+        "perSeedEnabled": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "perSeedDisabled": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "extinctions": {
+        "enabledMedian": 0,
+        "disabledMedian": 0,
+        "enabledMean": 0,
+        "disabledMean": 0,
+        "deltaMean": 0,
+        "pctDeltaMean": null,
+        "perSeedEnabled": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "perSeedDisabled": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "knownTilesFinalMean": {
+        "enabledMedian": 110.82,
+        "disabledMedian": 76.91,
+        "enabledMean": 108.47,
+        "disabledMean": 77.33,
+        "deltaMean": 31.14,
+        "pctDeltaMean": 40.27,
+        "perSeedEnabled": [
+          110.82,
+          115.67,
+          116.4,
+          102.45,
+          97
+        ],
+        "perSeedDisabled": [
+          76.82,
+          83.55,
+          78.18,
+          76.91,
+          71.18
+        ]
+      },
+      "resourceMemoriesFinalMean": {
+        "enabledMedian": 48,
+        "disabledMedian": 48,
+        "enabledMean": 48,
+        "disabledMean": 48,
+        "deltaMean": 0,
+        "pctDeltaMean": 0,
+        "perSeedEnabled": [
+          48,
+          48,
+          48,
+          48,
+          48
+        ],
+        "perSeedDisabled": [
+          48,
+          48,
+          48,
+          48,
+          48
+        ]
+      }
+    }
+  },
+  "correction17ClaimClassification": {
+    "claim": "enabling frontier exploration reduces default-map population by ~15-20%",
+    "map1PctDelta": -23.98,
+    "map2PctDelta": -15.13,
+    "map1SeedsLower": "5/5",
+    "map2SeedsLower": "5/5",
+    "classification": "REPRODUCED"
+  }
+}

@@ -1,0 +1,115 @@
+{
+  "audit": "CORRECTION-34D-PARTY-HEADCOUNT-LABOR-AUTHORITY",
+  "phase": "after",
+  "constructedState": {
+    "population": 20,
+    "workingAdults": 5,
+    "elders": 7,
+    "dependents": 8,
+    "parties": 1,
+    "partyPhase": "operating"
+  },
+  "headline": "PHYSICAL HEADCOUNT AND PRODUCTIVE LABOR ARE DISTINCT",
+  "split": {
+    "labourGrantedToParty": 5,
+    "bandWorkingAdultCohort": 5,
+    "impossibleLabourGranted": 0,
+    "physicalHeadcountUnchangedByReconciliation": true,
+    "physicalHeadcountAndLabourSeparableInState": true,
+    "fieldsPresentOnRecord": {
+      "partyWorkers": true,
+      "nonWorkingPartyPeople": true
+    }
+  },
+  "measurements": {
+    "asHandedIn": {
+      "physicalAwayHeadcount": 6,
+      "residentialPhysicalHeadcount": 14,
+      "totalWorkingAdults": 5,
+      "partyWorkers": 6,
+      "partyPhase": "operating",
+      "partyOutcomeReason": null,
+      "nonWorkingPartyPeople": 0,
+      "physicalPartyPeople": 6,
+      "partyComposition": {
+        "limited": 1,
+        "typical": 4,
+        "high": 1
+      },
+      "partyCompositionTotal": 6,
+      "committedMobilityPoolTotal": 6,
+      "availableMobilityPoolTotal": 0,
+      "travelPaceTilesPerDay": 2.092,
+      "travelPacePartyFactor": 0.991667,
+      "carryCapacityUnits": 0.72,
+      "provisionConsumptionPerDay": 0.0048,
+      "maximumProvisionBudget": 0.1152,
+      "targetWorkResidentialLabour": 0,
+      "catchmentAdults": 0,
+      "catchmentElders": 6,
+      "catchmentDependents": 8,
+      "catchmentEldersSubtrahend": 1,
+      "catchmentForagingDraw": 10.3,
+      "totalRepresentedPopulation": 20,
+      "commitmentAccounting": {
+        "population": 20,
+        "workingAdults": 5,
+        "committedAwayWorkers": 6,
+        "physicallyAwayPeople": 6,
+        "preparedCommitmentPeople": 0,
+        "awayNonWorkingPeople": 0,
+        "dependents": 8,
+        "conserved": true,
+        "laborBounded": false,
+        "awayHeadcountExceedsWorkingAdults": true
+      }
+    },
+    "afterProductionReconciliation": {
+      "physicalAwayHeadcount": 6,
+      "residentialPhysicalHeadcount": 14,
+      "totalWorkingAdults": 5,
+      "partyWorkers": 5,
+      "partyPhase": "operating",
+      "partyOutcomeReason": null,
+      "nonWorkingPartyPeople": 1,
+      "physicalPartyPeople": 6,
+      "partyComposition": {
+        "limited": 1,
+        "typical": 4,
+        "high": 0
+      },
+      "partyCompositionTotal": 5,
+      "committedMobilityPoolTotal": 5,
+      "availableMobilityPoolTotal": 0,
+      "travelPaceTilesPerDay": 1.969,
+      "travelPacePartyFactor": 0.933333,
+      "carryCapacityUnits": 0.6,
+      "provisionConsumptionPerDay": 0.0048,
+      "maximumProvisionBudget": 0.1152,
+      "targetWorkResidentialLabour": 0,
+      "catchmentAdults": 0,
+      "catchmentElders": 6,
+      "catchmentDependents": 8,
+      "catchmentEldersSubtrahend": 1,
+      "catchmentForagingDraw": 10.3,
+      "totalRepresentedPopulation": 20,
+      "commitmentAccounting": {
+        "population": 20,
+        "workingAdults": 5,
+        "committedAwayWorkers": 5,
+        "physicallyAwayPeople": 6,
+        "preparedCommitmentPeople": 0,
+        "awayNonWorkingPeople": 1,
+        "dependents": 8,
+        "conserved": true,
+        "laborBounded": true,
+        "awayHeadcountExceedsWorkingAdults": true
+      }
+    }
+  },
+  "privateReaderArithmeticReproduced": [
+    "sharedCatchment.getBandForagingDraw (module-private; arithmetic published in its own comment)",
+    "intraSeasonTrips.estimateTaskGroupPeople (module-private; reads workingAdults minus away partyWorkers)",
+    "expedition.consumeProvisions / provisionsExhausted (module-private; the rate constant is exported)"
+  ]
+}

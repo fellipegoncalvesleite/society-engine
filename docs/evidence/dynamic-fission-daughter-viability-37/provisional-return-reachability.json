@@ -1,0 +1,316 @@
+{
+  "generatedAt": "2026-08-11T22:54:03.845Z",
+  "seed": "audit27:natural:s1",
+  "warmDays": 2100,
+  "parentBandId": "band:varied-river-mid",
+  "parentTile": "tile:110:57",
+  "targetTile": "tile:108:56",
+  "targetDistance": 3,
+  "summary": {
+    "total": 12,
+    "passed": 12,
+    "failed": 0,
+    "vacuous": 0
+  },
+  "fixtures": [
+    {
+      "id": "RX1_co_located_return_is_actually_reintegrated_by_production",
+      "claim": "a returning group that physically reaches its living parent is handed back BY THE RUNNER, with no audit script calling the writer",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "reintegratedOnDayOffset": 22,
+        "timeline": [
+          {
+            "day": 1,
+            "phase": "travelling",
+            "pos": "tile:109:57",
+            "parentPos": "tile:110:57"
+          },
+          {
+            "day": 4,
+            "phase": "establishing",
+            "pos": "tile:108:56",
+            "parentPos": "tile:110:57"
+          },
+          {
+            "day": 18,
+            "phase": "returning",
+            "pos": "tile:108:56",
+            "parentPos": "tile:110:57"
+          },
+          {
+            "day": 22,
+            "phase": "reintegrated",
+            "pos": "tile:110:57",
+            "parentPos": "tile:110:57"
+          }
+        ],
+        "note": "before this pass the same scenario stood co-located for 552 days and stabilized falsely on day+530"
+      }
+    },
+    {
+      "id": "RX2_reintegration_happens_on_the_day_of_arrival_not_a_season_later",
+      "claim": "the merge day equals the co-location day; a meeting is not deferred to a boundary",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "firstCoLocationDayOffset": 22,
+        "reintegratedOnDayOffset": 22,
+        "latencyDays": 0
+      }
+    },
+    {
+      "id": "RX3_cohorts_and_population_are_conserved_line_by_line",
+      "claim": "each cohort adds exactly; no fixed-ratio re-derivation manufactures dependents on the way back in",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "cohortsBefore": {
+          "parent": {
+            "workingAdults": 13,
+            "dependents": 9,
+            "elders": 4
+          },
+          "successor": {
+            "workingAdults": 6,
+            "dependents": 2,
+            "elders": 0
+          }
+        },
+        "cohortsAfter": {
+          "workingAdults": 19,
+          "dependents": 11,
+          "elders": 4
+        },
+        "conserved": {
+          "workingAdults": true,
+          "dependents": true,
+          "elders": true
+        },
+        "worldPopAtDeparture": 235,
+        "worldPopAfter": 235,
+        "note": "world population is compared against the post-departure world, which is where these bodies already existed"
+      }
+    },
+    {
+      "id": "RX4_acute_risk_rings_merge_rather_than_one_being_dropped",
+      "claim": "the returning group's burden survives the merge; nobody is healed by walking home",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "parentEpisodesBefore": 10,
+        "successorEpisodesBefore": 10,
+        "mergedEpisodes": 10,
+        "distinctEpisodeIdsAfter": 10,
+        "mergedBandId": "band:varied-river-mid"
+      }
+    },
+    {
+      "id": "RX5_the_entity_is_removed_exactly_once",
+      "claim": "the successor is terminal with zero bodies, and a second sweep neither merges again nor duplicates anybody",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "successorPhase": "reintegrated",
+        "successorStatus": "dispersed",
+        "successorPopulation": 0,
+        "readsAsLiveProvisional": false,
+        "secondSweepReintegrations": 0,
+        "worldPopAfter": 235,
+        "popAfterSecondSweep": 235
+      }
+    },
+    {
+      "id": "RX6_no_reintegration_at_any_distance_greater_than_zero",
+      "claim": "no day on which the group was off its parent's tile was ever accepted, and every returning-phase day was refused specifically for position",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "separatedDaysSampled": 21,
+        "distancesSeen": [
+          1,
+          2,
+          3
+        ],
+        "anyAccepted": 0,
+        "refusalReasons": [
+          "not_physically_co_located",
+          "successor_is_not_returning"
+        ],
+        "daysRefusedForPositionSpecifically": 4,
+        "maxDistanceRefused": 3
+      }
+    },
+    {
+      "id": "RX7_a_stranger_band_cannot_absorb_a_successor_it_did_not_send",
+      "claim": "the parent is read from the successor's own parentBandId, so standing on a stranger's tile reintegrates nobody",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "constructed": true,
+        "strangerBandId": "band:varied-dry-corridor-mid",
+        "strangerTile": "tile:67:110",
+        "successorRecordedParent": "band:varied-river-mid",
+        "ok": false,
+        "refusal": "not_physically_co_located",
+        "strangerPopulationUnchanged": true
+      }
+    },
+    {
+      "id": "RX8_no_later_same_day_system_processes_the_removed_successor",
+      "claim": "reintegration runs before subsistence, return decision and establishment, and a terminal phase makes isProvisionalSuccessor false for all three",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "registryOrder": [
+          "intra-season-trips",
+          "expeditions",
+          "parent_fission_attempt_deadline",
+          "natural_fission_pre_departure",
+          "provisional_travel",
+          "provisional_reintegration",
+          "provisional_travel_subsistence",
+          "provisional_return_decision",
+          "provisional_establishment",
+          "successor_stabilization",
+          "provisional_lifecycle_deadline"
+        ],
+        "actionsAfterReintegration": [
+          "provisional_travel_subsistence",
+          "provisional_return_decision",
+          "provisional_establishment",
+          "successor_stabilization",
+          "provisional_lifecycle_deadline"
+        ],
+        "successorReadsAsLiveProvisional": false,
+        "daysElapsedBefore": 0,
+        "daysElapsedAfterFiveMoreDays": 0,
+        "unchanged": true,
+        "populationStillZero": true,
+        "phaseStill": "reintegrated"
+      }
+    },
+    {
+      "id": "DL1_every_day_declared_bound_resolves_within_one_daily_tick",
+      "claim": "a bound declared in days binds on its declared day, not at the next season boundary",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "boundCases": [
+          {
+            "phase": "returning",
+            "declaredMaxDays": 180,
+            "phaseEnteredDay": 1922,
+            "dueDay": 2102,
+            "firedDay": 2102,
+            "firedTo": "unresolved_after_failed_return",
+            "expectedNext": "unresolved_after_failed_return",
+            "latenessDays": 0,
+            "seasonalOnlyWouldHaveFiredDay": 2160,
+            "seasonalOnlyLatenessDays": 58
+          },
+          {
+            "phase": "travelling",
+            "declaredMaxDays": 180,
+            "phaseEnteredDay": 1922,
+            "dueDay": 2102,
+            "firedDay": 2102,
+            "firedTo": "returning",
+            "expectedNext": "returning",
+            "latenessDays": 0,
+            "seasonalOnlyWouldHaveFiredDay": 2160,
+            "seasonalOnlyLatenessDays": 58
+          },
+          {
+            "phase": "failed_early",
+            "declaredMaxDays": 30,
+            "phaseEnteredDay": 2072,
+            "dueDay": 2102,
+            "firedDay": 2102,
+            "firedTo": "returning",
+            "expectedNext": "returning",
+            "latenessDays": 0,
+            "seasonalOnlyWouldHaveFiredDay": 2160,
+            "seasonalOnlyLatenessDays": 58
+          },
+          {
+            "phase": "establishing",
+            "declaredMaxDays": 360,
+            "phaseEnteredDay": 1742,
+            "dueDay": 2102,
+            "firedDay": 2102,
+            "firedTo": "failed_early",
+            "expectedNext": "failed_early",
+            "latenessDays": 0,
+            "seasonalOnlyWouldHaveFiredDay": 2160,
+            "seasonalOnlyLatenessDays": 58
+          }
+        ],
+        "maxLatenessDays": 0,
+        "maxSeasonalOnlyLatenessDays": 58,
+        "note": "seasonalOnly* is what the single seasonal caller would have produced for the identical bound"
+      }
+    },
+    {
+      "id": "DL2_the_timeout_target_is_the_contract_target",
+      "claim": "each bound resolves into the phase its own contract names, and never into a physical-event phase",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "transitions": [
+          {
+            "phase": "returning",
+            "firedTo": "unresolved_after_failed_return",
+            "expected": "unresolved_after_failed_return"
+          },
+          {
+            "phase": "travelling",
+            "firedTo": "returning",
+            "expected": "returning"
+          },
+          {
+            "phase": "failed_early",
+            "firedTo": "returning",
+            "expected": "returning"
+          },
+          {
+            "phase": "establishing",
+            "firedTo": "failed_early",
+            "expected": "failed_early"
+          }
+        ]
+      }
+    },
+    {
+      "id": "DL3_a_timer_alone_produces_no_physical_terminal_outcome",
+      "claim": "no elapsed-time transition lands in stabilized, reintegrated, extinguished or departed",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "firedTargets": [
+          "unresolved_after_failed_return",
+          "returning",
+          "returning",
+          "failed_early"
+        ],
+        "forbiddenTargets": [
+          "stabilized",
+          "reintegrated",
+          "provisional_extinguished",
+          "departed"
+        ]
+      }
+    },
+    {
+      "id": "DL4_repaired_cadence_is_deterministic",
+      "claim": "the same seed produces the same transition days, including the reintegration day",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "run1": "travelling@+1 establishing@+4 returning@+18 reintegrated@+22",
+        "run2": "travelling@+1 establishing@+4 returning@+18 reintegrated@+22"
+      }
+    }
+  ]
+}

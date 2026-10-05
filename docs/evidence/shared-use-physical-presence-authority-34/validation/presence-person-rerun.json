@@ -1,0 +1,16 @@
+{
+  "audit": "physicalPresenceFixturesAudit",
+  "checkpoint": "CORRECTION-34",
+  "arm": "after",
+  "scenario": "map2",
+  "seed": "audit27:natural:map2:s1",
+  "years": 6,
+  "samplingResolution": "DAILY",
+  "authorityPresentOnThisArm": true,
+  "generatedAt": "2026-08-03T00:13:22.689Z",
+  "purpose": "P22 — residential remainder + away-party people = represented population, every band, every day",
+  "failures": 0,
+  "failureDetail": [],
+  "ghostWorkerDaysStillFullyWeightedAtHome": 0,
+  "awayWorkerDaysRepresentedNowhere": 0
+}

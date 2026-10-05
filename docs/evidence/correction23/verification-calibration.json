@@ -1,0 +1,316 @@
+{
+  "years": 40,
+  "seed": "c23c:cal",
+  "maps": {
+    "map1": {
+      "bandDays": 72000,
+      "launches": 3198,
+      "attemptsRecorded": 3078,
+      "mirror": {
+        "checked": 3078,
+        "agreed": 3078,
+        "agreementRate": 100,
+        "disagreements": []
+      },
+      "outcomeTotals": {
+        "confirmed": 2930,
+        "negative": 67,
+        "inconclusive": 81,
+        "lost": 0,
+        "overallConfirmRate": 95.2
+      },
+      "byQuestion": {
+        "water_access": {
+          "attempts": 1034,
+          "confirmed": 1032,
+          "negative": 2,
+          "inconclusive": 0,
+          "lost": 0,
+          "confirmedRate": 99.8,
+          "predeterminedByEligibility": 1031,
+          "predeterminedRate": 99.7
+        },
+        "resource_presence": {
+          "attempts": 481,
+          "confirmed": 481,
+          "negative": 0,
+          "inconclusive": 0,
+          "lost": 0,
+          "confirmedRate": 100,
+          "predeterminedByEligibility": 480,
+          "predeterminedRate": 99.8
+        },
+        "resource_usability": {
+          "attempts": 283,
+          "confirmed": 240,
+          "negative": 43,
+          "inconclusive": 0,
+          "lost": 0,
+          "confirmedRate": 84.8,
+          "predeterminedByEligibility": 114,
+          "predeterminedRate": 40.3
+        },
+        "temporary_use": {
+          "attempts": 207,
+          "confirmed": 185,
+          "negative": 22,
+          "inconclusive": 0,
+          "lost": 0,
+          "confirmedRate": 89.4,
+          "predeterminedByEligibility": 0,
+          "predeterminedRate": 0
+        },
+        "route_repeatability": {
+          "attempts": 992,
+          "confirmed": 992,
+          "negative": 0,
+          "inconclusive": 0,
+          "lost": 0,
+          "confirmedRate": 100,
+          "predeterminedByEligibility": 992,
+          "predeterminedRate": 100
+        },
+        "seasonal_persistence": {
+          "attempts": 81,
+          "confirmed": 0,
+          "negative": 0,
+          "inconclusive": 81,
+          "lost": 0,
+          "confirmedRate": 0,
+          "predeterminedByEligibility": 81,
+          "predeterminedRate": 100
+        }
+      },
+      "populationVsSelected": {
+        "water_access": {
+          "eligiblePopulation": 4945,
+          "populationConfirmRate": 88.1,
+          "selectedConfirmRate": 99.8
+        },
+        "resource_presence": {
+          "eligiblePopulation": 5588,
+          "populationConfirmRate": 96.9,
+          "selectedConfirmRate": 100
+        },
+        "resource_usability": {
+          "eligiblePopulation": 5648,
+          "populationConfirmRate": 96.9,
+          "selectedConfirmRate": 84.8
+        },
+        "temporary_use": {
+          "eligiblePopulation": 6626,
+          "populationConfirmRate": 54.2,
+          "selectedConfirmRate": 89.4
+        },
+        "route_repeatability": {
+          "eligiblePopulation": 6602,
+          "populationConfirmRate": 100,
+          "selectedConfirmRate": 100
+        },
+        "seasonal_persistence": {
+          "eligiblePopulation": 2646,
+          "populationConfirmRate": 0,
+          "selectedConfirmRate": 0
+        }
+      },
+      "candidateCensus": {
+        "samplePasses": 80,
+        "observedTileRecordsScanned": 6677,
+        "stateShares": {
+          "water_access": {
+            "unknownPct": 0,
+            "knownPoorPct": 22.2,
+            "promisingPct": 74.1,
+            "verifiedUsablePct": 3.7,
+            "verifiedInadequatePct": 0
+          },
+          "resource_presence": {
+            "unknownPct": 0,
+            "knownPoorPct": 14.3,
+            "promisingPct": 83.7,
+            "verifiedUsablePct": 2,
+            "verifiedInadequatePct": 0
+          },
+          "resource_usability": {
+            "unknownPct": 0,
+            "knownPoorPct": 14.3,
+            "promisingPct": 84.6,
+            "verifiedUsablePct": 1,
+            "verifiedInadequatePct": 0.1
+          },
+          "temporary_use": {
+            "unknownPct": 0,
+            "knownPoorPct": 0,
+            "promisingPct": 99.2,
+            "verifiedUsablePct": 0.6,
+            "verifiedInadequatePct": 0.2
+          },
+          "route_repeatability": {
+            "unknownPct": 0,
+            "knownPoorPct": 0,
+            "promisingPct": 98.9,
+            "verifiedUsablePct": 1.1,
+            "verifiedInadequatePct": 0
+          },
+          "seasonal_persistence": {
+            "unknownPct": 0,
+            "knownPoorPct": 0,
+            "promisingPct": 39.6,
+            "verifiedUsablePct": 60.4,
+            "verifiedInadequatePct": 0
+          }
+        }
+      },
+      "launchPolicy": {
+        "launchesWithNeedBelow045_soCausedByNoUsefulRetrievalAlone": 965,
+        "launchesWithNeedAtOrAbove045": 2233,
+        "verificationBandDayShare": 4.4
+      },
+      "distanceTiles": {
+        "n": 3198,
+        "mean": 9.967,
+        "min": 4,
+        "max": 22
+      },
+      "repeatTargets": {
+        "distinctBandTargetPairs": 193,
+        "maxRepeats": 199,
+        "pairsVisitedMoreThanOnce": 138
+      },
+      "sampleAttempts": [
+        {
+          "question": "route_repeatability",
+          "outcome": "confirmed",
+          "predetermined": true,
+          "observedRichness": 0.045,
+          "truthRichness": 0.045,
+          "observedWaterAccess": 0,
+          "truthWaterAccess": 0,
+          "need": 0.32,
+          "acquisition": "residential_observation"
+        },
+        {
+          "question": "route_repeatability",
+          "outcome": "confirmed",
+          "predetermined": true,
+          "observedRichness": 0.014,
+          "truthRichness": 0.014,
+          "observedWaterAccess": 0,
+          "truthWaterAccess": 0,
+          "need": 0.32,
+          "acquisition": "residential_observation"
+        },
+        {
+          "question": "route_repeatability",
+          "outcome": "confirmed",
+          "predetermined": true,
+          "observedRichness": 0,
+          "truthRichness": 0.116,
+          "observedWaterAccess": 0,
+          "truthWaterAccess": 0,
+          "need": 0.32,
+          "acquisition": "returned_frontier_exploration"
+        },
+        {
+          "question": "route_repeatability",
+          "outcome": "confirmed",
+          "predetermined": true,
+          "observedRichness": 0.25,
+          "truthRichness": 0.13,
+          "observedWaterAccess": 0,
+          "truthWaterAccess": 0,
+          "need": 0.32,
+          "acquisition": "returned_frontier_exploration"
+        },
+        {
+          "question": "route_repeatability",
+          "outcome": "confirmed",
+          "predetermined": true,
+          "observedRichness": 0,
+          "truthRichness": 0,
+          "observedWaterAccess": 0,
+          "truthWaterAccess": 0,
+          "need": 0.32,
+          "acquisition": "residential_observation"
+        },
+        {
+          "question": "route_repeatability",
+          "outcome": "confirmed",
+          "predetermined": true,
+          "observedRichness": 0,
+          "truthRichness": 0,
+          "observedWaterAccess": 0,
+          "truthWaterAccess": 0,
+          "need": 0.32,
+          "acquisition": "returned_route_reconnaissance"
+        },
+        {
+          "question": "route_repeatability",
+          "outcome": "confirmed",
+          "predetermined": true,
+          "observedRichness": 0,
+          "truthRichness": 0,
+          "observedWaterAccess": 0,
+          "truthWaterAccess": 0,
+          "need": 0.32,
+          "acquisition": "residential_observation"
+        },
+        {
+          "question": "route_repeatability",
+          "outcome": "confirmed",
+          "predetermined": true,
+          "observedRichness": 0,
+          "truthRichness": 0.12,
+          "observedWaterAccess": 0,
+          "truthWaterAccess": 0,
+          "need": 0.32,
+          "acquisition": "returned_frontier_exploration"
+        },
+        {
+          "question": "route_repeatability",
+          "outcome": "confirmed",
+          "predetermined": true,
+          "observedRichness": 0,
+          "truthRichness": 0,
+          "observedWaterAccess": 0,
+          "truthWaterAccess": 0,
+          "need": 0.32,
+          "acquisition": "returned_route_reconnaissance"
+        },
+        {
+          "question": "route_repeatability",
+          "outcome": "confirmed",
+          "predetermined": true,
+          "observedRichness": 0,
+          "truthRichness": 0.099,
+          "observedWaterAccess": 0,
+          "truthWaterAccess": 0,
+          "need": 0.32,
+          "acquisition": "returned_frontier_exploration"
+        },
+        {
+          "question": "route_repeatability",
+          "outcome": "confirmed",
+          "predetermined": true,
+          "observedRichness": 0,
+          "truthRichness": 0.099,
+          "observedWaterAccess": 0,
+          "truthWaterAccess": 0,
+          "need": 0.32,
+          "acquisition": "returned_frontier_exploration"
+        },
+        {
+          "question": "route_repeatability",
+          "outcome": "confirmed",
+          "predetermined": true,
+          "observedRichness": 0,
+          "truthRichness": 0.121,
+          "observedWaterAccess": 0,
+          "truthWaterAccess": 0,
+          "need": 0.32,
+          "acquisition": "returned_frontier_exploration"
+        }
+      ]
+    }
+  }
+}

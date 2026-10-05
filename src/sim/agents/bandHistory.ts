@@ -20,9 +20,11 @@
 //   fissionEvents ≤12) — never a map scan.
 // ===========================================================================
 
-import type { BandId, RouteId, TickNumber, TileId } from "../core/types";
+import type { BandId, DayNumber, RouteId, TickNumber, TileId } from "../core/types";
 import { getTile } from "../world/generate";
 import type { WorldState } from "../world/types";
+import { getWorldTimeForDay } from "../tick/time";
+import { isBandTerminal, isProvisionalSuccessor } from "./bandLifecycle";
 import type {
   AncestryEntry,
   Band,
@@ -34,6 +36,7 @@ import type {
   BandEraRecord,
   BandFissionEvent,
   BandFoundingSnapshot,
+  FissionLifecycleRecord,
   BandHistoricalEpisode,
   BandHistoryTrackingState,
   BandLineageLink,
@@ -42,6 +45,9 @@ import type {
   InheritedEraSummary,
   OpenEraAccumulator,
   SeasonalHungerClassification,
+  SuccessorDepartureRecord,
+  SuccessorPostReturnEstablishmentEvent,
+  SuccessorStabilizationEvent,
 } from "./types";
 
 export const DEEP_HISTORY_CONSTANTS = {
@@ -92,6 +98,20 @@ export interface DaughterFoundingArgs {
   readonly startingDependents: number;
   readonly startingWorkingAdults: number;
   readonly startingElders: number;
+}
+
+export interface StabilizedSuccessorFoundingArgs {
+  readonly successor: Band;
+  readonly lineage: BandLineageLink;
+  readonly departure: SuccessorDepartureRecord;
+  readonly stabilization: SuccessorStabilizationEvent;
+}
+
+export interface PostReturnEstablishedSuccessorFoundingArgs {
+  readonly successor: Band;
+  readonly lineage: BandLineageLink;
+  readonly departure: SuccessorDepartureRecord;
+  readonly establishment: SuccessorPostReturnEstablishmentEvent;
 }
 
 // ---------------------------------------------------------------------------
@@ -195,6 +215,191 @@ export function createDaughterDeepHistory(
     unknownAtFounding,
   };
 
+  const inherited = deriveInheritedHistory(parent);
+
+  return buildInitialState(
+    args.daughterBandId,
+    founding,
+    inherited.ancestryLine,
+    inherited.inheritedEraSummaries,
+    inherited.inheritedEpisodes,
+    world.time.year,
+    args.foundingTileId,
+    event.daughterPopulation,
+    event.inheritedKnowledgeCount,
+    world.time.tick,
+  );
+}
+
+/**
+ * Found a Direction-D successor on the day positive establishment becomes true.
+ *
+ * This is intentionally separate from `createDaughterDeepHistory`: the legacy helper receives one
+ * instantaneous `BandFissionEvent` and treats its current parent condition as condition "at split".
+ * A provisional successor departed earlier, so reading the parent now would rewrite later state into
+ * the past. Departure facts come from the immutable departure record; unavailable parent-condition
+ * facts remain explicitly unknown; current successor facts are stamped at stabilization.
+ */
+export function createStabilizedSuccessorDeepHistory(
+  world: WorldState,
+  parent: Band,
+  args: StabilizedSuccessorFoundingArgs,
+): BandDeepHistoryState {
+  const { successor, lineage, departure, stabilization } = args;
+  const tile = getTile(world, successor.position);
+  const currentKnownTileCount = Object.keys(successor.knowledge.observedTiles).length;
+  const currentPlaceMemoryCount = Object.keys(successor.placeMemory ?? {}).length;
+  const currentCorridorCount = Object.keys(successor.travelCorridors ?? {}).length;
+  const currentCrossingCount = Object.keys(successor.crossingMemories ?? {}).length;
+  const founding: BandFoundingSnapshot = {
+    bandId: successor.id,
+    kind: "fission_daughter",
+    foundedAt: stabilization.time,
+    foundingTileId: successor.position,
+    foundingTileWaterAccess: tile === undefined ? undefined : round2(tile.resourceProfile.waterAccess),
+    foundingTileIsRiverbank: tile?.isRiverbank,
+    foundingTileIsCoastal: tile?.isCoastal,
+    foundingTileIsFloodplain: tile?.isFloodplain,
+    creationCause: "independent_operation_stabilized",
+    creationReasonIds: stabilization.reasonIds.slice(0, C.MAX_EVIDENCE_IDS_PER_REF),
+    startingPopulation: successor.demography.population,
+    startingDependents: successor.demography.dependents,
+    startingWorkingAdults: successor.demography.workingAdults,
+    startingElders: successor.demography.elders,
+    startingKnownTileCount: currentKnownTileCount,
+    startingPlaceMemoryCount: currentPlaceMemoryCount,
+    startingCorridorCount: currentCorridorCount,
+    startingCrossingCount: currentCrossingCount,
+    parentBandId: parent.id,
+    parentOriginTileId: departure.originTileId,
+    relation: lineage.relation,
+    parentPopulationBefore: departure.parentPopulationBefore,
+    // These four fields were NOT captured at departure. Reading the parent on stabilization day
+    // would be a false historical timestamp, so undefined is the only honest value.
+    parentFoodStressAtSplit: undefined,
+    parentWaterStressAtSplit: undefined,
+    parentHungerClassificationAtSplit: undefined,
+    parentExtinctionRiskAtSplit: undefined,
+    inheritedKnowledgeCount: departure.inheritedKnowledgeCount,
+    inheritedMemoryCount: departure.inheritedMemoryCount,
+    inheritedCorridorCount: departure.inheritedCorridorCount,
+    inheritedCrossingCount: departure.inheritedCrossingCount,
+    evidence: [
+      { kind: "successor_departure_event", ids: [String(departure.id)] },
+      { kind: "successor_stabilization_event", ids: [String(stabilization.id)] },
+      { kind: "lineage_link", ids: lineage.reasonIds.slice(0, C.MAX_EVIDENCE_IDS_PER_REF).map(String) },
+    ],
+    unknownAtFounding: [
+      "parentFoodStressAtSplit_notRecordedAtDeparture",
+      "parentWaterStressAtSplit_notRecordedAtDeparture",
+      "parentHungerClassificationAtSplit_notRecordedAtDeparture",
+      "parentExtinctionRiskAtSplit_notRecordedAtDeparture",
+    ],
+  };
+  const inherited = deriveInheritedHistory(parent);
+
+  const initial = buildInitialState(
+    successor.id,
+    founding,
+    inherited.ancestryLine,
+    inherited.inheritedEraSummaries,
+    inherited.inheritedEpisodes,
+    stabilization.time.year,
+    successor.position,
+    successor.demography.population,
+    currentKnownTileCount,
+    stabilization.tick,
+  );
+  return projectSuccessorSeparationLifecycleHistory(
+    initial,
+    departure,
+    successor,
+    stabilization.time.year,
+  );
+}
+
+/** Found a successor without erasing its failed-return episode or relabelling it stabilization. */
+export function createPostReturnEstablishedSuccessorDeepHistory(
+  world: WorldState,
+  parent: Band,
+  args: PostReturnEstablishedSuccessorFoundingArgs,
+): BandDeepHistoryState {
+  const { successor, lineage, departure, establishment } = args;
+  const tile = getTile(world, successor.position);
+  const known = Object.keys(successor.knowledge.observedTiles).length;
+  const memories = Object.keys(successor.placeMemory ?? {}).length;
+  const corridors = Object.keys(successor.travelCorridors ?? {}).length;
+  const crossings = Object.keys(successor.crossingMemories ?? {}).length;
+  const founding: BandFoundingSnapshot = {
+    bandId: successor.id,
+    kind: "fission_daughter",
+    foundedAt: establishment.time,
+    foundingTileId: successor.position,
+    foundingTileWaterAccess: tile === undefined ? undefined : round2(tile.resourceProfile.waterAccess),
+    foundingTileIsRiverbank: tile?.isRiverbank,
+    foundingTileIsCoastal: tile?.isCoastal,
+    foundingTileIsFloodplain: tile?.isFloodplain,
+    creationCause: "independent_life_established_after_failed_return",
+    creationReasonIds: establishment.reasonIds.slice(0, C.MAX_EVIDENCE_IDS_PER_REF),
+    startingPopulation: successor.demography.population,
+    startingDependents: successor.demography.dependents,
+    startingWorkingAdults: successor.demography.workingAdults,
+    startingElders: successor.demography.elders,
+    startingKnownTileCount: known,
+    startingPlaceMemoryCount: memories,
+    startingCorridorCount: corridors,
+    startingCrossingCount: crossings,
+    parentBandId: parent.id,
+    parentOriginTileId: departure.originTileId,
+    relation: lineage.relation,
+    parentPopulationBefore: departure.parentPopulationBefore,
+    parentFoodStressAtSplit: undefined,
+    parentWaterStressAtSplit: undefined,
+    parentHungerClassificationAtSplit: undefined,
+    parentExtinctionRiskAtSplit: undefined,
+    inheritedKnowledgeCount: departure.inheritedKnowledgeCount,
+    inheritedMemoryCount: departure.inheritedMemoryCount,
+    inheritedCorridorCount: departure.inheritedCorridorCount,
+    inheritedCrossingCount: departure.inheritedCrossingCount,
+    evidence: [
+      { kind: "successor_departure_event", ids: [String(departure.id)] },
+      { kind: "post_return_continuation_commitment", ids: [establishment.continuationCommitment.commitmentId] },
+      { kind: "successor_post_return_establishment_event", ids: [String(establishment.id)] },
+      { kind: "lineage_link", ids: lineage.reasonIds.slice(0, C.MAX_EVIDENCE_IDS_PER_REF).map(String) },
+    ],
+    unknownAtFounding: [
+      "parentFoodStressAtSplit_notRecordedAtDeparture",
+      "parentWaterStressAtSplit_notRecordedAtDeparture",
+      "parentHungerClassificationAtSplit_notRecordedAtDeparture",
+      "parentExtinctionRiskAtSplit_notRecordedAtDeparture",
+    ],
+  };
+  const inherited = deriveInheritedHistory(parent);
+  const initial = buildInitialState(
+    successor.id,
+    founding,
+    inherited.ancestryLine,
+    inherited.inheritedEraSummaries,
+    inherited.inheritedEpisodes,
+    establishment.time.year,
+    successor.position,
+    successor.demography.population,
+    known,
+    establishment.tick,
+  );
+  return projectSuccessorSeparationLifecycleHistory(
+    initial,
+    departure,
+    successor,
+    establishment.time.year,
+  );
+}
+
+function deriveInheritedHistory(parent: Band): {
+  readonly ancestryLine: readonly AncestryEntry[];
+  readonly inheritedEraSummaries: readonly InheritedEraSummary[];
+  readonly inheritedEpisodes: readonly BandHistoricalEpisode[];
+} {
   const parentHistory = parent.deepHistory;
   const ancestryLine: AncestryEntry[] = [
     ...(parentHistory?.ancestryLine ?? []),
@@ -228,19 +433,166 @@ export function createDaughterDeepHistory(
         { kind: "inherited_summary", ids: [String(parent.id)] },
       ]),
     }));
+  return { ancestryLine, inheritedEraSummaries, inheritedEpisodes };
+}
 
-  return buildInitialState(
-    args.daughterBandId,
-    founding,
-    ancestryLine,
-    inheritedEraSummaries,
-    inheritedEpisodes,
-    world.time.year,
-    args.foundingTileId,
-    event.daughterPopulation,
-    event.inheritedKnowledgeCount,
-    world.time.tick,
+interface SuccessorLifecycleProjection {
+  readonly departure: SuccessorDepartureRecord;
+  readonly successor?: Band;
+  readonly lifecycle?: FissionLifecycleRecord;
+}
+
+/**
+ * Join a physical departure to the one successor record it names. This is deliberately a read model:
+ * no phase is reconstructed from elapsed time, population, location, or endpoint events.
+ */
+function deriveSuccessorLifecycleProjection(
+  world: WorldState,
+  departure: SuccessorDepartureRecord,
+): SuccessorLifecycleProjection {
+  const successor = world.bands[departure.successorBandId];
+  const lifecycle =
+    successor?.provisionalSuccessor?.lineageId === departure.lineageId
+      ? successor.provisionalSuccessor
+      : undefined;
+  return { departure, successor, lifecycle };
+}
+
+function lifecycleOutcomeDetail(phase: FissionLifecycleRecord["phase"] | undefined): Readonly<Record<string, number>> {
+  return {
+    terminalOutcomeStabilized: phase === "stabilized" ? 1 : 0,
+    terminalOutcomeEstablishedAfterFailedReturn: phase === "established_after_failed_return" ? 1 : 0,
+    terminalOutcomeReintegrated: phase === "reintegrated" ? 1 : 0,
+    terminalOutcomeProvisionalExtinguished: phase === "provisional_extinguished" ? 1 : 0,
+  };
+}
+
+function lifecycleSummary(phase: FissionLifecycleRecord["phase"] | undefined): string {
+  switch (phase) {
+    case "stabilized": return "a physically separated successor stabilized as an established band";
+    case "established_after_failed_return": return "a successor established independent life after a failed return";
+    case "reintegrated": return "a physically separated successor returned and rejoined its parent";
+    case "provisional_extinguished": return "a physically separated successor died before establishment";
+    case undefined: return "a physical successor departure is recorded but its matching lifecycle record is unavailable";
+    default: return `a physically separated successor remains in canonical phase ${phase}`;
+  }
+}
+
+function upsertSuccessorSeparationLifecycleEpisode(
+  ownerBandId: BandId,
+  existing: readonly BandHistoricalEpisode[],
+  departure: SuccessorDepartureRecord,
+  successor: Band | undefined,
+  lifecycle: FissionLifecycleRecord | undefined,
+  observedYear: number,
+): readonly BandHistoricalEpisode[] {
+  const id = `episode:${String(ownerBandId)}:successor_separation_lifecycle:${departure.lineageId}`;
+  const matched = successor !== undefined && lifecycle !== undefined;
+  const ongoing = matched && isProvisionalSuccessor(successor);
+  const terminal = matched && !ongoing;
+  const terminalYear = terminal ? getWorldTimeForDay(lifecycle.phaseEnteredDay as DayNumber).year : undefined;
+  const path = lifecycle === undefined ? undefined : [...lifecycle.history, lifecycle.phase];
+  const evidence: HistoryEvidenceRef[] = [
+    { kind: "successor_departure_event", ids: [String(departure.id)] },
+    ...(lifecycle === undefined
+      ? []
+      : [{
+          kind: "successor_lifecycle_record" as const,
+          ids: [
+            String(lifecycle.lineageId),
+            `phase:${lifecycle.phase}`,
+            `path:${path?.join(">") ?? lifecycle.phase}`,
+          ],
+        }]),
+  ];
+  const prior = existing.find((episode) => episode.id === id);
+  const episode: BandHistoricalEpisode = {
+    id,
+    type: "successor_separation_lifecycle",
+    startYear: departure.time.year,
+    endYear: terminalYear,
+    ongoing,
+    severity: round2(clamp01(
+      departure.parentPopulationBefore <= 0
+        ? 0
+        : departure.successorPopulationAtDeparture / departure.parentPopulationBefore,
+    )),
+    relatedTileId: departure.targetTileId,
+    relatedBandId: departure.successorBandId,
+    summary: lifecycleSummary(lifecycle?.phase),
+    detail: {
+      departedOnDay: departure.departedOnDay,
+      successorPopulationAtDeparture: departure.successorPopulationAtDeparture,
+      parentPopulationBefore: departure.parentPopulationBefore,
+      parentPopulationAfter: departure.parentPopulationAfter,
+      lifecycleRecordMatched: matched ? 1 : 0,
+      lifecyclePhaseEnteredDay: lifecycle?.phaseEnteredDay ?? departure.departedOnDay,
+      lifecycleHistoryLength: path?.length ?? 0,
+      returnPathEntered: lifecycle?.separationCourse?.status === "return_path_entered" ? 1 : 0,
+      ...lifecycleOutcomeDetail(lifecycle?.phase),
+    },
+    evidence: capRefs(evidence),
+    recordKind: "recorded_event",
+    confidence: matched ? 1 : 0.5,
+    occurrenceCount: prior?.occurrenceCount ?? 1,
+    lastUpdatedYear: terminalYear ?? (matched ? observedYear : departure.time.year),
+    provenance: "lived",
+  };
+  return [...existing.filter((entry) => entry.id !== id), episode]
+    .sort((left, right) => (left.startYear - right.startYear) || left.id.localeCompare(right.id));
+}
+
+/**
+ * Shared projection used by both the parent's annual history view and the successor's own founding
+ * history. It copies only canonical retained records and remains behaviorally inert.
+ */
+export function projectSuccessorSeparationLifecycleHistory(
+  history: BandDeepHistoryState,
+  departure: SuccessorDepartureRecord,
+  successor: Band,
+  observedYear: number,
+): BandDeepHistoryState {
+  const lifecycle = successor.provisionalSuccessor?.lineageId === departure.lineageId
+    ? successor.provisionalSuccessor
+    : undefined;
+  const episodes = upsertSuccessorSeparationLifecycleEpisode(
+    history.bandId,
+    history.episodes,
+    departure,
+    successor,
+    lifecycle,
+    observedYear,
   );
+  const protectedEpisodeIds = new Set([
+    `episode:${String(history.bandId)}:successor_separation_lifecycle:${departure.lineageId}`,
+  ]);
+  const capped = capEpisodes(episodes, protectedEpisodeIds);
+  return finalizeCappedHistoryState(
+    { ...history, episodes: capped.episodes, payloadBytesEstimate: 0 },
+    history.caps.erasMergedCount,
+    history.caps.episodesDroppedCount + capped.droppedCount,
+    protectedEpisodeIds,
+  );
+}
+
+function projectRecordedSuccessorLifecycles(
+  world: WorldState,
+  band: Band,
+  history: BandDeepHistoryState,
+): BandDeepHistoryState {
+  let episodes = history.episodes;
+  for (const departure of band.successorDepartureRecords ?? []) {
+    const projection = deriveSuccessorLifecycleProjection(world, departure);
+    episodes = upsertSuccessorSeparationLifecycleEpisode(
+      band.id,
+      episodes,
+      departure,
+      projection.successor,
+      projection.lifecycle,
+      world.time.year,
+    );
+  }
+  return episodes === history.episodes ? history : { ...history, episodes };
 }
 
 function buildInitialState(
@@ -338,12 +690,7 @@ function advanceBandDeepHistoryForYear(world: WorldState, band: Band): Band {
     return band;
   }
 
-  const dead =
-    band.status === "dispersed" ||
-    band.viability?.status === "absorbed" ||
-    band.viability?.status === "extinct";
-
-  if (dead) {
+  if (isBandTerminal(band)) {
     if (history.terminalRecord !== undefined) {
       return band;
     }
@@ -369,6 +716,8 @@ interface YearObservation {
   readonly waterStressSeasonsLast8: number;
   readonly extinctionRisk: number;
   readonly newFissionEvents: readonly BandFissionEvent[];
+  readonly newSuccessorStabilizations: readonly SuccessorStabilizationEvent[];
+  readonly newPostReturnEstablishments: readonly SuccessorPostReturnEstablishmentEvent[];
   readonly movesThisYear: number;
   readonly knownBreadth: number;
   readonly fallbackFoodReliance: number;
@@ -392,6 +741,19 @@ function collectYearObservation(band: Band, tracking: BandHistoryTrackingState, 
     waterStressSeasonsLast8: support?.waterStressSeasonsLast8 ?? 0,
     extinctionRisk: band.viability?.extinctionRisk ?? 0,
     newFissionEvents: band.fissionEvents.filter((event) => event.tick > tracking.lastObservedTick),
+    // Daily stabilization may occur inside the same seasonal tick as the last yearly observation,
+    // so tick-only comparison would lose a day-1 event at tick 0 forever. The event owns its exact
+    // simulated day; yearly history owns an exact prior-year boundary.
+    newSuccessorStabilizations: (band.successorStabilizationEvents ?? []).filter(
+      (event) =>
+        String(event.parentBandId) === String(band.id) &&
+        event.stabilizedOnDay > tracking.lastObservedYear * 360,
+    ),
+    newPostReturnEstablishments: (band.successorPostReturnEstablishmentEvents ?? []).filter(
+      (event) =>
+        String(event.parentBandId) === String(band.id) &&
+        event.establishedOnDay > tracking.lastObservedYear * 360,
+    ),
     movesThisYear: band.movementHistory.filter((record) => record.tick > tracking.lastObservedTick).length,
     knownBreadth: deriveKnownBreadth(band),
     fallbackFoodReliance: band.ecologicalStressCauses?.fallbackFoodReliance ?? 0,
@@ -401,13 +763,15 @@ function collectYearObservation(band: Band, tracking: BandHistoryTrackingState, 
 
 function observeYear(world: WorldState, band: Band, history: BandDeepHistoryState): BandDeepHistoryState {
   const year = world.time.year;
-  const observation = collectYearObservation(band, history.tracking, year);
-  const tracking = advanceTracking(history.tracking, observation, world.time.tick);
-  const episodesAfterDetection = detectEpisodes(band, history, observation, tracking);
-  const { episodes, droppedCount } = capEpisodes(episodesAfterDetection);
-  const openEra = accumulateEra(world, band, history.openEra, observation);
+  const projectedHistory = projectRecordedSuccessorLifecycles(world, band, history);
+  const observation = collectYearObservation(band, projectedHistory.tracking, year);
+  const tracking = advanceTracking(projectedHistory.tracking, observation, world.time.tick);
+  const episodesAfterDetection = detectEpisodes(band, projectedHistory, observation, tracking);
+  const protectedLifecycleEpisodeIds = retainedSuccessorLifecycleEpisodeIds(band);
+  const { episodes, droppedCount } = capEpisodes(episodesAfterDetection, protectedLifecycleEpisodeIds);
+  const openEra = accumulateEra(world, band, projectedHistory.openEra, observation);
   const closeTrigger = openEra === undefined ? undefined : deriveEraCloseTrigger(openEra, observation, episodes, year);
-  let eras = history.eras;
+  let eras = projectedHistory.eras;
   let nextOpenEra = openEra;
 
   if (openEra !== undefined && closeTrigger !== undefined) {
@@ -432,7 +796,7 @@ function observeYear(world: WorldState, band: Band, history: BandDeepHistoryStat
     };
   }
 
-  let erasMergedCount = history.caps.erasMergedCount;
+  let erasMergedCount = projectedHistory.caps.erasMergedCount;
 
   while (eras.length > C.MAX_ERA_RECORDS) {
     eras = [mergeEras(eras[0], eras[1]), ...eras.slice(2)];
@@ -440,17 +804,22 @@ function observeYear(world: WorldState, band: Band, history: BandDeepHistoryStat
   }
 
   const next: BandDeepHistoryState = {
-    ...history,
+    ...projectedHistory,
     eras,
     openEra: nextOpenEra,
     episodes,
     tracking,
-    caps: makeCaps(erasMergedCount, history.caps.episodesDroppedCount + droppedCount, true),
+    caps: makeCaps(erasMergedCount, projectedHistory.caps.episodesDroppedCount + droppedCount, true),
     lastAdvancedYear: year,
     payloadBytesEstimate: 0,
   };
 
-  return finalizeCappedHistoryState(next, erasMergedCount, history.caps.episodesDroppedCount + droppedCount);
+  return finalizeCappedHistoryState(
+    next,
+    erasMergedCount,
+    projectedHistory.caps.episodesDroppedCount + droppedCount,
+    protectedLifecycleEpisodeIds,
+  );
 }
 
 function advanceTracking(
@@ -539,6 +908,51 @@ function detectEpisodes(
       confidence: 1,
       relatedBandId: event.daughterBandId,
       relatedTileId: event.targetTileId,
+    });
+  }
+
+  // Direction-D daughter_branch_formed — only after positive stabilization, never at departure.
+  for (const event of observation.newSuccessorStabilizations) {
+    drafts.push({
+      type: "daughter_branch_formed",
+      subjectKey: String(event.successorBandId),
+      startYear: event.time.year,
+      ongoing: false,
+      severity: clamp01(event.successorPopulationAtStabilization / 30),
+      summary: `a provisional successor became an established band of ${event.successorPopulationAtStabilization} people`,
+      detail: {
+        successorPopulationAtStabilization: event.successorPopulationAtStabilization,
+        operationDays: event.independentOperation.assessmentWindow.days,
+        year: event.time.year,
+      },
+      evidence: [{ kind: "successor_stabilization_event", ids: [String(event.id)] }],
+      recordKind: "recorded_event",
+      confidence: 1,
+      relatedBandId: event.successorBandId,
+      relatedTileId: event.stabilizedTileId,
+    });
+  }
+
+  // Distinct from ordinary stabilization: the failed return and fresh decision remain visible.
+  for (const event of observation.newPostReturnEstablishments) {
+    drafts.push({
+      type: "daughter_branch_formed",
+      subjectKey: String(event.successorBandId),
+      startYear: event.time.year,
+      ongoing: false,
+      severity: clamp01(event.successorPopulationAtEstablishment / 30),
+      summary: `a successor rebuilt independent life after a failed return with ${event.successorPopulationAtEstablishment} people`,
+      detail: {
+        successorPopulationAtEstablishment: event.successorPopulationAtEstablishment,
+        postCommitmentOperationDays: event.independentOperation.assessmentWindow.days,
+        failedReturnBeganOnDay: event.failedReturnBeganOnDay,
+        year: event.time.year,
+      },
+      evidence: [{ kind: "successor_post_return_establishment_event", ids: [String(event.id)] }],
+      recordKind: "recorded_event",
+      confidence: 1,
+      relatedBandId: event.successorBandId,
+      relatedTileId: event.establishedTileId,
     });
   }
 
@@ -841,7 +1255,12 @@ function foldEpisodeDrafts(
   const episodes: BandHistoricalEpisode[] = [];
 
   for (const episode of byId.values()) {
-    if (episode.provenance === "lived" && episode.ongoing && !touchedOngoingIds.has(episode.id)) {
+    if (
+      episode.type !== "successor_separation_lifecycle" &&
+      episode.provenance === "lived" &&
+      episode.ongoing &&
+      !touchedOngoingIds.has(episode.id)
+    ) {
       episodes.push({ ...episode, ongoing: false, endYear: episode.lastUpdatedYear });
     } else {
       episodes.push(episode);
@@ -855,6 +1274,7 @@ const EPISODE_TYPE_WEIGHT: Readonly<Record<BandEpisodeType, number>> = {
   population_thinned: 0.5,
   population_recovered: 0.5,
   daughter_branch_formed: 1,
+  successor_separation_lifecycle: 1,
   long_hunger_period: 0.6,
   water_caution_period: 0.3,
   route_became_memory: 0.2,
@@ -867,7 +1287,18 @@ const EPISODE_TYPE_WEIGHT: Readonly<Record<BandEpisodeType, number>> = {
   band_collapsed_end: 2,
 };
 
-function capEpisodes(episodes: readonly BandHistoricalEpisode[]): {
+function retainedSuccessorLifecycleEpisodeIds(band: Band): ReadonlySet<string> {
+  return new Set(
+    (band.successorDepartureRecords ?? []).map(
+      (departure) => `episode:${String(band.id)}:successor_separation_lifecycle:${departure.lineageId}`,
+    ),
+  );
+}
+
+function capEpisodes(
+  episodes: readonly BandHistoricalEpisode[],
+  protectedEpisodeIds: ReadonlySet<string> = new Set(),
+): {
   readonly episodes: readonly BandHistoricalEpisode[];
   readonly droppedCount: number;
 } {
@@ -875,21 +1306,34 @@ function capEpisodes(episodes: readonly BandHistoricalEpisode[]): {
     return { episodes, droppedCount: 0 };
   }
 
-  const scored = [...episodes].sort((left, right) => {
-    const leftScore = episodeSignificance(left);
-    const rightScore = episodeSignificance(right);
+  const protectedEpisodes = episodes
+    .filter((episode) => protectedEpisodeIds.has(episode.id))
+    .sort((left, right) => left.id.localeCompare(right.id));
+  const remainingSlots = Math.max(0, C.MAX_EPISODES - protectedEpisodes.length);
+  const scored = episodes
+    .filter((episode) => !protectedEpisodeIds.has(episode.id))
+    .sort((left, right) => {
+      const leftScore = episodeSignificance(left);
+      const rightScore = episodeSignificance(right);
 
-    if (leftScore !== rightScore) {
-      return rightScore - leftScore;
-    }
+      if (leftScore !== rightScore) {
+        return rightScore - leftScore;
+      }
 
-    return left.id.localeCompare(right.id);
-  });
-  const kept = new Set(scored.slice(0, C.MAX_EPISODES).map((episode) => episode.id));
+      return left.id.localeCompare(right.id);
+    });
+  // Current successor-departure history is capped at 12, so protected rows cannot fill the 28-slot
+  // deep-history ring in valid state. The slice is a deterministic corruption fallback, not a normal
+  // path.
+  const protectedKept = protectedEpisodes.slice(0, C.MAX_EPISODES);
+  const kept = new Set([
+    ...protectedKept.map((episode) => episode.id),
+    ...scored.slice(0, remainingSlots).map((episode) => episode.id),
+  ]);
 
   return {
     episodes: episodes.filter((episode) => kept.has(episode.id)),
-    droppedCount: episodes.length - C.MAX_EPISODES,
+    droppedCount: episodes.length - kept.size,
   };
 }
 
@@ -928,10 +1372,16 @@ function accumulateEra(
     hungerYears: openEra.hungerYears + (isChronicHunger(observation.hungerClassification) ? 1 : 0),
     waterStressYears: openEra.waterStressYears + (isWaterStress(observation.hungerClassification) ? 1 : 0),
     recoveryYears: openEra.recoveryYears + (isRecovery(observation.hungerClassification) ? 1 : 0),
-    fissionCount: openEra.fissionCount + observation.newFissionEvents.length,
+    fissionCount:
+      openEra.fissionCount +
+      observation.newFissionEvents.length +
+      observation.newSuccessorStabilizations.length +
+      observation.newPostReturnEstablishments.length,
     daughterBandIds: [
       ...openEra.daughterBandIds,
       ...observation.newFissionEvents.map((event) => event.daughterBandId),
+      ...observation.newSuccessorStabilizations.map((event) => event.successorBandId),
+      ...observation.newPostReturnEstablishments.map((event) => event.successorBandId),
     ].slice(0, C.MAX_DAUGHTER_IDS_PER_ERA),
     movesCount: openEra.movesCount + observation.movesThisYear,
     yearsAccumulated: openEra.yearsAccumulated + 1,
@@ -965,7 +1415,12 @@ function deriveEraCloseTrigger(
     return "population_recovery";
   }
 
-  if (canEventClose && observation.newFissionEvents.length > 0) {
+  if (
+    canEventClose &&
+    (observation.newFissionEvents.length > 0 ||
+      observation.newSuccessorStabilizations.length > 0 ||
+      observation.newPostReturnEstablishments.length > 0)
+  ) {
     return "fission";
   }
 
@@ -1125,7 +1580,8 @@ function recordTerminalHistory(
   history: BandDeepHistoryState,
 ): BandDeepHistoryState {
   const viability = band.viability;
-  const absorbed = viability?.status === "absorbed";
+  const terminalStatus = viability?.status;
+  const absorbed = terminalStatus === "absorbed";
   const terminalTrace = [...band.causalTraces]
     .reverse()
     .find((trace) => trace.kind === "band_absorbed" || trace.kind === "band_extinct");
@@ -1175,10 +1631,12 @@ function recordTerminalHistory(
     erasMergedCount += 1;
   }
 
+  const protectedLifecycleEpisodeIds = retainedSuccessorLifecycleEpisodeIds(band);
   const { episodes, droppedCount } = capEpisodes(
     [...history.episodes.map((episode) => (episode.ongoing ? { ...episode, ongoing: false, endYear: episode.lastUpdatedYear } : episode)), terminalEpisode].sort(
       (left, right) => (left.startYear - right.startYear) || left.id.localeCompare(right.id),
     ),
+    protectedLifecycleEpisodeIds,
   );
   const next: BandDeepHistoryState = {
     ...history,
@@ -1191,7 +1649,12 @@ function recordTerminalHistory(
     payloadBytesEstimate: 0,
   };
 
-  return finalizeCappedHistoryState(next, erasMergedCount, history.caps.episodesDroppedCount + droppedCount);
+  return finalizeCappedHistoryState(
+    next,
+    erasMergedCount,
+    history.caps.episodesDroppedCount + droppedCount,
+    protectedLifecycleEpisodeIds,
+  );
 }
 
 // ---------------------------------------------------------------------------
@@ -1202,6 +1665,7 @@ function finalizeCappedHistoryState(
   state: BandDeepHistoryState,
   erasMergedCount: number,
   episodesDroppedCount: number,
+  protectedEpisodeIds: ReadonlySet<string> = new Set(),
 ): BandDeepHistoryState {
   let eras = [...state.eras];
   let episodes = [...state.episodes];
@@ -1231,7 +1695,9 @@ function finalizeCappedHistoryState(
   }
 
   while (payloadBytesEstimate > C.PAYLOAD_SOFT_CAP_BYTES && episodes.length > 0) {
-    episodes = dropLeastSignificantEpisode(episodes);
+    const reduced = dropLeastSignificantEpisode(episodes, protectedEpisodeIds);
+    if (reduced.length === episodes.length) break;
+    episodes = reduced;
     droppedCount += 1;
     next = { ...next, episodes, caps: makeCaps(mergedCount, droppedCount, true), payloadBytesEstimate: 0 };
     payloadBytesEstimate = estimatePayloadBytes(next);
@@ -1254,8 +1720,9 @@ function finalizeCappedHistoryState(
 
 function dropLeastSignificantEpisode(
   episodes: readonly BandHistoricalEpisode[],
+  protectedEpisodeIds: ReadonlySet<string> = new Set(),
 ): BandHistoricalEpisode[] {
-  const drop = [...episodes].sort((left, right) => {
+  const drop = episodes.filter((episode) => !protectedEpisodeIds.has(episode.id)).sort((left, right) => {
     const scoreDiff = episodeSignificance(left) - episodeSignificance(right);
 
     if (scoreDiff !== 0) {

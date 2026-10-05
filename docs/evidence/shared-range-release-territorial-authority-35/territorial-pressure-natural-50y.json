@@ -1,0 +1,24 @@
+{
+  "audit": "CORRECTION-35-TERRITORIAL-PRESSURE-NATURAL",
+  "note": "Extracted from release-territorial-natural-50y.json, which measures both halves of this checkpoint in one pass over the same world. Published under this name so the evidence manifest reads plainly; the source file is the authority.",
+  "seed": "audit27:natural:s1",
+  "years": 50,
+  "days": 18000,
+  "samplingCadence": "daily (stored field)",
+  "territorialPressure": {
+    "bandDaysSampled": 162000,
+    "distinctBandValues": [
+      0.12
+    ],
+    "valueChangesOutsideDaughterCreation": 0,
+    "daughterCreationsObserved": 0,
+    "bandsWithNoSocialEvidenceHoldingNonZeroValue": 131848,
+    "socialPressureProfileValues": [
+      0.08
+    ],
+    "changeExamples": [],
+    "bandsProbedOnFinalWorld": 9,
+    "bandsWhereVaryingTheFieldMovedPressure": 0,
+    "interpretation": "varying the field across its whole range moves no band's pressure on the final natural world"
+  }
+}

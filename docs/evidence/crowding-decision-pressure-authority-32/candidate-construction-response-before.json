@@ -1,0 +1,400 @@
+{
+  "audit": "crowdingAttributionInstrumentAudit",
+  "checkpoint": "CORRECTION-32A",
+  "supersedes": "crowdingDecisionAttributionAudit.mjs (whole-candidate score subtraction)",
+  "arm": "before",
+  "seed": "c32:attribution",
+  "seasons": 14,
+  "generatedAt": "2026-08-02T18:41:56.344Z",
+  "purpose": "9.3 BEHAVIOURAL candidate-construction response ONLY. Whether the candidate set, the availability of a family, or the selected action changed when crowding was removed. These are NOT score attributions and must never be summarised as crowding magnitude.",
+  "summary": {
+    "bandsMeasured": 13,
+    "selectionsChangedByCrowding": 0,
+    "candidateSetChanged": 0,
+    "familySetChanged": 0
+  },
+  "results": [
+    {
+      "label": "F1_adjacent_pair_rich",
+      "bandId": "band:custom:0",
+      "source": {
+        "weightedCrowding": 0.15,
+        "nearbyBandCount": 1,
+        "crowdingBandIds": [
+          "band:custom:1"
+        ],
+        "crowdingPenalty": 0.06
+      },
+      "selectedFull": "move_to_tile:tile:194:90",
+      "selectedZeroCrowding": "move_to_tile:tile:194:90",
+      "selectionChangedByCrowding": false,
+      "candidateSetChanged": false,
+      "onlyInFull": [],
+      "onlyInControl": [],
+      "familiesFull": [
+        "logistical_probe",
+        "move_to_tile",
+        "resource_scout",
+        "stay"
+      ],
+      "familiesControl": [
+        "logistical_probe",
+        "move_to_tile",
+        "resource_scout",
+        "stay"
+      ]
+    },
+    {
+      "label": "F2_solo_control_rich",
+      "bandId": "band:custom:0",
+      "source": {
+        "weightedCrowding": 0,
+        "nearbyBandCount": 0,
+        "crowdingBandIds": [],
+        "crowdingPenalty": 0
+      },
+      "selectedFull": "move_to_tile:tile:194:90",
+      "selectedZeroCrowding": "move_to_tile:tile:194:90",
+      "selectionChangedByCrowding": false,
+      "candidateSetChanged": false,
+      "onlyInFull": [],
+      "onlyInControl": [],
+      "familiesFull": [
+        "logistical_probe",
+        "move_to_tile",
+        "resource_scout",
+        "stay"
+      ],
+      "familiesControl": [
+        "logistical_probe",
+        "move_to_tile",
+        "resource_scout",
+        "stay"
+      ]
+    },
+    {
+      "label": "F3_adjacent_pair_dry",
+      "bandId": "band:custom:0",
+      "source": {
+        "weightedCrowding": 0.21,
+        "nearbyBandCount": 1,
+        "crowdingBandIds": [
+          "band:custom:1"
+        ],
+        "crowdingPenalty": 0.14
+      },
+      "selectedFull": "logistical_probe:tile:58:133",
+      "selectedZeroCrowding": "logistical_probe:tile:58:133",
+      "selectionChangedByCrowding": false,
+      "candidateSetChanged": false,
+      "onlyInFull": [],
+      "onlyInControl": [],
+      "familiesFull": [
+        "logistical_probe",
+        "move_to_tile",
+        "resource_scout",
+        "stay"
+      ],
+      "familiesControl": [
+        "logistical_probe",
+        "move_to_tile",
+        "resource_scout",
+        "stay"
+      ]
+    },
+    {
+      "label": "F4_three_neighbours_rich",
+      "bandId": "band:custom:0",
+      "source": {
+        "weightedCrowding": 0.44,
+        "nearbyBandCount": 3,
+        "crowdingBandIds": [
+          "band:custom:1",
+          "band:custom:2",
+          "band:custom:3"
+        ],
+        "crowdingPenalty": 0.17
+      },
+      "selectedFull": "move_to_tile:tile:196:91",
+      "selectedZeroCrowding": "move_to_tile:tile:196:91",
+      "selectionChangedByCrowding": false,
+      "candidateSetChanged": false,
+      "onlyInFull": [],
+      "onlyInControl": [],
+      "familiesFull": [
+        "logistical_probe",
+        "move_to_tile",
+        "stay"
+      ],
+      "familiesControl": [
+        "logistical_probe",
+        "move_to_tile",
+        "stay"
+      ]
+    },
+    {
+      "label": "F5_explore_frontier_crowded",
+      "bandId": "band:custom:0",
+      "source": {
+        "weightedCrowding": 0.15,
+        "nearbyBandCount": 1,
+        "crowdingBandIds": [
+          "band:custom:1"
+        ],
+        "crowdingPenalty": 0.06
+      },
+      "selectedFull": "stay:tile:195:90",
+      "selectedZeroCrowding": "stay:tile:195:90",
+      "selectionChangedByCrowding": false,
+      "candidateSetChanged": false,
+      "onlyInFull": [],
+      "onlyInControl": [],
+      "familiesFull": [
+        "explore_unknown_neighbor",
+        "logistical_probe",
+        "move_to_tile",
+        "resource_scout",
+        "stay"
+      ],
+      "familiesControl": [
+        "explore_unknown_neighbor",
+        "logistical_probe",
+        "move_to_tile",
+        "resource_scout",
+        "stay"
+      ]
+    },
+    {
+      "label": "F6_explore_frontier_solo_control",
+      "bandId": "band:custom:0",
+      "source": {
+        "weightedCrowding": 0,
+        "nearbyBandCount": 0,
+        "crowdingBandIds": [],
+        "crowdingPenalty": 0
+      },
+      "selectedFull": "stay:tile:195:90",
+      "selectedZeroCrowding": "stay:tile:195:90",
+      "selectionChangedByCrowding": false,
+      "candidateSetChanged": false,
+      "onlyInFull": [],
+      "onlyInControl": [],
+      "familiesFull": [
+        "explore_unknown_neighbor",
+        "logistical_probe",
+        "move_to_tile",
+        "resource_scout",
+        "stay"
+      ],
+      "familiesControl": [
+        "explore_unknown_neighbor",
+        "logistical_probe",
+        "move_to_tile",
+        "resource_scout",
+        "stay"
+      ]
+    },
+    {
+      "label": "P1_zero_crowding_control",
+      "bandId": "band:custom:0",
+      "source": {
+        "weightedCrowding": 0,
+        "nearbyBandCount": 0,
+        "crowdingBandIds": [],
+        "crowdingPenalty": 0
+      },
+      "selectedFull": "move_to_tile:tile:194:90",
+      "selectedZeroCrowding": "move_to_tile:tile:194:90",
+      "selectionChangedByCrowding": false,
+      "candidateSetChanged": false,
+      "onlyInFull": [],
+      "onlyInControl": [],
+      "familiesFull": [
+        "logistical_probe",
+        "move_to_tile",
+        "resource_scout",
+        "stay"
+      ],
+      "familiesControl": [
+        "logistical_probe",
+        "move_to_tile",
+        "resource_scout",
+        "stay"
+      ]
+    },
+    {
+      "label": "N_map1_s44_band:delta-coastal-foragers",
+      "bandId": "band:delta-coastal-foragers",
+      "source": {
+        "weightedCrowding": 0.03,
+        "nearbyBandCount": 1,
+        "crowdingBandIds": [
+          "band:lake-wetland-foragers"
+        ],
+        "crowdingPenalty": 0.01
+      },
+      "selectedFull": "move_to_tile:tile:122:60",
+      "selectedZeroCrowding": "move_to_tile:tile:122:60",
+      "selectionChangedByCrowding": false,
+      "candidateSetChanged": false,
+      "onlyInFull": [],
+      "onlyInControl": [],
+      "familiesFull": [
+        "logistical_probe",
+        "move_to_tile",
+        "resource_scout",
+        "stay"
+      ],
+      "familiesControl": [
+        "logistical_probe",
+        "move_to_tile",
+        "resource_scout",
+        "stay"
+      ]
+    },
+    {
+      "label": "N_map1_s44_band:lake-wetland-foragers",
+      "bandId": "band:lake-wetland-foragers",
+      "source": {
+        "weightedCrowding": 0.03,
+        "nearbyBandCount": 1,
+        "crowdingBandIds": [
+          "band:delta-coastal-foragers"
+        ],
+        "crowdingPenalty": 0.01
+      },
+      "selectedFull": "move_to_tile:tile:121:63",
+      "selectedZeroCrowding": "move_to_tile:tile:121:63",
+      "selectionChangedByCrowding": false,
+      "candidateSetChanged": false,
+      "onlyInFull": [],
+      "onlyInControl": [],
+      "familiesFull": [
+        "move_to_tile",
+        "resource_scout",
+        "stay"
+      ],
+      "familiesControl": [
+        "move_to_tile",
+        "resource_scout",
+        "stay"
+      ]
+    },
+    {
+      "label": "N_map2_s14_band:varied-dry-corridor-mid",
+      "bandId": "band:varied-dry-corridor-mid",
+      "source": {
+        "weightedCrowding": 0.06,
+        "nearbyBandCount": 1,
+        "crowdingBandIds": [
+          "band:varied-dry-corridor-upper"
+        ],
+        "crowdingPenalty": 0.05
+      },
+      "selectedFull": "resource_scout:tile:70:110",
+      "selectedZeroCrowding": "resource_scout:tile:70:110",
+      "selectionChangedByCrowding": false,
+      "candidateSetChanged": false,
+      "onlyInFull": [],
+      "onlyInControl": [],
+      "familiesFull": [
+        "move_to_tile",
+        "resource_scout",
+        "stay"
+      ],
+      "familiesControl": [
+        "move_to_tile",
+        "resource_scout",
+        "stay"
+      ]
+    },
+    {
+      "label": "N_map2_s14_band:varied-dry-corridor-upper",
+      "bandId": "band:varied-dry-corridor-upper",
+      "source": {
+        "weightedCrowding": 0.07,
+        "nearbyBandCount": 1,
+        "crowdingBandIds": [
+          "band:varied-dry-corridor-mid"
+        ],
+        "crowdingPenalty": 0.06
+      },
+      "selectedFull": "resource_scout:tile:66:107",
+      "selectedZeroCrowding": "resource_scout:tile:66:107",
+      "selectionChangedByCrowding": false,
+      "candidateSetChanged": false,
+      "onlyInFull": [],
+      "onlyInControl": [],
+      "familiesFull": [
+        "move_to_tile",
+        "resource_scout",
+        "stay"
+      ],
+      "familiesControl": [
+        "move_to_tile",
+        "resource_scout",
+        "stay"
+      ]
+    },
+    {
+      "label": "N_map2_s45_band:varied-lake-north",
+      "bandId": "band:varied-lake-north",
+      "source": {
+        "weightedCrowding": 0.03,
+        "nearbyBandCount": 1,
+        "crowdingBandIds": [
+          "band:varied-lake-west"
+        ],
+        "crowdingPenalty": 0.02
+      },
+      "selectedFull": "move_to_tile:tile:71:63",
+      "selectedZeroCrowding": "move_to_tile:tile:71:63",
+      "selectionChangedByCrowding": false,
+      "candidateSetChanged": false,
+      "onlyInFull": [],
+      "onlyInControl": [],
+      "familiesFull": [
+        "logistical_probe",
+        "move_to_tile",
+        "resource_scout",
+        "stay"
+      ],
+      "familiesControl": [
+        "logistical_probe",
+        "move_to_tile",
+        "resource_scout",
+        "stay"
+      ]
+    },
+    {
+      "label": "N_map2_s45_band:varied-lake-west",
+      "bandId": "band:varied-lake-west",
+      "source": {
+        "weightedCrowding": 0.03,
+        "nearbyBandCount": 1,
+        "crowdingBandIds": [
+          "band:varied-lake-north"
+        ],
+        "crowdingPenalty": 0.02
+      },
+      "selectedFull": "move_to_tile:tile:72:68",
+      "selectedZeroCrowding": "move_to_tile:tile:72:68",
+      "selectionChangedByCrowding": false,
+      "candidateSetChanged": false,
+      "onlyInFull": [],
+      "onlyInControl": [],
+      "familiesFull": [
+        "logistical_probe",
+        "move_to_tile",
+        "resource_scout",
+        "stay"
+      ],
+      "familiesControl": [
+        "logistical_probe",
+        "move_to_tile",
+        "resource_scout",
+        "stay"
+      ]
+    }
+  ]
+}

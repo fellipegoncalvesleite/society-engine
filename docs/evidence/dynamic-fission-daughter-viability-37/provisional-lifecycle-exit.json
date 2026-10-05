@@ -1,0 +1,205 @@
+{
+  "generatedAt": "2026-08-11T14:42:55.404Z",
+  "seed": "audit27:natural:s1",
+  "warmDays": 2100,
+  "observeDays": 1200,
+  "parentId": "band:varied-river-mid",
+  "successorId": "band:varied-river-mid:provisional:1",
+  "summary": {
+    "fixtures": 10,
+    "passing": 10,
+    "failing": 0,
+    "vacuous": 0,
+    "physicalEventPhases": [
+      "departed",
+      "reintegrated",
+      "provisional_extinguished",
+      "stabilized"
+    ],
+    "sharedByReferenceFields": [
+      "health",
+      "subsistenceModes",
+      "deathMemory",
+      "socialPressure",
+      "biomeAdaptation"
+    ]
+  },
+  "fixtures": [
+    {
+      "id": "E1_successful_terminals_require_a_physical_event",
+      "claim": "`reintegrated` and `stabilized` — the two phases that assert something happened in the world — are classified as requiring a physical event, and every phase carries a classification",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "phases": 13,
+        "unclassified": [],
+        "physicalEventPhases": [
+          "departed",
+          "reintegrated",
+          "provisional_extinguished",
+          "stabilized"
+        ]
+      }
+    },
+    {
+      "id": "E2_no_timeout_points_at_a_phase_requiring_a_physical_event",
+      "claim": "the structural invariant over the contract table itself — a timeout is elapsed time by definition, so pointing one at a phase that asserts a world event is the defect regardless of which phases are involved; re-pointing `returning.onTimeout` back at `reintegrated` fails this",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "ownershipProblems": [],
+        "timeoutIntoPhysical": []
+      }
+    },
+    {
+      "id": "E3_elapsed_time_cannot_request_a_physical_event_phase",
+      "claim": "a transition to `reintegrated` or `stabilized` carrying `cause: elapsed_time` is REFUSED, even when every other named proof is satisfied",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "elapsedTimeToReintegrated": "terminal_outcome_requires_a_physical_event",
+        "elapsedTimeToStabilizedWithFullProof": "terminal_outcome_requires_a_physical_event",
+        "physicalEventWithoutCoLocationProof": "reintegration_without_proven_co_location",
+        "physicalEventWithCoLocationProof": "ACCEPTED"
+      }
+    },
+    {
+      "id": "E4_the_timeout_resolver_does_not_bypass_the_guards",
+      "claim": "`resolveTimeout` on an expired `returning` produces the named event-bounded living condition — it cannot manufacture establishment or reintegration",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "resultPhase": "unresolved_after_failed_return",
+        "timedOut": true
+      }
+    },
+    {
+      "id": "E7_a_caller_that_declares_no_cause_is_refused",
+      "claim": "omitting `cause` entirely does not read as permission — both successful terminals refuse an undeclared caller even with every other precondition satisfied",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "undeclaredToReintegrated": "terminal_outcome_requires_a_physical_event",
+        "undeclaredToStabilized": "terminal_outcome_requires_a_physical_event"
+      }
+    },
+    {
+      "id": "E5_a_group_can_no_longer_leave_quarantine_on_a_timer",
+      "claim": "the same world, seed and instrument that previously reproduced `reintegrated` at day 359 by ELAPSED TIME never does so again: the successor never becomes an ordinary established band, and any reintegration it does reach was earned by standing on its parent's tile",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "observedDays": 1200,
+        "phaseTrail": [
+          {
+            "dayOffset": 0,
+            "phase": "travelling"
+          },
+          {
+            "dayOffset": 13,
+            "phase": "establishing"
+          },
+          {
+            "dayOffset": 27,
+            "phase": "returning"
+          },
+          {
+            "dayOffset": 33,
+            "phase": "reintegrated"
+          }
+        ],
+        "finalPhase": "reintegrated",
+        "becameOrdinaryAt": null,
+        "exitWasPhysicalCoLocation": true,
+        "departureTargetTile": "tile:108:54",
+        "stillProvisional": false
+      }
+    },
+    {
+      "id": "E6_failed_return_is_named_without_manufacturing_attempt_two",
+      "claim": "an expired return enters `unresolved_after_failed_return`, is reported as unresolved, and remains there under later elapsed time because only a real physical/social event may resolve it",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "firstResolutions": [
+          {
+            "bandId": "band:varied-river-mid:provisional:1",
+            "lineageId": "LIN-EXIT-1",
+            "fromPhase": "returning",
+            "toPhase": "unresolved_after_failed_return",
+            "populationAtResolution": 11,
+            "reason": "phase_bound_expired"
+          }
+        ],
+        "laterResolutions": [],
+        "phaseAfterBound": "unresolved_after_failed_return",
+        "phaseAfterAnotherThousandDays": "unresolved_after_failed_return",
+        "reportedAsUnresolved": true
+      }
+    },
+    {
+      "id": "A1_the_shared_references_are_never_mutated_through_the_alias",
+      "claim": "every field the transfer policy shares BY REFERENCE is deep-frozen on both bands and the world is advanced 400 days; an in-place write throws in module strict mode, and none does",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "sharedFields": [
+          "health",
+          "subsistenceModes",
+          "deathMemory",
+          "socialPressure",
+          "biomeAdaptation"
+        ],
+        "mutationError": null,
+        "replacedRatherThanEdited": [],
+        "note": "replacedRatherThanEdited lists fields whose content moved while frozen — only achievable by replacing the object, so it is evidence FOR immutability, not against it"
+      }
+    },
+    {
+      "id": "A2_every_shared_reference_is_a_classified_decision",
+      "claim": "no field is shared by accident: each carries a transfer class and a value shape that explicitly permits carrying",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "classification": {
+          "health": {
+            "transferClass": "FOUNDER_CARRIED_EMBODIED_BURDEN",
+            "successorValue": "carried_no_relief"
+          },
+          "subsistenceModes": {
+            "transferClass": "SHARED_HISTORICAL_FACT",
+            "successorValue": "carried"
+          },
+          "deathMemory": {
+            "transferClass": "SHARED_HISTORICAL_FACT",
+            "successorValue": "carried"
+          },
+          "socialPressure": {
+            "transferClass": "RECOMPUTE_FROM_SUCCESSOR_TRUTH",
+            "successorValue": "carried_pending_recompute"
+          },
+          "biomeAdaptation": {
+            "transferClass": "SHARED_HISTORICAL_FACT",
+            "successorValue": "carried"
+          }
+        },
+        "permitted": 5,
+        "total": 5
+      }
+    },
+    {
+      "id": "A3_divergent_content_implies_divergent_objects",
+      "claim": "no field ends up with different content on the two bands while still pointing at ONE object — which is exactly the state an in-place write would leave and an immutable writer cannot",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "divergedButAliased": [],
+        "stillAliasedAfter400Days": [
+          "health",
+          "subsistenceModes"
+        ],
+        "successorSurvived": true
+      }
+    }
+  ]
+}

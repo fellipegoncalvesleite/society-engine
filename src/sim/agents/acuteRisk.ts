@@ -2,6 +2,7 @@ import type { ReasonId, TickNumber, TileId } from "../core/types";
 import type { WorldState } from "../world/types";
 import { enforceResourceKnowledgeCap } from "./resourceKnowledge";
 import { deriveCareTreatmentRelief } from "./adaptationBoundary";
+import { getExpeditionPhysicalPeople } from "./bandMobility";
 // EXPEDITIONARY-4 §14 — the provisioning scale an away party's exposure is judged
 // against (single definition site; no duplicated constants).
 import {
@@ -460,8 +461,12 @@ function deriveAcuteRiskCandidates(world: WorldState, band: Band): readonly Acut
     const loadRatio = clamp01(
       expedition.cargo.harvestUnits / Math.max(0.0001, expedition.cargo.carryCapacityUnits),
     );
+    // CORRECTION-34D — the budget must be drawn over the same people `consumeProvisions` feeds, or
+    // this share reads as exhaustion the moment a party carries a non-working member.
     const provisionBudget =
-      expedition.partyWorkers * EXPEDITION_PROVISION_UNITS_PER_WORKER_DAY * EXPEDITION_MAX_DURATION_DAYS;
+      getExpeditionPhysicalPeople(expedition) *
+      EXPEDITION_PROVISION_UNITS_PER_WORKER_DAY *
+      EXPEDITION_MAX_DURATION_DAYS;
     const provisionShare = clamp01(expedition.cargo.provisionUnitsConsumed / Math.max(0.0001, provisionBudget));
     const partyTile = world.tiles[expedition.positionTileId];
     const exposureRisk = partyTile === undefined
@@ -691,6 +696,126 @@ function summarizeActiveEffect(episodes: readonly AcuteRiskEpisode[]): AcuteRisk
     movementCautionBump: round3(Math.min(ACTIVE_EFFECT_CAP.movementCautionBump, sum(active.map((episode) => episode.effect.movementCautionBump)))),
     knowledgeUpdateWeight: round3(Math.min(ACTIVE_EFFECT_CAP.knowledgeUpdateWeight, sum(active.map((episode) => episode.effect.knowledgeUpdateWeight)))),
     recoverySeasons: active.reduce((max, episode) => Math.max(max, episode.remainingRecoverySeasons), 0),
+  };
+}
+
+// ── ROADMAP ITEM 4 — MERGING TWO BOUNDED EPISODE RINGS ──────────────────────────────────────────
+
+/** What the merge did, published so a reintegration cannot quietly cure or duplicate an injury. */
+export interface AcuteRiskMergeLedger {
+  readonly parentEpisodesBefore: number;
+  readonly returningEpisodesBefore: number;
+  readonly sharedEpisodeIds: number;
+  readonly returningOnlyEpisodes: number;
+  readonly mergedEpisodes: number;
+  readonly retainedEpisodes: number;
+  readonly droppedByCap: number;
+  readonly activeEpisodesRetained: number;
+  readonly activeEpisodesDropped: number;
+  readonly effectRederivedFromMergedRing: true;
+  readonly noEpisodeReplayed: true;
+  /** Honest declaration: an episode is a BAND-level record and cannot name the people who carry it. */
+  readonly cohortAttributionUnavailable: true;
+}
+
+/**
+ * ROADMAP ITEM 4 §10 — THE ONE PLACE TWO ACUTE-RISK RINGS BECOME ONE.
+ *
+ * The defect this closes was measured and published by the previous pass and NOT repaired: ten
+ * acute-risk episodes walked home with a returning group and the reintegration writer, having no
+ * authority to merge two bounded rings, kept the parent's and dropped the returning group's. Since the
+ * successor entity is then removed, a group could go out, be hurt, come back, and arrive healed —
+ * **cure by reintegration**, which is the reset the realism checklist forbids wearing a different hat.
+ *
+ * The opposite failure is just as available and is why this is not a concatenation: the two rings
+ * SHARE HISTORY. The founders left carrying the parent's episodes, so the same physical event exists on
+ * both sides under the same id, and appending would give one injury two entries, two recoveries and
+ * two mortality contributions.
+ *
+ * So: union BY EPISODE ID, and nothing else about an episode is touched. Recovery timers are not
+ * reset, severities are not re-rolled, no consequence is re-applied. **The active effect is REDERIVED
+ * from the merged ring** by the same summarizer every ordinary tick uses, so it cannot be a stale
+ * value from either side.
+ *
+ * ── THE RETENTION POLICY, STATED RATHER THAN IMPLIED ──
+ *
+ * Two rings of up to ten cannot both survive in one ring of ten. The policy is: **an episode still in
+ * recovery outranks one that is only remembered**, then newest first, then by id so replay is exact.
+ * Recency alone would have let a group with fresh trivial scrapes push out the parent's unhealed
+ * injuries — dropping live burden to keep dead records. Everything the cap removes is counted into
+ * `droppedEpisodeCount`, so a bounded ring stays bounded and nothing disappears silently.
+ */
+export function mergeAcuteRiskOnReintegration(
+  parent: Band,
+  returning: Band,
+  tick: TickNumber,
+): { readonly state: AcuteRiskState | undefined; readonly ledger: AcuteRiskMergeLedger } {
+  const parentState = parent.acuteRisk;
+  const returningState = returning.acuteRisk;
+  const parentEpisodes = parentState?.recentEpisodes ?? [];
+  const returningEpisodes = returningState?.recentEpisodes ?? [];
+
+  const byId = new Map<string, AcuteRiskEpisode>();
+  let shared = 0;
+  for (const episode of parentEpisodes) byId.set(episode.id, episode);
+  for (const episode of returningEpisodes) {
+    if (byId.has(episode.id)) {
+      shared += 1;
+      // THE SAME EVENT, HELD TWICE. Keep the copy with the most recovery still owed: the two diverged
+      // only by being decayed on different schedules, and taking the smaller remainder would be a
+      // partial cure obtained by having been in two places at once.
+      const existing = byId.get(episode.id) as AcuteRiskEpisode;
+      if (episode.remainingRecoverySeasons > existing.remainingRecoverySeasons) byId.set(episode.id, episode);
+      continue;
+    }
+    // Re-identified to the band that now holds it, exactly as the departure seam re-identifies the
+    // state it hands out. The EVENT is unchanged; only the claim about whose people carry it moves.
+    byId.set(episode.id, { ...episode, bandId: parent.id });
+  }
+
+  const merged = [...byId.values()].sort(
+    (a, b) =>
+      Number(b.remainingRecoverySeasons > 0) - Number(a.remainingRecoverySeasons > 0) ||
+      Number(b.tick) - Number(a.tick) ||
+      a.id.localeCompare(b.id),
+  );
+  const retained = merged.slice(0, RECENT_EPISODE_CAP);
+  const dropped = merged.slice(RECENT_EPISODE_CAP);
+
+  const ledger: AcuteRiskMergeLedger = {
+    parentEpisodesBefore: parentEpisodes.length,
+    returningEpisodesBefore: returningEpisodes.length,
+    sharedEpisodeIds: shared,
+    returningOnlyEpisodes: returningEpisodes.length - shared,
+    mergedEpisodes: merged.length,
+    retainedEpisodes: retained.length,
+    droppedByCap: dropped.length,
+    activeEpisodesRetained: retained.filter((episode) => episode.remainingRecoverySeasons > 0).length,
+    activeEpisodesDropped: dropped.filter((episode) => episode.remainingRecoverySeasons > 0).length,
+    effectRederivedFromMergedRing: true,
+    noEpisodeReplayed: true,
+    cohortAttributionUnavailable: true,
+  };
+
+  if (parentState === undefined && returningState === undefined) {
+    return { state: undefined, ledger };
+  }
+  const base = parentState ?? (returningState as AcuteRiskState);
+  return {
+    state: {
+      ...base,
+      bandId: parent.id,
+      lastUpdatedTick: tick,
+      recentEpisodes: retained,
+      latestEpisode: retained[0] ?? base.latestEpisode,
+      // REDERIVED, never carried. A merged ring with a stale summary is a burden that exists in the
+      // record and does nothing in the world.
+      activeEffect: summarizeActiveEffect(retained),
+      droppedEpisodeCount:
+        (parentState?.droppedEpisodeCount ?? 0) + (returningState?.droppedEpisodeCount ?? 0) + dropped.length,
+      expiredEpisodeCount: (parentState?.expiredEpisodeCount ?? 0) + (returningState?.expiredEpisodeCount ?? 0),
+    },
+    ledger,
   };
 }
 

@@ -1,4 +1,4 @@
-import type { ReasonId } from "../core/types";
+import type { ReasonId, TileId } from "../core/types";
 import { getTile, getTileAtCoord } from "../world/generate";
 import type { Tile, WorldState } from "../world/types";
 import type {
@@ -315,4 +315,38 @@ function clamp01(value: number): number {
 
 function round2(value: number): number {
   return Math.round(value * 100) / 100;
+}
+
+/**
+ * CORRECTION-26 — mark a visible-landscape cue as physically checked.
+ *
+ * This moved out of `rules/candidates/visibleLandscapeCandidate.ts` and changed meaning
+ * with it. Before, a `logistical_probe` being SELECTED set the cue to `partly_checked` and
+ * incremented `influencedScoutOrProbeCount`, so a cue nobody ever walked to was reported as
+ * checked. It is now called by the daily executor on ARRIVAL, so the status describes a
+ * real visit and the count means "a party actually went because of this cue".
+ *
+ * It lives here because `landscapeVisibility.ts` owns the cue state (it is the constructor
+ * at `buildCueRecord`), and because the daily physical path is in `agents/` and must not
+ * import from `rules/`.
+ */
+export function markVisibleLandscapeCueProbeChecked(
+  band: Band,
+  checkedTileId: TileId,
+): readonly VisibleLandscapeCue[] | undefined {
+  const cues = band.visibleLandscapeCues;
+
+  if (cues === undefined) {
+    return cues;
+  }
+
+  return cues.map((cue) =>
+    cue.approximateTileId === checkedTileId
+      ? {
+          ...cue,
+          status: "partly_checked",
+          influencedScoutOrProbeCount: cue.influencedScoutOrProbeCount + 1,
+        }
+      : cue,
+  );
 }

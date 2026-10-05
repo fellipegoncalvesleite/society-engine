@@ -1,0 +1,36 @@
+=== 2J.1A SHARED-CATCHMENT INVARIANTS (TILE_SUPPORT=10 per tile) ===
+
+[1] SOLO band → every share == 1.0, support == sum(tileSupport)
+┌─────────┬────────────┬──────┬────────┬───────┬─────┐
+│ (index) │ tile       │ dist │ weight │ share │ got │
+├─────────┼────────────┼──────┼────────┼───────┼─────┤
+│ 0       │ 'tile:0,0' │ 0    │ 10     │ 1     │ 10  │
+│ 1       │ 'tile:1,0' │ 1    │ 7      │ 1     │ 10  │
+│ 2       │ 'tile:2,0' │ 2    │ 4.5    │ 1     │ 10  │
+└─────────┴────────────┴──────┴────────┴───────┴─────┘
+    total=30  expectedSolo=30  allSharesAre1=true  => PASS
+
+[4] FAR non-overlapping band C (huge demand, distant) added
+    A.supportSolo=30  A.supportWithFarC=30  A.overlap=[]  => PASS
+
+[2,3] Per-contested-tile: sum(shares) ~ 1.0 and allocated <= tileSupport
+┌─────────┬────────────┬───────────┬───────────┬───────────┬─────────────┐
+│ (index) │ tile       │ claimants │ sumShares │ allocated │ tileSupport │
+├─────────┼────────────┼───────────┼───────────┼───────────┼─────────────┤
+│ 0       │ 'tile:2,0' │ 2         │ 1         │ 10        │ 10          │
+│ 1       │ 'tile:3,0' │ 3         │ 1         │ 10        │ 10          │
+│ 2       │ 'tile:4,0' │ 3         │ 1         │ 10        │ 10          │
+│ 3       │ 'tile:5,0' │ 1         │ 1         │ 10        │ 10          │
+└─────────┴────────────┴───────────┴───────────┴───────────┴─────────────┘
+    maxDeviationFrom1=0  allocatedNeverExceedsSupport=true  => PASS
+
+[5] TWO EQUAL-demand bands, identical catchment → 0.5/0.5 symmetric split
+    A.total=15  B.total=15  allSharesAre0.5=true  => PASS
+
+[6] HIGHER-demand band gets larger total share, per-capita still reflects crowding
+    BIG.totalShareSupport=24  SMALL.totalShareSupport=6  (BIG > SMALL = true)
+    BIG per-capita: solo=1.5 -> contested=1.2  (dropped = true)
+    SMALL per-capita contested=1.2
+    => PASS
+
+=== done ===

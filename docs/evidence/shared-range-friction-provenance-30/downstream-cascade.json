@@ -1,0 +1,393 @@
+{
+  "checkpoint": "CORRECTION-30",
+  "question": "does removing the false records move the access / tension / report cascade?",
+  "controlledFixtures": {
+    "accessCascade": {
+      "before": {
+        "verdict": "NO_ACCESS_CASCADE",
+        "accessBefore": {
+          "placeExists": false,
+          "accessState": null,
+          "strangerCaution": 0,
+          "sharedUsePressure": 0,
+          "rememberedRefusalAvoidance": 0,
+          "placeSensitivity": 0,
+          "behaviorSensitivePlaceCautionBias": 0.01,
+          "behaviorContestedAvoidanceBias": 0,
+          "behaviorToleranceReductionBias": 0,
+          "behaviorMaxHook": 0.03,
+          "topPlaceCount": 8
+        },
+        "accessAfter": {
+          "placeExists": false,
+          "accessState": null,
+          "strangerCaution": 0,
+          "sharedUsePressure": 0,
+          "rememberedRefusalAvoidance": 0,
+          "placeSensitivity": 0,
+          "behaviorSensitivePlaceCautionBias": 0.01,
+          "behaviorContestedAvoidanceBias": 0,
+          "behaviorToleranceReductionBias": 0,
+          "behaviorMaxHook": 0.03,
+          "topPlaceCount": 8
+        }
+      },
+      "after": {
+        "verdict": "NO_ACCESS_CASCADE",
+        "accessBefore": {
+          "placeExists": false,
+          "accessState": null,
+          "strangerCaution": 0,
+          "sharedUsePressure": 0,
+          "rememberedRefusalAvoidance": 0,
+          "placeSensitivity": 0,
+          "behaviorSensitivePlaceCautionBias": 0.01,
+          "behaviorContestedAvoidanceBias": 0,
+          "behaviorToleranceReductionBias": 0,
+          "behaviorMaxHook": 0.03,
+          "topPlaceCount": 8
+        },
+        "accessAfter": {
+          "placeExists": false,
+          "accessState": null,
+          "strangerCaution": 0,
+          "sharedUsePressure": 0,
+          "rememberedRefusalAvoidance": 0,
+          "placeSensitivity": 0,
+          "behaviorSensitivePlaceCautionBias": 0.01,
+          "behaviorContestedAvoidanceBias": 0,
+          "behaviorToleranceReductionBias": 0,
+          "behaviorMaxHook": 0.03,
+          "topPlaceCount": 8
+        }
+      },
+      "probeSensitivity": {
+        "before": {
+          "frictionRingLength": 8,
+          "accessWithFriction": {
+            "placeExists": true,
+            "accessState": "tolerated_shared_use",
+            "strangerCaution": 0.15,
+            "sharedUsePressure": 0.28,
+            "rememberedRefusalAvoidance": 0.14,
+            "placeSensitivity": 0.35,
+            "behaviorSensitivePlaceCautionBias": 0.01,
+            "behaviorContestedAvoidanceBias": 0,
+            "behaviorToleranceReductionBias": 0,
+            "behaviorMaxHook": 0.06,
+            "topPlaceCount": 8
+          },
+          "accessWithoutFriction": {
+            "placeExists": true,
+            "accessState": "familiar_use",
+            "strangerCaution": 0,
+            "sharedUsePressure": 0,
+            "rememberedRefusalAvoidance": 0.14,
+            "placeSensitivity": 0.26,
+            "behaviorSensitivePlaceCautionBias": 0.01,
+            "behaviorContestedAvoidanceBias": 0,
+            "behaviorToleranceReductionBias": 0,
+            "behaviorMaxHook": 0.06,
+            "topPlaceCount": 7
+          },
+          "tensionWithFriction": {
+            "socialTensionPressure": 0.28,
+            "rangeFrictionCauseStrength": null,
+            "cohesion": 0.71,
+            "tolerance": 0.64
+          },
+          "tensionWithoutFriction": {
+            "socialTensionPressure": 0.22,
+            "rangeFrictionCauseStrength": null,
+            "cohesion": 0.71,
+            "tolerance": 0.64
+          },
+          "accessProbeIsSensitive": true,
+          "tensionProbeIsSensitive": true
+        },
+        "after": {
+          "frictionRingLength": 4,
+          "accessWithFriction": {
+            "placeExists": true,
+            "accessState": "tolerated_shared_use",
+            "strangerCaution": 0.13,
+            "sharedUsePressure": 0.24,
+            "rememberedRefusalAvoidance": 0.14,
+            "placeSensitivity": 0.34,
+            "behaviorSensitivePlaceCautionBias": 0.01,
+            "behaviorContestedAvoidanceBias": 0,
+            "behaviorToleranceReductionBias": 0,
+            "behaviorMaxHook": 0.06,
+            "topPlaceCount": 7
+          },
+          "accessWithoutFriction": {
+            "placeExists": true,
+            "accessState": "familiar_use",
+            "strangerCaution": 0,
+            "sharedUsePressure": 0,
+            "rememberedRefusalAvoidance": 0.14,
+            "placeSensitivity": 0.26,
+            "behaviorSensitivePlaceCautionBias": 0.01,
+            "behaviorContestedAvoidanceBias": 0,
+            "behaviorToleranceReductionBias": 0,
+            "behaviorMaxHook": 0.06,
+            "topPlaceCount": 7
+          },
+          "tensionWithFriction": {
+            "socialTensionPressure": 0.26,
+            "rangeFrictionCauseStrength": null,
+            "cohesion": 0.71,
+            "tolerance": 0.64
+          },
+          "tensionWithoutFriction": {
+            "socialTensionPressure": 0.22,
+            "rangeFrictionCauseStrength": null,
+            "cohesion": 0.71,
+            "tolerance": 0.64
+          },
+          "accessProbeIsSensitive": true,
+          "tensionProbeIsSensitive": true
+        }
+      },
+      "note": "the access probe DOES move when real friction is present, so the null above is a real null"
+    },
+    "socialTensionCascade": {
+      "before": {
+        "verdict": "NO_SOCIAL_TENSION_CASCADE",
+        "tensionBefore": {
+          "socialTensionPressure": 0.25,
+          "rangeFrictionCauseStrength": null,
+          "cohesion": 0.78,
+          "tolerance": 0.59
+        },
+        "tensionAfter": {
+          "socialTensionPressure": 0.25,
+          "rangeFrictionCauseStrength": null,
+          "cohesion": 0.78,
+          "tolerance": 0.59
+        }
+      },
+      "after": {
+        "verdict": "NO_SOCIAL_TENSION_CASCADE",
+        "tensionBefore": {
+          "socialTensionPressure": 0.25,
+          "rangeFrictionCauseStrength": null,
+          "cohesion": 0.78,
+          "tolerance": 0.59
+        },
+        "tensionAfter": {
+          "socialTensionPressure": 0.25,
+          "rangeFrictionCauseStrength": null,
+          "cohesion": 0.78,
+          "tolerance": 0.59
+        }
+      },
+      "probeSensitivity": {
+        "before": {
+          "frictionRingLength": 8,
+          "accessWithFriction": {
+            "placeExists": true,
+            "accessState": "tolerated_shared_use",
+            "strangerCaution": 0.15,
+            "sharedUsePressure": 0.28,
+            "rememberedRefusalAvoidance": 0.14,
+            "placeSensitivity": 0.35,
+            "behaviorSensitivePlaceCautionBias": 0.01,
+            "behaviorContestedAvoidanceBias": 0,
+            "behaviorToleranceReductionBias": 0,
+            "behaviorMaxHook": 0.06,
+            "topPlaceCount": 8
+          },
+          "accessWithoutFriction": {
+            "placeExists": true,
+            "accessState": "familiar_use",
+            "strangerCaution": 0,
+            "sharedUsePressure": 0,
+            "rememberedRefusalAvoidance": 0.14,
+            "placeSensitivity": 0.26,
+            "behaviorSensitivePlaceCautionBias": 0.01,
+            "behaviorContestedAvoidanceBias": 0,
+            "behaviorToleranceReductionBias": 0,
+            "behaviorMaxHook": 0.06,
+            "topPlaceCount": 7
+          },
+          "tensionWithFriction": {
+            "socialTensionPressure": 0.28,
+            "rangeFrictionCauseStrength": null,
+            "cohesion": 0.71,
+            "tolerance": 0.64
+          },
+          "tensionWithoutFriction": {
+            "socialTensionPressure": 0.22,
+            "rangeFrictionCauseStrength": null,
+            "cohesion": 0.71,
+            "tolerance": 0.64
+          },
+          "accessProbeIsSensitive": true,
+          "tensionProbeIsSensitive": true
+        },
+        "after": {
+          "frictionRingLength": 4,
+          "accessWithFriction": {
+            "placeExists": true,
+            "accessState": "tolerated_shared_use",
+            "strangerCaution": 0.13,
+            "sharedUsePressure": 0.24,
+            "rememberedRefusalAvoidance": 0.14,
+            "placeSensitivity": 0.34,
+            "behaviorSensitivePlaceCautionBias": 0.01,
+            "behaviorContestedAvoidanceBias": 0,
+            "behaviorToleranceReductionBias": 0,
+            "behaviorMaxHook": 0.06,
+            "topPlaceCount": 7
+          },
+          "accessWithoutFriction": {
+            "placeExists": true,
+            "accessState": "familiar_use",
+            "strangerCaution": 0,
+            "sharedUsePressure": 0,
+            "rememberedRefusalAvoidance": 0.14,
+            "placeSensitivity": 0.26,
+            "behaviorSensitivePlaceCautionBias": 0.01,
+            "behaviorContestedAvoidanceBias": 0,
+            "behaviorToleranceReductionBias": 0,
+            "behaviorMaxHook": 0.06,
+            "topPlaceCount": 7
+          },
+          "tensionWithFriction": {
+            "socialTensionPressure": 0.26,
+            "rangeFrictionCauseStrength": null,
+            "cohesion": 0.71,
+            "tolerance": 0.64
+          },
+          "tensionWithoutFriction": {
+            "socialTensionPressure": 0.22,
+            "rangeFrictionCauseStrength": null,
+            "cohesion": 0.71,
+            "tolerance": 0.64
+          },
+          "accessProbeIsSensitive": true,
+          "tensionProbeIsSensitive": true
+        }
+      },
+      "note": "the tension probe DOES move when real friction is present, so the null above is a real null"
+    }
+  },
+  "naturalCascade": {
+    "accessStateDistribution": {
+      "before": {
+        "familiar_use": 12116,
+        "none": 294,
+        "expected_return": 6231,
+        "tolerated_shared_use": 70
+      },
+      "after": {
+        "familiar_use": 12111,
+        "none": 294,
+        "expected_return": 6223,
+        "tolerated_shared_use": 83
+      }
+    },
+    "strangerCautionSum": {
+      "before": 298.32,
+      "after": 300.64,
+      "delta": 2.32,
+      "unchanged": false
+    },
+    "sharedUsePressureSum": {
+      "before": 182.11,
+      "after": 189.04,
+      "delta": 6.93,
+      "unchanged": false
+    },
+    "rememberedRefusalAvoidanceSum": {
+      "before": 2547.08,
+      "after": 2551.35,
+      "delta": 4.27,
+      "unchanged": false
+    },
+    "accessBehaviorHookSum": {
+      "before": 148.68,
+      "after": 148.68,
+      "delta": 0,
+      "unchanged": true
+    },
+    "accessPlaceSeasons": {
+      "before": 18711,
+      "after": 18711,
+      "delta": 0,
+      "unchanged": true
+    },
+    "socialTensionSum": {
+      "before": 605.79,
+      "after": 606.55,
+      "delta": 0.76,
+      "unchanged": false
+    },
+    "socialTensionSamples": {
+      "before": 2400,
+      "after": 2400,
+      "delta": 0,
+      "unchanged": true
+    },
+    "reportedAwarenessRecords": {
+      "before": 35776,
+      "after": 35776,
+      "delta": 0,
+      "unchanged": true
+    },
+    "reportLinkedRecords": {
+      "before": 33,
+      "after": 33,
+      "delta": 0,
+      "unchanged": true
+    }
+  },
+  "recentOverlapCountIsolation": {
+    "run": true,
+    "description": "third arm: the corrected tree with recentOverlapCount pinned to 1, isolating the observer-memory re-sourcing from the removal of the private reads",
+    "aggregate": {
+      "frictionRecordsCreated": 61,
+      "directObservedPresenceRecords": 28,
+      "inferredRecentActivityRecords": 0,
+      "strangerCautionSum": 290.34,
+      "sharedUsePressureSum": 164.49,
+      "rememberedRefusalAvoidanceSum": 2536.32,
+      "socialTensionSum": 605.21,
+      "finalPopulation": 817,
+      "moves": 1547
+    },
+    "distributions": {
+      "creationDistanceByBucket": {
+        "4": 9,
+        "2-3": 40,
+        "5-10": 12
+      },
+      "confidenceDistribution": {
+        "observed": 28,
+        "reported_secondhand": 33
+      },
+      "interpretationDistribution": {
+        "ford_overlap": 18,
+        "noticed_shared_use": 2,
+        "possible_intrusion": 8,
+        "avoid_warning_remembered": 33
+      },
+      "tensionDistribution": {
+        "watchful": 36,
+        "none": 17,
+        "mild": 8
+      },
+      "activityKindDistribution": {
+        "residential_presence": 28,
+        "unknown_activity": 33
+      },
+      "accessStateDistribution": {
+        "familiar_use": 12147,
+        "none": 294,
+        "expected_return": 6235,
+        "tolerated_shared_use": 35
+      }
+    }
+  }
+}

@@ -1,0 +1,813 @@
+{
+  "instrument": "EVENT-PAIRED FIRST-READER CONSUMPTION",
+  "note": "One record removed at a time, by recordEventId, from ALL FIVE stores the §5 inventory found can name an exploration tile: observedTiles, placeMemory, placeAttachments, frontierInferredTiles, travelCorridors, verificationEvidence. NOT the global snapshot ablation.",
+  "years": 40,
+  "seeds": [
+    "s1",
+    "s2",
+    "s3",
+    "s4",
+    "s5"
+  ],
+  "scenarios": [
+    "map1",
+    "map2",
+    "site_A_coast",
+    "site_B_dry_plains",
+    "site_C_dry_plains",
+    "site_D_aquatic",
+    "site_E_hills",
+    "site_F_hills",
+    "ordinary",
+    "isolated_marginal",
+    "hostile"
+  ],
+  "readerFamilies": [
+    "movement_destination",
+    "camp",
+    "resource_activity",
+    "daughter_fission"
+  ],
+  "routeCorridor": "STRUCTURAL NO READER — travelCorridors is written by updateTravelCorridorMemory from the residential movement record; the exploration hand-off never reaches it.",
+  "totals": {
+    "recordsTracked": 19974,
+    "byFamily": {
+      "movement_destination": {
+        "probes": 19974,
+        "changedVerdict": 2334,
+        "changedRanking": 2301,
+        "changedSelectedAction": 1339,
+        "physicalActionFollowed": 0,
+        "readerUnavailable": 0
+      },
+      "camp": {
+        "probes": 19974,
+        "changedVerdict": 70,
+        "changedRanking": 411,
+        "changedSelectedAction": 446,
+        "physicalActionFollowed": 0,
+        "readerUnavailable": 0
+      },
+      "resource_activity": {
+        "probes": 19974,
+        "changedVerdict": 122,
+        "changedRanking": 1557,
+        "changedSelectedAction": 1692,
+        "physicalActionFollowed": 0,
+        "readerUnavailable": 0
+      },
+      "daughter_fission": {
+        "probes": 14053,
+        "changedVerdict": 1920,
+        "changedRanking": 1160,
+        "changedSelectedAction": 1160,
+        "physicalActionFollowed": 0,
+        "readerUnavailable": 0
+      }
+    },
+    "consumedWithin90": 3743,
+    "consumedWithin360": 4637,
+    "neverRead": 0,
+    "readButInert": 16636,
+    "evictedBeforeRead": 0,
+    "changedVerdict": 4446,
+    "changedRanking": 5429,
+    "changedSelectedAction": 4637,
+    "physicalActionFollowed": 0
+  },
+  "probeSoundness": {
+    "checked": 19974,
+    "matchedProduction": 11930
+  },
+  "physicalActionLink": {
+    "movementActionChanged": 1339,
+    "physicallyRealised": 508,
+    "notRealised": 537
+  },
+  "positiveControls": {
+    "movement_destination": {
+      "attempts": 2179,
+      "passed": 2099
+    },
+    "camp": {
+      "attempts": 2299,
+      "passed": 2289
+    },
+    "resource_activity": {
+      "attempts": 2179,
+      "passed": 592
+    },
+    "daughter_fission": {
+      "attempts": 2268,
+      "passed": 2268
+    }
+  },
+  "byScenario": {
+    "map1": {
+      "recordsTracked": 4368,
+      "byFamily": {
+        "movement_destination": {
+          "probes": 4368,
+          "changedVerdict": 524,
+          "changedRanking": 440,
+          "changedSelectedAction": 256,
+          "readerUnavailable": 0
+        },
+        "camp": {
+          "probes": 4368,
+          "changedVerdict": 17,
+          "changedRanking": 102,
+          "changedSelectedAction": 109,
+          "readerUnavailable": 0
+        },
+        "resource_activity": {
+          "probes": 4368,
+          "changedVerdict": 20,
+          "changedRanking": 350,
+          "changedSelectedAction": 369,
+          "readerUnavailable": 0
+        },
+        "daughter_fission": {
+          "probes": 3491,
+          "changedVerdict": 403,
+          "changedRanking": 244,
+          "changedSelectedAction": 244,
+          "readerUnavailable": 0
+        }
+      },
+      "consumedWithin90": 792,
+      "consumedWithin360": 978,
+      "neverRead": 0,
+      "readButInert": 3669,
+      "evictedBeforeRead": 0,
+      "changedSelectedAction": 978
+    },
+    "map2": {
+      "recordsTracked": 8040,
+      "byFamily": {
+        "movement_destination": {
+          "probes": 8040,
+          "changedVerdict": 899,
+          "changedRanking": 953,
+          "changedSelectedAction": 524,
+          "readerUnavailable": 0
+        },
+        "camp": {
+          "probes": 8040,
+          "changedVerdict": 21,
+          "changedRanking": 164,
+          "changedSelectedAction": 178,
+          "readerUnavailable": 0
+        },
+        "resource_activity": {
+          "probes": 8040,
+          "changedVerdict": 40,
+          "changedRanking": 614,
+          "changedSelectedAction": 664,
+          "readerUnavailable": 0
+        },
+        "daughter_fission": {
+          "probes": 6404,
+          "changedVerdict": 779,
+          "changedRanking": 444,
+          "changedSelectedAction": 444,
+          "readerUnavailable": 0
+        }
+      },
+      "consumedWithin90": 1469,
+      "consumedWithin360": 1810,
+      "neverRead": 0,
+      "readButInert": 6695,
+      "evictedBeforeRead": 0,
+      "changedSelectedAction": 1810
+    },
+    "site_A_coast": {
+      "recordsTracked": 625,
+      "byFamily": {
+        "movement_destination": {
+          "probes": 625,
+          "changedVerdict": 87,
+          "changedRanking": 104,
+          "changedSelectedAction": 52,
+          "readerUnavailable": 0
+        },
+        "camp": {
+          "probes": 625,
+          "changedVerdict": 0,
+          "changedRanking": 18,
+          "changedSelectedAction": 18,
+          "readerUnavailable": 0
+        },
+        "resource_activity": {
+          "probes": 625,
+          "changedVerdict": 0,
+          "changedRanking": 76,
+          "changedSelectedAction": 77,
+          "readerUnavailable": 0
+        },
+        "daughter_fission": {
+          "probes": 423,
+          "changedVerdict": 91,
+          "changedRanking": 56,
+          "changedSelectedAction": 56,
+          "readerUnavailable": 0
+        }
+      },
+      "consumedWithin90": 161,
+      "consumedWithin360": 203,
+      "neverRead": 0,
+      "readButInert": 472,
+      "evictedBeforeRead": 0,
+      "changedSelectedAction": 203
+    },
+    "site_B_dry_plains": {
+      "recordsTracked": 264,
+      "byFamily": {
+        "movement_destination": {
+          "probes": 264,
+          "changedVerdict": 40,
+          "changedRanking": 41,
+          "changedSelectedAction": 25,
+          "readerUnavailable": 0
+        },
+        "camp": {
+          "probes": 264,
+          "changedVerdict": 5,
+          "changedRanking": 1,
+          "changedSelectedAction": 6,
+          "readerUnavailable": 0
+        },
+        "resource_activity": {
+          "probes": 264,
+          "changedVerdict": 5,
+          "changedRanking": 17,
+          "changedSelectedAction": 22,
+          "readerUnavailable": 0
+        },
+        "daughter_fission": {
+          "probes": 110,
+          "changedVerdict": 16,
+          "changedRanking": 7,
+          "changedSelectedAction": 7,
+          "readerUnavailable": 0
+        }
+      },
+      "consumedWithin90": 55,
+      "consumedWithin360": 60,
+      "neverRead": 0,
+      "readButInert": 222,
+      "evictedBeforeRead": 0,
+      "changedSelectedAction": 60
+    },
+    "site_C_dry_plains": {
+      "recordsTracked": 1119,
+      "byFamily": {
+        "movement_destination": {
+          "probes": 1119,
+          "changedVerdict": 146,
+          "changedRanking": 141,
+          "changedSelectedAction": 77,
+          "readerUnavailable": 0
+        },
+        "camp": {
+          "probes": 1119,
+          "changedVerdict": 10,
+          "changedRanking": 14,
+          "changedSelectedAction": 20,
+          "readerUnavailable": 0
+        },
+        "resource_activity": {
+          "probes": 1119,
+          "changedVerdict": 10,
+          "changedRanking": 83,
+          "changedSelectedAction": 93,
+          "readerUnavailable": 0
+        },
+        "daughter_fission": {
+          "probes": 413,
+          "changedVerdict": 104,
+          "changedRanking": 48,
+          "changedSelectedAction": 48,
+          "readerUnavailable": 0
+        }
+      },
+      "consumedWithin90": 202,
+      "consumedWithin360": 238,
+      "neverRead": 0,
+      "readButInert": 960,
+      "evictedBeforeRead": 0,
+      "changedSelectedAction": 238
+    },
+    "site_D_aquatic": {
+      "recordsTracked": 221,
+      "byFamily": {
+        "movement_destination": {
+          "probes": 221,
+          "changedVerdict": 67,
+          "changedRanking": 61,
+          "changedSelectedAction": 43,
+          "readerUnavailable": 0
+        },
+        "camp": {
+          "probes": 221,
+          "changedVerdict": 1,
+          "changedRanking": 7,
+          "changedSelectedAction": 7,
+          "readerUnavailable": 0
+        },
+        "resource_activity": {
+          "probes": 221,
+          "changedVerdict": 0,
+          "changedRanking": 45,
+          "changedSelectedAction": 50,
+          "readerUnavailable": 0
+        },
+        "daughter_fission": {
+          "probes": 213,
+          "changedVerdict": 31,
+          "changedRanking": 13,
+          "changedSelectedAction": 13,
+          "readerUnavailable": 0
+        }
+      },
+      "consumedWithin90": 101,
+      "consumedWithin360": 113,
+      "neverRead": 0,
+      "readButInert": 144,
+      "evictedBeforeRead": 0,
+      "changedSelectedAction": 113
+    },
+    "site_E_hills": {
+      "recordsTracked": 1044,
+      "byFamily": {
+        "movement_destination": {
+          "probes": 1044,
+          "changedVerdict": 108,
+          "changedRanking": 118,
+          "changedSelectedAction": 70,
+          "readerUnavailable": 0
+        },
+        "camp": {
+          "probes": 1044,
+          "changedVerdict": 3,
+          "changedRanking": 11,
+          "changedSelectedAction": 12,
+          "readerUnavailable": 0
+        },
+        "resource_activity": {
+          "probes": 1044,
+          "changedVerdict": 10,
+          "changedRanking": 78,
+          "changedSelectedAction": 84,
+          "readerUnavailable": 0
+        },
+        "daughter_fission": {
+          "probes": 545,
+          "changedVerdict": 126,
+          "changedRanking": 79,
+          "changedSelectedAction": 79,
+          "readerUnavailable": 0
+        }
+      },
+      "consumedWithin90": 172,
+      "consumedWithin360": 245,
+      "neverRead": 0,
+      "readButInert": 865,
+      "evictedBeforeRead": 0,
+      "changedSelectedAction": 245
+    },
+    "site_F_hills": {
+      "recordsTracked": 1235,
+      "byFamily": {
+        "movement_destination": {
+          "probes": 1235,
+          "changedVerdict": 112,
+          "changedRanking": 114,
+          "changedSelectedAction": 62,
+          "readerUnavailable": 0
+        },
+        "camp": {
+          "probes": 1235,
+          "changedVerdict": 6,
+          "changedRanking": 29,
+          "changedSelectedAction": 29,
+          "readerUnavailable": 0
+        },
+        "resource_activity": {
+          "probes": 1235,
+          "changedVerdict": 5,
+          "changedRanking": 86,
+          "changedSelectedAction": 92,
+          "readerUnavailable": 0
+        },
+        "daughter_fission": {
+          "probes": 774,
+          "changedVerdict": 32,
+          "changedRanking": 27,
+          "changedSelectedAction": 27,
+          "readerUnavailable": 0
+        }
+      },
+      "consumedWithin90": 191,
+      "consumedWithin360": 210,
+      "neverRead": 0,
+      "readButInert": 1083,
+      "evictedBeforeRead": 0,
+      "changedSelectedAction": 210
+    },
+    "ordinary": {
+      "recordsTracked": 1082,
+      "byFamily": {
+        "movement_destination": {
+          "probes": 1082,
+          "changedVerdict": 126,
+          "changedRanking": 125,
+          "changedSelectedAction": 77,
+          "readerUnavailable": 0
+        },
+        "camp": {
+          "probes": 1082,
+          "changedVerdict": 0,
+          "changedRanking": 13,
+          "changedSelectedAction": 13,
+          "readerUnavailable": 0
+        },
+        "resource_activity": {
+          "probes": 1082,
+          "changedVerdict": 12,
+          "changedRanking": 67,
+          "changedSelectedAction": 79,
+          "readerUnavailable": 0
+        },
+        "daughter_fission": {
+          "probes": 646,
+          "changedVerdict": 24,
+          "changedRanking": 12,
+          "changedSelectedAction": 12,
+          "readerUnavailable": 0
+        }
+      },
+      "consumedWithin90": 171,
+      "consumedWithin360": 181,
+      "neverRead": 0,
+      "readButInert": 965,
+      "evictedBeforeRead": 0,
+      "changedSelectedAction": 181
+    },
+    "isolated_marginal": {
+      "recordsTracked": 1235,
+      "byFamily": {
+        "movement_destination": {
+          "probes": 1235,
+          "changedVerdict": 127,
+          "changedRanking": 120,
+          "changedSelectedAction": 86,
+          "readerUnavailable": 0
+        },
+        "camp": {
+          "probes": 1235,
+          "changedVerdict": 7,
+          "changedRanking": 30,
+          "changedSelectedAction": 32,
+          "readerUnavailable": 0
+        },
+        "resource_activity": {
+          "probes": 1235,
+          "changedVerdict": 10,
+          "changedRanking": 75,
+          "changedSelectedAction": 85,
+          "readerUnavailable": 0
+        },
+        "daughter_fission": {
+          "probes": 581,
+          "changedVerdict": 217,
+          "changedRanking": 157,
+          "changedSelectedAction": 157,
+          "readerUnavailable": 0
+        }
+      },
+      "consumedWithin90": 246,
+      "consumedWithin360": 360,
+      "neverRead": 0,
+      "readButInert": 982,
+      "evictedBeforeRead": 0,
+      "changedSelectedAction": 360
+    },
+    "hostile": {
+      "recordsTracked": 741,
+      "byFamily": {
+        "movement_destination": {
+          "probes": 741,
+          "changedVerdict": 98,
+          "changedRanking": 84,
+          "changedSelectedAction": 67,
+          "readerUnavailable": 0
+        },
+        "camp": {
+          "probes": 741,
+          "changedVerdict": 0,
+          "changedRanking": 22,
+          "changedSelectedAction": 22,
+          "readerUnavailable": 0
+        },
+        "resource_activity": {
+          "probes": 741,
+          "changedVerdict": 10,
+          "changedRanking": 66,
+          "changedSelectedAction": 77,
+          "readerUnavailable": 0
+        },
+        "daughter_fission": {
+          "probes": 453,
+          "changedVerdict": 97,
+          "changedRanking": 73,
+          "changedSelectedAction": 73,
+          "readerUnavailable": 0
+        }
+      },
+      "consumedWithin90": 183,
+      "consumedWithin360": 239,
+      "neverRead": 0,
+      "readButInert": 579,
+      "evictedBeforeRead": 0,
+      "changedSelectedAction": 239
+    }
+  },
+  "decisiveExamples": [
+    {
+      "scenario": "map1",
+      "seed": "s1",
+      "recordEventId": "band:dry-margin-foragers|tile:111:40|105",
+      "family": "resource_activity",
+      "latencyDays": 3,
+      "verdictBefore": 27,
+      "verdictAfter": 27,
+      "actionWithout": "tile:111:40",
+      "actionWith": "tile:111:40"
+    },
+    {
+      "scenario": "map1",
+      "seed": "s1",
+      "recordEventId": "band:dry-margin-foragers|tile:110:40|105",
+      "family": "resource_activity",
+      "latencyDays": 3,
+      "verdictBefore": 28,
+      "verdictAfter": 27,
+      "actionWithout": "tile:111:40",
+      "actionWith": "tile:111:40"
+    },
+    {
+      "scenario": "map1",
+      "seed": "s1",
+      "recordEventId": "band:dry-margin-foragers|tile:112:40|105",
+      "family": "movement_destination",
+      "latencyDays": 74,
+      "verdictBefore": 2.24,
+      "verdictAfter": 3.17,
+      "actionWithout": "move_to_tile",
+      "actionWith": "stay"
+    },
+    {
+      "scenario": "map1",
+      "seed": "s1",
+      "recordEventId": "band:lake-wetland-foragers|tile:102:58|188",
+      "family": "resource_activity",
+      "latencyDays": 1,
+      "verdictBefore": 48,
+      "verdictAfter": 48,
+      "actionWithout": "tile:101:56",
+      "actionWith": "tile:103:58"
+    },
+    {
+      "scenario": "map1",
+      "seed": "s1",
+      "recordEventId": "band:lake-wetland-foragers|tile:101:58|188",
+      "family": "movement_destination",
+      "latencyDays": 81,
+      "verdictBefore": 3.04,
+      "verdictAfter": 3.49,
+      "actionWithout": "move_to_tile",
+      "actionWith": "stay"
+    },
+    {
+      "scenario": "map1",
+      "seed": "s1",
+      "recordEventId": "band:highland-edge-foragers|tile:35:20|278",
+      "family": "resource_activity",
+      "latencyDays": 1,
+      "verdictBefore": 42,
+      "verdictAfter": 41,
+      "actionWithout": "tile:34:20",
+      "actionWith": "tile:34:20"
+    },
+    {
+      "scenario": "map1",
+      "seed": "s1",
+      "recordEventId": "band:delta-coastal-foragers|tile:126:58|282",
+      "family": "resource_activity",
+      "latencyDays": 3,
+      "verdictBefore": 48,
+      "verdictAfter": 48,
+      "actionWithout": "tile:125:58",
+      "actionWith": "tile:125:56"
+    },
+    {
+      "scenario": "map1",
+      "seed": "s1",
+      "recordEventId": "band:highland-edge-foragers|tile:35:20|278",
+      "family": "movement_destination",
+      "latencyDays": 81,
+      "verdictBefore": 3.74,
+      "verdictAfter": 3.24,
+      "actionWithout": "explore_unknown_neighbor",
+      "actionWith": "move_to_tile"
+    },
+    {
+      "scenario": "map1",
+      "seed": "s1",
+      "recordEventId": "band:delta-coastal-foragers|tile:126:58|282",
+      "family": "movement_destination",
+      "latencyDays": 77,
+      "verdictBefore": 4.52,
+      "verdictAfter": 5.24,
+      "actionWithout": "explore_unknown_neighbor",
+      "actionWith": "move_to_tile"
+    },
+    {
+      "scenario": "map1",
+      "seed": "s1",
+      "recordEventId": "band:delta-coastal-foragers|tile:126:59|282",
+      "family": "camp",
+      "latencyDays": 77,
+      "verdictBefore": 0.16,
+      "verdictAfter": 0.17,
+      "actionWithout": "pressure_relief_move",
+      "actionWith": "pressure_relief_move"
+    },
+    {
+      "scenario": "map1",
+      "seed": "s1",
+      "recordEventId": "band:lake-wetland-foragers|tile:104:58|188",
+      "family": "daughter_fission",
+      "latencyDays": 172,
+      "verdictBefore": 1.38,
+      "verdictAfter": 1.73,
+      "actionWithout": "tile:103:58",
+      "actionWith": "tile:104:58"
+    },
+    {
+      "scenario": "map1",
+      "seed": "s1",
+      "recordEventId": "band:delta-coastal-foragers|tile:126:60|282",
+      "family": "daughter_fission",
+      "latencyDays": 78,
+      "verdictBefore": 1.55,
+      "verdictAfter": 2.12,
+      "actionWithout": "tile:127:59",
+      "actionWith": "tile:126:60"
+    },
+    {
+      "scenario": "map1",
+      "seed": "s1",
+      "recordEventId": "band:river-valley-foragers|tile:124:65|374",
+      "family": "resource_activity",
+      "latencyDays": 1,
+      "verdictBefore": 48,
+      "verdictAfter": 48,
+      "actionWithout": "tile:123:66",
+      "actionWith": "tile:123:63"
+    },
+    {
+      "scenario": "map1",
+      "seed": "s1",
+      "recordEventId": "band:river-valley-foragers|tile:124:65|374",
+      "family": "camp",
+      "latencyDays": 75,
+      "verdictBefore": 0.15,
+      "verdictAfter": 0.15,
+      "actionWithout": "pressure_relief_move",
+      "actionWith": "pressure_relief_move"
+    },
+    {
+      "scenario": "map1",
+      "seed": "s1",
+      "recordEventId": "band:river-valley-foragers|tile:124:64|374",
+      "family": "daughter_fission",
+      "latencyDays": 346,
+      "verdictBefore": 1.67,
+      "verdictAfter": 1.78,
+      "actionWithout": "tile:122:64",
+      "actionWith": "tile:124:64"
+    },
+    {
+      "scenario": "map1",
+      "seed": "s1",
+      "recordEventId": "band:dry-margin-foragers|tile:112:41|1273",
+      "family": "resource_activity",
+      "latencyDays": 2,
+      "verdictBefore": 47,
+      "verdictAfter": 44,
+      "actionWithout": "tile:111:40",
+      "actionWith": "tile:111:40"
+    },
+    {
+      "scenario": "map1",
+      "seed": "s1",
+      "recordEventId": "band:dry-margin-foragers|tile:112:43|1273",
+      "family": "resource_activity",
+      "latencyDays": 2,
+      "verdictBefore": 46,
+      "verdictAfter": 44,
+      "actionWithout": "tile:111:40",
+      "actionWith": "tile:111:40"
+    },
+    {
+      "scenario": "map1",
+      "seed": "s1",
+      "recordEventId": "band:dry-margin-foragers|tile:112:43|1273",
+      "family": "movement_destination",
+      "latencyDays": 76,
+      "verdictBefore": 5.37,
+      "verdictAfter": 3.52,
+      "actionWithout": "explore_unknown_neighbor",
+      "actionWith": "move_to_tile"
+    },
+    {
+      "scenario": "map1",
+      "seed": "s1",
+      "recordEventId": "band:lake-wetland-foragers|tile:101:58|1366",
+      "family": "resource_activity",
+      "latencyDays": 2,
+      "verdictBefore": 48,
+      "verdictAfter": 48,
+      "actionWithout": "tile:101:59",
+      "actionWith": "tile:100:58"
+    },
+    {
+      "scenario": "map1",
+      "seed": "s1",
+      "recordEventId": "band:lake-wetland-foragers|tile:101:57|1366",
+      "family": "resource_activity",
+      "latencyDays": 2,
+      "verdictBefore": 48,
+      "verdictAfter": 48,
+      "actionWithout": "tile:101:59",
+      "actionWith": "tile:100:58"
+    },
+    {
+      "scenario": "map1",
+      "seed": "s1",
+      "recordEventId": "band:lake-wetland-foragers|tile:102:58|1366",
+      "family": "movement_destination",
+      "latencyDays": 73,
+      "verdictBefore": 3.48,
+      "verdictAfter": 4.24,
+      "actionWithout": "move_to_tile",
+      "actionWith": "move_to_tile"
+    },
+    {
+      "scenario": "map1",
+      "seed": "s1",
+      "recordEventId": "band:dry-margin-foragers|tile:112:56|1273",
+      "family": "daughter_fission",
+      "latencyDays": 167,
+      "verdictBefore": 1.45,
+      "verdictAfter": 1.45,
+      "actionWithout": "tile:112:57",
+      "actionWith": "tile:113:58"
+    },
+    {
+      "scenario": "map1",
+      "seed": "s1",
+      "recordEventId": "band:dry-margin-foragers|tile:113:58|1273",
+      "family": "daughter_fission",
+      "latencyDays": 167,
+      "verdictBefore": 1.43,
+      "verdictAfter": 1.45,
+      "actionWithout": "tile:112:58",
+      "actionWith": "tile:113:58"
+    },
+    {
+      "scenario": "map1",
+      "seed": "s1",
+      "recordEventId": "band:lake-wetland-foragers|tile:101:57|1366",
+      "family": "daughter_fission",
+      "latencyDays": 74,
+      "verdictBefore": 1.32,
+      "verdictAfter": 1.3,
+      "actionWithout": "tile:100:57",
+      "actionWith": "tile:99:57"
+    },
+    {
+      "scenario": "map1",
+      "seed": "s1",
+      "recordEventId": "band:lake-wetland-foragers|tile:99:57|1366",
+      "family": "daughter_fission",
+      "latencyDays": 74,
+      "verdictBefore": 1.32,
+      "verdictAfter": 1.3,
+      "actionWithout": "tile:100:57",
+      "actionWith": "tile:99:57"
+    }
+  ]
+}

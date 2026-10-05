@@ -1,0 +1,105 @@
+{
+  "left": "R0",
+  "right": "R1",
+  "seed": "s3",
+  "firstDivergence": {
+    "verificationLaunches": {
+      "day": 732,
+      "year": 3,
+      "tick": 8,
+      "left": "stom:0",
+      "right": ""
+    },
+    "verificationTargets": {
+      "day": 384,
+      "year": 2,
+      "tick": 4,
+      "left": "stom:0:tile:202:72:resource_test_possible",
+      "right": "stom:0:tile:204:74:water_access"
+    },
+    "physicalRoutes": {
+      "day": 396,
+      "year": 2,
+      "tick": 4,
+      "left": "stom:0:frontier_verification:6",
+      "right": "stom:0:frontier_verification:11"
+    },
+    "tilesObserved": {
+      "day": 551,
+      "year": 2,
+      "tick": 6,
+      "left": "stom:0:47",
+      "right": "stom:0:49"
+    },
+    "placeRefreshed": {
+      "day": 399,
+      "year": 2,
+      "tick": 4,
+      "left": "6",
+      "right": "0"
+    },
+    "placeEvicted": {
+      "day": 2520,
+      "year": 7,
+      "tick": 28,
+      "left": "stom:0:tile:206:66,stom:0:tile:207:67,stom:0:tile:208:68,stom:0:tile:209:70,stom:0:tile:209:72",
+      "right": ""
+    },
+    "explorationLaunches": {
+      "day": 1266,
+      "year": 4,
+      "tick": 14,
+      "left": "",
+      "right": "stom:0"
+    },
+    "decision": {
+      "day": 35280,
+      "year": 98,
+      "tick": 392,
+      "left": "stom:0:-",
+      "right": ""
+    },
+    "position": {
+      "day": 2070,
+      "year": 6,
+      "tick": 23,
+      "left": "stom:0:tile:207:73",
+      "right": "stom:0:tile:207:70"
+    },
+    "receipts": {
+      "day": 3078,
+      "year": 9,
+      "tick": 34,
+      "left": "stom:0:0.066",
+      "right": "stom:0:0.023"
+    },
+    "support": {
+      "day": 3150,
+      "year": 9,
+      "tick": 35,
+      "left": "stom:0:0",
+      "right": "stom:0:0.46"
+    },
+    "population": {
+      "day": 13320,
+      "year": 37,
+      "tick": 148,
+      "left": "21",
+      "right": "20"
+    }
+  },
+  "chainOrder": [
+    "verificationTargets",
+    "physicalRoutes",
+    "placeRefreshed",
+    "tilesObserved",
+    "verificationLaunches",
+    "explorationLaunches",
+    "position",
+    "placeEvicted",
+    "receipts",
+    "support",
+    "population",
+    "decision"
+  ]
+}

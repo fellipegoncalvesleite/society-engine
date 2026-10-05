@@ -1,0 +1,42 @@
+{
+  "audit": "CORRECTION-34A-P27-FOUR-WAY-STEP-MODE",
+  "years": 6,
+  "spanDays": 1890,
+  "scenario": "map2",
+  "seed": "c34a:stepmode",
+  "verdict": "ALL_FOUR_STEP_MODES_IDENTICAL",
+  "reference": "daily",
+  "comparisons": [
+    {
+      "mode": "daily",
+      "steps": 1890,
+      "tick": 21,
+      "matchesDaily": true,
+      "bytes": 3945
+    },
+    {
+      "mode": "weekly",
+      "steps": 270,
+      "tick": 21,
+      "matchesDaily": true,
+      "bytes": 3945
+    },
+    {
+      "mode": "monthly",
+      "steps": 63,
+      "tick": 21,
+      "matchesDaily": true,
+      "bytes": 3945
+    },
+    {
+      "mode": "seasonal",
+      "steps": 21,
+      "tick": 21,
+      "matchesDaily": true,
+      "bytes": 3945
+    }
+  ],
+  "interpretation": "daily, weekly, monthly and seasonal are batch sizes over one daily kernel (advanceWorldByDays -> runDailyActions -> seasonal boundary processing). Identical canonical state under all four is what makes that a measured fact rather than a call-graph claim.",
+  "instrumentNote": "stepSim advances `steps` units OF THE GIVEN MODE, not days. A first version of this probe passed the same step count to all four modes and compared 24 days against 24 seasons, reporting DIVERGENT with ticks 0/1/8/24 — it was measuring its own unequal spans. The span is now a multiple of 630 days, the LCM of the four mode lengths, so every mode runs the identical simulated time.",
+  "projectionNote": "the compared projection includes band position, status, viability, full demography, every expedition's phase/workers/position/route index/provisions/harvest, terminal outcome ids, trip-record count, seasonal-receipt period and the depletion key count"
+}

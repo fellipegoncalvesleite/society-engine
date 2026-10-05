@@ -79,6 +79,8 @@ try {
   const resolve = (w, memory, targetTileId, routeTiles) => {
     const result = trips.resolveExpeditionTargetWork(
       w, band, memory, targetTileId, Math.max(0, routeTiles.length - 1), routeTiles, day, "food_resource_check",
+      // CORRECTION-34E — the work at the target is done by the party, so the probe names it.
+      { partyWorkers: 2 },
     );
     const taken = result.record.physicalFoodHarvest?.usableSupport ?? 0;
     return { ...result, taken, reason: expedition.classifyTargetWorkOutcome(result.record, taken) };
@@ -153,6 +155,7 @@ try {
   const stableRepeat = (() => {
     const result = trips.resolveExpeditionTargetWork(
       world2, band2, makeMemory(), site.tile.id, Math.max(0, site.route.length - 1), site.route, day, "food_resource_check",
+      { partyWorkers: 2 },
     );
     const taken = result.record.physicalFoodHarvest?.usableSupport ?? 0;
     return { taken, reason: expedition.classifyTargetWorkOutcome(result.record, taken) };

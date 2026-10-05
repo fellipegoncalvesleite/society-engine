@@ -14,7 +14,7 @@ import type {
   TileId,
   WorldTime,
 } from "../core/types";
-import type { KnowledgeSourceKind, KnowledgeState } from "../knowledge/types";
+import type { KnowledgeAcquisitionKind, KnowledgeSourceKind, KnowledgeState } from "../knowledge/types";
 import type {
   ResourceClassAvailabilitySummary,
   ResourceClassId,
@@ -26,6 +26,14 @@ import type { ResourceEcologyBandState, ResourceEcologyClassId } from "./resourc
 import type { TemporaryWatercraftAssessment } from "./storageSuitability";
 import type { VisibleNatureState } from "./visibleNature";
 import type { ProbeRecencyMemory } from "./probeMemory";
+import type { InvestigationOutcomeRingEntry, PendingInvestigationRecord } from "./pendingInvestigation";
+import type { FounderAllocation } from "./fissionFounderAllocation";
+import type {
+  FounderCohortBinding,
+  FounderCohortCommitment,
+  FounderDepartureAuthorization,
+} from "./fissionCommitment";
+import type { ParentResidualPolicy } from "./fissionResidualMeasurement";
 import type { ResourceScoutDebug, ScoutLearningRingEntry } from "./resourceScout";
 import type { PlantUseTestEvent, PlantUseTestRingEntry } from "./plantUseTesting";
 import type {
@@ -48,6 +56,831 @@ import type {
   Reason,
 } from "../rules/types";
 import type { BiomeKind, RiverCrossingClass } from "../world/types";
+import type { FissionLifecyclePhase } from "./fissionLifecycleKernel";
+
+/**
+ * ROADMAP ITEM 4 — the bounded lifecycle record carried on a band.
+ *
+ * The phase vocabulary and every transition rule live in the pure kernel
+ * (`fissionLifecycleKernel.ts`); this is only the shape stored in canonical state. `lineageId` ties
+ * a parent's attempt to the successor it produced, so parent/successor co-residence can be
+ * recognised from DIRECT LIFECYCLE PROVENANCE rather than from invented kinship.
+ */
+
+/**
+ * The ordinary-ecology evidence that caused one parent-side fission attempt to begin.
+ *
+ * This is proposal content, not a completed plan and not a departure event. The target and founder
+ * count are the specific separation the parent is considering; they become the canonical
+ * `targetTileId` and `requestedFounders` only after the planning adapter re-validates them on a later
+ * simulated day. Keeping the two names apart is what prevents `proposed` from silently claiming the
+ * `departure_planned` contract.
+ *
+ * One record replaces the previous one when a later annual ecological condition opens a new attempt,
+ * so the state is bounded. Every quantity is either ordinary demographic evidence or band-known
+ * destination evidence; there is no hidden-world target here.
+ */
+export interface NaturalFissionProposalEvidence {
+  readonly authority: "annual_demography";
+  readonly cause: "accumulated_split_pressure" | "crisis_breakaway_pressure";
+  readonly proposedOnDay: number;
+  readonly evidenceTick: TickNumber;
+  readonly splitPressure: number;
+  /** The old demographic sizing model's requested cohort before physical-availability capping. */
+  readonly ecologicalFounderRequest: number;
+  /** The bounded cohort this specific proposal is considering after current availability is read. */
+  readonly proposedFounders: number;
+  /** Bodies at the residence and not already promised to a prepared expedition on proposal day. */
+  readonly foundersAvailableAtProposal: number;
+  /** Existing legacy minimum, retained as the natural revision floor rather than inventing one. */
+  readonly minimumFounderRequest: number;
+  /** A tile in the parent's own observed record; still only a proposal candidate at this phase. */
+  readonly proposedTargetTileId: TileId;
+  readonly proposedTargetScore: number;
+  readonly proposedTargetReason:
+    | "frontier_split"
+    | "river_corridor_split"
+    | "coastal_split"
+    | "crossing_enabled_split";
+  /** Bounded causal provenance from the annual evidence producer. */
+  readonly reasonIds: readonly string[];
+}
+
+/**
+ * ROADMAP ITEM 4 — WHAT WAS ASSESSED, ACCEPTED AND PERMITTED, BEFORE ANYONE LEAVES.
+ *
+ * WHY THIS IS ONE NESTED RECORD RATHER THAN FIVE OPTIONAL FIELDS.
+ *
+ * The prepared facts are not independently meaningful: a commitment describes ONE allocation, a
+ * permit authorizes ONE commitment's terms, and a freshness fingerprint measures the parent the
+ * assessment actually read. Five optional fields on the attempt would admit thirty-one partial
+ * states, nearly all incoherent — commitment A paired with allocation B being the one that matters,
+ * because it is exactly the defect this whole family exists to prevent. One optional nested record
+ * is written and cleared atomically by one writer, so those pairings are unconstructible rather than
+ * merely discouraged.
+ *
+ * It does NOT create a second authority for any fact it holds. The allocation is still
+ * `allocateFounderCohorts`'s, the commitment still `assessFounderCohortCommitment`'s, the permit
+ * still `openDepartureAuthorization`'s. This record is the BINDING that says they were produced
+ * together, for one departure, from one reading of one parent.
+ */
+export interface PreparedFissionDeparture {
+  /** The day preparation ran. Supplied, never read from a hidden clock. */
+  readonly preparedOnDay: number;
+  /**
+   * The EXACT allocation that was assessed and accepted — not a headcount.
+   *
+   * A count cannot say whether eight founders are 5 adults + 2 dependents + 1 elder or some other
+   * composition, and the residual authority's verdict and the cohort's acceptance were both about
+   * one specific composition. The later physical departure must be able to prove it is moving those
+   * represented founders, so the composition is stored rather than recomputed.
+   */
+  readonly allocation: FounderAllocation;
+  /** Retained so a reader can see whether the residual authority revised the request downward. */
+  readonly requestedFounders: number;
+  /** What the residual authority endorsed. Equal to the request when no revision was needed. */
+  readonly endorsedFounders: number;
+  /** The immutable historical fact that a represented founder cohort accepted these terms. */
+  readonly commitment: FounderCohortCommitment;
+  /**
+   * The measured evidence the acceptance rested on, as bounded rounded numbers.
+   *
+   * Reason ids alone cannot answer this later: they are threshold-crossed labels, and every quantity
+   * behind them — split pressure, embodied burden, destination familiarity — moves as the band
+   * lives. Once the parent changes, nothing could reconstruct how close the decision was, so a
+   * reader would have the commitment's conclusion and no way to check it. Seven rounded numbers per
+   * prepared departure, replaced wholesale rather than appended, so this does not grow.
+   */
+  readonly commitmentEvidence: PreparedCommitmentEvidence;
+  /** The one-use permit for this departure. Its status is the live authority; see fissionCommitment. */
+  readonly authorization: FounderDepartureAuthorization;
+  /**
+   * A deterministic fingerprint of EVERY input the parent-residual authority read.
+   *
+   * Preparation and departure are separated by up to `DEPARTURE_READY_MAX_DAYS`, and the parent is
+   * not still during them: the annual demographic step moves cohorts, expeditions commit and release
+   * bodies daily, nutrition and acute condition move seasonally. A commitment describes terms
+   * assessed against one reading of the parent, so a later departure needs a way to ask whether that
+   * reading still holds. The fingerprint covers the whole closed input struct rather than a chosen
+   * subset, so no load-bearing field can be forgotten.
+   */
+  readonly residualInputFingerprint: string;
+  /**
+   * The one part of the residual reading that is NOT a fact about the parent, kept so the fingerprint
+   * can be RECONSTRUCTED rather than trusted.
+   *
+   * Every other residual input is derived from the band by `fissionResidualMeasurement`, so a later
+   * departure can re-read them and see whether they moved. `minimumFounderRequest` cannot be derived
+   * from anything — it is the smallest departure the caller was willing to accept — so without it
+   * stored, the departure seam could not rebuild the same closed input and the comparison would be
+   * against a different struct. Storing it is what keeps the fingerprint exhaustive over
+   * `keyof ParentResidualInput` at BOTH ends instead of only at the writing end.
+   */
+  readonly residualPolicy: ParentResidualPolicy;
+}
+
+/**
+ * ROADMAP ITEM 4 — WHAT THE SUCCESSOR CARRIES OUT OF THE DEPARTURE THAT ACTUALLY HAPPENED.
+ *
+ * WHY THE SUCCESSOR NEEDS ANY OF THIS. A future stabilization authority must be able to prove that
+ * THIS group came from THAT positive commitment. Reconstructing it later from "same parent, similar
+ * founder count" is not proof — a parent can attempt more than one separation over its life, and two
+ * attempts of eleven founders are indistinguishable under that rule. So the link is carried, once,
+ * at the moment it is true.
+ *
+ * WHY IT IS FIVE FIELDS AND NOT THE WHOLE `PreparedFissionDeparture`. The prepared record contains a
+ * LIVE ONE-USE PERMIT, and a permit is an authority to move bodies. Copying it onto the successor
+ * would hand a group that has already departed a second authorization to depart — the exact double-
+ * departure this pass exists to make impossible, recreated by the provenance that was supposed to
+ * describe it. What the successor needs is historical: which commitment, which exact cohort, when it
+ * was decided, when it was executed, and that the permit is SPENT.
+ *
+ * It is also why this cannot simply be read off the parent later: the parent's attempt is terminal
+ * after departure and a future cleanup may clear it, while the successor's own account of where it
+ * came from must survive as long as the successor does.
+ */
+export interface ConsumedDepartureProvenance {
+  /** Direct join to the bounded physical-departure record shared by parent and successor. */
+  readonly departureRecordId: EventId;
+  /** The commitment this departure executed. The join key to the parent's historical record. */
+  readonly commitmentId: string;
+  /** The day the cohort accepted these terms. */
+  readonly commitmentDecisionDay: number;
+  /** The day the bodies actually moved. Never equal to the decision day by construction. */
+  readonly departedOnDay: number;
+  /** The exact represented cohort — the same three integers the commitment bound to. */
+  readonly founders: FounderCohortBinding;
+  /**
+   * Literal, not a boolean: this record exists only because a permit was spent, and naming the
+   * status means a reader never has to infer "it must have been consumed, because here we are".
+   */
+  readonly authorizationStatus: "consumed_by_departure";
+}
+
+/**
+ * A bounded, immutable record of what became true at the physical seam — and no more.
+ *
+ * This record says bodies left under one positive commitment and one spent permit. It deliberately
+ * says nothing about whether the successor later established. The identical record is retained on
+ * both sides of the split, so a later reader does not have to reconstruct a departure from a founder
+ * count, a date, or a parent name after the parent's current-attempt slot has moved on.
+ */
+export interface SuccessorDepartureRecord {
+  readonly id: EventId;
+  readonly time: WorldTime;
+  readonly tick: TickNumber;
+  readonly lineageId: string;
+  readonly parentBandId: BandId;
+  readonly successorBandId: BandId;
+  readonly relation: BandLineageRelation;
+  readonly commitmentId: string;
+  readonly commitmentDecisionDay: number;
+  readonly departedOnDay: number;
+  readonly originTileId: TileId;
+  readonly targetTileId: TileId;
+  readonly founders: FounderCohortBinding;
+  readonly authorizationStatus: "consumed_by_departure";
+  readonly parentPopulationBefore: number;
+  readonly parentPopulationAfter: number;
+  readonly successorPopulationAtDeparture: number;
+  readonly inheritedKnowledgeCount: number;
+  readonly inheritedMemoryCount: number;
+  readonly inheritedCrossingCount: number;
+  readonly inheritedCorridorCount: number;
+  readonly reasonIds: readonly ReasonId[];
+}
+
+/**
+ * Monotonic answer to a question the bounded lifecycle phase ring cannot answer forever.
+ *
+ * `return_path_entered` is absorbing. No writer changes it back to `outbound_trial`, so stabilization
+ * cannot become possible merely because `FissionLifecycleRecord.history` evicted an old `returning`
+ * entry. Optional only for compatibility with pre-seam fixtures and serialized worlds; the positive
+ * stabilization authority requires it and the physical seam always initializes it.
+ */
+export type ProvisionalSeparationCourse =
+  | {
+      readonly status: "outbound_trial";
+      readonly initializedOnDay: number;
+    }
+  | {
+      readonly status: "return_path_entered";
+      readonly initializedOnDay: number;
+      readonly firstEnteredOnDay: number;
+      readonly enteredFromPhase: FissionLifecyclePhase;
+      readonly trigger: "lived_return_decision" | "phase_bound_expired";
+    };
+
+/**
+ * The named physical-operation proof consumed by stabilization.
+ *
+ * It is a conjunction, not a score. Each boolean has one source authority and none can compensate
+ * for another: plentiful food cannot pay for no water, many bodies cannot replace work, and a rich
+ * tile cannot replace a closed window of actual extraction. The window may span localities, which is
+ * why this proves mobile group operation rather than sedentary residence.
+ */
+export interface SuccessorIndependentOperationEvidence {
+  readonly authority: "successor_independent_operation_v1";
+  readonly successorBandId: BandId;
+  readonly lineageId: string;
+  readonly assessedOnDay: number;
+  readonly departureDay: number;
+  readonly arrivalDay: number;
+  readonly assessmentWindow: {
+    readonly startDay: number;
+    readonly endDay: number;
+    readonly days: number;
+    readonly tileIds: readonly TileId[];
+    readonly supportUnits: number;
+    readonly demandUnits: number;
+    readonly supportRatio: number;
+    readonly daysWithAnyPhysicalTake: number;
+    readonly workerDays: number;
+    readonly depletionApplied: number;
+    readonly meanWaterStress: number;
+    readonly closedBy: SubsistenceAssessmentWindow["closedBy"];
+  };
+  readonly currentCondition: {
+    readonly population: number;
+    readonly workingAdults: number;
+    readonly mortalityRiskBump: number;
+    readonly returnDecisionWouldAbandon: boolean;
+  };
+  readonly requirements: {
+    readonly physicallyArrivedAtAcceptedTarget: boolean;
+    readonly postDepartureDemandWindowCompleted: boolean;
+    readonly demandWasMeasured: boolean;
+    readonly productiveLaborWasLived: boolean;
+    readonly realFoodWasTakenAndDepleted: boolean;
+    readonly supportStayedAboveReturnFailureFloor: boolean;
+    readonly waterStayedBelowNoWaterFailureLine: boolean;
+    readonly livingPopulationRemains: boolean;
+    readonly workingPopulationRemains: boolean;
+    readonly embodiedBurdenRemainsBelowReturnLine: boolean;
+    readonly currentReturnAuthorityDoesNotAbandon: boolean;
+  };
+  readonly allRequirementsMet: boolean;
+  readonly sourceAuthorities: readonly string[];
+}
+
+/**
+ * The positive completion fact written only after the successor actually stabilizes.
+ *
+ * Departure remains a separate earlier record, preventing either teleport fiction (stabilization
+ * stamped on departure day) or premature success (departure claiming establishment). The identical
+ * bounded object is appended to parent and successor in the same atomic world update.
+ */
+export interface SuccessorStabilizationEvent {
+  readonly id: EventId;
+  readonly time: WorldTime;
+  readonly tick: TickNumber;
+  readonly stabilizedOnDay: number;
+  readonly departureRecordId: EventId;
+  readonly lineageId: string;
+  readonly parentBandId: BandId;
+  readonly successorBandId: BandId;
+  readonly relation: BandLineageRelation;
+  readonly stabilizedTileId: TileId;
+  readonly successorPopulationAtStabilization: number;
+  readonly successorWorkingAdultsAtStabilization: number;
+  readonly successorDependentsAtStabilization: number;
+  readonly successorEldersAtStabilization: number;
+  readonly neverEnteredReturnPath: true;
+  readonly independentOperation: SuccessorIndependentOperationEvidence;
+  readonly reasonIds: readonly ReasonId[];
+}
+
+/** The exact living cohort represented by a decision taken after a failed return. */
+export interface PostReturnSurvivorCohortBinding {
+  readonly workingAdults: number;
+  readonly dependents: number;
+  readonly elders: number;
+}
+
+/**
+ * The successor-owned evidence on which the CURRENT survivors chose a new independent course.
+ *
+ * Nothing here is inherited from the founder commitment. The interval begins only after
+ * `unresolved_after_failed_return` became true, and the destination is either the tile physically
+ * occupied by the group or a tile in its own observed knowledge. A poor interval may still support
+ * a decision to try different remembered country; it never proves establishment.
+ */
+export interface PostReturnContinuationDecisionEvidence {
+  readonly authority: "post_return_continuation_decision_v1";
+  readonly failedReturnBeganOnDay: number;
+  readonly assessedOnDay: number;
+  readonly livedSinceFailure: {
+    readonly firstDay: number;
+    readonly lastDay: number;
+    readonly days: number;
+    readonly demandUnits: number;
+    readonly workerDays: number;
+    readonly supportUnits: number;
+    readonly meanWaterStress: number;
+  };
+  readonly currentCondition: {
+    readonly population: number;
+    readonly workingAdults: number;
+    readonly dependents: number;
+    readonly elders: number;
+    readonly mortalityRiskBump: number;
+  };
+  readonly target: {
+    readonly tileId: TileId;
+    readonly basis: "current_occupied_tile" | "group_observed_memory";
+    readonly observedConfidence?: number;
+    readonly observedRichness?: number;
+    readonly observedWaterAccess?: number;
+  };
+  readonly requirements: {
+    readonly failedReturnIsMonotonicHistory: boolean;
+    readonly postFailureLifeWasPhysicallyMeasured: boolean;
+    readonly currentSurvivorCohortIsNonempty: boolean;
+    readonly productiveLaborRemains: boolean;
+    readonly embodiedCapacityRemains: boolean;
+    readonly targetComesFromGroupOwnedKnowledge: boolean;
+  };
+  readonly allRequirementsMet: boolean;
+  readonly sourceAuthorities: readonly string[];
+}
+
+/**
+ * A new social fact made by the survivors after return failed.
+ *
+ * This is deliberately not `FounderCohortCommitment`: it represents the current cohort, binds no
+ * parent-side transfer, grants no departure permit, and commits only to continuing as a separate
+ * group from a current or remembered place.
+ */
+export interface PostReturnContinuationCommitment {
+  readonly commitmentId: string;
+  readonly authority: "post_return_continuation_commitment_v1";
+  readonly actorResolution: "aggregate_current_survivor_cohort";
+  readonly intent: "continue_as_separate_group";
+  readonly successorBandId: BandId;
+  readonly parentBandId: BandId;
+  readonly lineageId: string;
+  readonly survivors: PostReturnSurvivorCohortBinding;
+  readonly failedReturnBeganOnDay: number;
+  readonly decisionDay: number;
+  readonly decisionTileId: TileId;
+  readonly targetTileId: TileId;
+  readonly evidence: PostReturnContinuationDecisionEvidence;
+  readonly reasonIds: readonly ReasonId[];
+}
+
+/**
+ * The distinct physical contradiction that ended one current post-return course.
+ *
+ * No score appears here. A blocked route, a completed barren operation window, water failure,
+ * depleted labour and embodied deterioration are different facts even though they all reopen the
+ * same social question. Optional window fields are present only when a complete target-local
+ * measurement exists; a partial or travelling window cannot condemn the committed ground.
+ */
+export type PostReturnContinuationFailureReason =
+  | "repeated_local_route_refusal"
+  | "completed_target_window_without_physical_take"
+  | "completed_target_window_without_productive_labor"
+  | "completed_target_window_support_failed"
+  | "completed_target_window_water_failed"
+  | "productive_labor_below_continuation_minimum"
+  | "embodied_burden_above_continuation_limit";
+
+export interface PostReturnContinuationFailureEvidence {
+  readonly authority: "post_return_continuation_failure_v1";
+  readonly successorBandId: BandId;
+  readonly lineageId: string;
+  readonly commitmentId: string;
+  readonly failedOnDay: number;
+  readonly reason: PostReturnContinuationFailureReason;
+  readonly positionTileId: TileId;
+  readonly targetTileId: TileId;
+  readonly physicallyReachedCommittedTarget: boolean;
+  readonly blockedStepDays: number;
+  readonly blockedStepDaysRequired: number;
+  readonly workingAdults: number;
+  readonly minimumWorkingAdults: number;
+  readonly mortalityRiskBump: number;
+  readonly maximumMortalityRiskBump: number;
+  readonly completedTargetWindow?: {
+    readonly startDay: number;
+    readonly endDay: number;
+    readonly days: number;
+    readonly tileIds: readonly TileId[];
+    readonly supportUnits: number;
+    readonly demandUnits: number;
+    readonly supportRatio: number;
+    readonly supportRatioFloor: number;
+    readonly workerDays: number;
+    readonly daysWithAnyPhysicalTake: number;
+    readonly depletionApplied: number;
+    readonly hadAnyOwnPhysicalTake: boolean;
+    readonly meanWaterStress: number;
+    readonly maximumMeanWaterStress: number;
+    readonly closedBy: "demand_window_complete";
+  };
+  readonly requirements: {
+    readonly currentCommitmentIsCanonical: boolean;
+    readonly livingPopulationRemains: boolean;
+    readonly reasonSpecificPhysicalBoundaryMet: boolean;
+  };
+  readonly allRequirementsMet: boolean;
+  readonly sourceAuthorities: readonly string[];
+}
+
+/** A superseded commitment remains a real social fact, but no longer authorizes a course. */
+export interface HistoricalPostReturnContinuationCommitment {
+  readonly status: "superseded_after_physical_failure";
+  readonly supersededOnDay: number;
+  readonly commitment: PostReturnContinuationCommitment;
+  readonly failure: PostReturnContinuationFailureEvidence;
+}
+
+/** Physical operation earned strictly after the fresh post-return commitment. */
+export interface PostReturnIndependentOperationEvidence {
+  readonly authority: "post_return_independent_operation_v1";
+  readonly successorBandId: BandId;
+  readonly lineageId: string;
+  readonly commitmentId: string;
+  readonly assessedOnDay: number;
+  readonly assessmentWindow: SuccessorIndependentOperationEvidence["assessmentWindow"];
+  readonly currentCondition: SuccessorIndependentOperationEvidence["currentCondition"];
+  readonly requirements: {
+    readonly physicallyReachedCommittedTarget: boolean;
+    readonly operationWindowBeganAfterFreshCommitment: boolean;
+    readonly demandWasMeasured: boolean;
+    readonly productiveLaborWasLived: boolean;
+    readonly realFoodWasTakenAndDepleted: boolean;
+    readonly supportStayedAboveReturnFailureFloor: boolean;
+    readonly waterStayedBelowNoWaterFailureLine: boolean;
+    readonly livingPopulationRemains: boolean;
+    readonly workingPopulationRemains: boolean;
+    readonly embodiedBurdenRemainsBelowReturnLine: boolean;
+  };
+  readonly allRequirementsMet: boolean;
+  readonly sourceAuthorities: readonly string[];
+}
+
+/**
+ * A historically distinct completion: this group tried to return, failed, chose again, and only
+ * then demonstrated an independent life. It must never be projected as ordinary stabilization.
+ */
+export interface SuccessorPostReturnEstablishmentEvent {
+  readonly id: EventId;
+  readonly time: WorldTime;
+  readonly tick: TickNumber;
+  readonly establishedOnDay: number;
+  readonly departureRecordId: EventId;
+  readonly lineageId: string;
+  readonly parentBandId: BandId;
+  readonly successorBandId: BandId;
+  readonly relation: BandLineageRelation;
+  readonly establishedTileId: TileId;
+  readonly successorPopulationAtEstablishment: number;
+  readonly successorWorkingAdultsAtEstablishment: number;
+  readonly successorDependentsAtEstablishment: number;
+  readonly successorEldersAtEstablishment: number;
+  readonly returnPathEntered: true;
+  readonly failedReturnBeganOnDay: number;
+  readonly continuationCommitment: PostReturnContinuationCommitment;
+  readonly independentOperation: PostReturnIndependentOperationEvidence;
+  readonly reasonIds: readonly ReasonId[];
+}
+
+/** Bounded, all-numeric. Only written on acceptance, where every term was measurable. */
+export interface PreparedCommitmentEvidence {
+  readonly motive: number;
+  readonly destinationFamiliarity: number;
+  readonly embodiedCapacity: number;
+  readonly splitCausedDamage: number;
+  readonly readiness: number;
+  readonly tendencyDelta: number;
+  readonly willingness: number;
+}
+
+export interface FissionLifecycleRecord {
+  readonly phase: FissionLifecyclePhase;
+  readonly phaseEnteredDay: number;
+  /** Bounded, newest last, capped by the kernel. */
+  readonly history: readonly FissionLifecyclePhase[];
+  /** Shared by the parent's attempt and the successor it produced. */
+  readonly lineageId: string;
+  /** Present only when ordinary ecology opened this attempt; never copied to a successor. */
+  readonly naturalProposal?: NaturalFissionProposalEvidence;
+  /** The count originally requested, retained even when the residual authority revised it down. */
+  readonly requestedFounders?: number;
+  /** The count the parent residual authority actually endorsed, when it differed. */
+  readonly endorsedFounders?: number;
+  /** Why a revision happened, or why the attempt was refused. Reason ids, never prose. */
+  readonly reasonIds?: readonly string[];
+  /** The band-known destination this attempt named. Never hidden world truth. */
+  readonly targetTileId?: TileId;
+  /**
+   * Everything that was assessed, accepted and permitted before anyone leaves.
+   *
+   * Present only on an attempt that `prepareFissionDeparture` carried through the whole chain, and
+   * that writer is the only thing that sets it. Absent means preparation has not happened — NOT that
+   * it happened and produced nothing.
+   */
+  readonly preparedDeparture?: PreparedFissionDeparture;
+  /**
+   * Bounded historical evidence of the departure that actually happened.
+   *
+   * Written ONLY on the SUCCESSOR's record, by the atomic departure seam, in the same world mutation
+   * that moves the bodies — so its presence and the transfer are the same event. The parent's attempt
+   * never carries it: the parent keeps the prepared record, which holds the spent permit, and one
+   * fact recorded twice in two shapes is how the two sides start to disagree.
+   */
+  readonly departureProvenance?: ConsumedDepartureProvenance;
+  /** Monotonic return/abandonment history; unlike `history`, it cannot roll an old return away. */
+  readonly separationCourse?: ProvisionalSeparationCourse;
+  /** Direct join to the positive completion event, present only after `stabilized`. */
+  readonly stabilizationEventId?: EventId;
+  /** The fresh survivor-cohort decision made after a bounded return attempt failed. */
+  readonly postReturnCommitment?: PostReturnContinuationCommitment;
+  /**
+   * Bounded provenance for superseded post-return decisions, newest last. A historical entry grants
+   * no movement or establishment authority; only `postReturnCommitment` is current.
+   */
+  readonly postReturnCommitmentHistory?: readonly HistoricalPostReturnContinuationCommitment[];
+  /**
+   * Bounded target exclusion memory. It prevents an automatic A -> A retry after physical failure
+   * without retaining an unbounded ledger of every attempted decision.
+   */
+  readonly postReturnFailedTargetTileIds?: readonly TileId[];
+  /** Direct join to the historically distinct post-return establishment event. */
+  readonly postReturnEstablishmentEventId?: EventId;
+  /**
+   * The tile the founders physically left from, retained so a return has a destination it LEGITIMATELY
+   * KNOWS. It is the last place this group actually saw its parent — deliberately NOT the parent's
+   * current position, which the travellers have no channel to observe.
+   */
+  readonly departureTileId?: TileId;
+  /** Bounded outbound trail, newest last, so a return can retrace ground the group actually walked. */
+  readonly trail?: readonly TileId[];
+  /**
+   * ROADMAP ITEM 4 — TWO PHYSICAL OBSERVATIONS, AND THE FOUR THINGS THEY DO NOT MEAN.
+   *
+   * A red-team pass tried to derive "this group had an alternative and did not take it" from `trail`
+   * and `blockedStepDays`, and both were the wrong instruments. `trail` is an append-only breadcrumb
+   * written in EVERY movement phase, capped at 64 with the OLDEST entries evicted — so a long journey
+   * loses the home end first — and nothing routes by it. `blockedStepDays` counts refusals toward
+   * WHATEVER the current phase is aiming at, so it describes the outbound direction while travelling
+   * and the homeward one while returning, and it is reset on entry to `returning`. Neither can answer
+   * whether going home was physically open.
+   *
+   * These two fields answer only what they say, and the names are chosen so they cannot be read as
+   * more. They are OBSERVATIONS OF PHYSICAL FACT written by the movement authority, never decisions.
+   *
+   * `homewardStepFromHereWasAvailable` means EXACTLY: on the day stamped, at least one tile adjacent
+   * to where this group was standing was passable AND strictly closer to `departureTileId`.
+   *
+   * It does NOT mean: the parent is still there (the group has no channel to know); the whole route
+   * home is open (only the first step was tested); a return would succeed; or that anybody weighed
+   * the option. It is the ground's answer to one step, nothing else.
+   *
+   * `lastActionRelativeToDeparture` records what the group PHYSICALLY DID that day measured against
+   * `departureTileId`. It is deliberately not named for any intention. While `returning` it reads
+   * `toward_departure` by construction, because that is the phase's own destination.
+   */
+  readonly homewardStepFromHereWasAvailable?: boolean;
+  readonly homewardStepObservedOnDay?: number;
+  readonly lastActionRelativeToDeparture?: ProvisionalActionRelativeToDeparture;
+  readonly lastActionRelativeToDepartureDay?: number;
+  /**
+   * Bounded physical history gathered while this provisional group lives outside the parent camp.
+   *
+   * This is measurement and provenance only. It does not establish a social commitment, create an
+   * independence attempt, or authorize any lifecycle outcome. A future parent-support channel must
+   * distinguish lifetime support history from support during a real committed attempt, but neither
+   * field belongs here until an actual writer exists.
+   */
+  readonly operationHistory?: ProvisionalOperationHistory;
+  /**
+   * ROADMAP ITEM 4 — THE GROUP'S OWN, RUNNING, PHYSICAL SUBSISTENCE INTERVAL.
+   *
+   * A band working a residential catchment is measured once a season, because that is the unit its
+   * food arrives in. A group walking across country has no camp, no catchment and no season-long
+   * arrangement — so measuring it on the residential cadence measured it never, and an unasked
+   * question read as contentment. This is the successor's OWN interval: what it physically took,
+   * what its bodies physically needed over the same days, and what the ground gave it to drink.
+   *
+   * Bounded by construction: running sums plus a small ring of recent days.
+   */
+  readonly travelSubsistence?: TravelSubsistenceState;
+  /**
+   * ROADMAP ITEM 4 — the group's attempt to live where it is standing, and what it has learned there.
+   *
+   * Present only while a group is in `establishing`. Reset whenever the group enters that phase again,
+   * because evidence gathered at one site says nothing about another.
+   */
+  readonly establishment?: ProvisionalEstablishmentState;
+  /**
+   * Days the group wanted to go on and the ground refused every step toward its destination. Retained
+   * because "there is no way forward from here" is exactly the evidence a return decision needs, and
+   * it is the group's OWN experience of being stopped rather than knowledge of what lies beyond.
+   */
+  readonly blockedStepDays?: number;
+  /** Why the group turned for home, when it did. A reason id, never prose. */
+  readonly returnCause?: ProvisionalReturnCause;
+}
+
+/**
+ * Why a group decided to walk home. Every one of these is something the group has LIVED and can
+ * measure on itself; none reads the parent, the destination or the future.
+ */
+/**
+ * What a provisional group physically did on a day, measured against the tile it left from.
+ *
+ * An observation, not a decision label — deliberately NOT named `continue`, `recommit`,
+   * `choose_independence` or `refuse_return`. A step away from home may execute the named departure or
+   * reflect a physical constraint; this type records the movement and says nothing about intent.
+ */
+export type ProvisionalActionRelativeToDeparture =
+  | "toward_departure"
+  | "away_from_departure"
+  | "lateral_to_departure"
+  | "stayed";
+
+export type ProvisionalReturnCause =
+  | "measured_support_failed_at_this_site"
+  | "no_water_where_the_group_is_standing"
+  | "every_way_forward_is_blocked"
+  | "not_enough_working_people_left"
+  | "embodied_burden_beyond_what_the_group_can_carry";
+
+/** A named lived-evidence signal, with where it came from and when it was earned. */
+export interface ProvisionalEvidenceSignal {
+  readonly id: ProvisionalEvidenceId;
+  /** The production authority the signal is read from. Never a UI or read-model field. */
+  readonly sourceAuthority: string;
+  /** The day the signal first held. Absent while it does not hold. */
+  readonly acquiredDay?: number;
+  readonly holds: boolean;
+  /** The measured quantity behind the verdict, so a reader can check it rather than trust it. */
+  readonly measured: number;
+  /** A descriptive comparison line, not a lifecycle requirement. */
+  readonly reference: number;
+}
+
+/**
+ * Descriptive condition and locality measurements for a provisional successor.
+ *
+ * These identifiers publish what was measured. None is a stabilization requirement, and the list
+ * deliberately contains no successor-identity or parent-support verdict.
+ */
+export type ProvisionalEvidenceId =
+  | "water_reachable_where_the_group_lives"
+  | "productive_labour_retained"
+  | "embodied_burden_bounded"
+  // locality-level — retained, reported, NOT required
+  | "measured_support_intervals_at_this_site"
+  | "measured_support_covered_a_real_share_of_demand"
+  | "food_repeatedly_taken_from_local_sources"
+  | "long_enough_to_reject_one_lucky_day";
+
+/** A bounded, outcome-blind measurement of physically lived provisional subsistence. */
+export interface SubsistenceAssessmentWindow {
+  /** Every locality this measurement spanned. */
+  readonly tileIds: readonly TileId[];
+  /** The subset where usable support and real depletion were both positive. */
+  readonly tileIdsWithAnyPhysicalTake: readonly TileId[];
+  readonly startDay: number;
+  readonly endDay: number;
+  readonly days: number;
+  /** Physically taken, after the patch's own processing loss. */
+  readonly supportUnits: number;
+  /** What these bodies needed over exactly these days. */
+  readonly demandUnits: number;
+  readonly daysWithAnyPhysicalTake: number;
+  readonly waterStressDaySum: number;
+  readonly workerDays: number;
+  readonly depletionApplied: number;
+  /**
+   * Why the sample stopped accumulating — never why it succeeded or failed.
+   * `demand_window_complete` is the ordinary closer and is outcome-blind by construction.
+   */
+  readonly closedBy: "demand_window_complete" | "lifecycle_ended";
+  /**
+   * Exactly one claim: this window contained some usable support backed by real extraction.
+   * It says nothing about adequacy, independence, identity, commitment, or lifecycle outcome.
+   */
+  readonly hadAnyOwnPhysicalTake: boolean;
+}
+
+/**
+ * Bounded physical/provenance history for a provisional group's whole lifetime.
+ *
+ * No field is attempt-scoped. Phase membership cannot create a social attempt, and no reader may use
+ * these measurements to request stabilization before a real positive commitment writer exists.
+ */
+export interface ProvisionalOperationHistory {
+  readonly lifetimeDaysWithAnyPhysicalTake: number;
+  readonly lifetimeAssessmentWindows: number;
+  readonly lifetimeWindowsWithAnyPhysicalTake: number;
+  /** Distinct tiles on which this group ever recorded usable support backed by real depletion. */
+  readonly lifetimeTileIdsWithAnyPhysicalTake: readonly TileId[];
+  /** Bounded recent measurements, descriptive only, newest last. */
+  readonly recentAssessmentWindows: readonly SubsistenceAssessmentWindow[];
+  readonly openAssessmentWindow?: OpenSubsistenceAssessmentWindow;
+}
+
+/** A running assessment before it closes into a `SubsistenceAssessmentWindow`. */
+export interface OpenSubsistenceAssessmentWindow {
+  readonly tileIds: readonly TileId[];
+  readonly tileIdsWithAnyPhysicalTake: readonly TileId[];
+  readonly startDay: number;
+  readonly days: number;
+  readonly supportUnits: number;
+  readonly demandUnits: number;
+  readonly daysWithAnyPhysicalTake: number;
+  readonly waterStressDaySum: number;
+  readonly workerDays: number;
+  readonly depletionApplied: number;
+}
+
+export interface ProvisionalEstablishmentState {
+  readonly siteTileId: TileId;
+  readonly sinceDay: number;
+  /** The interval count the group carried into this site, so intervals HERE can be counted. */
+  readonly closedIntervalsAtEntry: number;
+  /** The day the current bounded descriptive window opened. It grants no lifecycle authority. */
+  readonly windowOpenedDay: number;
+  readonly windowsAssessed: number;
+  /** Days the group has physically been at this site. */
+  readonly daysAtSite: number;
+  /** Cumulative days at this site on which a gathering attempt took something real. */
+  readonly productiveGatheringDaysAtSite: number;
+  /** Cumulative measured water stress over the days at this site. */
+  readonly waterStressDaySumAtSite: number;
+  /**
+   * Support and demand accumulated FROM THE DAYS LIVED AT THIS SITE, and from nowhere else.
+   *
+   * These exist because the support-share signal used to read `Band.seasonalSupport` — the whole
+   * rolling state, which at that point still holds the samples the founders walked out with. The
+   * conjunction was probably safe, since requiring two intervals closed here implies the current
+   * sample is one of them, but the evidence was leaning on ANOTHER predicate's ordering to make its
+   * own source claim true. Evidence has to own the causality it asserts, so the site now accumulates
+   * its own numerator and denominator from the same daily records every other site signal reads.
+   */
+  readonly supportUnitsAtSite: number;
+  readonly demandUnitsAtSite: number;
+  readonly signals: readonly ProvisionalEvidenceSignal[];
+  readonly satisfiedSignals: number;
+}
+
+/**
+ * ROADMAP ITEM 4 — a provisional group's running subsistence interval.
+ *
+ * Every positive unit in `supportUnits` came from a real physical source that was really depleted, was
+ * carried by real workers who therefore walked less far that day, and is credited exactly once.
+ * `demandUnits` is the same quantity on the other side of the ledger: what these bodies needed over
+ * exactly these days, at the canonical adult-equivalent demand.
+ */
+export interface TravelSubsistenceState {
+  /** Day this interval began. An interval is closed and restarted, never extended indefinitely. */
+  readonly intervalStartDay: number;
+  /** The last day this interval was advanced, so a day can never be charged twice. */
+  readonly lastAdvancedDay: number;
+  readonly daysElapsed: number;
+  /** Accumulated adult-equivalent demand over the interval's days. Bodies, not workers. */
+  readonly demandUnits: number;
+  /** Accumulated USABLE support physically extracted over the interval's days, after losses. */
+  readonly supportUnits: number;
+  /** Accumulated raw harvest before transport/processing losses, published so the losses are visible. */
+  readonly harvestUnits: number;
+  readonly processingLossUnits: number;
+  /** Accumulated depletion applied to real world sources. The other side of every support unit. */
+  readonly depletionApplied: number;
+  /** Days a gathering attempt was made at all (workers were allocated to it). */
+  readonly gatheringDays: number;
+  /** Days a gathering attempt found a physical source and took something from it. */
+  readonly gatheringDaysWithAnyTake: number;
+  /** Summed measured water stress over the interval's days, at the ground the group stood on. */
+  readonly waterStressDaySum: number;
+  /** Days the group stood where it could not drink. A real consequence, not a label. */
+  readonly daysWithoutWater: number;
+  /** Bounded evidence ring, newest last. */
+  readonly recentDays: readonly TravelSubsistenceDay[];
+  /** How many physical support intervals this group has closed. Measurement cadence only. */
+  readonly closedIntervals: number;
+}
+
+export interface TravelSubsistenceDay {
+  readonly day: number;
+  readonly tileId: TileId;
+  /** Share of the day's worker effort spent looking for food rather than covering ground. */
+  readonly gatherShare: number;
+  readonly gatheringWorkers: number;
+  readonly requestedUnits: number;
+  readonly harvestedUnits: number;
+  readonly usableUnits: number;
+  readonly depletionApplied: number;
+  readonly demandUnits: number;
+  readonly waterStress: number;
+  readonly sourceKind: "plant_patch" | "none";
+  readonly sourceId?: string;
+  readonly failureReason?: "no_workers_allocated" | "physical_source_absent" | "physically_exhausted" | "activity_failed";
+}
 
 export type BandStatus =
   | "foraging"
@@ -89,6 +922,12 @@ export interface SocialPressureProfile {
   readonly demographicPressure: number;
   readonly fissionPressure: number;
   readonly leadershipStress: number;
+  /**
+   * CORRECTION-35 — INERT, AND IT ALWAYS WAS. Set to 0.08 by `getInitialSocialPressure()` and
+   * carried forward unchanged by `applyDemographyToSocialPressure`'s spread. It has NO reader
+   * anywhere in the repository — it is a separate field from `Band.territorialPressure`, and the
+   * two must not be conflated.
+   */
   readonly territorialPressure: number;
   readonly stateAvoidancePressure: number;
   readonly cohesionStress: number;
@@ -905,7 +1744,27 @@ export type ExpeditionTaskKind =
   // Verify a remembered but stale/uncertain distant patch (information only).
   | "distant_patch_verification"
   // Read a route/crossing toward distant country (information only).
-  | "route_reconnaissance";
+  //
+  // CORRECTION-17 §6 — this task VERIFIES OR RE-WALKS COUNTRY THE BAND ALREADY KNOWS.
+  // Both its candidate families are band-known targets: a tile a previous party failed
+  // to reach, or a remembered patch whose ACCESS evidence is weak. It can therefore
+  // never extend the knowledge horizon, which is why `frontier_exploration` below is a
+  // distinct family and not a rename of this one.
+  | "route_reconnaissance"
+  // CORRECTION-17 §6 — walk out along a band-known DIRECTIONAL HYPOTHESIS into country
+  // the residential band does not yet know, discovering the route one physical step at a
+  // time, and bring home whatever was actually seen. Distinct from every task above:
+  // it has NO destination tile, NO remembered patch, and NO precomputed route. It is the
+  // only task family permitted to enter unknown country.
+  | "frontier_exploration"
+  // CORRECTION-23 §6 — go back to a specific promising-but-uncertain place and answer ONE
+  // named question about it. This is the bridge CORRECTION-22 proved was missing: every
+  // other investigation family selects its target from `resourceKnowledgeState.patchMemories`
+  // (remembered RESOURCE PATCHES), while shallow frontier country exists only in
+  // `knowledge.observedTiles`. Nothing converted promising terrain into tested,
+  // domain-specific evidence, so a pressured band could see that better country might exist
+  // and had no physical means of finding out.
+  | "frontier_verification";
 
 /** Bounded physical lifecycle of a party that is away from the residential camp. */
 export type ExpeditionPhase =
@@ -948,7 +1807,46 @@ export type ExpeditionOutcomeReason =
   | "route_impassable"
   | "injury_forced_return"
   | "season_window_closed"
-  | "party_lost";
+  | "party_lost"
+  // CORRECTION-34B §9 — the band could no longer staff a commitment it had already made, and the
+  // party had NOT yet departed. Existing reasons cannot express this: every one of them describes
+  // something that happened on a journey, and a `prepared` party has no journey. Its people are
+  // standing in camp and are already inside the residential remainder, so calling them
+  // `party_lost` would invent a death. Reached only from `reconcileExpeditionCommitment`.
+  | "commitment_unsupported"
+  // CORRECTION-34D §9 — the band's working-adult cohort can no longer support the productive
+  // labour this party was staffed with, and the reduction has driven it below
+  // EXPEDITION_MIN_PARTY_WORKERS. The party still EXISTS: every body is where it was, and it
+  // turns for home carrying whatever it has. This is not a death, not a loss and not an injury —
+  // it is a party that can no longer do the work it walked out to do.
+  | "party_labor_unsupported"
+  // CORRECTION-34D §9 — NOT A PHYSICAL HISTORY. The record described more people than the band
+  // has, which no ordinary path can produce once fission is bounded by residential availability
+  // and cohort transitions no longer move bodies. Reaching this means the state handed to the
+  // simulation was already invalid (corrupt, hand-assembled or pre-dating the bound), so the
+  // record is retired as a labelled non-historical repair. It must never be read as a death, a
+  // return, a party-local loss or anything that happened in the world.
+  | "invalid_state_repaired"
+  // CORRECTION-17 §9/§10 — frontier-exploration terminations. Every one is a physical
+  // reason a party stopped going outward; none of them is "success by timeout".
+  //
+  // The party reached the point where one more outward step would leave it unable to
+  // reserve a plausible walk home. It turned back deliberately, with whatever it had.
+  | "frontier_return_budget_reached"
+  // The party stood at its deepest point and every onward step was physically
+  // impassable or already walked — a barrier, not a budget.
+  | "frontier_barrier_blocked"
+  // The party walked out, saw only ordinary/poor country, and came home saying so.
+  // This is an HONEST NULL RESULT, not a failure of the machinery.
+  | "frontier_returned_ordinary_country"
+  // CORRECTION-23 §15 — verification terminations. Each names what was physically learned.
+  // The party reached the place and answered its question affirmatively.
+  | "verification_confirmed"
+  // The party reached the place and the answer was negative — within the bounded area it
+  // actually searched. That is not proof of total absence anywhere.
+  | "verification_negative"
+  // The party reached the place and could not settle the question either way.
+  | "verification_inconclusive";
 
 /**
  * EXPEDITIONARY-4 §8 — aggregate mobility-role counts a party was drawn from.
@@ -1015,12 +1913,39 @@ export interface ExpeditionRecord {
   readonly hardDeadlineDay: DayNumber;
   readonly travelDaysElapsed: number;
   readonly workDaysElapsed: number;
-  /** Aggregate composition — never individual people. */
+  /**
+   * PRODUCTIVE LABOUR, not bodies. Aggregate composition — never individual people.
+   *
+   * CORRECTION-34D — this field used to answer two incompatible questions. It was the physical
+   * headcount for presence, conservation and fission, and simultaneously the productive labour
+   * for work, pace, carrying and provisioning. Those separate here: `partyWorkers` is the labour
+   * the party can currently perform, and the physical headcount is
+   * `partyWorkers + nonWorkingPartyPeople`.
+   */
   readonly partyWorkers: number;
+  /**
+   * CORRECTION-34D — party members who are physically present and still consume, but currently
+   * grant no productive labour, mobility-role capability or carrying capacity.
+   *
+   * Absent means zero, which is exactly what every record written before this field existed
+   * meant: headcount and labour were equal at launch and nothing could separate them. A legacy
+   * record therefore upgrades without reinterpretation.
+   *
+   * A person enters this count when the band's working-adult cohort can no longer support the
+   * labour already committed away — an AGGREGATE ALLOCATION, never an observation of which
+   * individual aged, was injured or was reclassified. The model has cohorts, not people, and
+   * cannot locate a cohort transition inside a party. It never leaves the count while the party
+   * is away: a reclassification is not reversed by the residence gaining an adult elsewhere.
+   */
+  readonly nonWorkingPartyPeople?: number;
   /**
    * EXPEDITIONARY-4 §8 — which mobility-role pools these workers were drawn from
    * (limited/typical/high). Aggregate counts, conserved against the band's pools; a
    * high-capacity adult committed here is unavailable to every other party until return.
+   *
+   * CORRECTION-34D — this totals `partyWorkers`, the PRODUCTIVE labour. It deliberately does not
+   * total the physical headcount: a non-working member draws from no mobility pool because they
+   * supply no mobility capability.
    */
   readonly partyComposition?: ExpeditionPartyComposition;
   readonly cargo: ExpeditionCargo;
@@ -1044,6 +1969,26 @@ export interface ExpeditionRecord {
   readonly pendingKnowledgeRecord?: IntraSeasonTripRecord;
   /** Information the party is physically carrying home; unavailable to the band until return. */
   readonly carriedObservations: readonly ExpeditionObservation[];
+  /**
+   * CORRECTION-17 §8 — present ONLY on `frontier_exploration`. The directional
+   * hypothesis the party set out on. For this task family `targetTileId` is the plan's
+   * band-known ANCHOR and is explicitly NOT a destination; `routeTileIds` is not a
+   * precomputed path but the breadcrumb trail of tiles the party has ALREADY walked,
+   * appended one physical step at a time.
+   */
+  readonly frontierPlan?: FrontierExplorationPlan;
+  /**
+   * CORRECTION-17 §10 — the greatest grid distance from the origin camp this party has
+   * physically reached. Used for the return reserve and reported by the horizon audit.
+   */
+  readonly frontierDeepestReachTiles?: number;
+  /**
+   * CORRECTION-23 §6 — present ONLY on `frontier_verification`. The single question this
+   * party went to answer, and the band-known evidence gap that justified the walk.
+   */
+  readonly verificationPlan?: FrontierVerificationPlan;
+  /** Physically established at the destination; applied to band knowledge only on return. */
+  readonly verificationResult?: FrontierVerificationResult;
   /** §13 — deliberate smoke-signal attempts this party made (bounded; may fail). */
   readonly signalAttempts?: readonly ExpeditionSignalAttempt[];
   readonly reasonIds: readonly ReasonId[];
@@ -1062,9 +2007,262 @@ export interface ExpeditionObservation {
     | "target_depleted"
     | "route_hazard"
     | "route_passable"
-    | "distant_feature";
+    | "distant_feature"
+    // CORRECTION-17 §12 — a frontier party physically stood on a tile the residential
+    // band did not know and looked around. It teaches EXISTENCE, broad terrain, broad
+    // water/relief visibility, passability experience and approximate risk — and
+    // nothing else. It never teaches stock quantity, plant classes, exploitation
+    // competence, food safety, recovery rates, future yield, seasonal calendars, or
+    // other bands. Resource knowledge still requires the existing observe/test/use path.
+    | "frontier_country_seen"
+    // The onward direction is physically blocked from a tile the party stood on.
+    | "frontier_barrier";
   readonly confidence: number;
   readonly observedDay: DayNumber;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CORRECTION-17 §8 — the frontier-exploration PLAN. A direction, not a destination.
+//
+// This is the whole anti-omniscience contract of the new task family. The plan is
+// built exclusively from band-known evidence (a remembered corridor heading, the edge
+// of known terrain, a broad relief/water cue physically visible from camp, inherited
+// directional memory, or bounded second-hand direction). It carries a HEADING, a broad
+// SECTOR, the band-known tile the heading was read FROM, and a return budget.
+//
+// It deliberately carries NO target tile, NO unseen resource tile, NO rich-habitat
+// tile and NO daughter target. The party discovers its route incrementally, one
+// physical step at a time, and may come home having found nothing.
+// ─────────────────────────────────────────────────────────────────────────────
+
+/** Which band-known evidence produced the heading. Never hidden world truth. */
+export type FrontierExplorationBasis =
+  // Continuation of a remembered/inferred travel corridor.
+  | "corridor_continuation"
+  // The outer edge of the band's own known country (a known tile with unknown neighbours).
+  | "known_edge"
+  // A broad relief/vegetation band physically visible from the camp's viewshed.
+  | "visible_relief"
+  // A visible valley or water-margin direction.
+  | "water_margin"
+  // Directional memory inherited from a parent band (degraded, never a map).
+  | "inherited_heading"
+  // Bounded second-hand direction (a heading someone else reported, low confidence).
+  | "second_hand_direction";
+
+/** Broad 8-way sector label. A sector, never a tile. */
+export type FrontierExplorationSector = "n" | "ne" | "e" | "se" | "s" | "sw" | "w" | "nw";
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CORRECTION-23 §6 — FRONTIER VERIFICATION. One named question about one known place.
+//
+// Deliberately NOT a generic "inspect tile" action. Each question has its own eligibility,
+// its own physical task, its own evidence output and its own failure modes, because the
+// evidence a party can actually bring back differs completely between them: standing at a
+// spring tells you water is reachable, and tells you nothing about whether the plants here
+// are edible.
+// ─────────────────────────────────────────────────────────────────────────────
+
+export type FrontierVerificationQuestion =
+  // Is water physically reachable and usable at this place, right now?
+  | "water_access"
+  // Is there a food resource physically present in the bounded area searched?
+  | "resource_presence"
+  // CORRECTION-23B §7 — RENAMED from `resource_usability`, which claimed more than the
+  // question physically establishes. The on-site test reads terrain, not a stock: it draws
+  // against no patch, applies no depletion and produces no receipt. What it can honestly
+  // report is whether a real, stock-backed test is worth attempting here at all.
+  | "resource_test_possible"
+  // Can a bounded party remain and operate here for a short period?
+  | "temporary_use"
+  // Does what we saw persist into another season? Cannot be answered by one visit.
+  | "seasonal_persistence";
+
+/**
+ * CORRECTION-23B §8 — `route_repeatability` was REMOVED as a question rather than repaired.
+ *
+ * It returned `confirmed` unconditionally, read no world state, and accounted for 32% of all
+ * verification traffic. §8 authorises removal where a successful round trip already proves
+ * repeatability: every completed verification party IS a successful round trip, so the answer
+ * was already established by the journey and did not need a party of its own. Route evidence
+ * is still recorded — as a by-product of any completed party, below — but it no longer
+ * consumes the one verification slot a band has.
+ */
+export type RouteRepeatabilityEvidence = "walked_out_and_back" | "not_established";
+
+/**
+ * CORRECTION-23C §7 — WHY a water-access attempt failed, kept at the scope the physics
+ * actually represents.
+ *
+ * Only two causes are physically distinguishable in the current model, and inventing more
+ * would be a label, not a distinction:
+ *   - the party stood on the target and found nothing reachable in the bounded area;
+ *   - the party never reached the target, so the ROUTE failed and the place is unanswered.
+ * A route failure is scoped to that attempt and never becomes a claim about the destination.
+ */
+export type WaterAccessFailureKind = "absent_in_bounded_search" | "route_blocked";
+
+/** What the band already holds about a target, and what it is missing. */
+export interface FrontierVerificationEvidenceGap {
+  readonly question: FrontierVerificationQuestion;
+  /** Band-known signal that made this place look worth the walk. Never hidden truth. */
+  readonly promisingSignal: string;
+  /** The specific evidence the band does NOT have. */
+  readonly missingEvidence: string;
+  /** Bounded 0..1 measure of how badly the band needs this answered. */
+  readonly informationDeficit: number;
+}
+
+export interface FrontierVerificationPlan {
+  readonly question: FrontierVerificationQuestion;
+  /** The band-known observed tile this question is about. */
+  readonly targetTileId: TileId;
+  /** The shallow record that raised the question, by its acquisition kind. */
+  readonly originatingAcquisition: KnowledgeAcquisitionKind;
+  readonly promisingSignal: string;
+  readonly missingEvidence: string;
+  readonly informationDeficit: NormalizedIntensity;
+  /** Why this band, now. Band-known hardship/opportunity state only. */
+  readonly selectionReason: string;
+  /** Days the party may spend working at the destination. */
+  readonly onSiteBudgetDays: number;
+  readonly attemptIndex: number;
+  /** Literal non-claims, asserted by construction and checked by the audits. */
+  readonly noHiddenTruthRead: true;
+  readonly bandKnownTargetOnly: true;
+}
+
+/** What a returned verification party physically established. Bounded, one domain. */
+export interface FrontierVerificationResult {
+  readonly question: FrontierVerificationQuestion;
+  readonly targetTileId: TileId;
+  readonly outcome: "confirmed" | "negative" | "inconclusive";
+  /** Season the observation was actually made in — never generalized to a calendar. */
+  readonly season: Season;
+  /** True only when a physical harvest happened and entered the canonical ledger. */
+  readonly harvested: boolean;
+  readonly harvestUnits: number;
+  /** Human-readable basis, surfaced by the read model. */
+  readonly evidenceBasis: string;
+  /** CORRECTION-23C §7 — physical scope of a negative answer; absent otherwise. */
+  readonly accessFailureKind?: WaterAccessFailureKind;
+  readonly reasonIds: readonly ReasonId[];
+}
+
+/**
+ * CORRECTION-23B §11 — AUTHORITATIVE VERIFICATION EVIDENCE, and the band's retry memory.
+ *
+ * CORRECTION-23's continuation proved the answers were inert: no production reader consumed
+ * them, and destroying every affirmative result reproduced production seed for seed. It also
+ * proved retry control was broken, because `mayRetry` could only see what was still inside
+ * the 12-entry display ring, so one band re-verified one place 1,186 times in 500 years.
+ *
+ * This record fixes both. It is keyed by (place, question) and UPSERTED, so a repeat attempt
+ * updates a row rather than appending one — retries cannot grow state. It is what the domain
+ * readers consume, and what the retry gate consults.
+ *
+ * `frontierVerificationAttempts` remains the bounded DISPLAY history and is no longer load
+ * bearing for behaviour.
+ */
+export interface VerificationEvidenceRecord {
+  readonly tileId: TileId;
+  readonly question: FrontierVerificationQuestion;
+  readonly outcome: "confirmed" | "negative" | "inconclusive";
+  /** Seasons in which THIS question was physically answered at THIS place. Never a calendar. */
+  readonly seasonsAnswered: readonly Season[];
+  readonly lastSeason: Season;
+  readonly lastTick: TickNumber;
+  readonly attempts: number;
+  /** Band-known hardship at the last attempt — a materially changed situation reopens it. */
+  readonly hardshipAtLastAttempt: number;
+  /** Route length actually walked last time — changed route evidence reopens it. */
+  readonly routeTilesAtLastAttempt: number;
+  /** §8 — recorded as a by-product of the journey, never as a question of its own. */
+  readonly routeEvidence: RouteRepeatabilityEvidence;
+  /**
+   * CORRECTION-23C §5 — how the band came to hold the record this answer was asked about.
+   * Retained so a direct physical answer is never confused with an inherited or reported one.
+   */
+  readonly acquisition?: KnowledgeAcquisitionKind;
+  /** §7 — the physical scope of a negative answer. Absent on confirmed or inconclusive. */
+  readonly accessFailureKind?: WaterAccessFailureKind;
+}
+
+/**
+ * CORRECTION-23C §3/§5 — what a physical water-access event does and does not establish.
+ *
+ * The three ideas below were collapsed into one `waterReliability` scalar by CORRECTION-23B,
+ * which floored the field at 0.55 on a confirmed access. That floor satisfied a physical
+ * ACCESS gate and simultaneously fed a destination RANKING term and a margin relaxation, so
+ * "a party once drew water here" silently became "this place is better". It could also raise
+ * the number above the physical value, since a confirmation needs only `waterAccess >= 0.3`
+ * or an adjacent water tile.
+ *
+ * They are now three separate things:
+ *   accessState   did a party physically reach and use water here? (feasibility only)
+ *   reliability   how dependable is the water? (observation/experience only, never this)
+ *   preference    is this destination better? (reads reliability, never accessState)
+ */
+export type DirectWaterAccessState =
+  // No party has been sent to ask.
+  | "unasked"
+  // A party stood here and drew water. Establishes physical feasibility, nothing else.
+  | "accessed"
+  // A party stood here and found nothing reachable in the area it searched.
+  | "refuted"
+  // The attempt settled nothing — it must not pass the gate and must not fail it.
+  | "inconclusive";
+
+/** §5 — the full, bounded statement a direct water-access event supports. */
+export interface DirectWaterAccessEvidence {
+  readonly state: DirectWaterAccessState;
+  /** The season the event actually happened in. Never generalized to other seasons. */
+  readonly season?: Season;
+  /** Every season this exact question has been physically answered in at this place. */
+  readonly seasonsObserved: readonly Season[];
+  /** Route length walked on the last attempt — the route basis for the claim. */
+  readonly routeTiles?: number;
+  readonly routeEvidence?: RouteRepeatabilityEvidence;
+  readonly acquisition?: KnowledgeAcquisitionKind;
+  readonly attempts: number;
+  readonly failureKind?: WaterAccessFailureKind;
+  /** Literal non-claims, asserted by construction and checked by W1-W10. */
+  readonly provesReliability: false;
+  readonly provesOtherSeasons: false;
+}
+
+/** Bounded per-band record of verifications already attempted, for §16 retry control. */
+export interface FrontierVerificationAttempt {
+  readonly tileId: TileId;
+  readonly question: FrontierVerificationQuestion;
+  readonly tick: TickNumber;
+  readonly season: Season;
+  readonly outcome: "confirmed" | "negative" | "inconclusive" | "lost";
+}
+
+export interface FrontierExplorationPlan {
+  /** Unit heading derived from band-known directional evidence. */
+  readonly headingX: number;
+  readonly headingY: number;
+  /** The broad sector the party set out into. */
+  readonly sector: FrontierExplorationSector;
+  readonly basis: FrontierExplorationBasis;
+  /**
+   * The band-KNOWN tile the heading was read from (a corridor head, a known edge tile,
+   * or the camp itself). It is an ANCHOR, not a destination: the party normally walks
+   * straight past it into country nobody in the band has seen.
+   */
+  readonly anchorTileId: TileId;
+  /** Confidence in the directional hypothesis itself (not in what lies out there). */
+  readonly headingConfidence: number;
+  /** Outward tiles the party may walk before the return reserve binds. */
+  readonly outboundBudgetTiles: number;
+  /** Tiles of walking capacity held back so the party can plausibly get home. */
+  readonly returnReserveTiles: number;
+  /** Literal non-claims — asserted by construction, checked by the anti-omniscience audit. */
+  readonly noHiddenDestination: true;
+  readonly noUnseenTargetTile: true;
+  readonly noHiddenRichness: true;
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -1141,7 +2339,14 @@ export interface ExpeditionOutcomeSummary {
   readonly outcomeReason: ExpeditionOutcomeReason;
   readonly distanceTiles: number;
   readonly totalDays: number;
+  /** Productive labour the party carried (CORRECTION-34D — not its headcount). */
   readonly partyWorkers: number;
+  /**
+   * CORRECTION-34D — bodies that walked out. Absent on records written before the split, where
+   * it equalled `partyWorkers`; read it as `partyPeople ?? partyWorkers`. Human-facing text
+   * ("N adults left and were never seen again") must use THIS, not the labour count.
+   */
+  readonly partyPeople?: number;
   /** Physical units that actually reached the residential camp (0 for information-only/failed). */
   readonly deliveredHarvestUnits: number;
   readonly provisionUnitsConsumed: number;
@@ -1900,6 +3105,7 @@ export interface BandLineageReadabilityState {
   readonly lineagePath: readonly BandId[];
   readonly activeStatus: "active" | "dispersed" | "absorbed" | "extinct";
   readonly absorbedByBandId?: BandId;
+  readonly formationStatus: "origin" | "provisional_separation" | "established_daughter" | "failed_separation_record";
   readonly relationCategory?: SocialRelationCategory;
   readonly displayLabel: string;
   readonly rawSource: string;
@@ -2097,6 +3303,20 @@ export type ProtoAccessEncounterTone =
   | "cooperation_remembered"
   | "stale_uncertain";
 
+// CORRECTION-31 — a DERIVED description of where the band's social evidence about a place has
+// got to. It is not a stored state machine and nothing writes it as an authority: it is read
+// off evidence age and provenance every tick, so it cannot drift out of step with the records
+// it describes.
+//   none                 no friction evidence about this place at all
+//   active               the freshest episode is still inside the current annual round
+//   cooling              evidence exists and still counts, but is losing influence with age
+//   released_historical  records are still held, and no longer move any behaviour
+export type ProtoAccessSocialEvidencePhase =
+  | "none"
+  | "active"
+  | "cooling"
+  | "released_historical";
+
 export type ProtoAccessReasonFamily =
   | "familiar_use"
   | "kin_tolerance"
@@ -2135,6 +3355,19 @@ export interface ProtoAccessMemory {
   readonly confidence: NormalizedIntensity;
   readonly staleness: NormalizedIntensity;
   readonly staleYears: number;
+  // CORRECTION-31 — the social-evidence lifecycle, DERIVED every tick by accessNorms, never
+  // stored as an independent authority. `activeEvidenceWeight` is how much the strongest
+  // surviving episode about this place still counts (1 = fresh, 0 = behaviourally released);
+  // `historicalEvidenceCount` is how many records the band still holds that no longer move
+  // anything. Release is behavioural: the records, the contact memory and the place memory
+  // all remain. `presentWithoutOthersSeasons` is the bounded count of consecutive seasons the
+  // band has stood here with nobody inside the proximity radius — the one contradiction
+  // channel this repository can support truthfully.
+  readonly activeEvidenceWeight?: NormalizedIntensity;
+  readonly activeEvidenceCount?: number;
+  readonly historicalEvidenceCount?: number;
+  readonly socialEvidencePhase?: ProtoAccessSocialEvidencePhase;
+  readonly presentWithoutOthersSeasons?: number;
   readonly positiveReasons: readonly ProtoAccessReason[];
   readonly negativeReasons: readonly ProtoAccessReason[];
   readonly topReasons: readonly string[];
@@ -2446,6 +3679,23 @@ export interface KnownUnusedHabitatOpportunity {
   readonly currentUsePressure: NormalizedIntensity;
   readonly currentCrowding: NormalizedIntensity;
   readonly waterReliability: NormalizedIntensity;
+  // CORRECTION-23C §6 — the PHYSICAL-ACCESS verdict, separate from the reliability number
+  // above. `waterReliability` is what the band observed and drives ranking;
+  // `waterAccessFeasible` is whether reaching water here is physically possible and drives
+  // only the gate. A confirmed access sets the boolean and NEVER moves the number.
+  readonly waterAccessFeasible?: boolean;
+  /**
+   * CORRECTION-23I §6.2 — true only when a confirmed direct water access would, on its own,
+   * make this candidate eligible: water currently fails and every other conjunct of
+   * `consideredAsTarget` already passes. The verification launch gate reads it to decide
+   * whether asking can change anything. Nothing that scores, ranks or relaxes a margin reads
+   * it, and it never becomes a magnitude.
+   */
+  readonly waterAccessIsBindingBlocker?: boolean;
+  readonly directWaterAccessState?: DirectWaterAccessState;
+  /** The season the direct access event actually happened in. Never generalized. */
+  readonly directWaterAccessSeason?: Season;
+  readonly directWaterAccessSeasonsObserved?: readonly Season[];
   readonly travelCost: NormalizedIntensity;
   readonly riskPenalty: NormalizedIntensity;
   readonly confidence: NormalizedIntensity;
@@ -2670,6 +3920,11 @@ export type BandFoundingKind = "origin_spawn" | "fission_daughter";
 export type HistoryEvidenceKind =
   | "creation_record"
   | "fission_event"
+  | "successor_departure_event"
+  | "successor_lifecycle_record"
+  | "successor_stabilization_event"
+  | "post_return_continuation_commitment"
+  | "successor_post_return_establishment_event"
   | "lineage_link"
   | "demographic_churn"
   | "seasonal_support"
@@ -2800,6 +4055,7 @@ export type BandEpisodeType =
   | "population_thinned"
   | "population_recovered"
   | "daughter_branch_formed"
+  | "successor_separation_lifecycle"
   | "long_hunger_period"
   | "water_caution_period"
   | "route_became_memory"
@@ -3802,6 +5058,16 @@ export interface RangeSaturationState {
   readonly effectiveHabitatSuitability: NormalizedIntensity;
   readonly perCapitaReturnEstimate: NormalizedIntensity;
   readonly saturationPressure: NormalizedIntensity;
+  // CORRECTION-32 — the SAME saturation sum with the `nearbyCrowding * 0.34` term removed.
+  //
+  // `saturationPressure` legitimately mixes the band's own use pressure, local population
+  // density, seasonal stress and current physical crowding, and every ecological/social
+  // reader (carryingCapacity, innerFission, reportedKnowledge, frontierDispersal, the UI)
+  // continues to read the full value. But the DECISION scorer already charges that same
+  // physical crowding once, through `crowdingPenalty`, so scoring the full saturation
+  // alongside it charged one nearby band twice under two names. The decision seam reads
+  // this partitioned value instead. Derived, never stored as an independent authority.
+  readonly saturationPressureExcludingCrowding: NormalizedIntensity;
   readonly confidence: NormalizedIntensity;
   // Range saturation v1 (checkpoint 2J): explicit capacity model on top of the
   // existing crowding signal. Optional for back-compat with older constructors.
@@ -5795,7 +7061,12 @@ export type CampMovementStatus =
   | "stagnant"
   | "unstable";
 
-export type TemporaryCampPurpose =
+/**
+ * CORRECTION-26 §12 — what a small task party went out to do. RENAMED from
+ * `TemporaryCampPurpose`: the record it labels was never a camp (see
+ * `TemporaryTaskPartyRecord`).
+ */
+export type TemporaryTaskPurpose =
   | "food_work"
   | "water_edge_work"
   | "crossing_prep"
@@ -5962,18 +7233,51 @@ export interface LocalCampShiftRecord {
   readonly noSettlement: true;
 }
 
-export interface TemporaryTaskCampRecord {
+/**
+ * CORRECTION-26 §12 — A SMALL TASK PARTY THAT PHYSICALLY WENT OUT AND CAME BACK.
+ *
+ * THE DEFECT THIS REPLACES. This used to be `TemporaryTaskCampRecord`, and it was written
+ * whenever a band merely SELECTED a `logistical_probe` or `resource_scout` while holding
+ * its residence (`campMovement.ts`, `!input.moved && (probe || scout)`). It claimed an
+ * `originTileId -> targetTileId` camp with a purpose, a confidence and a three-tick
+ * expiry, and the event log, the public story and both UI panels reported it as one — "a
+ * small camp near the X let them test work". No camp existed. Nobody had left the
+ * residence. CLOSURE-25 recorded that `campMovement`'s "task camp" has NO reader inside
+ * the simulation at all, only projections, so what it produced was a projection of
+ * something that never happened.
+ *
+ * WHAT IT IS NOW. One record per investigation party that ACTUALLY DEPARTED, written from
+ * the resolved `PendingInvestigationRecord` the daily execution phase produced, carrying
+ * that execution's own identity, its real party size, its real route length, and its real
+ * terminal outcome. A same-day party sleeps nowhere, so `noCamp` is asserted alongside
+ * `noSettlement`/`noInventory`.
+ *
+ * A selected-but-unexecuted investigation produces NO record here — nobody went. It stays
+ * inspectable through `Band.recentInvestigationOutcomes`, which names why.
+ *
+ * NOT MERGED WITH `ExpeditionTaskCamp`. A genuine multi-day operation that must sleep at
+ * its target is still governed entirely by the expedition lifecycle; this type never
+ * describes one and never gains behaviour.
+ */
+export interface TemporaryTaskPartyRecord {
   readonly id: string;
   readonly tick: TickNumber;
+  /** The residence the party left from and returned to the same day. */
   readonly originTileId: TileId;
   readonly targetTileId: TileId;
-  readonly purpose: TemporaryCampPurpose;
-  readonly status: "active" | "completed" | "failed" | "expired";
+  readonly purpose: TemporaryTaskPurpose;
+  /** `completed` — walked there and looked. `failed` — could not reach the target. */
+  readonly status: "completed" | "failed";
   readonly confidence: NormalizedIntensity;
-  readonly expiresAfterTick: TickNumber;
+  /** The exact `investigation-exec:` identity, or absent when no route could be built. */
+  readonly executionId?: string;
+  readonly partyWorkers: number;
+  readonly routeDistanceTiles: number;
   readonly evidenceRefs: readonly CampMovementEvidenceRef[];
   readonly noSettlement: true;
   readonly noInventory: true;
+  /** A same-day party sleeps at home. This record is not, and never was, a camp. */
+  readonly noCamp: true;
 }
 
 export interface NewPlaceEstablishmentState {
@@ -6058,7 +7362,7 @@ export interface CampMovementState {
   readonly status: CampMovementStatus;
   readonly currentEstablishment?: NewPlaceEstablishmentState;
   readonly recentLocalShifts: readonly LocalCampShiftRecord[];
-  readonly temporaryTaskCamps: readonly TemporaryTaskCampRecord[];
+  readonly temporaryTaskParties: readonly TemporaryTaskPartyRecord[];
   readonly oldCampPullScore: NormalizedIntensity;
   readonly oldCampDecay: readonly OldCampAnchorDecayRecord[];
   readonly stagnationFlags: readonly string[];
@@ -6073,7 +7377,7 @@ export interface CampMovementState {
   };
   readonly caps: {
     readonly localShiftCap: number;
-    readonly temporaryCampCap: number;
+    readonly temporaryTaskPartyCap: number;
     readonly oldCampDecayCap: number;
     readonly stagnationEscapeCap: number;
     readonly evidencePerItemCap: number;
@@ -6097,6 +7401,31 @@ export interface Band {
   readonly position: TileId;
   readonly size: number;
   readonly status: BandStatus;
+  /**
+   * ROADMAP ITEM 4 — the PARENT side of a Direction D fission attempt, when one is current.
+   *
+   * Present only while this band is trying to split. **It holds no bodies at any phase**; the people
+   * it concerns are still this band's until the departure transition. Absent on every band that is
+   * not currently attempting a split, so `fissionAttempt !== undefined` is the whole question and no
+   * reader has to destructure a role to ask it.
+   *
+   * Deliberately NOT folded into `BandStatus`: that union is already residential activity
+   * (`foraging`, `camped`, `moving`, `settled`, `stressed`), a transient fission marker (`splitting`,
+   * written to the parent after a fission completes) and one terminal lifecycle value (`dispersed`).
+   * See `LIFECYCLE_SEMANTICS_DECISION.md`.
+   */
+  readonly fissionAttempt?: FissionLifecycleRecord;
+  /**
+   * ROADMAP ITEM 4 — the SUCCESSOR side: this band IS a provisional successor while present.
+   *
+   * A provisional successor is **physically real** — it holds bodies at a tile, it eats, it can fall
+   * ill and it can die — but it is **not yet an ordinary stabilized daughter**. It is cleared exactly
+   * once, at `stabilized` or at `reintegrated`.
+   *
+   * `isLivingBand` keeps its current meaning for such a band: it IS living. "Established" is a
+   * different question and has its own predicate.
+   */
+  readonly provisionalSuccessor?: FissionLifecycleRecord;
   readonly mobilityStrategy: MobilityStrategy;
   readonly subsistenceModes: readonly SubsistenceMode[];
   readonly technologies: readonly TechnologyTag[];
@@ -6110,6 +7439,22 @@ export interface Band {
   readonly mobilityCostTolerance: number;
   readonly storageCapacity: number;
   readonly hungerPressure: number;
+  /**
+   * CORRECTION-35 — BEHAVIOURALLY INERT AND RETAINED FOR SCHEMA AND HISTORY ONLY.
+   *
+   * Written once at spawn as the constant 0.12, and once more when a daughter takes
+   * `clamp01(parent * 0.72 + 0.04)`. NO lived process writes it: not crowding, not encounters,
+   * not friction, not access expectation, not contested use, not resource sharing, not culture.
+   * It used to reach behaviour through three readers — `pressure.ts` (x0.08 into
+   * `mobilityPressure`), `rules/mobilityIntent.ts` (x0.12 into intent scoring) and
+   * `rules/bandDecision.ts` (x0.14 into a reason's reported pressure) — which gave every band a
+   * territorial motive to move simply for having been created. All three are removed.
+   *
+   * It is kept in state so serialized worlds, the UI projection and decision-context records stay
+   * readable, and so a future cultural or institutional territoriality has a name to claim. Such a
+   * system must arrive with its OWN lived writer; re-attaching this constant to behaviour without
+   * one would restore the defect.
+   */
   readonly territorialPressure: number;
   readonly demography: BandDemography;
   readonly biomeAdaptation: BiomeAdaptationProfile;
@@ -6119,6 +7464,12 @@ export interface Band {
   readonly daughterBandIds: readonly BandId[];
   readonly lineage?: BandLineageLink;
   readonly fissionEvents: readonly BandFissionEvent[];
+  /** Bounded physical departures, distinct from the legacy instantaneous completed-fission event. */
+  readonly successorDepartureRecords?: readonly SuccessorDepartureRecord[];
+  /** Bounded positive completion events, shared identically by parent and stabilized successor. */
+  readonly successorStabilizationEvents?: readonly SuccessorStabilizationEvent[];
+  /** Bounded completions whose history includes a failed return and a fresh survivor commitment. */
+  readonly successorPostReturnEstablishmentEvents?: readonly SuccessorPostReturnEstablishmentEvent[];
   readonly initialSpawnReason?: InitialSpawnReason;
   readonly currentIntent?: MobilityIntent;
   readonly intentHistory?: readonly MobilityIntent[];
@@ -6144,6 +7495,20 @@ export interface Band {
   // EXPEDITIONARY-1: bounded terminal history (cap EXPEDITION_OUTCOME_CAP) — what
   // came back, what failed and why. Read by the candidate family as lived evidence.
   readonly recentExpeditionOutcomes?: readonly ExpeditionOutcomeSummary[];
+  // CORRECTION-17 §20: the tick this band last SENT an exploratory party. One scalar, so
+  // the "one honest look per window" suppression is exact. It cannot be read off
+  // `recentExpeditionOutcomes`, which is an LRU capped at EXPEDITION_OUTCOME_CAP entries:
+  // six ordinary expeditions concluding inside the window silently evict the frontier
+  // record and the band explores again early. Storing the tick makes the window a real
+  // bound rather than a probabilistic one, at O(1) state.
+  readonly lastFrontierExplorationTick?: TickNumber;
+  // CORRECTION-23 §16/§24 — bounded retry history for frontier verification. Capped at
+  // VERIFICATION_ATTEMPT_HISTORY_CAP entries so repeat control is exact without unbounded
+  // state, and so a question answered negatively is not re-asked under unchanged conditions.
+  readonly frontierVerificationAttempts?: readonly FrontierVerificationAttempt[];
+  // CORRECTION-23B §11 — authoritative verification evidence AND retry memory, keyed by
+  // (place, question) and upserted. Bounded; daughters reset. This is what readers consume.
+  readonly verificationEvidence?: readonly VerificationEvidenceRecord[];
   // EXPEDITIONARY-4 §13: smoke signals the RESIDENTIAL camp physically received
   // (bounded, capped, expiring). The only pre-return channel from an away party.
   readonly receivedSmokeSignals?: readonly ReceivedSmokeSignal[];
@@ -6166,6 +7531,17 @@ export interface Band {
   // recently scouted and whether they were informative — drives probe target diversity
   // + diminishing returns. Probe-quality only; never relocation/yield/stress.
   readonly probeMemory?: ProbeRecencyMemory;
+  // CORRECTION-26 — ONE selected-but-not-yet-executed resource investigation
+  // (`resource_scout` / `logistical_probe`), carrying its originating `Decision.id` from
+  // the seasonal boundary into the following season's first eligible trip day, where
+  // `agents/intraSeasonTrips.ts` physically executes it or names why it could not.
+  // Structurally capped at one (the seasonal loop takes one decision per band per season),
+  // self-expiring after one season, never inherited by a daughter, and never cleared
+  // without a terminal outcome being appended to the ring below.
+  readonly pendingInvestigation?: PendingInvestigationRecord;
+  // Bounded terminal history for the above, so no selected investigation can disappear
+  // silently. O(1) per band, independent of simulation age. Daughters reset.
+  readonly recentInvestigationOutcomes?: readonly InvestigationOutcomeRingEntry[];
   // Debug-only record of the band's most recent resource_scout (2K.1H). Surfaced in
   // report-band/BandPanel; never read by behaviour.
   readonly lastResourceScout?: ResourceScoutDebug;

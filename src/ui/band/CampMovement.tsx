@@ -15,7 +15,7 @@ import type {
   OldCampAnchorDecayRecord,
   PressureReliefCandidate,
   StagnationEscapeRecord,
-  TemporaryTaskCampRecord,
+  TemporaryTaskPartyRecord,
 } from "../../sim/agents/types";
 import type { Band } from "../../sim/agents/types";
 import type { WorldState } from "../../sim/world/types";
@@ -62,7 +62,7 @@ export function CampMovement({
         ))}
         <div className="practice-feedback-overview-counts">
           <span>{profile.localCampShiftCount} local shift{profile.localCampShiftCount === 1 ? "" : "s"}</span>
-          <span>{profile.temporaryCampCount} temporary camp{profile.temporaryCampCount === 1 ? "" : "s"}</span>
+          <span>{profile.temporaryTaskPartyCount} temporary camp{profile.temporaryTaskPartyCount === 1 ? "" : "s"}</span>
           <span>{profile.stagnationEscapeResponseCount} escape response{profile.stagnationEscapeResponseCount === 1 ? "" : "s"}</span>
           <span>{profile.oldCampDecayCount} old-camp decay cue{profile.oldCampDecayCount === 1 ? "" : "s"}</span>
         </div>
@@ -104,7 +104,7 @@ export function CampMovement({
           ))}
       </RecordBlock>
 
-      <RecordBlock title="Local shifts and temporary camps" empty="No recent local shift or task camp is stored yet.">
+      <RecordBlock title="Local shifts and day parties" empty="No recent local shift or task party is stored yet.">
         {profile.recentLocalShifts.slice(0, 4).map((shift) => (
           <LocalShiftCard
             key={shift.id}
@@ -112,11 +112,11 @@ export function CampMovement({
             story={storyProfile === undefined ? undefined : publicStoryForSource(storyProfile, shift.id, "camp_story")}
           />
         ))}
-        {profile.temporaryTaskCamps.slice(0, 4).map((camp) => (
-          <TemporaryCampCard
-            key={camp.id}
-            camp={camp}
-            story={storyProfile === undefined ? undefined : publicStoryForSource(storyProfile, camp.id, "camp_story")}
+        {profile.temporaryTaskParties.slice(0, 4).map((party) => (
+          <TemporaryTaskPartyCard
+            key={party.id}
+            party={party}
+            story={storyProfile === undefined ? undefined : publicStoryForSource(storyProfile, party.id, "camp_story")}
           />
         ))}
       </RecordBlock>
@@ -304,20 +304,28 @@ function PressureReliefCard({
   );
 }
 
-function TemporaryCampCard({ camp, story }: { readonly camp: TemporaryTaskCampRecord; readonly story?: PublicStoryItem }) {
+// CORRECTION-26 §12 — this card used to be titled "Temporary task camp" and was rendered
+// for a record written when a band merely SELECTED a probe. It now shows a party that
+// physically went out and came home the same day, with its real size and route length.
+function TemporaryTaskPartyCard({ party, story }: { readonly party: TemporaryTaskPartyRecord; readonly story?: PublicStoryItem }) {
   return (
-    <article className={`practice-feedback-card status-${camp.status}`}>
+    <article className={`practice-feedback-card status-${party.status}`}>
       <div className="practice-feedback-card-body">
         <div className="adaptive-attempt-head">
           <Icon name="scout" />
-          <strong className="public-story-title">{story?.title ?? "Temporary task camp"}</strong>
+          <strong className="public-story-title">{story?.title ?? "Day party"}</strong>
         </div>
-        <p className="public-story-line">{story?.story ?? `${sentence(camp.purpose)} is ${camp.status.replace(/_/g, " ")}. It is short-lived and carries no store.`}</p>
+        <p className="public-story-line">
+          {story?.story ?? (party.status === "completed"
+            ? `A small party went out for ${sentence(party.purpose).toLowerCase()} and came back the same day. The camp did not move.`
+            : `A small party set out for ${sentence(party.purpose).toLowerCase()} and could not reach the place.`)}
+        </p>
         <div className="practice-feedback-card-chips">
-          <Chip>temporary</Chip>
-          <Chip>{story?.status ?? camp.status.replace(/_/g, " ")}</Chip>
+          <Chip>{party.partyWorkers} went</Chip>
+          <Chip>{party.routeDistanceTiles} tiles out</Chip>
+          <Chip>{story?.status ?? (party.status === "completed" ? "went and returned" : "could not reach it")}</Chip>
         </div>
-        <EvidenceLine evidence={camp.evidenceRefs} />
+        <EvidenceLine evidence={party.evidenceRefs} />
       </div>
     </article>
   );

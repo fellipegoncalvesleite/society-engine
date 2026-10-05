@@ -1,0 +1,296 @@
+{
+  "audit": "CORRECTION-35-COMBINED-FIXTURES",
+  "summary": {
+    "fixtures": 8,
+    "failing": 0,
+    "vacuous": 0,
+    "vacuousIds": [],
+    "failingIds": []
+  },
+  "verdicts": {
+    "C1_cooling_social_evidence": "NON_ZERO_BEHAVIOUR_PHASE_COOLING_COUNTS_COHERENT",
+    "C2_released_social_evidence": "RETAINED_ZERO_BEHAVIOUR_NO_ORPHAN_CONTINUATION",
+    "C3_no_social_evidence": "ZERO_SOCIAL_BEHAVIOUR_AND_ZERO_UNSUPPORTED_TERRITORIAL_MOTIVE",
+    "C4_genuine_new_encounter": "FRESH_EVIDENCE_APPEARS_ONCE_THROUGH_THE_CANONICAL_WRITER",
+    "C5_remote_record_isolation": "FOCAL_RESULT_UNCHANGED_BY_REMOTE_RECORDS",
+    "C6_decision_pressure_accounting": "NO_DUPLICATE_CROWDING_ACCESS_OR_TERRITORIAL_PATH",
+    "C7_physical_resource_control": "NO_BODY_LABOUR_STOCK_CARGO_OR_RECEIPT_REGRESSION",
+    "C8_fission_boundary": "ITEM_4_REMAINS_UNIMPLEMENTED"
+  },
+  "fixtures": {
+    "C1_cooling_social_evidence": {
+      "verdict": "NON_ZERO_BEHAVIOUR_PHASE_COOLING_COUNTS_COHERENT",
+      "vacuous": false,
+      "row": {
+        "age": 4,
+        "phase": "cooling",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "weight": 0.89,
+        "confidence": 0.64,
+        "recordsForTile": 1,
+        "deltas": {
+          "strangerCaution": 0.31,
+          "sharedUsePressure": 0.2,
+          "rememberedRefusalAvoidance": 0.21,
+          "rememberedCooperationTolerance": 0.02,
+          "kinTolerance": 0,
+          "familiarTolerance": 0.11
+        },
+        "behaviourDelta": 0.85
+      },
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "a genuinely cooling record with genuinely non-zero behaviour"
+      }
+    },
+    "C2_released_social_evidence": {
+      "verdict": "RETAINED_ZERO_BEHAVIOUR_NO_ORPHAN_CONTINUATION",
+      "vacuous": false,
+      "row": {
+        "age": 12,
+        "phase": "released_historical",
+        "activeCount": 0,
+        "historicalCount": 1,
+        "weight": 0,
+        "confidence": 0.59,
+        "recordsForTile": 1,
+        "deltas": {
+          "strangerCaution": 0,
+          "sharedUsePressure": 0,
+          "rememberedRefusalAvoidance": 0,
+          "rememberedCooperationTolerance": 0,
+          "kinTolerance": 0,
+          "familiarTolerance": 0
+        },
+        "behaviourDelta": 0
+      },
+      "territorialInert": true,
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "the same place does move behaviour when the evidence is fresh"
+      }
+    },
+    "C3_no_social_evidence": {
+      "verdict": "ZERO_SOCIAL_BEHAVIOUR_AND_ZERO_UNSUPPORTED_TERRITORIAL_MOTIVE",
+      "vacuous": false,
+      "none": {
+        "phase": "none",
+        "activeCount": 0,
+        "historicalCount": 0,
+        "weight": 0,
+        "confidence": 0.59,
+        "recordsForTile": 0,
+        "deltas": {
+          "strangerCaution": 0,
+          "sharedUsePressure": 0,
+          "rememberedRefusalAvoidance": 0,
+          "rememberedCooperationTolerance": 0,
+          "kinTolerance": 0,
+          "familiarTolerance": 0
+        },
+        "behaviourDelta": 0
+      },
+      "territorialRows": [
+        {
+          "territorialPressure": 0,
+          "mobilityPressure": 0.9,
+          "netMovePressure": 1,
+          "crowdingPenalty": 0,
+          "nearbyBandPressure": 0,
+          "action": "move_to_tile",
+          "target": "tile:61:108",
+          "score": 3.48,
+          "deliberationBreadth": 11,
+          "reasonPressures": [
+            "primary:seek_better_water=0.9282",
+            "sec7:daughter_dispersal_pressure=0.26",
+            "sec10:mobility_pressure=0.9"
+          ],
+          "attributionReasons": [],
+          "candidates": [
+            "move_to_tile:tile:58:108:0.67",
+            "move_to_tile:tile:59:108:1.39",
+            "move_to_tile:tile:59:109:-0.3",
+            "move_to_tile:tile:60:106:0.05",
+            "move_to_tile:tile:60:109:0.59",
+            "move_to_tile:tile:60:110:-0.45",
+            "move_to_tile:tile:61:108:3.48",
+            "move_to_tile:tile:61:109:0.85",
+            "move_to_tile:tile:62:108:1.48",
+            "resource_scout:tile:61:108:3.17",
+            "stay:-:0.99"
+          ]
+        },
+        {
+          "territorialPressure": 0.12,
+          "mobilityPressure": 0.9,
+          "netMovePressure": 1,
+          "crowdingPenalty": 0,
+          "nearbyBandPressure": 0,
+          "action": "move_to_tile",
+          "target": "tile:61:108",
+          "score": 3.48,
+          "deliberationBreadth": 11,
+          "reasonPressures": [
+            "primary:seek_better_water=0.9282",
+            "sec7:daughter_dispersal_pressure=0.26",
+            "sec10:mobility_pressure=0.9"
+          ],
+          "attributionReasons": [],
+          "candidates": [
+            "move_to_tile:tile:58:108:0.67",
+            "move_to_tile:tile:59:108:1.39",
+            "move_to_tile:tile:59:109:-0.3",
+            "move_to_tile:tile:60:106:0.05",
+            "move_to_tile:tile:60:109:0.59",
+            "move_to_tile:tile:60:110:-0.45",
+            "move_to_tile:tile:61:108:3.48",
+            "move_to_tile:tile:61:109:0.85",
+            "move_to_tile:tile:62:108:1.48",
+            "resource_scout:tile:61:108:3.17",
+            "stay:-:0.99"
+          ]
+        },
+        {
+          "territorialPressure": 0.8,
+          "mobilityPressure": 0.9,
+          "netMovePressure": 1,
+          "crowdingPenalty": 0,
+          "nearbyBandPressure": 0,
+          "action": "move_to_tile",
+          "target": "tile:61:108",
+          "score": 3.48,
+          "deliberationBreadth": 11,
+          "reasonPressures": [
+            "primary:seek_better_water=0.9282",
+            "sec7:daughter_dispersal_pressure=0.26",
+            "sec10:mobility_pressure=0.9"
+          ],
+          "attributionReasons": [],
+          "candidates": [
+            "move_to_tile:tile:58:108:0.67",
+            "move_to_tile:tile:59:108:1.39",
+            "move_to_tile:tile:59:109:-0.3",
+            "move_to_tile:tile:60:106:0.05",
+            "move_to_tile:tile:60:109:0.59",
+            "move_to_tile:tile:60:110:-0.45",
+            "move_to_tile:tile:61:108:3.48",
+            "move_to_tile:tile:61:109:0.85",
+            "move_to_tile:tile:62:108:1.48",
+            "resource_scout:tile:61:108:3.17",
+            "stay:-:0.99"
+          ]
+        }
+      ],
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "the band still has real mobility pressure from food, water and risk, so the two zeros are specific and not a dead band",
+        "mobilityPressure": 0.9
+      }
+    },
+    "C4_genuine_new_encounter": {
+      "verdict": "FRESH_EVIDENCE_APPEARS_ONCE_THROUGH_THE_CANONICAL_WRITER",
+      "vacuous": false,
+      "fresh": {
+        "phase": "active",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "weight": 1,
+        "confidence": 0.64,
+        "recordsForTile": 1,
+        "deltas": {
+          "strangerCaution": 0.36,
+          "sharedUsePressure": 0.22,
+          "rememberedRefusalAvoidance": 0.25,
+          "rememberedCooperationTolerance": 0.02,
+          "kinTolerance": 0,
+          "familiarTolerance": 0.12
+        },
+        "behaviourDelta": 0.97
+      },
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "the new episode genuinely moves behaviour",
+        "delta": 0.97
+      }
+    },
+    "C5_remote_record_isolation": {
+      "verdict": "FOCAL_RESULT_UNCHANGED_BY_REMOTE_RECORDS",
+      "vacuous": false,
+      "baseline": {
+        "phase": "cooling",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "weight": 0.89,
+        "confidence": 0.64,
+        "recordsForTile": 1,
+        "deltas": {
+          "strangerCaution": 0.31,
+          "sharedUsePressure": 0.2,
+          "rememberedRefusalAvoidance": 0.21,
+          "rememberedCooperationTolerance": 0.02,
+          "kinTolerance": 0,
+          "familiarTolerance": 0.11
+        },
+        "behaviourDelta": 0.85
+      },
+      "withRemoteRecords": {
+        "phase": "cooling",
+        "delta": 0.85
+      },
+      "remoteRecordsAdded": 6,
+      "remoteTerritorialPressure": 0.9,
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "at least five remote bands were added, each carrying a high territorial value, and the focal place has a non-trivial reading to disturb",
+        "added": 6,
+        "baselineDelta": 0.85
+      }
+    },
+    "C6_decision_pressure_accounting": {
+      "verdict": "NO_DUPLICATE_CROWDING_ACCESS_OR_TERRITORIAL_PATH",
+      "vacuous": false,
+      "territorialPaths": 0,
+      "crowdingPenalty": [
+        0,
+        0,
+        0
+      ],
+      "accessPathsCountedOnce": "the with-minus-without instrument measures the access channel exactly once; CORRECTION-32's direct-charge suite is rerun unchanged",
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "three field values compared with no resulting difference"
+      }
+    },
+    "C7_physical_resource_control": {
+      "verdict": "NO_BODY_LABOUR_STOCK_CARGO_OR_RECEIPT_REGRESSION",
+      "vacuous": false,
+      "conserved": true,
+      "laborBounded": true,
+      "presenceTotal": 22,
+      "population": 22,
+      "note": "the full physical suites (34 presence, R1-R12, L1-L12, H1-H14, T1-T14, Z0-Z12, numeric chain) are rerun unchanged in this checkpoint's regression",
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "a real band with real people was checked",
+        "population": 22
+      }
+    },
+    "C8_fission_boundary": {
+      "verdict": "ITEM_4_REMAINS_UNIMPLEMENTED",
+      "vacuous": false,
+      "unimplemented": [
+        "dynamic fission driven by shared-range pressure",
+        "daughter viability",
+        "successor-group selection",
+        "cancelling a prepared party to free founders"
+      ],
+      "changedByThisCorrection": "nothing in demography.ts except the inert-field documentation; createDaughterBand is untouched",
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "the fission entry point was inspected and this correction's diff does not touch it"
+      }
+    }
+  }
+}

@@ -1,0 +1,280 @@
+{
+  "audit": "crowdingAttributionInstrumentAudit --merge-regression",
+  "checkpoint": "CORRECTION-32A",
+  "intent": "Every case that produced an impossible 'crowding influence' under the superseded instrument must now either measure a clean, bounded, exactly-attributed contribution, or be REJECTED as unpairable. It must never again report a multi-point crowding influence with zero crowding inputs.",
+  "arms": {
+    "after": {
+      "file": "docs/evidence/crowding-decision-pressure-authority-32/candidate-pairing-integrity.json",
+      "generatedAt": "2026-08-02T18:41:07.532Z"
+    },
+    "before": {
+      "file": "docs/evidence/crowding-decision-pressure-authority-32/candidate-pairing-integrity-before.json",
+      "generatedAt": "2026-08-02T18:41:56.344Z"
+    }
+  },
+  "summary": {
+    "cases": 5,
+    "rejectedAsUnpairable": 0,
+    "cleanBoundedContribution": 5,
+    "reproducedInvalidResidual": 0,
+    "caseNotFound": 0,
+    "pass": true
+  },
+  "cases": [
+    {
+      "arm": "after",
+      "label": "P1_zero_crowding_control",
+      "action": "move_to_tile:tile:196:90",
+      "oldReported": -3.39,
+      "why": "solo band, every named crowding input 0",
+      "matchedCandidates": 2,
+      "legacyKeyWasAmbiguous": true,
+      "legacyKeyFamilies": [
+        "core",
+        "corridor_relocation"
+      ],
+      "correctedIdentities": [
+        "move_to_tile:tile:196:90|origin=tile:195:90|family=core",
+        "move_to_tile:tile:196:90|origin=tile:195:90|family=corridor_relocation"
+      ],
+      "pairStatuses": [
+        "clean_exact_partition",
+        "clean_exact_partition"
+      ],
+      "correctedAttributableTotal": [
+        0,
+        0
+      ],
+      "correctedDirectSum": [
+        0,
+        0
+      ],
+      "crowdingInputs": [
+        {
+          "nearbyBandPressure": 0,
+          "crowdingPenalty": 0,
+          "crowdingExploreBoost": 0,
+          "saturationExploreBoost": 0,
+          "rangeSaturation": 0,
+          "socialAccessRisk": 0,
+          "daughterDispersalExploreBoost": 0
+        },
+        {
+          "nearbyBandPressure": 0,
+          "crowdingPenalty": 0,
+          "crowdingExploreBoost": 0,
+          "saturationExploreBoost": 0,
+          "rangeSaturation": 0,
+          "socialAccessRisk": 0,
+          "daughterDispersalExploreBoost": 0
+        }
+      ],
+      "diagnosis": "the superseded key was ambiguous here: two candidates of DIFFERENT families shared `${type}:${targetTileId}`, `new Map(...)` kept only the last, and the old instrument subtracted two different candidates' scores. The corrected identity separates them.",
+      "verdict": "CLEAN_EXACT_CONTRIBUTION"
+    },
+    {
+      "arm": "after",
+      "label": "F1_adjacent_pair_rich",
+      "action": "move_to_tile:tile:194:90",
+      "oldReported": -4.02,
+      "why": "sum of named paths 0.04, residual -4.06",
+      "matchedCandidates": 2,
+      "legacyKeyWasAmbiguous": true,
+      "legacyKeyFamilies": [
+        "core",
+        "corridor_relocation"
+      ],
+      "correctedIdentities": [
+        "move_to_tile:tile:194:90|origin=tile:195:90|family=core",
+        "move_to_tile:tile:194:90|origin=tile:195:90|family=corridor_relocation"
+      ],
+      "pairStatuses": [
+        "clean_exact_partition",
+        "clean_exact_partition"
+      ],
+      "correctedAttributableTotal": [
+        0.04,
+        0
+      ],
+      "correctedDirectSum": [
+        0.04,
+        0
+      ],
+      "crowdingInputs": [
+        {
+          "nearbyBandPressure": 0.11,
+          "crowdingPenalty": 0.04,
+          "crowdingExploreBoost": 0,
+          "saturationExploreBoost": 0,
+          "rangeSaturation": 0,
+          "socialAccessRisk": 0,
+          "daughterDispersalExploreBoost": 0
+        },
+        {
+          "nearbyBandPressure": 0,
+          "crowdingPenalty": 0,
+          "crowdingExploreBoost": 0,
+          "saturationExploreBoost": 0,
+          "rangeSaturation": 0,
+          "socialAccessRisk": 0,
+          "daughterDispersalExploreBoost": 0
+        }
+      ],
+      "diagnosis": "the superseded key was ambiguous here: two candidates of DIFFERENT families shared `${type}:${targetTileId}`, `new Map(...)` kept only the last, and the old instrument subtracted two different candidates' scores. The corrected identity separates them.",
+      "verdict": "CLEAN_EXACT_CONTRIBUTION"
+    },
+    {
+      "arm": "after",
+      "label": "F2_solo_control_rich",
+      "action": "move_to_tile:tile:196:90",
+      "oldReported": -3.39,
+      "why": "solo control, zero crowding",
+      "matchedCandidates": 2,
+      "legacyKeyWasAmbiguous": true,
+      "legacyKeyFamilies": [
+        "core",
+        "corridor_relocation"
+      ],
+      "correctedIdentities": [
+        "move_to_tile:tile:196:90|origin=tile:195:90|family=core",
+        "move_to_tile:tile:196:90|origin=tile:195:90|family=corridor_relocation"
+      ],
+      "pairStatuses": [
+        "clean_exact_partition",
+        "clean_exact_partition"
+      ],
+      "correctedAttributableTotal": [
+        0,
+        0
+      ],
+      "correctedDirectSum": [
+        0,
+        0
+      ],
+      "crowdingInputs": [
+        {
+          "nearbyBandPressure": 0,
+          "crowdingPenalty": 0,
+          "crowdingExploreBoost": 0,
+          "saturationExploreBoost": 0,
+          "rangeSaturation": 0,
+          "socialAccessRisk": 0,
+          "daughterDispersalExploreBoost": 0
+        },
+        {
+          "nearbyBandPressure": 0,
+          "crowdingPenalty": 0,
+          "crowdingExploreBoost": 0,
+          "saturationExploreBoost": 0,
+          "rangeSaturation": 0,
+          "socialAccessRisk": 0,
+          "daughterDispersalExploreBoost": 0
+        }
+      ],
+      "diagnosis": "the superseded key was ambiguous here: two candidates of DIFFERENT families shared `${type}:${targetTileId}`, `new Map(...)` kept only the last, and the old instrument subtracted two different candidates' scores. The corrected identity separates them.",
+      "verdict": "CLEAN_EXACT_CONTRIBUTION"
+    },
+    {
+      "arm": "before",
+      "label": "F1_adjacent_pair_rich",
+      "action": "move_to_tile:tile:196:90",
+      "oldReported": -3.02,
+      "why": "before-arm equivalent multi-point residual",
+      "matchedCandidates": 2,
+      "legacyKeyWasAmbiguous": true,
+      "legacyKeyFamilies": [
+        "core",
+        "corridor_relocation"
+      ],
+      "correctedIdentities": [
+        "move_to_tile:tile:196:90|origin=tile:195:90|family=core",
+        "move_to_tile:tile:196:90|origin=tile:195:90|family=corridor_relocation"
+      ],
+      "pairStatuses": [
+        "clean_exact_partition",
+        "clean_exact_partition"
+      ],
+      "correctedAttributableTotal": [
+        0.15,
+        0
+      ],
+      "correctedDirectSum": [
+        0.1,
+        0
+      ],
+      "crowdingInputs": [
+        {
+          "nearbyBandPressure": 0.19,
+          "crowdingPenalty": 0.07,
+          "crowdingExploreBoost": 0,
+          "saturationExploreBoost": 0,
+          "rangeSaturation": 0,
+          "socialAccessRisk": 0,
+          "daughterDispersalExploreBoost": 0
+        },
+        {
+          "nearbyBandPressure": 0,
+          "crowdingPenalty": 0,
+          "crowdingExploreBoost": 0,
+          "saturationExploreBoost": 0,
+          "rangeSaturation": 0,
+          "socialAccessRisk": 0,
+          "daughterDispersalExploreBoost": 0
+        }
+      ],
+      "diagnosis": "the superseded key was ambiguous here: two candidates of DIFFERENT families shared `${type}:${targetTileId}`, `new Map(...)` kept only the last, and the old instrument subtracted two different candidates' scores. The corrected identity separates them.",
+      "verdict": "CLEAN_EXACT_CONTRIBUTION"
+    },
+    {
+      "arm": "before",
+      "label": "F2_solo_control_rich",
+      "action": "move_to_tile:tile:196:90",
+      "oldReported": -3.39,
+      "why": "before-arm solo control",
+      "matchedCandidates": 2,
+      "legacyKeyWasAmbiguous": true,
+      "legacyKeyFamilies": [
+        "core",
+        "corridor_relocation"
+      ],
+      "correctedIdentities": [
+        "move_to_tile:tile:196:90|origin=tile:195:90|family=core",
+        "move_to_tile:tile:196:90|origin=tile:195:90|family=corridor_relocation"
+      ],
+      "pairStatuses": [
+        "clean_exact_partition",
+        "clean_exact_partition"
+      ],
+      "correctedAttributableTotal": [
+        0,
+        0
+      ],
+      "correctedDirectSum": [
+        0,
+        0
+      ],
+      "crowdingInputs": [
+        {
+          "nearbyBandPressure": 0,
+          "crowdingPenalty": 0,
+          "crowdingExploreBoost": 0,
+          "saturationExploreBoost": 0,
+          "rangeSaturation": 0,
+          "socialAccessRisk": 0,
+          "daughterDispersalExploreBoost": 0
+        },
+        {
+          "nearbyBandPressure": 0,
+          "crowdingPenalty": 0,
+          "crowdingExploreBoost": 0,
+          "saturationExploreBoost": 0,
+          "rangeSaturation": 0,
+          "socialAccessRisk": 0,
+          "daughterDispersalExploreBoost": 0
+        }
+      ],
+      "diagnosis": "the superseded key was ambiguous here: two candidates of DIFFERENT families shared `${type}:${targetTileId}`, `new Map(...)` kept only the last, and the old instrument subtracted two different candidates' scores. The corrected identity separates them.",
+      "verdict": "CLEAN_EXACT_CONTRIBUTION"
+    }
+  ]
+}

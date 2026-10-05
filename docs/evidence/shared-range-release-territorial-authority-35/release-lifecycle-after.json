@@ -1,0 +1,594 @@
+{
+  "audit": "CORRECTION-35A-RELEASE-LIFECYCLE-FIELD-CONSISTENCY",
+  "phase": "after",
+  "headline": "RELEASE LABEL AGREES WITH BEHAVIOR",
+  "naturalIncident": null,
+  "naturalIncidentReproduced": false,
+  "controlledLadder": {
+    "A1_fresh": {
+      "case": "direct:age0",
+      "fields": {
+        "socialEvidencePhase": "active",
+        "activeEvidenceCount": 1,
+        "historicalEvidenceCount": 0,
+        "activeEvidenceWeight": 1,
+        "confidence": 0.65
+      },
+      "recordsNamingThisTile": 1,
+      "deltas": {
+        "strangerCaution": 0.25,
+        "sharedUsePressure": 0.14,
+        "rememberedRefusalAvoidance": 0.18,
+        "rememberedCooperationTolerance": 0,
+        "kinTolerance": 0,
+        "familiarTolerance": 0
+      },
+      "totalBehaviourDelta": 0.57,
+      "placeTracked": true,
+      "injectedAgeTicks": 0
+    },
+    "A2_cooling_above_threshold": {
+      "case": "direct:age4",
+      "fields": {
+        "socialEvidencePhase": "cooling",
+        "activeEvidenceCount": 1,
+        "historicalEvidenceCount": 0,
+        "activeEvidenceWeight": 0.89,
+        "confidence": 0.65
+      },
+      "recordsNamingThisTile": 1,
+      "deltas": {
+        "strangerCaution": 0.22,
+        "sharedUsePressure": 0.12,
+        "rememberedRefusalAvoidance": 0.15,
+        "rememberedCooperationTolerance": 0,
+        "kinTolerance": 0,
+        "familiarTolerance": 0
+      },
+      "totalBehaviourDelta": 0.49,
+      "placeTracked": true,
+      "injectedAgeTicks": 4
+    },
+    "A3_sub_threshold_still_contributing": {
+      "case": "reported:age15",
+      "fields": {
+        "socialEvidencePhase": "cooling",
+        "activeEvidenceCount": 1,
+        "historicalEvidenceCount": 0,
+        "activeEvidenceWeight": 0.04,
+        "confidence": 0.57
+      },
+      "recordsNamingThisTile": 1,
+      "deltas": {
+        "strangerCaution": 0.01,
+        "sharedUsePressure": 0.01,
+        "rememberedRefusalAvoidance": 0,
+        "rememberedCooperationTolerance": 0,
+        "kinTolerance": 0,
+        "familiarTolerance": 0
+      },
+      "totalBehaviourDelta": 0.02,
+      "placeTracked": true,
+      "injectedAgeTicks": 15,
+      "note": "the (0, 0.05) band is unreachable for DIRECT evidence on an integer tick age — the direct curve's lowest non-zero steps are 0.2 / 0.11 / 0.08 on the tolerated / neutral / tense horizons. Only the reported path, whose weight is a product, lands inside it. The natural incident is exactly such a record."
+    },
+    "A4_fully_released": {
+      "case": "direct:age12",
+      "fields": {
+        "socialEvidencePhase": "released_historical",
+        "activeEvidenceCount": 0,
+        "historicalEvidenceCount": 1,
+        "activeEvidenceWeight": 0,
+        "confidence": 0.59
+      },
+      "recordsNamingThisTile": 1,
+      "deltas": {
+        "strangerCaution": 0,
+        "sharedUsePressure": 0,
+        "rememberedRefusalAvoidance": 0,
+        "rememberedCooperationTolerance": 0,
+        "kinTolerance": 0,
+        "familiarTolerance": 0
+      },
+      "totalBehaviourDelta": 0,
+      "placeTracked": true,
+      "injectedAgeTicks": 12
+    },
+    "A5_no_evidence": {
+      "case": "no_records",
+      "fields": {
+        "socialEvidencePhase": "none",
+        "activeEvidenceCount": 0,
+        "historicalEvidenceCount": 0,
+        "activeEvidenceWeight": 0,
+        "confidence": 0.59
+      },
+      "recordsNamingThisTile": 0,
+      "deltas": {
+        "strangerCaution": 0,
+        "sharedUsePressure": 0,
+        "rememberedRefusalAvoidance": 0,
+        "rememberedCooperationTolerance": 0,
+        "kinTolerance": 0,
+        "familiarTolerance": 0
+      },
+      "totalBehaviourDelta": 0,
+      "placeTracked": true
+    }
+  },
+  "weightSweeps": {
+    "direct": [
+      {
+        "injectedAgeTicks": 0,
+        "weight": 1,
+        "phase": "active",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "confidence": 0.65,
+        "behaviourDelta": 0.57
+      },
+      {
+        "injectedAgeTicks": 1,
+        "weight": 1,
+        "phase": "active",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "confidence": 0.65,
+        "behaviourDelta": 0.57
+      },
+      {
+        "injectedAgeTicks": 2,
+        "weight": 1,
+        "phase": "active",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "confidence": 0.65,
+        "behaviourDelta": 0.57
+      },
+      {
+        "injectedAgeTicks": 3,
+        "weight": 1,
+        "phase": "active",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "confidence": 0.65,
+        "behaviourDelta": 0.57
+      },
+      {
+        "injectedAgeTicks": 4,
+        "weight": 0.89,
+        "phase": "cooling",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "confidence": 0.65,
+        "behaviourDelta": 0.49
+      },
+      {
+        "injectedAgeTicks": 5,
+        "weight": 0.78,
+        "phase": "cooling",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "confidence": 0.65,
+        "behaviourDelta": 0.42
+      },
+      {
+        "injectedAgeTicks": 6,
+        "weight": 0.67,
+        "phase": "cooling",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "confidence": 0.65,
+        "behaviourDelta": 0.35
+      },
+      {
+        "injectedAgeTicks": 7,
+        "weight": 0.56,
+        "phase": "cooling",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "confidence": 0.65,
+        "behaviourDelta": 0.29
+      },
+      {
+        "injectedAgeTicks": 8,
+        "weight": 0.44,
+        "phase": "cooling",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "confidence": 0.65,
+        "behaviourDelta": 0.22
+      },
+      {
+        "injectedAgeTicks": 9,
+        "weight": 0.33,
+        "phase": "cooling",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "confidence": 0.65,
+        "behaviourDelta": 0.16
+      },
+      {
+        "injectedAgeTicks": 10,
+        "weight": 0.22,
+        "phase": "cooling",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "confidence": 0.65,
+        "behaviourDelta": 0.1
+      },
+      {
+        "injectedAgeTicks": 11,
+        "weight": 0.11,
+        "phase": "cooling",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "confidence": 0.65,
+        "behaviourDelta": 0.05
+      },
+      {
+        "injectedAgeTicks": 12,
+        "weight": 0,
+        "phase": "released_historical",
+        "activeCount": 0,
+        "historicalCount": 1,
+        "confidence": 0.59,
+        "behaviourDelta": 0
+      },
+      {
+        "injectedAgeTicks": 13,
+        "weight": 0,
+        "phase": "released_historical",
+        "activeCount": 0,
+        "historicalCount": 1,
+        "confidence": 0.59,
+        "behaviourDelta": 0
+      },
+      {
+        "injectedAgeTicks": 14,
+        "weight": 0,
+        "phase": "released_historical",
+        "activeCount": 0,
+        "historicalCount": 1,
+        "confidence": 0.59,
+        "behaviourDelta": 0
+      },
+      {
+        "injectedAgeTicks": 15,
+        "weight": 0,
+        "phase": "released_historical",
+        "activeCount": 0,
+        "historicalCount": 1,
+        "confidence": 0.59,
+        "behaviourDelta": 0
+      },
+      {
+        "injectedAgeTicks": 16,
+        "weight": 0,
+        "phase": "released_historical",
+        "activeCount": 0,
+        "historicalCount": 1,
+        "confidence": 0.59,
+        "behaviourDelta": 0
+      },
+      {
+        "injectedAgeTicks": 17,
+        "weight": 0,
+        "phase": "released_historical",
+        "activeCount": 0,
+        "historicalCount": 1,
+        "confidence": 0.59,
+        "behaviourDelta": 0
+      },
+      {
+        "injectedAgeTicks": 18,
+        "weight": 0,
+        "phase": "released_historical",
+        "activeCount": 0,
+        "historicalCount": 1,
+        "confidence": 0.59,
+        "behaviourDelta": 0
+      },
+      {
+        "injectedAgeTicks": 19,
+        "weight": 0,
+        "phase": "released_historical",
+        "activeCount": 0,
+        "historicalCount": 1,
+        "confidence": 0.59,
+        "behaviourDelta": 0
+      },
+      {
+        "injectedAgeTicks": 20,
+        "weight": 0,
+        "phase": "released_historical",
+        "activeCount": 0,
+        "historicalCount": 1,
+        "confidence": 0.59,
+        "behaviourDelta": 0
+      },
+      {
+        "injectedAgeTicks": 21,
+        "weight": 0,
+        "phase": "released_historical",
+        "activeCount": 0,
+        "historicalCount": 1,
+        "confidence": 0.59,
+        "behaviourDelta": 0
+      },
+      {
+        "injectedAgeTicks": 22,
+        "weight": 0,
+        "phase": "released_historical",
+        "activeCount": 0,
+        "historicalCount": 1,
+        "confidence": 0.59,
+        "behaviourDelta": 0
+      },
+      {
+        "injectedAgeTicks": 23,
+        "weight": 0,
+        "phase": "released_historical",
+        "activeCount": 0,
+        "historicalCount": 1,
+        "confidence": 0.59,
+        "behaviourDelta": 0
+      },
+      {
+        "injectedAgeTicks": 24,
+        "weight": 0,
+        "phase": "released_historical",
+        "activeCount": 0,
+        "historicalCount": 1,
+        "confidence": 0.59,
+        "behaviourDelta": 0
+      }
+    ],
+    "reported": [
+      {
+        "injectedAgeTicks": 0,
+        "weight": 0.56,
+        "phase": "cooling",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "confidence": 0.62,
+        "behaviourDelta": 0.35
+      },
+      {
+        "injectedAgeTicks": 1,
+        "weight": 0.56,
+        "phase": "cooling",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "confidence": 0.62,
+        "behaviourDelta": 0.35
+      },
+      {
+        "injectedAgeTicks": 2,
+        "weight": 0.56,
+        "phase": "cooling",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "confidence": 0.62,
+        "behaviourDelta": 0.35
+      },
+      {
+        "injectedAgeTicks": 3,
+        "weight": 0.56,
+        "phase": "cooling",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "confidence": 0.62,
+        "behaviourDelta": 0.35
+      },
+      {
+        "injectedAgeTicks": 4,
+        "weight": 0.52,
+        "phase": "cooling",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "confidence": 0.62,
+        "behaviourDelta": 0.32
+      },
+      {
+        "injectedAgeTicks": 5,
+        "weight": 0.47,
+        "phase": "cooling",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "confidence": 0.62,
+        "behaviourDelta": 0.29
+      },
+      {
+        "injectedAgeTicks": 6,
+        "weight": 0.43,
+        "phase": "cooling",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "confidence": 0.62,
+        "behaviourDelta": 0.26
+      },
+      {
+        "injectedAgeTicks": 7,
+        "weight": 0.39,
+        "phase": "cooling",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "confidence": 0.62,
+        "behaviourDelta": 0.24
+      },
+      {
+        "injectedAgeTicks": 8,
+        "weight": 0.34,
+        "phase": "cooling",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "confidence": 0.62,
+        "behaviourDelta": 0.21
+      },
+      {
+        "injectedAgeTicks": 9,
+        "weight": 0.3,
+        "phase": "cooling",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "confidence": 0.62,
+        "behaviourDelta": 0.18
+      },
+      {
+        "injectedAgeTicks": 10,
+        "weight": 0.26,
+        "phase": "cooling",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "confidence": 0.62,
+        "behaviourDelta": 0.15
+      },
+      {
+        "injectedAgeTicks": 11,
+        "weight": 0.22,
+        "phase": "cooling",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "confidence": 0.62,
+        "behaviourDelta": 0.13
+      },
+      {
+        "injectedAgeTicks": 12,
+        "weight": 0.17,
+        "phase": "cooling",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "confidence": 0.62,
+        "behaviourDelta": 0.1
+      },
+      {
+        "injectedAgeTicks": 13,
+        "weight": 0.13,
+        "phase": "cooling",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "confidence": 0.62,
+        "behaviourDelta": 0.07
+      },
+      {
+        "injectedAgeTicks": 14,
+        "weight": 0.09,
+        "phase": "cooling",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "confidence": 0.62,
+        "behaviourDelta": 0.05
+      },
+      {
+        "injectedAgeTicks": 15,
+        "weight": 0.04,
+        "phase": "cooling",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "confidence": 0.57,
+        "behaviourDelta": 0.02
+      },
+      {
+        "injectedAgeTicks": 16,
+        "weight": 0,
+        "phase": "released_historical",
+        "activeCount": 0,
+        "historicalCount": 1,
+        "confidence": 0.57,
+        "behaviourDelta": 0
+      },
+      {
+        "injectedAgeTicks": 17,
+        "weight": 0,
+        "phase": "released_historical",
+        "activeCount": 0,
+        "historicalCount": 1,
+        "confidence": 0.57,
+        "behaviourDelta": 0
+      },
+      {
+        "injectedAgeTicks": 18,
+        "weight": 0,
+        "phase": "released_historical",
+        "activeCount": 0,
+        "historicalCount": 1,
+        "confidence": 0.57,
+        "behaviourDelta": 0
+      },
+      {
+        "injectedAgeTicks": 19,
+        "weight": 0,
+        "phase": "released_historical",
+        "activeCount": 0,
+        "historicalCount": 1,
+        "confidence": 0.57,
+        "behaviourDelta": 0
+      },
+      {
+        "injectedAgeTicks": 20,
+        "weight": 0,
+        "phase": "released_historical",
+        "activeCount": 0,
+        "historicalCount": 1,
+        "confidence": 0.57,
+        "behaviourDelta": 0
+      },
+      {
+        "injectedAgeTicks": 21,
+        "weight": 0,
+        "phase": "released_historical",
+        "activeCount": 0,
+        "historicalCount": 1,
+        "confidence": 0.57,
+        "behaviourDelta": 0
+      },
+      {
+        "injectedAgeTicks": 22,
+        "weight": 0,
+        "phase": "released_historical",
+        "activeCount": 0,
+        "historicalCount": 1,
+        "confidence": 0.57,
+        "behaviourDelta": 0
+      },
+      {
+        "injectedAgeTicks": 23,
+        "weight": 0,
+        "phase": "released_historical",
+        "activeCount": 0,
+        "historicalCount": 1,
+        "confidence": 0.57,
+        "behaviourDelta": 0
+      },
+      {
+        "injectedAgeTicks": 24,
+        "weight": 0,
+        "phase": "released_historical",
+        "activeCount": 0,
+        "historicalCount": 1,
+        "confidence": 0.57,
+        "behaviourDelta": 0
+      }
+    ]
+  },
+  "curveFacts": {
+    "freshTicks": 3,
+    "horizons": {
+      "tolerated": 8,
+      "neutral": 12,
+      "tense": 16,
+      "reported": 16
+    },
+    "weightIsRounded": "weighSocialEvidence returns round2(clamp01(weight)), so the smallest non-zero weight is 0.01 and weight === 0 is an EXACT causal zero, not an epsilon",
+    "everyContributionScalesByWeight": "strongestFrictionRelation, bestContactTolerance, tensionFromFriction, the tolerance and refusal terms and eventPressure all multiply by entry.weight, so weight 0 gives exactly 0 by multiplication",
+    "subThresholdReachability": "on an integer tick age the direct curve yields 0.2 / 0.11 / 0.08 as its lowest non-zero weights on the tolerated / neutral / tense horizons — all at or above the 0.05 activity threshold. The (0, 0.05) band is reachable only through the REPORTED path, whose weight is a product ageWeight x 0.7 x hopFactor x freshness. That is why the defect is rare and why the natural incident is a reported record."
+  },
+  "invariantsUnderTest": {
+    "releasedMeansZeroContribution": true,
+    "subThresholdIsLabelledReleasedWhileContributing": false,
+    "countsSumToRetainedRecords": true,
+    "everySweepRowWithNonZeroWeightContributes": true,
+    "everySweepRowLabelledReleasedContributesNothing": true
+  }
+}

@@ -1,0 +1,3713 @@
+{
+  "checkpoint": "CORRECTION-26",
+  "generatedFor": "resource investigation physical execution — natural occurrence",
+  "years": 20,
+  "seedPrefix": "c26:physical",
+  "seeds": [
+    "s1",
+    "s2"
+  ],
+  "scenarios": [
+    "map1",
+    "map2",
+    "ordinary"
+  ],
+  "totals": {
+    "selectedInvestigations": 343,
+    "resolved": 340,
+    "stillPendingAtEnd": 3,
+    "byOutcome": {
+      "executed_and_returned": 139,
+      "route_unavailable": 54,
+      "arrival_failed": 0,
+      "beyond_same_day_reach": 147,
+      "insufficient_labor": 0,
+      "destination_blocked": 0,
+      "target_no_longer_valid": 0,
+      "band_moved_before_departure": 0,
+      "band_no_longer_active": 0,
+      "superseded": 0,
+      "expired_before_execution": 0
+    },
+    "byAction": {
+      "resource_scout": 158,
+      "logistical_probe": 185
+    },
+    "targetMemoryChangesWithoutExecution": 0,
+    "targetMemoryChangesAfterExecution": 73,
+    "investigationFoodReceipts": 0,
+    "investigationConsumedByEconomy": 0,
+    "taskPartyRecords": 139,
+    "taskPartyRecordsWithoutExecution": 0,
+    "maxPendingPerBand": 1,
+    "maxOutcomeRingPerBand": 6,
+    "duplicateExecutionIds": 0
+  },
+  "runs": [
+    {
+      "scenario": "map1",
+      "seed": "s1",
+      "years": 20,
+      "selected": 51,
+      "resolved": 50,
+      "stillPendingAtEnd": 1,
+      "outcomeCounts": {
+        "executed_and_returned": 21,
+        "route_unavailable": 21,
+        "arrival_failed": 0,
+        "beyond_same_day_reach": 8,
+        "insufficient_labor": 0,
+        "destination_blocked": 0,
+        "target_no_longer_valid": 0,
+        "band_moved_before_departure": 0,
+        "band_no_longer_active": 0,
+        "superseded": 0,
+        "expired_before_execution": 0
+      },
+      "memoryChangeWithoutExecution": 0,
+      "memoryChangeAfterExecution": 4,
+      "taskPartyRecords": 21,
+      "taskPartyRecordsWithoutExecution": 0,
+      "investigationFoodReceipts": 0,
+      "maxPendingPerBand": 1,
+      "maxOutcomeRingPerBand": 6,
+      "unresolvedSelections": 1
+    },
+    {
+      "scenario": "map1",
+      "seed": "s2",
+      "years": 20,
+      "selected": 48,
+      "resolved": 48,
+      "stillPendingAtEnd": 0,
+      "outcomeCounts": {
+        "executed_and_returned": 17,
+        "route_unavailable": 14,
+        "arrival_failed": 0,
+        "beyond_same_day_reach": 17,
+        "insufficient_labor": 0,
+        "destination_blocked": 0,
+        "target_no_longer_valid": 0,
+        "band_moved_before_departure": 0,
+        "band_no_longer_active": 0,
+        "superseded": 0,
+        "expired_before_execution": 0
+      },
+      "memoryChangeWithoutExecution": 0,
+      "memoryChangeAfterExecution": 9,
+      "taskPartyRecords": 17,
+      "taskPartyRecordsWithoutExecution": 0,
+      "investigationFoodReceipts": 0,
+      "maxPendingPerBand": 1,
+      "maxOutcomeRingPerBand": 6,
+      "unresolvedSelections": 0
+    },
+    {
+      "scenario": "map2",
+      "seed": "s1",
+      "years": 20,
+      "selected": 151,
+      "resolved": 149,
+      "stillPendingAtEnd": 2,
+      "outcomeCounts": {
+        "executed_and_returned": 44,
+        "route_unavailable": 12,
+        "arrival_failed": 0,
+        "beyond_same_day_reach": 93,
+        "insufficient_labor": 0,
+        "destination_blocked": 0,
+        "target_no_longer_valid": 0,
+        "band_moved_before_departure": 0,
+        "band_no_longer_active": 0,
+        "superseded": 0,
+        "expired_before_execution": 0
+      },
+      "memoryChangeWithoutExecution": 0,
+      "memoryChangeAfterExecution": 27,
+      "taskPartyRecords": 44,
+      "taskPartyRecordsWithoutExecution": 0,
+      "investigationFoodReceipts": 0,
+      "maxPendingPerBand": 1,
+      "maxOutcomeRingPerBand": 6,
+      "unresolvedSelections": 2
+    },
+    {
+      "scenario": "map2",
+      "seed": "s2",
+      "years": 20,
+      "selected": 72,
+      "resolved": 72,
+      "stillPendingAtEnd": 0,
+      "outcomeCounts": {
+        "executed_and_returned": 39,
+        "route_unavailable": 5,
+        "arrival_failed": 0,
+        "beyond_same_day_reach": 28,
+        "insufficient_labor": 0,
+        "destination_blocked": 0,
+        "target_no_longer_valid": 0,
+        "band_moved_before_departure": 0,
+        "band_no_longer_active": 0,
+        "superseded": 0,
+        "expired_before_execution": 0
+      },
+      "memoryChangeWithoutExecution": 0,
+      "memoryChangeAfterExecution": 19,
+      "taskPartyRecords": 39,
+      "taskPartyRecordsWithoutExecution": 0,
+      "investigationFoodReceipts": 0,
+      "maxPendingPerBand": 1,
+      "maxOutcomeRingPerBand": 6,
+      "unresolvedSelections": 0
+    },
+    {
+      "scenario": "ordinary",
+      "seed": "s1",
+      "years": 20,
+      "selected": 11,
+      "resolved": 11,
+      "stillPendingAtEnd": 0,
+      "outcomeCounts": {
+        "executed_and_returned": 9,
+        "route_unavailable": 1,
+        "arrival_failed": 0,
+        "beyond_same_day_reach": 1,
+        "insufficient_labor": 0,
+        "destination_blocked": 0,
+        "target_no_longer_valid": 0,
+        "band_moved_before_departure": 0,
+        "band_no_longer_active": 0,
+        "superseded": 0,
+        "expired_before_execution": 0
+      },
+      "memoryChangeWithoutExecution": 0,
+      "memoryChangeAfterExecution": 7,
+      "taskPartyRecords": 9,
+      "taskPartyRecordsWithoutExecution": 0,
+      "investigationFoodReceipts": 0,
+      "maxPendingPerBand": 1,
+      "maxOutcomeRingPerBand": 6,
+      "unresolvedSelections": 0
+    },
+    {
+      "scenario": "ordinary",
+      "seed": "s2",
+      "years": 20,
+      "selected": 10,
+      "resolved": 10,
+      "stillPendingAtEnd": 0,
+      "outcomeCounts": {
+        "executed_and_returned": 9,
+        "route_unavailable": 1,
+        "arrival_failed": 0,
+        "beyond_same_day_reach": 0,
+        "insufficient_labor": 0,
+        "destination_blocked": 0,
+        "target_no_longer_valid": 0,
+        "band_moved_before_departure": 0,
+        "band_no_longer_active": 0,
+        "superseded": 0,
+        "expired_before_execution": 0
+      },
+      "memoryChangeWithoutExecution": 0,
+      "memoryChangeAfterExecution": 7,
+      "taskPartyRecords": 9,
+      "taskPartyRecordsWithoutExecution": 0,
+      "investigationFoodReceipts": 0,
+      "maxPendingPerBand": 1,
+      "maxOutcomeRingPerBand": 6,
+      "unresolvedSelections": 0
+    }
+  ],
+  "rawSample": [
+    {
+      "scenario": "map1",
+      "seed": "s1",
+      "selection": {
+        "decisionId": "decision:band:dry-margin-foragers:2",
+        "bandId": "band:dry-margin-foragers",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:112:40",
+        "targetTileId": "tile:115:39",
+        "selectedDay": 180,
+        "selectedTick": 2,
+        "expiresAfterDay": 270,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:dry-margin-foragers:2",
+        "outcome": "executed_and_returned",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:115:39",
+        "resolvedDay": 186,
+        "executionId": "investigation-exec:decision:band:dry-margin-foragers:2:186",
+        "activityOutcome": "returned_with_information",
+        "partyWorkers": 1,
+        "routeDistanceTiles": 4,
+        "observedTileCount": 16
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s1",
+      "selection": {
+        "decisionId": "decision:band:highland-edge-foragers:6",
+        "bandId": "band:highland-edge-foragers",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:35:19",
+        "targetTileId": "tile:35:16",
+        "selectedDay": 540,
+        "selectedTick": 6,
+        "expiresAfterDay": 630,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "side_country_observation"
+      },
+      "resolution": {
+        "decisionId": "decision:band:highland-edge-foragers:6",
+        "outcome": "executed_and_returned",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:35:16",
+        "resolvedDay": 546,
+        "executionId": "investigation-exec:decision:band:highland-edge-foragers:6:546",
+        "activityOutcome": "returned_with_information",
+        "partyWorkers": 2,
+        "routeDistanceTiles": 3,
+        "observedTileCount": 14
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s1",
+      "selection": {
+        "decisionId": "decision:band:lake-wetland-foragers:9",
+        "bandId": "band:lake-wetland-foragers",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:104:58",
+        "targetTileId": "tile:103:55",
+        "selectedDay": 810,
+        "selectedTick": 9,
+        "expiresAfterDay": 900,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:lake-wetland-foragers:9",
+        "outcome": "route_unavailable",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:103:55",
+        "resolvedDay": 816,
+        "executionId": null,
+        "activityOutcome": null,
+        "partyWorkers": 0,
+        "routeDistanceTiles": null,
+        "observedTileCount": null
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s1",
+      "selection": {
+        "decisionId": "decision:band:lake-wetland-foragers:10",
+        "bandId": "band:lake-wetland-foragers",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:104:58",
+        "targetTileId": "tile:103:55",
+        "selectedDay": 900,
+        "selectedTick": 10,
+        "expiresAfterDay": 990,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:lake-wetland-foragers:10",
+        "outcome": "route_unavailable",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:103:55",
+        "resolvedDay": 906,
+        "executionId": null,
+        "activityOutcome": null,
+        "partyWorkers": 0,
+        "routeDistanceTiles": null,
+        "observedTileCount": null
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s1",
+      "selection": {
+        "decisionId": "decision:band:dry-margin-foragers:15",
+        "bandId": "band:dry-margin-foragers",
+        "actionType": "resource_scout",
+        "originTileId": "tile:112:42",
+        "targetTileId": "tile:112:43",
+        "selectedDay": 1350,
+        "selectedTick": 15,
+        "expiresAfterDay": 1440,
+        "scoutKind": "fallback_food",
+        "targetResourceClass": "fallback_food",
+        "probePurpose": null
+      },
+      "resolution": {
+        "decisionId": "decision:band:dry-margin-foragers:15",
+        "outcome": "executed_and_returned",
+        "actionType": "resource_scout",
+        "targetTileId": "tile:112:43",
+        "resolvedDay": 1356,
+        "executionId": "investigation-exec:decision:band:dry-margin-foragers:15:1356",
+        "activityOutcome": "returned_with_information",
+        "partyWorkers": 1,
+        "routeDistanceTiles": 1,
+        "observedTileCount": 8
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s1",
+      "selection": {
+        "decisionId": "decision:band:lake-wetland-foragers:17",
+        "bandId": "band:lake-wetland-foragers",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:100:57",
+        "targetTileId": "tile:100:54",
+        "selectedDay": 1530,
+        "selectedTick": 17,
+        "expiresAfterDay": 1620,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:lake-wetland-foragers:17",
+        "outcome": "route_unavailable",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:100:54",
+        "resolvedDay": 1536,
+        "executionId": null,
+        "activityOutcome": null,
+        "partyWorkers": 0,
+        "routeDistanceTiles": null,
+        "observedTileCount": null
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s1",
+      "selection": {
+        "decisionId": "decision:band:lake-wetland-foragers:19",
+        "bandId": "band:lake-wetland-foragers",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:101:57",
+        "targetTileId": "tile:100:54",
+        "selectedDay": 1710,
+        "selectedTick": 19,
+        "expiresAfterDay": 1800,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:lake-wetland-foragers:19",
+        "outcome": "route_unavailable",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:100:54",
+        "resolvedDay": 1716,
+        "executionId": null,
+        "activityOutcome": null,
+        "partyWorkers": 0,
+        "routeDistanceTiles": null,
+        "observedTileCount": null
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s1",
+      "selection": {
+        "decisionId": "decision:band:lake-wetland-foragers:20",
+        "bandId": "band:lake-wetland-foragers",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:101:57",
+        "targetTileId": "tile:100:54",
+        "selectedDay": 1800,
+        "selectedTick": 20,
+        "expiresAfterDay": 1890,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:lake-wetland-foragers:20",
+        "outcome": "route_unavailable",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:100:54",
+        "resolvedDay": 1806,
+        "executionId": null,
+        "activityOutcome": null,
+        "partyWorkers": 0,
+        "routeDistanceTiles": null,
+        "observedTileCount": null
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s1",
+      "selection": {
+        "decisionId": "decision:band:dry-margin-foragers:21",
+        "bandId": "band:dry-margin-foragers",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:114:47",
+        "targetTileId": "tile:115:49",
+        "selectedDay": 1890,
+        "selectedTick": 21,
+        "expiresAfterDay": 1980,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:dry-margin-foragers:21",
+        "outcome": "executed_and_returned",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:115:49",
+        "resolvedDay": 1896,
+        "executionId": "investigation-exec:decision:band:dry-margin-foragers:21:1896",
+        "activityOutcome": "returned_with_information",
+        "partyWorkers": 1,
+        "routeDistanceTiles": 3,
+        "observedTileCount": 13
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s1",
+      "selection": {
+        "decisionId": "decision:band:lake-wetland-foragers:21",
+        "bandId": "band:lake-wetland-foragers",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:101:57",
+        "targetTileId": "tile:100:54",
+        "selectedDay": 1890,
+        "selectedTick": 21,
+        "expiresAfterDay": 1980,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:lake-wetland-foragers:21",
+        "outcome": "route_unavailable",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:100:54",
+        "resolvedDay": 1896,
+        "executionId": null,
+        "activityOutcome": null,
+        "partyWorkers": 0,
+        "routeDistanceTiles": null,
+        "observedTileCount": null
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s1",
+      "selection": {
+        "decisionId": "decision:band:dry-margin-foragers:22",
+        "bandId": "band:dry-margin-foragers",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:114:47",
+        "targetTileId": "tile:115:51",
+        "selectedDay": 1980,
+        "selectedTick": 22,
+        "expiresAfterDay": 2070,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:dry-margin-foragers:22",
+        "outcome": "beyond_same_day_reach",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:115:51",
+        "resolvedDay": 1986,
+        "executionId": null,
+        "activityOutcome": null,
+        "partyWorkers": null,
+        "routeDistanceTiles": 5,
+        "observedTileCount": null
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s1",
+      "selection": {
+        "decisionId": "decision:band:lake-wetland-foragers:22",
+        "bandId": "band:lake-wetland-foragers",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:101:57",
+        "targetTileId": "tile:100:54",
+        "selectedDay": 1980,
+        "selectedTick": 22,
+        "expiresAfterDay": 2070,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:lake-wetland-foragers:22",
+        "outcome": "route_unavailable",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:100:54",
+        "resolvedDay": 1986,
+        "executionId": null,
+        "activityOutcome": null,
+        "partyWorkers": 0,
+        "routeDistanceTiles": null,
+        "observedTileCount": null
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s1",
+      "selection": {
+        "decisionId": "decision:band:dry-margin-foragers:23",
+        "bandId": "band:dry-margin-foragers",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:114:47",
+        "targetTileId": "tile:115:51",
+        "selectedDay": 2070,
+        "selectedTick": 23,
+        "expiresAfterDay": 2160,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:dry-margin-foragers:23",
+        "outcome": "beyond_same_day_reach",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:115:51",
+        "resolvedDay": 2076,
+        "executionId": null,
+        "activityOutcome": null,
+        "partyWorkers": null,
+        "routeDistanceTiles": 5,
+        "observedTileCount": null
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s1",
+      "selection": {
+        "decisionId": "decision:band:dry-margin-foragers:24",
+        "bandId": "band:dry-margin-foragers",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:114:47",
+        "targetTileId": "tile:115:51",
+        "selectedDay": 2160,
+        "selectedTick": 24,
+        "expiresAfterDay": 2250,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:dry-margin-foragers:24",
+        "outcome": "beyond_same_day_reach",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:115:51",
+        "resolvedDay": 2166,
+        "executionId": null,
+        "activityOutcome": null,
+        "partyWorkers": null,
+        "routeDistanceTiles": 5,
+        "observedTileCount": null
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s1",
+      "selection": {
+        "decisionId": "decision:band:dry-margin-foragers:25",
+        "bandId": "band:dry-margin-foragers",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:114:47",
+        "targetTileId": "tile:115:51",
+        "selectedDay": 2250,
+        "selectedTick": 25,
+        "expiresAfterDay": 2340,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:dry-margin-foragers:25",
+        "outcome": "beyond_same_day_reach",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:115:51",
+        "resolvedDay": 2256,
+        "executionId": null,
+        "activityOutcome": null,
+        "partyWorkers": null,
+        "routeDistanceTiles": 5,
+        "observedTileCount": null
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s1",
+      "selection": {
+        "decisionId": "decision:band:dry-margin-foragers:26",
+        "bandId": "band:dry-margin-foragers",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:114:47",
+        "targetTileId": "tile:115:50",
+        "selectedDay": 2340,
+        "selectedTick": 26,
+        "expiresAfterDay": 2430,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:dry-margin-foragers:26",
+        "outcome": "executed_and_returned",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:115:50",
+        "resolvedDay": 2346,
+        "executionId": "investigation-exec:decision:band:dry-margin-foragers:26:2346",
+        "activityOutcome": "returned_with_information",
+        "partyWorkers": 1,
+        "routeDistanceTiles": 4,
+        "observedTileCount": 16
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s1",
+      "selection": {
+        "decisionId": "decision:band:lake-wetland-foragers:30",
+        "bandId": "band:lake-wetland-foragers",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:102:58",
+        "targetTileId": "tile:103:55",
+        "selectedDay": 2700,
+        "selectedTick": 30,
+        "expiresAfterDay": 2790,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:lake-wetland-foragers:30",
+        "outcome": "route_unavailable",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:103:55",
+        "resolvedDay": 2706,
+        "executionId": null,
+        "activityOutcome": null,
+        "partyWorkers": 0,
+        "routeDistanceTiles": null,
+        "observedTileCount": null
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s1",
+      "selection": {
+        "decisionId": "decision:band:lake-wetland-foragers:31",
+        "bandId": "band:lake-wetland-foragers",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:102:58",
+        "targetTileId": "tile:102:55",
+        "selectedDay": 2790,
+        "selectedTick": 31,
+        "expiresAfterDay": 2880,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:lake-wetland-foragers:31",
+        "outcome": "route_unavailable",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:102:55",
+        "resolvedDay": 2796,
+        "executionId": null,
+        "activityOutcome": null,
+        "partyWorkers": 0,
+        "routeDistanceTiles": null,
+        "observedTileCount": null
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s1",
+      "selection": {
+        "decisionId": "decision:band:highland-edge-foragers:34",
+        "bandId": "band:highland-edge-foragers",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:36:21",
+        "targetTileId": "tile:37:18",
+        "selectedDay": 3060,
+        "selectedTick": 34,
+        "expiresAfterDay": 3150,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "side_country_observation"
+      },
+      "resolution": {
+        "decisionId": "decision:band:highland-edge-foragers:34",
+        "outcome": "executed_and_returned",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:37:18",
+        "resolvedDay": 3066,
+        "executionId": "investigation-exec:decision:band:highland-edge-foragers:34:3066",
+        "activityOutcome": "returned_with_information",
+        "partyWorkers": 2,
+        "routeDistanceTiles": 4,
+        "observedTileCount": 16
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s1",
+      "selection": {
+        "decisionId": "decision:band:dry-margin-foragers:36",
+        "bandId": "band:dry-margin-foragers",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:115:52",
+        "targetTileId": "tile:110:57",
+        "selectedDay": 3240,
+        "selectedTick": 36,
+        "expiresAfterDay": 3330,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:dry-margin-foragers:36",
+        "outcome": "beyond_same_day_reach",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:110:57",
+        "resolvedDay": 3246,
+        "executionId": null,
+        "activityOutcome": null,
+        "partyWorkers": null,
+        "routeDistanceTiles": 10,
+        "observedTileCount": null
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s1",
+      "selection": {
+        "decisionId": "decision:band:lake-wetland-foragers:36",
+        "bandId": "band:lake-wetland-foragers",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:101:57",
+        "targetTileId": "tile:102:55",
+        "selectedDay": 3240,
+        "selectedTick": 36,
+        "expiresAfterDay": 3330,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:lake-wetland-foragers:36",
+        "outcome": "route_unavailable",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:102:55",
+        "resolvedDay": 3246,
+        "executionId": null,
+        "activityOutcome": null,
+        "partyWorkers": 0,
+        "routeDistanceTiles": null,
+        "observedTileCount": null
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s1",
+      "selection": {
+        "decisionId": "decision:band:dry-margin-foragers:37",
+        "bandId": "band:dry-margin-foragers",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:115:52",
+        "targetTileId": "tile:110:57",
+        "selectedDay": 3330,
+        "selectedTick": 37,
+        "expiresAfterDay": 3420,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:dry-margin-foragers:37",
+        "outcome": "beyond_same_day_reach",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:110:57",
+        "resolvedDay": 3336,
+        "executionId": null,
+        "activityOutcome": null,
+        "partyWorkers": null,
+        "routeDistanceTiles": 10,
+        "observedTileCount": null
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s1",
+      "selection": {
+        "decisionId": "decision:band:lake-wetland-foragers:37",
+        "bandId": "band:lake-wetland-foragers",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:101:57",
+        "targetTileId": "tile:100:54",
+        "selectedDay": 3330,
+        "selectedTick": 37,
+        "expiresAfterDay": 3420,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:lake-wetland-foragers:37",
+        "outcome": "route_unavailable",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:100:54",
+        "resolvedDay": 3336,
+        "executionId": null,
+        "activityOutcome": null,
+        "partyWorkers": 0,
+        "routeDistanceTiles": null,
+        "observedTileCount": null
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s1",
+      "selection": {
+        "decisionId": "decision:band:dry-margin-foragers:40",
+        "bandId": "band:dry-margin-foragers",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:116:54",
+        "targetTileId": "tile:120:58",
+        "selectedDay": 3600,
+        "selectedTick": 40,
+        "expiresAfterDay": 3690,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:dry-margin-foragers:40",
+        "outcome": "beyond_same_day_reach",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:120:58",
+        "resolvedDay": 3606,
+        "executionId": null,
+        "activityOutcome": null,
+        "partyWorkers": null,
+        "routeDistanceTiles": 8,
+        "observedTileCount": null
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s1",
+      "selection": {
+        "decisionId": "decision:band:dry-margin-foragers:41",
+        "bandId": "band:dry-margin-foragers",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:116:54",
+        "targetTileId": "tile:116:56",
+        "selectedDay": 3690,
+        "selectedTick": 41,
+        "expiresAfterDay": 3780,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:dry-margin-foragers:41",
+        "outcome": "executed_and_returned",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:116:56",
+        "resolvedDay": 3696,
+        "executionId": "investigation-exec:decision:band:dry-margin-foragers:41:3696",
+        "activityOutcome": "returned_with_information",
+        "partyWorkers": 1,
+        "routeDistanceTiles": 2,
+        "observedTileCount": 11
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s1",
+      "selection": {
+        "decisionId": "decision:band:lake-wetland-foragers:41",
+        "bandId": "band:lake-wetland-foragers",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:104:58",
+        "targetTileId": "tile:103:55",
+        "selectedDay": 3690,
+        "selectedTick": 41,
+        "expiresAfterDay": 3780,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:lake-wetland-foragers:41",
+        "outcome": "route_unavailable",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:103:55",
+        "resolvedDay": 3696,
+        "executionId": null,
+        "activityOutcome": null,
+        "partyWorkers": 0,
+        "routeDistanceTiles": null,
+        "observedTileCount": null
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s1",
+      "selection": {
+        "decisionId": "decision:band:dry-margin-foragers:42",
+        "bandId": "band:dry-margin-foragers",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:116:54",
+        "targetTileId": "tile:116:56",
+        "selectedDay": 3780,
+        "selectedTick": 42,
+        "expiresAfterDay": 3870,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:dry-margin-foragers:42",
+        "outcome": "executed_and_returned",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:116:56",
+        "resolvedDay": 3786,
+        "executionId": "investigation-exec:decision:band:dry-margin-foragers:42:3786",
+        "activityOutcome": "returned_with_information",
+        "partyWorkers": 1,
+        "routeDistanceTiles": 2,
+        "observedTileCount": 11
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s1",
+      "selection": {
+        "decisionId": "decision:band:dry-margin-foragers:43",
+        "bandId": "band:dry-margin-foragers",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:116:54",
+        "targetTileId": "tile:116:56",
+        "selectedDay": 3870,
+        "selectedTick": 43,
+        "expiresAfterDay": 3960,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:dry-margin-foragers:43",
+        "outcome": "executed_and_returned",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:116:56",
+        "resolvedDay": 3876,
+        "executionId": "investigation-exec:decision:band:dry-margin-foragers:43:3876",
+        "activityOutcome": "returned_with_information",
+        "partyWorkers": 1,
+        "routeDistanceTiles": 2,
+        "observedTileCount": 11
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s1",
+      "selection": {
+        "decisionId": "decision:band:dry-margin-foragers:44",
+        "bandId": "band:dry-margin-foragers",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:116:54",
+        "targetTileId": "tile:116:56",
+        "selectedDay": 3960,
+        "selectedTick": 44,
+        "expiresAfterDay": 4050,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:dry-margin-foragers:44",
+        "outcome": "executed_and_returned",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:116:56",
+        "resolvedDay": 3966,
+        "executionId": "investigation-exec:decision:band:dry-margin-foragers:44:3966",
+        "activityOutcome": "returned_with_information",
+        "partyWorkers": 1,
+        "routeDistanceTiles": 2,
+        "observedTileCount": 11
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s1",
+      "selection": {
+        "decisionId": "decision:band:dry-margin-foragers:45",
+        "bandId": "band:dry-margin-foragers",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:116:54",
+        "targetTileId": "tile:116:56",
+        "selectedDay": 4050,
+        "selectedTick": 45,
+        "expiresAfterDay": 4140,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:dry-margin-foragers:45",
+        "outcome": "executed_and_returned",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:116:56",
+        "resolvedDay": 4056,
+        "executionId": "investigation-exec:decision:band:dry-margin-foragers:45:4056",
+        "activityOutcome": "returned_with_information",
+        "partyWorkers": 1,
+        "routeDistanceTiles": 2,
+        "observedTileCount": 11
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s1",
+      "selection": {
+        "decisionId": "decision:band:lake-wetland-foragers:45",
+        "bandId": "band:lake-wetland-foragers",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:101:57",
+        "targetTileId": "tile:100:54",
+        "selectedDay": 4050,
+        "selectedTick": 45,
+        "expiresAfterDay": 4140,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:lake-wetland-foragers:45",
+        "outcome": "route_unavailable",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:100:54",
+        "resolvedDay": 4056,
+        "executionId": null,
+        "activityOutcome": null,
+        "partyWorkers": 0,
+        "routeDistanceTiles": null,
+        "observedTileCount": null
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s1",
+      "selection": {
+        "decisionId": "decision:band:dry-margin-foragers:46",
+        "bandId": "band:dry-margin-foragers",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:116:54",
+        "targetTileId": "tile:116:56",
+        "selectedDay": 4140,
+        "selectedTick": 46,
+        "expiresAfterDay": 4230,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:dry-margin-foragers:46",
+        "outcome": "executed_and_returned",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:116:56",
+        "resolvedDay": 4146,
+        "executionId": "investigation-exec:decision:band:dry-margin-foragers:46:4146",
+        "activityOutcome": "returned_with_information",
+        "partyWorkers": 1,
+        "routeDistanceTiles": 2,
+        "observedTileCount": 11
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s1",
+      "selection": {
+        "decisionId": "decision:band:dry-margin-foragers:47",
+        "bandId": "band:dry-margin-foragers",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:116:54",
+        "targetTileId": "tile:116:56",
+        "selectedDay": 4230,
+        "selectedTick": 47,
+        "expiresAfterDay": 4320,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:dry-margin-foragers:47",
+        "outcome": "executed_and_returned",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:116:56",
+        "resolvedDay": 4236,
+        "executionId": "investigation-exec:decision:band:dry-margin-foragers:47:4236",
+        "activityOutcome": "returned_with_information",
+        "partyWorkers": 1,
+        "routeDistanceTiles": 2,
+        "observedTileCount": 11
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s1",
+      "selection": {
+        "decisionId": "decision:band:dry-margin-foragers:48",
+        "bandId": "band:dry-margin-foragers",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:116:54",
+        "targetTileId": "tile:116:56",
+        "selectedDay": 4320,
+        "selectedTick": 48,
+        "expiresAfterDay": 4410,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:dry-margin-foragers:48",
+        "outcome": "executed_and_returned",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:116:56",
+        "resolvedDay": 4326,
+        "executionId": "investigation-exec:decision:band:dry-margin-foragers:48:4326",
+        "activityOutcome": "returned_with_information",
+        "partyWorkers": 1,
+        "routeDistanceTiles": 2,
+        "observedTileCount": 11
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s1",
+      "selection": {
+        "decisionId": "decision:band:dry-margin-foragers:49",
+        "bandId": "band:dry-margin-foragers",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:116:54",
+        "targetTileId": "tile:116:56",
+        "selectedDay": 4410,
+        "selectedTick": 49,
+        "expiresAfterDay": 4500,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:dry-margin-foragers:49",
+        "outcome": "executed_and_returned",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:116:56",
+        "resolvedDay": 4416,
+        "executionId": "investigation-exec:decision:band:dry-margin-foragers:49:4416",
+        "activityOutcome": "returned_with_information",
+        "partyWorkers": 1,
+        "routeDistanceTiles": 2,
+        "observedTileCount": 11
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s1",
+      "selection": {
+        "decisionId": "decision:band:lake-wetland-foragers:49",
+        "bandId": "band:lake-wetland-foragers",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:104:58",
+        "targetTileId": "tile:103:55",
+        "selectedDay": 4410,
+        "selectedTick": 49,
+        "expiresAfterDay": 4500,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:lake-wetland-foragers:49",
+        "outcome": "route_unavailable",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:103:55",
+        "resolvedDay": 4416,
+        "executionId": null,
+        "activityOutcome": null,
+        "partyWorkers": 0,
+        "routeDistanceTiles": null,
+        "observedTileCount": null
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s1",
+      "selection": {
+        "decisionId": "decision:band:dry-margin-foragers:50",
+        "bandId": "band:dry-margin-foragers",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:116:54",
+        "targetTileId": "tile:116:56",
+        "selectedDay": 4500,
+        "selectedTick": 50,
+        "expiresAfterDay": 4590,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:dry-margin-foragers:50",
+        "outcome": "executed_and_returned",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:116:56",
+        "resolvedDay": 4506,
+        "executionId": "investigation-exec:decision:band:dry-margin-foragers:50:4506",
+        "activityOutcome": "returned_with_information",
+        "partyWorkers": 1,
+        "routeDistanceTiles": 2,
+        "observedTileCount": 11
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s1",
+      "selection": {
+        "decisionId": "decision:band:lake-wetland-foragers:50",
+        "bandId": "band:lake-wetland-foragers",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:104:58",
+        "targetTileId": "tile:103:55",
+        "selectedDay": 4500,
+        "selectedTick": 50,
+        "expiresAfterDay": 4590,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:lake-wetland-foragers:50",
+        "outcome": "route_unavailable",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:103:55",
+        "resolvedDay": 4506,
+        "executionId": null,
+        "activityOutcome": null,
+        "partyWorkers": 0,
+        "routeDistanceTiles": null,
+        "observedTileCount": null
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s1",
+      "selection": {
+        "decisionId": "decision:band:dry-margin-foragers:51",
+        "bandId": "band:dry-margin-foragers",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:116:54",
+        "targetTileId": "tile:116:56",
+        "selectedDay": 4590,
+        "selectedTick": 51,
+        "expiresAfterDay": 4680,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:dry-margin-foragers:51",
+        "outcome": "executed_and_returned",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:116:56",
+        "resolvedDay": 4596,
+        "executionId": "investigation-exec:decision:band:dry-margin-foragers:51:4596",
+        "activityOutcome": "returned_with_information",
+        "partyWorkers": 1,
+        "routeDistanceTiles": 2,
+        "observedTileCount": 11
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s1",
+      "selection": {
+        "decisionId": "decision:band:dry-margin-foragers:52",
+        "bandId": "band:dry-margin-foragers",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:116:54",
+        "targetTileId": "tile:116:56",
+        "selectedDay": 4680,
+        "selectedTick": 52,
+        "expiresAfterDay": 4770,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:dry-margin-foragers:52",
+        "outcome": "executed_and_returned",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:116:56",
+        "resolvedDay": 4686,
+        "executionId": "investigation-exec:decision:band:dry-margin-foragers:52:4686",
+        "activityOutcome": "returned_with_information",
+        "partyWorkers": 1,
+        "routeDistanceTiles": 2,
+        "observedTileCount": 11
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s2",
+      "selection": {
+        "decisionId": "decision:band:dry-margin-foragers:2",
+        "bandId": "band:dry-margin-foragers",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:112:40",
+        "targetTileId": "tile:115:39",
+        "selectedDay": 180,
+        "selectedTick": 2,
+        "expiresAfterDay": 270,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:dry-margin-foragers:2",
+        "outcome": "executed_and_returned",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:115:39",
+        "resolvedDay": 186,
+        "executionId": "investigation-exec:decision:band:dry-margin-foragers:2:186",
+        "activityOutcome": "returned_with_information",
+        "partyWorkers": 1,
+        "routeDistanceTiles": 4,
+        "observedTileCount": 16
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s2",
+      "selection": {
+        "decisionId": "decision:band:highland-edge-foragers:6",
+        "bandId": "band:highland-edge-foragers",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:35:19",
+        "targetTileId": "tile:35:16",
+        "selectedDay": 540,
+        "selectedTick": 6,
+        "expiresAfterDay": 630,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "side_country_observation"
+      },
+      "resolution": {
+        "decisionId": "decision:band:highland-edge-foragers:6",
+        "outcome": "executed_and_returned",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:35:16",
+        "resolvedDay": 546,
+        "executionId": "investigation-exec:decision:band:highland-edge-foragers:6:546",
+        "activityOutcome": "returned_with_information",
+        "partyWorkers": 2,
+        "routeDistanceTiles": 3,
+        "observedTileCount": 14
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s2",
+      "selection": {
+        "decisionId": "decision:band:lake-wetland-foragers:13",
+        "bandId": "band:lake-wetland-foragers",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:101:57",
+        "targetTileId": "tile:100:54",
+        "selectedDay": 1170,
+        "selectedTick": 13,
+        "expiresAfterDay": 1260,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:lake-wetland-foragers:13",
+        "outcome": "route_unavailable",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:100:54",
+        "resolvedDay": 1176,
+        "executionId": null,
+        "activityOutcome": null,
+        "partyWorkers": 0,
+        "routeDistanceTiles": null,
+        "observedTileCount": null
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s2",
+      "selection": {
+        "decisionId": "decision:band:dry-margin-foragers:15",
+        "bandId": "band:dry-margin-foragers",
+        "actionType": "resource_scout",
+        "originTileId": "tile:112:42",
+        "targetTileId": "tile:112:43",
+        "selectedDay": 1350,
+        "selectedTick": 15,
+        "expiresAfterDay": 1440,
+        "scoutKind": "fallback_food",
+        "targetResourceClass": "fallback_food",
+        "probePurpose": null
+      },
+      "resolution": {
+        "decisionId": "decision:band:dry-margin-foragers:15",
+        "outcome": "executed_and_returned",
+        "actionType": "resource_scout",
+        "targetTileId": "tile:112:43",
+        "resolvedDay": 1356,
+        "executionId": "investigation-exec:decision:band:dry-margin-foragers:15:1356",
+        "activityOutcome": "returned_with_information",
+        "partyWorkers": 1,
+        "routeDistanceTiles": 1,
+        "observedTileCount": 8
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s2",
+      "selection": {
+        "decisionId": "decision:band:dry-margin-foragers:21",
+        "bandId": "band:dry-margin-foragers",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:114:47",
+        "targetTileId": "tile:115:49",
+        "selectedDay": 1890,
+        "selectedTick": 21,
+        "expiresAfterDay": 1980,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:dry-margin-foragers:21",
+        "outcome": "executed_and_returned",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:115:49",
+        "resolvedDay": 1896,
+        "executionId": "investigation-exec:decision:band:dry-margin-foragers:21:1896",
+        "activityOutcome": "returned_with_information",
+        "partyWorkers": 1,
+        "routeDistanceTiles": 3,
+        "observedTileCount": 13
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s2",
+      "selection": {
+        "decisionId": "decision:band:lake-wetland-foragers:21",
+        "bandId": "band:lake-wetland-foragers",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:101:57",
+        "targetTileId": "tile:100:54",
+        "selectedDay": 1890,
+        "selectedTick": 21,
+        "expiresAfterDay": 1980,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:lake-wetland-foragers:21",
+        "outcome": "route_unavailable",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:100:54",
+        "resolvedDay": 1896,
+        "executionId": null,
+        "activityOutcome": null,
+        "partyWorkers": 0,
+        "routeDistanceTiles": null,
+        "observedTileCount": null
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s2",
+      "selection": {
+        "decisionId": "decision:band:dry-margin-foragers:22",
+        "bandId": "band:dry-margin-foragers",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:114:47",
+        "targetTileId": "tile:115:51",
+        "selectedDay": 1980,
+        "selectedTick": 22,
+        "expiresAfterDay": 2070,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:dry-margin-foragers:22",
+        "outcome": "beyond_same_day_reach",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:115:51",
+        "resolvedDay": 1986,
+        "executionId": null,
+        "activityOutcome": null,
+        "partyWorkers": null,
+        "routeDistanceTiles": 5,
+        "observedTileCount": null
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s2",
+      "selection": {
+        "decisionId": "decision:band:dry-margin-foragers:23",
+        "bandId": "band:dry-margin-foragers",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:114:47",
+        "targetTileId": "tile:115:51",
+        "selectedDay": 2070,
+        "selectedTick": 23,
+        "expiresAfterDay": 2160,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:dry-margin-foragers:23",
+        "outcome": "beyond_same_day_reach",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:115:51",
+        "resolvedDay": 2076,
+        "executionId": null,
+        "activityOutcome": null,
+        "partyWorkers": null,
+        "routeDistanceTiles": 5,
+        "observedTileCount": null
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s2",
+      "selection": {
+        "decisionId": "decision:band:dry-margin-foragers:24",
+        "bandId": "band:dry-margin-foragers",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:114:47",
+        "targetTileId": "tile:115:51",
+        "selectedDay": 2160,
+        "selectedTick": 24,
+        "expiresAfterDay": 2250,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:dry-margin-foragers:24",
+        "outcome": "beyond_same_day_reach",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:115:51",
+        "resolvedDay": 2166,
+        "executionId": null,
+        "activityOutcome": null,
+        "partyWorkers": null,
+        "routeDistanceTiles": 5,
+        "observedTileCount": null
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s2",
+      "selection": {
+        "decisionId": "decision:band:dry-margin-foragers:25",
+        "bandId": "band:dry-margin-foragers",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:114:47",
+        "targetTileId": "tile:115:51",
+        "selectedDay": 2250,
+        "selectedTick": 25,
+        "expiresAfterDay": 2340,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:dry-margin-foragers:25",
+        "outcome": "beyond_same_day_reach",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:115:51",
+        "resolvedDay": 2256,
+        "executionId": null,
+        "activityOutcome": null,
+        "partyWorkers": null,
+        "routeDistanceTiles": 5,
+        "observedTileCount": null
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s2",
+      "selection": {
+        "decisionId": "decision:band:lake-wetland-foragers:25",
+        "bandId": "band:lake-wetland-foragers",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:104:58",
+        "targetTileId": "tile:103:55",
+        "selectedDay": 2250,
+        "selectedTick": 25,
+        "expiresAfterDay": 2340,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:lake-wetland-foragers:25",
+        "outcome": "route_unavailable",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:103:55",
+        "resolvedDay": 2256,
+        "executionId": null,
+        "activityOutcome": null,
+        "partyWorkers": 0,
+        "routeDistanceTiles": null,
+        "observedTileCount": null
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s2",
+      "selection": {
+        "decisionId": "decision:band:dry-margin-foragers:26",
+        "bandId": "band:dry-margin-foragers",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:114:47",
+        "targetTileId": "tile:115:50",
+        "selectedDay": 2340,
+        "selectedTick": 26,
+        "expiresAfterDay": 2430,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:dry-margin-foragers:26",
+        "outcome": "executed_and_returned",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:115:50",
+        "resolvedDay": 2346,
+        "executionId": "investigation-exec:decision:band:dry-margin-foragers:26:2346",
+        "activityOutcome": "returned_with_information",
+        "partyWorkers": 1,
+        "routeDistanceTiles": 4,
+        "observedTileCount": 16
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s2",
+      "selection": {
+        "decisionId": "decision:band:lake-wetland-foragers:29",
+        "bandId": "band:lake-wetland-foragers",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:101:57",
+        "targetTileId": "tile:100:54",
+        "selectedDay": 2610,
+        "selectedTick": 29,
+        "expiresAfterDay": 2700,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:lake-wetland-foragers:29",
+        "outcome": "route_unavailable",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:100:54",
+        "resolvedDay": 2616,
+        "executionId": null,
+        "activityOutcome": null,
+        "partyWorkers": 0,
+        "routeDistanceTiles": null,
+        "observedTileCount": null
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s2",
+      "selection": {
+        "decisionId": "decision:band:lake-wetland-foragers:30",
+        "bandId": "band:lake-wetland-foragers",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:101:57",
+        "targetTileId": "tile:100:54",
+        "selectedDay": 2700,
+        "selectedTick": 30,
+        "expiresAfterDay": 2790,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:lake-wetland-foragers:30",
+        "outcome": "route_unavailable",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:100:54",
+        "resolvedDay": 2706,
+        "executionId": null,
+        "activityOutcome": null,
+        "partyWorkers": 0,
+        "routeDistanceTiles": null,
+        "observedTileCount": null
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s2",
+      "selection": {
+        "decisionId": "decision:band:highland-edge-foragers:31",
+        "bandId": "band:highland-edge-foragers",
+        "actionType": "resource_scout",
+        "originTileId": "tile:37:23",
+        "targetTileId": "tile:37:22",
+        "selectedDay": 2790,
+        "selectedTick": 31,
+        "expiresAfterDay": 2880,
+        "scoutKind": "fallback_food",
+        "targetResourceClass": "fallback_food",
+        "probePurpose": null
+      },
+      "resolution": {
+        "decisionId": "decision:band:highland-edge-foragers:31",
+        "outcome": "executed_and_returned",
+        "actionType": "resource_scout",
+        "targetTileId": "tile:37:22",
+        "resolvedDay": 2796,
+        "executionId": "investigation-exec:decision:band:highland-edge-foragers:31:2796",
+        "activityOutcome": "returned_with_information",
+        "partyWorkers": 2,
+        "routeDistanceTiles": 1,
+        "observedTileCount": 8
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s2",
+      "selection": {
+        "decisionId": "decision:band:lake-wetland-foragers:31",
+        "bandId": "band:lake-wetland-foragers",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:101:57",
+        "targetTileId": "tile:100:54",
+        "selectedDay": 2790,
+        "selectedTick": 31,
+        "expiresAfterDay": 2880,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:lake-wetland-foragers:31",
+        "outcome": "route_unavailable",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:100:54",
+        "resolvedDay": 2796,
+        "executionId": null,
+        "activityOutcome": null,
+        "partyWorkers": 0,
+        "routeDistanceTiles": null,
+        "observedTileCount": null
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s2",
+      "selection": {
+        "decisionId": "decision:band:highland-edge-foragers:34",
+        "bandId": "band:highland-edge-foragers",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:36:21",
+        "targetTileId": "tile:37:18",
+        "selectedDay": 3060,
+        "selectedTick": 34,
+        "expiresAfterDay": 3150,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "side_country_observation"
+      },
+      "resolution": {
+        "decisionId": "decision:band:highland-edge-foragers:34",
+        "outcome": "executed_and_returned",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:37:18",
+        "resolvedDay": 3066,
+        "executionId": "investigation-exec:decision:band:highland-edge-foragers:34:3066",
+        "activityOutcome": "returned_with_information",
+        "partyWorkers": 1,
+        "routeDistanceTiles": 4,
+        "observedTileCount": 16
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s2",
+      "selection": {
+        "decisionId": "decision:band:lake-wetland-foragers:34",
+        "bandId": "band:lake-wetland-foragers",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:101:57",
+        "targetTileId": "tile:100:54",
+        "selectedDay": 3060,
+        "selectedTick": 34,
+        "expiresAfterDay": 3150,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:lake-wetland-foragers:34",
+        "outcome": "route_unavailable",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:100:54",
+        "resolvedDay": 3066,
+        "executionId": null,
+        "activityOutcome": null,
+        "partyWorkers": 0,
+        "routeDistanceTiles": null,
+        "observedTileCount": null
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s2",
+      "selection": {
+        "decisionId": "decision:band:lake-wetland-foragers:35",
+        "bandId": "band:lake-wetland-foragers",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:101:57",
+        "targetTileId": "tile:100:54",
+        "selectedDay": 3150,
+        "selectedTick": 35,
+        "expiresAfterDay": 3240,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:lake-wetland-foragers:35",
+        "outcome": "route_unavailable",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:100:54",
+        "resolvedDay": 3156,
+        "executionId": null,
+        "activityOutcome": null,
+        "partyWorkers": 0,
+        "routeDistanceTiles": null,
+        "observedTileCount": null
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s2",
+      "selection": {
+        "decisionId": "decision:band:dry-margin-foragers:36",
+        "bandId": "band:dry-margin-foragers",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:115:52",
+        "targetTileId": "tile:110:57",
+        "selectedDay": 3240,
+        "selectedTick": 36,
+        "expiresAfterDay": 3330,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:dry-margin-foragers:36",
+        "outcome": "beyond_same_day_reach",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:110:57",
+        "resolvedDay": 3246,
+        "executionId": null,
+        "activityOutcome": null,
+        "partyWorkers": null,
+        "routeDistanceTiles": 10,
+        "observedTileCount": null
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s2",
+      "selection": {
+        "decisionId": "decision:band:lake-wetland-foragers:36",
+        "bandId": "band:lake-wetland-foragers",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:101:57",
+        "targetTileId": "tile:100:54",
+        "selectedDay": 3240,
+        "selectedTick": 36,
+        "expiresAfterDay": 3330,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:lake-wetland-foragers:36",
+        "outcome": "route_unavailable",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:100:54",
+        "resolvedDay": 3246,
+        "executionId": null,
+        "activityOutcome": null,
+        "partyWorkers": 0,
+        "routeDistanceTiles": null,
+        "observedTileCount": null
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s2",
+      "selection": {
+        "decisionId": "decision:band:dry-margin-foragers:37",
+        "bandId": "band:dry-margin-foragers",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:115:52",
+        "targetTileId": "tile:110:57",
+        "selectedDay": 3330,
+        "selectedTick": 37,
+        "expiresAfterDay": 3420,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:dry-margin-foragers:37",
+        "outcome": "beyond_same_day_reach",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:110:57",
+        "resolvedDay": 3336,
+        "executionId": null,
+        "activityOutcome": null,
+        "partyWorkers": null,
+        "routeDistanceTiles": 10,
+        "observedTileCount": null
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s2",
+      "selection": {
+        "decisionId": "decision:band:lake-wetland-foragers:37",
+        "bandId": "band:lake-wetland-foragers",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:101:57",
+        "targetTileId": "tile:100:54",
+        "selectedDay": 3330,
+        "selectedTick": 37,
+        "expiresAfterDay": 3420,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:lake-wetland-foragers:37",
+        "outcome": "route_unavailable",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:100:54",
+        "resolvedDay": 3336,
+        "executionId": null,
+        "activityOutcome": null,
+        "partyWorkers": 0,
+        "routeDistanceTiles": null,
+        "observedTileCount": null
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s2",
+      "selection": {
+        "decisionId": "decision:band:dry-margin-foragers:39",
+        "bandId": "band:dry-margin-foragers",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:116:53",
+        "targetTileId": "tile:110:57",
+        "selectedDay": 3510,
+        "selectedTick": 39,
+        "expiresAfterDay": 3600,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:dry-margin-foragers:39",
+        "outcome": "beyond_same_day_reach",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:110:57",
+        "resolvedDay": 3516,
+        "executionId": null,
+        "activityOutcome": null,
+        "partyWorkers": null,
+        "routeDistanceTiles": 10,
+        "observedTileCount": null
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s2",
+      "selection": {
+        "decisionId": "decision:band:lake-wetland-foragers:40",
+        "bandId": "band:lake-wetland-foragers",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:103:60",
+        "targetTileId": "tile:105:56",
+        "selectedDay": 3600,
+        "selectedTick": 40,
+        "expiresAfterDay": 3690,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:lake-wetland-foragers:40",
+        "outcome": "beyond_same_day_reach",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:105:56",
+        "resolvedDay": 3606,
+        "executionId": null,
+        "activityOutcome": null,
+        "partyWorkers": null,
+        "routeDistanceTiles": 6,
+        "observedTileCount": null
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s2",
+      "selection": {
+        "decisionId": "decision:band:dry-margin-foragers:41",
+        "bandId": "band:dry-margin-foragers",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:116:55",
+        "targetTileId": "tile:116:56",
+        "selectedDay": 3690,
+        "selectedTick": 41,
+        "expiresAfterDay": 3780,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:dry-margin-foragers:41",
+        "outcome": "executed_and_returned",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:116:56",
+        "resolvedDay": 3696,
+        "executionId": "investigation-exec:decision:band:dry-margin-foragers:41:3696",
+        "activityOutcome": "returned_with_information",
+        "partyWorkers": 1,
+        "routeDistanceTiles": 1,
+        "observedTileCount": 8
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s2",
+      "selection": {
+        "decisionId": "decision:band:highland-edge-foragers:42",
+        "bandId": "band:highland-edge-foragers",
+        "actionType": "resource_scout",
+        "originTileId": "tile:36:22",
+        "targetTileId": "tile:37:24",
+        "selectedDay": 3780,
+        "selectedTick": 42,
+        "expiresAfterDay": 3870,
+        "scoutKind": "plant_patch",
+        "targetResourceClass": "generic_plant_food",
+        "probePurpose": null
+      },
+      "resolution": {
+        "decisionId": "decision:band:highland-edge-foragers:42",
+        "outcome": "executed_and_returned",
+        "actionType": "resource_scout",
+        "targetTileId": "tile:37:24",
+        "resolvedDay": 3786,
+        "executionId": "investigation-exec:decision:band:highland-edge-foragers:42:3786",
+        "activityOutcome": "returned_with_information",
+        "partyWorkers": 1,
+        "routeDistanceTiles": 3,
+        "observedTileCount": 13
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s2",
+      "selection": {
+        "decisionId": "decision:band:lake-wetland-foragers:44",
+        "bandId": "band:lake-wetland-foragers",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:103:62",
+        "targetTileId": "tile:103:58",
+        "selectedDay": 3960,
+        "selectedTick": 44,
+        "expiresAfterDay": 4050,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:lake-wetland-foragers:44",
+        "outcome": "executed_and_returned",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:103:58",
+        "resolvedDay": 3966,
+        "executionId": "investigation-exec:decision:band:lake-wetland-foragers:44:3966",
+        "activityOutcome": "returned_with_information",
+        "partyWorkers": 2,
+        "routeDistanceTiles": 4,
+        "observedTileCount": 17
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s2",
+      "selection": {
+        "decisionId": "decision:band:lake-wetland-foragers:45",
+        "bandId": "band:lake-wetland-foragers",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:103:62",
+        "targetTileId": "tile:103:58",
+        "selectedDay": 4050,
+        "selectedTick": 45,
+        "expiresAfterDay": 4140,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:lake-wetland-foragers:45",
+        "outcome": "executed_and_returned",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:103:58",
+        "resolvedDay": 4056,
+        "executionId": "investigation-exec:decision:band:lake-wetland-foragers:45:4056",
+        "activityOutcome": "returned_with_information",
+        "partyWorkers": 2,
+        "routeDistanceTiles": 4,
+        "observedTileCount": 17
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s2",
+      "selection": {
+        "decisionId": "decision:band:lake-wetland-foragers:46",
+        "bandId": "band:lake-wetland-foragers",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:103:62",
+        "targetTileId": "tile:103:58",
+        "selectedDay": 4140,
+        "selectedTick": 46,
+        "expiresAfterDay": 4230,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:lake-wetland-foragers:46",
+        "outcome": "executed_and_returned",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:103:58",
+        "resolvedDay": 4146,
+        "executionId": "investigation-exec:decision:band:lake-wetland-foragers:46:4146",
+        "activityOutcome": "returned_with_information",
+        "partyWorkers": 2,
+        "routeDistanceTiles": 4,
+        "observedTileCount": 17
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s2",
+      "selection": {
+        "decisionId": "decision:band:dry-margin-foragers:47",
+        "bandId": "band:dry-margin-foragers",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:116:58",
+        "targetTileId": "tile:116:61",
+        "selectedDay": 4230,
+        "selectedTick": 47,
+        "expiresAfterDay": 4320,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:dry-margin-foragers:47",
+        "outcome": "route_unavailable",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:116:61",
+        "resolvedDay": 4236,
+        "executionId": null,
+        "activityOutcome": null,
+        "partyWorkers": 0,
+        "routeDistanceTiles": null,
+        "observedTileCount": null
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s2",
+      "selection": {
+        "decisionId": "decision:band:lake-wetland-foragers:47",
+        "bandId": "band:lake-wetland-foragers",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:103:62",
+        "targetTileId": "tile:103:58",
+        "selectedDay": 4230,
+        "selectedTick": 47,
+        "expiresAfterDay": 4320,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:lake-wetland-foragers:47",
+        "outcome": "executed_and_returned",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:103:58",
+        "resolvedDay": 4236,
+        "executionId": "investigation-exec:decision:band:lake-wetland-foragers:47:4236",
+        "activityOutcome": "returned_with_information",
+        "partyWorkers": 2,
+        "routeDistanceTiles": 4,
+        "observedTileCount": 17
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s2",
+      "selection": {
+        "decisionId": "decision:band:dry-margin-foragers:48",
+        "bandId": "band:dry-margin-foragers",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:116:58",
+        "targetTileId": "tile:115:61",
+        "selectedDay": 4320,
+        "selectedTick": 48,
+        "expiresAfterDay": 4410,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:dry-margin-foragers:48",
+        "outcome": "route_unavailable",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:115:61",
+        "resolvedDay": 4326,
+        "executionId": null,
+        "activityOutcome": null,
+        "partyWorkers": 0,
+        "routeDistanceTiles": null,
+        "observedTileCount": null
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s2",
+      "selection": {
+        "decisionId": "decision:band:lake-wetland-foragers:48",
+        "bandId": "band:lake-wetland-foragers",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:103:62",
+        "targetTileId": "tile:104:58",
+        "selectedDay": 4320,
+        "selectedTick": 48,
+        "expiresAfterDay": 4410,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:lake-wetland-foragers:48",
+        "outcome": "beyond_same_day_reach",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:104:58",
+        "resolvedDay": 4326,
+        "executionId": null,
+        "activityOutcome": null,
+        "partyWorkers": null,
+        "routeDistanceTiles": 5,
+        "observedTileCount": null
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s2",
+      "selection": {
+        "decisionId": "decision:band:lake-wetland-foragers:49",
+        "bandId": "band:lake-wetland-foragers",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:103:62",
+        "targetTileId": "tile:104:58",
+        "selectedDay": 4410,
+        "selectedTick": 49,
+        "expiresAfterDay": 4500,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:lake-wetland-foragers:49",
+        "outcome": "beyond_same_day_reach",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:104:58",
+        "resolvedDay": 4416,
+        "executionId": null,
+        "activityOutcome": null,
+        "partyWorkers": null,
+        "routeDistanceTiles": 5,
+        "observedTileCount": null
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s2",
+      "selection": {
+        "decisionId": "decision:band:lake-wetland-foragers:50",
+        "bandId": "band:lake-wetland-foragers",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:103:62",
+        "targetTileId": "tile:104:58",
+        "selectedDay": 4500,
+        "selectedTick": 50,
+        "expiresAfterDay": 4590,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:lake-wetland-foragers:50",
+        "outcome": "beyond_same_day_reach",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:104:58",
+        "resolvedDay": 4506,
+        "executionId": null,
+        "activityOutcome": null,
+        "partyWorkers": null,
+        "routeDistanceTiles": 5,
+        "observedTileCount": null
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s2",
+      "selection": {
+        "decisionId": "decision:band:lake-wetland-foragers:51",
+        "bandId": "band:lake-wetland-foragers",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:103:62",
+        "targetTileId": "tile:104:58",
+        "selectedDay": 4590,
+        "selectedTick": 51,
+        "expiresAfterDay": 4680,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:lake-wetland-foragers:51",
+        "outcome": "beyond_same_day_reach",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:104:58",
+        "resolvedDay": 4596,
+        "executionId": null,
+        "activityOutcome": null,
+        "partyWorkers": null,
+        "routeDistanceTiles": 5,
+        "observedTileCount": null
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s2",
+      "selection": {
+        "decisionId": "decision:band:lake-wetland-foragers:52",
+        "bandId": "band:lake-wetland-foragers",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:103:62",
+        "targetTileId": "tile:104:58",
+        "selectedDay": 4680,
+        "selectedTick": 52,
+        "expiresAfterDay": 4770,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:lake-wetland-foragers:52",
+        "outcome": "beyond_same_day_reach",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:104:58",
+        "resolvedDay": 4686,
+        "executionId": null,
+        "activityOutcome": null,
+        "partyWorkers": null,
+        "routeDistanceTiles": 5,
+        "observedTileCount": null
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s2",
+      "selection": {
+        "decisionId": "decision:band:lake-wetland-foragers:53",
+        "bandId": "band:lake-wetland-foragers",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:103:62",
+        "targetTileId": "tile:104:58",
+        "selectedDay": 4770,
+        "selectedTick": 53,
+        "expiresAfterDay": 4860,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:lake-wetland-foragers:53",
+        "outcome": "beyond_same_day_reach",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:104:58",
+        "resolvedDay": 4776,
+        "executionId": null,
+        "activityOutcome": null,
+        "partyWorkers": null,
+        "routeDistanceTiles": 5,
+        "observedTileCount": null
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s2",
+      "selection": {
+        "decisionId": "decision:band:lake-wetland-foragers:58",
+        "bandId": "band:lake-wetland-foragers",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:102:58",
+        "targetTileId": "tile:98:58",
+        "selectedDay": 5220,
+        "selectedTick": 58,
+        "expiresAfterDay": 5310,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "side_country_observation"
+      },
+      "resolution": {
+        "decisionId": "decision:band:lake-wetland-foragers:58",
+        "outcome": "executed_and_returned",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:98:58",
+        "resolvedDay": 5226,
+        "executionId": "investigation-exec:decision:band:lake-wetland-foragers:58:5226",
+        "activityOutcome": "returned_with_information",
+        "partyWorkers": 2,
+        "routeDistanceTiles": 4,
+        "observedTileCount": 17
+      }
+    },
+    {
+      "scenario": "map2",
+      "seed": "s1",
+      "selection": {
+        "decisionId": "decision:band:varied-dry-corridor-mid:1",
+        "bandId": "band:varied-dry-corridor-mid",
+        "actionType": "resource_scout",
+        "originTileId": "tile:76:111",
+        "targetTileId": "tile:74:111",
+        "selectedDay": 90,
+        "selectedTick": 1,
+        "expiresAfterDay": 180,
+        "scoutKind": "fallback_food",
+        "targetResourceClass": "fallback_food",
+        "probePurpose": null
+      },
+      "resolution": {
+        "decisionId": "decision:band:varied-dry-corridor-mid:1",
+        "outcome": "executed_and_returned",
+        "actionType": "resource_scout",
+        "targetTileId": "tile:74:111",
+        "resolvedDay": 96,
+        "executionId": "investigation-exec:decision:band:varied-dry-corridor-mid:1:96",
+        "activityOutcome": "returned_with_information",
+        "partyWorkers": 1,
+        "routeDistanceTiles": 2,
+        "observedTileCount": 11
+      }
+    },
+    {
+      "scenario": "map2",
+      "seed": "s1",
+      "selection": {
+        "decisionId": "decision:band:varied-lake-west:1",
+        "bandId": "band:varied-lake-west",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:68:78",
+        "targetTileId": "tile:71:77",
+        "selectedDay": 90,
+        "selectedTick": 1,
+        "expiresAfterDay": 180,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:varied-lake-west:1",
+        "outcome": "executed_and_returned",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:71:77",
+        "resolvedDay": 96,
+        "executionId": "investigation-exec:decision:band:varied-lake-west:1:96",
+        "activityOutcome": "returned_with_information",
+        "partyWorkers": 2,
+        "routeDistanceTiles": 4,
+        "observedTileCount": 16
+      }
+    },
+    {
+      "scenario": "map2",
+      "seed": "s1",
+      "selection": {
+        "decisionId": "decision:band:varied-lake-west:2",
+        "bandId": "band:varied-lake-west",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:68:78",
+        "targetTileId": "tile:70:75",
+        "selectedDay": 180,
+        "selectedTick": 2,
+        "expiresAfterDay": 270,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:varied-lake-west:2",
+        "outcome": "beyond_same_day_reach",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:70:75",
+        "resolvedDay": 186,
+        "executionId": null,
+        "activityOutcome": null,
+        "partyWorkers": null,
+        "routeDistanceTiles": 5,
+        "observedTileCount": null
+      }
+    },
+    {
+      "scenario": "map2",
+      "seed": "s1",
+      "selection": {
+        "decisionId": "decision:band:varied-river-mid:2",
+        "bandId": "band:varied-river-mid",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:108:56",
+        "targetTileId": "tile:110:57",
+        "selectedDay": 180,
+        "selectedTick": 2,
+        "expiresAfterDay": 270,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:varied-river-mid:2",
+        "outcome": "executed_and_returned",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:110:57",
+        "resolvedDay": 186,
+        "executionId": "investigation-exec:decision:band:varied-river-mid:2:186",
+        "activityOutcome": "returned_with_information",
+        "partyWorkers": 2,
+        "routeDistanceTiles": 3,
+        "observedTileCount": 12
+      }
+    },
+    {
+      "scenario": "map2",
+      "seed": "s1",
+      "selection": {
+        "decisionId": "decision:band:varied-lake-west:3",
+        "bandId": "band:varied-lake-west",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:68:78",
+        "targetTileId": "tile:71:79",
+        "selectedDay": 270,
+        "selectedTick": 3,
+        "expiresAfterDay": 360,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:varied-lake-west:3",
+        "outcome": "executed_and_returned",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:71:79",
+        "resolvedDay": 276,
+        "executionId": "investigation-exec:decision:band:varied-lake-west:3:276",
+        "activityOutcome": "returned_with_information",
+        "partyWorkers": 2,
+        "routeDistanceTiles": 4,
+        "observedTileCount": 16
+      }
+    },
+    {
+      "scenario": "map2",
+      "seed": "s1",
+      "selection": {
+        "decisionId": "decision:band:varied-lake-west:4",
+        "bandId": "band:varied-lake-west",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:68:78",
+        "targetTileId": "tile:70:75",
+        "selectedDay": 360,
+        "selectedTick": 4,
+        "expiresAfterDay": 450,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:varied-lake-west:4",
+        "outcome": "beyond_same_day_reach",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:70:75",
+        "resolvedDay": 366,
+        "executionId": null,
+        "activityOutcome": null,
+        "partyWorkers": null,
+        "routeDistanceTiles": 5,
+        "observedTileCount": null
+      }
+    },
+    {
+      "scenario": "map2",
+      "seed": "s1",
+      "selection": {
+        "decisionId": "decision:band:varied-lake-east:5",
+        "bandId": "band:varied-lake-east",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:87:75",
+        "targetTileId": "tile:87:74",
+        "selectedDay": 450,
+        "selectedTick": 5,
+        "expiresAfterDay": 540,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:varied-lake-east:5",
+        "outcome": "executed_and_returned",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:87:74",
+        "resolvedDay": 456,
+        "executionId": "investigation-exec:decision:band:varied-lake-east:5:456",
+        "activityOutcome": "returned_with_information",
+        "partyWorkers": 1,
+        "routeDistanceTiles": 1,
+        "observedTileCount": 8
+      }
+    },
+    {
+      "scenario": "map2",
+      "seed": "s1",
+      "selection": {
+        "decisionId": "decision:band:varied-lake-west:5",
+        "bandId": "band:varied-lake-west",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:68:78",
+        "targetTileId": "tile:70:75",
+        "selectedDay": 450,
+        "selectedTick": 5,
+        "expiresAfterDay": 540,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:varied-lake-west:5",
+        "outcome": "beyond_same_day_reach",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:70:75",
+        "resolvedDay": 456,
+        "executionId": null,
+        "activityOutcome": null,
+        "partyWorkers": null,
+        "routeDistanceTiles": 5,
+        "observedTileCount": null
+      }
+    },
+    {
+      "scenario": "map2",
+      "seed": "s1",
+      "selection": {
+        "decisionId": "decision:band:varied-river-mid:5",
+        "bandId": "band:varied-river-mid",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:108:53",
+        "targetTileId": "tile:105:56",
+        "selectedDay": 450,
+        "selectedTick": 5,
+        "expiresAfterDay": 540,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:varied-river-mid:5",
+        "outcome": "beyond_same_day_reach",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:105:56",
+        "resolvedDay": 456,
+        "executionId": null,
+        "activityOutcome": null,
+        "partyWorkers": null,
+        "routeDistanceTiles": 6,
+        "observedTileCount": null
+      }
+    },
+    {
+      "scenario": "map2",
+      "seed": "s1",
+      "selection": {
+        "decisionId": "decision:band:varied-lake-west:6",
+        "bandId": "band:varied-lake-west",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:68:78",
+        "targetTileId": "tile:70:75",
+        "selectedDay": 540,
+        "selectedTick": 6,
+        "expiresAfterDay": 630,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:varied-lake-west:6",
+        "outcome": "beyond_same_day_reach",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:70:75",
+        "resolvedDay": 546,
+        "executionId": null,
+        "activityOutcome": null,
+        "partyWorkers": null,
+        "routeDistanceTiles": 5,
+        "observedTileCount": null
+      }
+    },
+    {
+      "scenario": "map2",
+      "seed": "s1",
+      "selection": {
+        "decisionId": "decision:band:varied-river-mid:6",
+        "bandId": "band:varied-river-mid",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:108:53",
+        "targetTileId": "tile:105:56",
+        "selectedDay": 540,
+        "selectedTick": 6,
+        "expiresAfterDay": 630,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:varied-river-mid:6",
+        "outcome": "beyond_same_day_reach",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:105:56",
+        "resolvedDay": 546,
+        "executionId": null,
+        "activityOutcome": null,
+        "partyWorkers": null,
+        "routeDistanceTiles": 6,
+        "observedTileCount": null
+      }
+    },
+    {
+      "scenario": "map2",
+      "seed": "s1",
+      "selection": {
+        "decisionId": "decision:band:varied-lake-west:7",
+        "bandId": "band:varied-lake-west",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:68:78",
+        "targetTileId": "tile:70:75",
+        "selectedDay": 630,
+        "selectedTick": 7,
+        "expiresAfterDay": 720,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:varied-lake-west:7",
+        "outcome": "beyond_same_day_reach",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:70:75",
+        "resolvedDay": 636,
+        "executionId": null,
+        "activityOutcome": null,
+        "partyWorkers": null,
+        "routeDistanceTiles": 5,
+        "observedTileCount": null
+      }
+    },
+    {
+      "scenario": "map2",
+      "seed": "s1",
+      "selection": {
+        "decisionId": "decision:band:varied-lake-west:8",
+        "bandId": "band:varied-lake-west",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:68:78",
+        "targetTileId": "tile:70:75",
+        "selectedDay": 720,
+        "selectedTick": 8,
+        "expiresAfterDay": 810,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:varied-lake-west:8",
+        "outcome": "beyond_same_day_reach",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:70:75",
+        "resolvedDay": 726,
+        "executionId": null,
+        "activityOutcome": null,
+        "partyWorkers": null,
+        "routeDistanceTiles": 5,
+        "observedTileCount": null
+      }
+    },
+    {
+      "scenario": "map2",
+      "seed": "s1",
+      "selection": {
+        "decisionId": "decision:band:varied-river-mid:8",
+        "bandId": "band:varied-river-mid",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:108:54",
+        "targetTileId": "tile:105:56",
+        "selectedDay": 720,
+        "selectedTick": 8,
+        "expiresAfterDay": 810,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:varied-river-mid:8",
+        "outcome": "beyond_same_day_reach",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:105:56",
+        "resolvedDay": 726,
+        "executionId": null,
+        "activityOutcome": null,
+        "partyWorkers": null,
+        "routeDistanceTiles": 5,
+        "observedTileCount": null
+      }
+    },
+    {
+      "scenario": "map2",
+      "seed": "s1",
+      "selection": {
+        "decisionId": "decision:band:varied-lake-west:9",
+        "bandId": "band:varied-lake-west",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:68:78",
+        "targetTileId": "tile:70:75",
+        "selectedDay": 810,
+        "selectedTick": 9,
+        "expiresAfterDay": 900,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:varied-lake-west:9",
+        "outcome": "beyond_same_day_reach",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:70:75",
+        "resolvedDay": 816,
+        "executionId": null,
+        "activityOutcome": null,
+        "partyWorkers": null,
+        "routeDistanceTiles": 5,
+        "observedTileCount": null
+      }
+    },
+    {
+      "scenario": "map2",
+      "seed": "s1",
+      "selection": {
+        "decisionId": "decision:band:varied-lake-west:10",
+        "bandId": "band:varied-lake-west",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:68:78",
+        "targetTileId": "tile:70:75",
+        "selectedDay": 900,
+        "selectedTick": 10,
+        "expiresAfterDay": 990,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:varied-lake-west:10",
+        "outcome": "beyond_same_day_reach",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:70:75",
+        "resolvedDay": 906,
+        "executionId": null,
+        "activityOutcome": null,
+        "partyWorkers": null,
+        "routeDistanceTiles": 5,
+        "observedTileCount": null
+      }
+    },
+    {
+      "scenario": "map2",
+      "seed": "s1",
+      "selection": {
+        "decisionId": "decision:band:varied-lake-west:11",
+        "bandId": "band:varied-lake-west",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:68:78",
+        "targetTileId": "tile:70:75",
+        "selectedDay": 990,
+        "selectedTick": 11,
+        "expiresAfterDay": 1080,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:varied-lake-west:11",
+        "outcome": "beyond_same_day_reach",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:70:75",
+        "resolvedDay": 996,
+        "executionId": null,
+        "activityOutcome": null,
+        "partyWorkers": null,
+        "routeDistanceTiles": 5,
+        "observedTileCount": null
+      }
+    },
+    {
+      "scenario": "map2",
+      "seed": "s1",
+      "selection": {
+        "decisionId": "decision:band:varied-lake-west:12",
+        "bandId": "band:varied-lake-west",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:68:78",
+        "targetTileId": "tile:70:75",
+        "selectedDay": 1080,
+        "selectedTick": 12,
+        "expiresAfterDay": 1170,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:varied-lake-west:12",
+        "outcome": "beyond_same_day_reach",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:70:75",
+        "resolvedDay": 1086,
+        "executionId": null,
+        "activityOutcome": null,
+        "partyWorkers": null,
+        "routeDistanceTiles": 5,
+        "observedTileCount": null
+      }
+    },
+    {
+      "scenario": "map2",
+      "seed": "s1",
+      "selection": {
+        "decisionId": "decision:band:varied-lake-west:13",
+        "bandId": "band:varied-lake-west",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:68:78",
+        "targetTileId": "tile:70:75",
+        "selectedDay": 1170,
+        "selectedTick": 13,
+        "expiresAfterDay": 1260,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:varied-lake-west:13",
+        "outcome": "beyond_same_day_reach",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:70:75",
+        "resolvedDay": 1176,
+        "executionId": null,
+        "activityOutcome": null,
+        "partyWorkers": null,
+        "routeDistanceTiles": 5,
+        "observedTileCount": null
+      }
+    },
+    {
+      "scenario": "map2",
+      "seed": "s1",
+      "selection": {
+        "decisionId": "decision:band:varied-lake-west:14",
+        "bandId": "band:varied-lake-west",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:68:78",
+        "targetTileId": "tile:70:75",
+        "selectedDay": 1260,
+        "selectedTick": 14,
+        "expiresAfterDay": 1350,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:varied-lake-west:14",
+        "outcome": "beyond_same_day_reach",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:70:75",
+        "resolvedDay": 1266,
+        "executionId": null,
+        "activityOutcome": null,
+        "partyWorkers": null,
+        "routeDistanceTiles": 5,
+        "observedTileCount": null
+      }
+    },
+    {
+      "scenario": "map2",
+      "seed": "s1",
+      "selection": {
+        "decisionId": "decision:band:varied-dry-corridor-upper:15",
+        "bandId": "band:varied-dry-corridor-upper",
+        "actionType": "resource_scout",
+        "originTileId": "tile:68:107",
+        "targetTileId": "tile:65:107",
+        "selectedDay": 1350,
+        "selectedTick": 15,
+        "expiresAfterDay": 1440,
+        "scoutKind": "water_refuge",
+        "targetResourceClass": "water_resource",
+        "probePurpose": null
+      },
+      "resolution": {
+        "decisionId": "decision:band:varied-dry-corridor-upper:15",
+        "outcome": "executed_and_returned",
+        "actionType": "resource_scout",
+        "targetTileId": "tile:65:107",
+        "resolvedDay": 1356,
+        "executionId": "investigation-exec:decision:band:varied-dry-corridor-upper:15:1356",
+        "activityOutcome": "returned_with_information",
+        "partyWorkers": 1,
+        "routeDistanceTiles": 3,
+        "observedTileCount": 14
+      }
+    },
+    {
+      "scenario": "map2",
+      "seed": "s1",
+      "selection": {
+        "decisionId": "decision:band:varied-lake-west:15",
+        "bandId": "band:varied-lake-west",
+        "actionType": "logistical_probe",
+        "originTileId": "tile:68:78",
+        "targetTileId": "tile:70:75",
+        "selectedDay": 1350,
+        "selectedTick": 15,
+        "expiresAfterDay": 1440,
+        "scoutKind": null,
+        "targetResourceClass": null,
+        "probePurpose": "general_probe"
+      },
+      "resolution": {
+        "decisionId": "decision:band:varied-lake-west:15",
+        "outcome": "beyond_same_day_reach",
+        "actionType": "logistical_probe",
+        "targetTileId": "tile:70:75",
+        "resolvedDay": 1356,
+        "executionId": null,
+        "activityOutcome": null,
+        "partyWorkers": null,
+        "routeDistanceTiles": 5,
+        "observedTileCount": null
+      }
+    },
+    {
+      "scenario": "map2",
+      "seed": "s1",
+      "selection": {
+        "decisionId": "decision:band:varied-dry-corridor-upper:16",
+        "bandId": "band:varied-dry-corridor-upper",
+        "actionType": "resource_scout",
+        "originTileId": "tile:68:107",
+        "targetTileId": "tile:66:107",
+        "selectedDay": 1440,
+        "selectedTick": 16,
+        "expiresAfterDay": 1530,
+        "scoutKind": "plant_patch",
+        "targetResourceClass": "generic_plant_food",
+        "probePurpose": null
+      },
+      "resolution": {
+        "decisionId": "decision:band:varied-dry-corridor-upper:16",
+        "outcome": "executed_and_returned",
+        "actionType": "resource_scout",
+        "targetTileId": "tile:66:107",
+        "resolvedDay": 1446,
+        "executionId": "investigation-exec:decision:band:varied-dry-corridor-upper:16:1446",
+        "activityOutcome": "returned_with_information",
+        "partyWorkers": 1,
+        "routeDistanceTiles": 2,
+        "observedTileCount": 11
+      }
+    },
+    {
+      "scenario": "map2",
+      "seed": "s1",
+      "selection": {
+        "decisionId": "decision:band:varied-dry-corridor-upper:18",
+        "bandId": "band:varied-dry-corridor-upper",
+        "actionType": "resource_scout",
+        "originTileId": "tile:71:107",
+        "targetTileId": "tile:68:107",
+        "selectedDay": 1620,
+        "selectedTick": 18,
+        "expiresAfterDay": 1710,
+        "scoutKind": "plant_patch",
+        "targetResourceClass": "generic_plant_food",
+        "probePurpose": null
+      },
+      "resolution": {
+        "decisionId": "decision:band:varied-dry-corridor-upper:18",
+        "outcome": "executed_and_returned",
+        "actionType": "resource_scout",
+        "targetTileId": "tile:68:107",
+        "resolvedDay": 1626,
+        "executionId": "investigation-exec:decision:band:varied-dry-corridor-upper:18:1626",
+        "activityOutcome": "returned_with_information",
+        "partyWorkers": 1,
+        "routeDistanceTiles": 3,
+        "observedTileCount": 14
+      }
+    },
+    {
+      "scenario": "map2",
+      "seed": "s1",
+      "selection": {
+        "decisionId": "decision:band:varied-dry-corridor-upper:19",
+        "bandId": "band:varied-dry-corridor-upper",
+        "actionType": "resource_scout",
+        "originTileId": "tile:71:107",
+        "targetTileId": "tile:64:107",
+        "selectedDay": 1710,
+        "selectedTick": 19,
+        "expiresAfterDay": 1800,
+        "scoutKind": "water_refuge",
+        "targetResourceClass": "water_resource",
+        "probePurpose": null
+      },
+      "resolution": {
+        "decisionId": "decision:band:varied-dry-corridor-upper:19",
+        "outcome": "beyond_same_day_reach",
+        "actionType": "resource_scout",
+        "targetTileId": "tile:64:107",
+        "resolvedDay": 1716,
+        "executionId": null,
+        "activityOutcome": null,
+        "partyWorkers": null,
+        "routeDistanceTiles": 7,
+        "observedTileCount": null
+      }
+    },
+    {
+      "scenario": "map2",
+      "seed": "s1",
+      "selection": {
+        "decisionId": "decision:band:varied-dry-corridor-mid:21",
+        "bandId": "band:varied-dry-corridor-mid",
+        "actionType": "resource_scout",
+        "originTileId": "tile:68:110",
+        "targetTileId": "tile:69:110",
+        "selectedDay": 1890,
+        "selectedTick": 21,
+        "expiresAfterDay": 1980,
+        "scoutKind": "fallback_food",
+        "targetResourceClass": "fallback_food",
+        "probePurpose": null
+      },
+      "resolution": {
+        "decisionId": "decision:band:varied-dry-corridor-mid:21",
+        "outcome": "executed_and_returned",
+        "actionType": "resource_scout",
+        "targetTileId": "tile:69:110",
+        "resolvedDay": 1896,
+        "executionId": "investigation-exec:decision:band:varied-dry-corridor-mid:21:1896",
+        "activityOutcome": "returned_with_information",
+        "partyWorkers": 1,
+        "routeDistanceTiles": 1,
+        "observedTileCount": 8
+      }
+    },
+    {
+      "scenario": "map2",
+      "seed": "s1",
+      "selection": {
+        "decisionId": "decision:band:varied-dry-corridor-upper:21",
+        "bandId": "band:varied-dry-corridor-upper",
+        "actionType": "resource_scout",
+        "originTileId": "tile:74:107",
+        "targetTileId": "tile:71:107",
+        "selectedDay": 1890,
+        "selectedTick": 21,
+        "expiresAfterDay": 1980,
+        "scoutKind": "fallback_food",
+        "targetResourceClass": "fallback_food",
+        "probePurpose": null
+      },
+      "resolution": {
+        "decisionId": "decision:band:varied-dry-corridor-upper:21",
+        "outcome": "executed_and_returned",
+        "actionType": "resource_scout",
+        "targetTileId": "tile:71:107",
+        "resolvedDay": 1896,
+        "executionId": "investigation-exec:decision:band:varied-dry-corridor-upper:21:1896",
+        "activityOutcome": "returned_with_information",
+        "partyWorkers": 1,
+        "routeDistanceTiles": 3,
+        "observedTileCount": 14
+      }
+    },
+    {
+      "scenario": "map2",
+      "seed": "s1",
+      "selection": {
+        "decisionId": "decision:band:varied-dry-corridor-mid:22",
+        "bandId": "band:varied-dry-corridor-mid",
+        "actionType": "resource_scout",
+        "originTileId": "tile:68:110",
+        "targetTileId": "tile:68:108",
+        "selectedDay": 1980,
+        "selectedTick": 22,
+        "expiresAfterDay": 2070,
+        "scoutKind": "fallback_food",
+        "targetResourceClass": "fallback_food",
+        "probePurpose": null
+      },
+      "resolution": {
+        "decisionId": "decision:band:varied-dry-corridor-mid:22",
+        "outcome": "route_unavailable",
+        "actionType": "resource_scout",
+        "targetTileId": "tile:68:108",
+        "resolvedDay": 1986,
+        "executionId": null,
+        "activityOutcome": null,
+        "partyWorkers": 0,
+        "routeDistanceTiles": null,
+        "observedTileCount": null
+      }
+    },
+    {
+      "scenario": "map2",
+      "seed": "s1",
+      "selection": {
+        "decisionId": "decision:band:varied-dry-corridor-upper:22",
+        "bandId": "band:varied-dry-corridor-upper",
+        "actionType": "resource_scout",
+        "originTileId": "tile:74:107",
+        "targetTileId": "tile:64:107",
+        "selectedDay": 1980,
+        "selectedTick": 22,
+        "expiresAfterDay": 2070,
+        "scoutKind": "water_refuge",
+        "targetResourceClass": "water_resource",
+        "probePurpose": null
+      },
+      "resolution": {
+        "decisionId": "decision:band:varied-dry-corridor-upper:22",
+        "outcome": "beyond_same_day_reach",
+        "actionType": "resource_scout",
+        "targetTileId": "tile:64:107",
+        "resolvedDay": 1986,
+        "executionId": null,
+        "activityOutcome": null,
+        "partyWorkers": null,
+        "routeDistanceTiles": 10,
+        "observedTileCount": null
+      }
+    },
+    {
+      "scenario": "map2",
+      "seed": "s1",
+      "selection": {
+        "decisionId": "decision:band:varied-dry-corridor-mid:23",
+        "bandId": "band:varied-dry-corridor-mid",
+        "actionType": "resource_scout",
+        "originTileId": "tile:68:110",
+        "targetTileId": "tile:68:108",
+        "selectedDay": 2070,
+        "selectedTick": 23,
+        "expiresAfterDay": 2160,
+        "scoutKind": "fallback_food",
+        "targetResourceClass": "fallback_food",
+        "probePurpose": null
+      },
+      "resolution": {
+        "decisionId": "decision:band:varied-dry-corridor-mid:23",
+        "outcome": "route_unavailable",
+        "actionType": "resource_scout",
+        "targetTileId": "tile:68:108",
+        "resolvedDay": 2076,
+        "executionId": null,
+        "activityOutcome": null,
+        "partyWorkers": 0,
+        "routeDistanceTiles": null,
+        "observedTileCount": null
+      }
+    },
+    {
+      "scenario": "map2",
+      "seed": "s1",
+      "selection": {
+        "decisionId": "decision:band:varied-dry-corridor-upper:23",
+        "bandId": "band:varied-dry-corridor-upper",
+        "actionType": "resource_scout",
+        "originTileId": "tile:74:107",
+        "targetTileId": "tile:64:107",
+        "selectedDay": 2070,
+        "selectedTick": 23,
+        "expiresAfterDay": 2160,
+        "scoutKind": "water_refuge",
+        "targetResourceClass": "water_resource",
+        "probePurpose": null
+      },
+      "resolution": {
+        "decisionId": "decision:band:varied-dry-corridor-upper:23",
+        "outcome": "beyond_same_day_reach",
+        "actionType": "resource_scout",
+        "targetTileId": "tile:64:107",
+        "resolvedDay": 2076,
+        "executionId": null,
+        "activityOutcome": null,
+        "partyWorkers": null,
+        "routeDistanceTiles": 10,
+        "observedTileCount": null
+      }
+    },
+    {
+      "scenario": "map2",
+      "seed": "s1",
+      "selection": {
+        "decisionId": "decision:band:varied-dry-corridor-mid:24",
+        "bandId": "band:varied-dry-corridor-mid",
+        "actionType": "resource_scout",
+        "originTileId": "tile:68:110",
+        "targetTileId": "tile:68:108",
+        "selectedDay": 2160,
+        "selectedTick": 24,
+        "expiresAfterDay": 2250,
+        "scoutKind": "fallback_food",
+        "targetResourceClass": "fallback_food",
+        "probePurpose": null
+      },
+      "resolution": {
+        "decisionId": "decision:band:varied-dry-corridor-mid:24",
+        "outcome": "route_unavailable",
+        "actionType": "resource_scout",
+        "targetTileId": "tile:68:108",
+        "resolvedDay": 2166,
+        "executionId": null,
+        "activityOutcome": null,
+        "partyWorkers": 0,
+        "routeDistanceTiles": null,
+        "observedTileCount": null
+      }
+    },
+    {
+      "scenario": "map2",
+      "seed": "s1",
+      "selection": {
+        "decisionId": "decision:band:varied-dry-corridor-upper:24",
+        "bandId": "band:varied-dry-corridor-upper",
+        "actionType": "resource_scout",
+        "originTileId": "tile:74:107",
+        "targetTileId": "tile:64:107",
+        "selectedDay": 2160,
+        "selectedTick": 24,
+        "expiresAfterDay": 2250,
+        "scoutKind": "water_refuge",
+        "targetResourceClass": "water_resource",
+        "probePurpose": null
+      },
+      "resolution": {
+        "decisionId": "decision:band:varied-dry-corridor-upper:24",
+        "outcome": "beyond_same_day_reach",
+        "actionType": "resource_scout",
+        "targetTileId": "tile:64:107",
+        "resolvedDay": 2166,
+        "executionId": null,
+        "activityOutcome": null,
+        "partyWorkers": null,
+        "routeDistanceTiles": 10,
+        "observedTileCount": null
+      }
+    },
+    {
+      "scenario": "map2",
+      "seed": "s1",
+      "selection": {
+        "decisionId": "decision:band:varied-dry-corridor-mid:25",
+        "bandId": "band:varied-dry-corridor-mid",
+        "actionType": "resource_scout",
+        "originTileId": "tile:68:110",
+        "targetTileId": "tile:68:108",
+        "selectedDay": 2250,
+        "selectedTick": 25,
+        "expiresAfterDay": 2340,
+        "scoutKind": "fallback_food",
+        "targetResourceClass": "fallback_food",
+        "probePurpose": null
+      },
+      "resolution": {
+        "decisionId": "decision:band:varied-dry-corridor-mid:25",
+        "outcome": "route_unavailable",
+        "actionType": "resource_scout",
+        "targetTileId": "tile:68:108",
+        "resolvedDay": 2256,
+        "executionId": null,
+        "activityOutcome": null,
+        "partyWorkers": 0,
+        "routeDistanceTiles": null,
+        "observedTileCount": null
+      }
+    },
+    {
+      "scenario": "map2",
+      "seed": "s1",
+      "selection": {
+        "decisionId": "decision:band:varied-dry-corridor-upper:25",
+        "bandId": "band:varied-dry-corridor-upper",
+        "actionType": "resource_scout",
+        "originTileId": "tile:74:107",
+        "targetTileId": "tile:64:107",
+        "selectedDay": 2250,
+        "selectedTick": 25,
+        "expiresAfterDay": 2340,
+        "scoutKind": "water_refuge",
+        "targetResourceClass": "water_resource",
+        "probePurpose": null
+      },
+      "resolution": {
+        "decisionId": "decision:band:varied-dry-corridor-upper:25",
+        "outcome": "beyond_same_day_reach",
+        "actionType": "resource_scout",
+        "targetTileId": "tile:64:107",
+        "resolvedDay": 2256,
+        "executionId": null,
+        "activityOutcome": null,
+        "partyWorkers": null,
+        "routeDistanceTiles": 10,
+        "observedTileCount": null
+      }
+    },
+    {
+      "scenario": "map2",
+      "seed": "s1",
+      "selection": {
+        "decisionId": "decision:band:varied-dry-corridor-mid:26",
+        "bandId": "band:varied-dry-corridor-mid",
+        "actionType": "resource_scout",
+        "originTileId": "tile:68:110",
+        "targetTileId": "tile:68:108",
+        "selectedDay": 2340,
+        "selectedTick": 26,
+        "expiresAfterDay": 2430,
+        "scoutKind": "fallback_food",
+        "targetResourceClass": "fallback_food",
+        "probePurpose": null
+      },
+      "resolution": {
+        "decisionId": "decision:band:varied-dry-corridor-mid:26",
+        "outcome": "route_unavailable",
+        "actionType": "resource_scout",
+        "targetTileId": "tile:68:108",
+        "resolvedDay": 2346,
+        "executionId": null,
+        "activityOutcome": null,
+        "partyWorkers": 0,
+        "routeDistanceTiles": null,
+        "observedTileCount": null
+      }
+    },
+    {
+      "scenario": "map2",
+      "seed": "s1",
+      "selection": {
+        "decisionId": "decision:band:varied-dry-corridor-upper:26",
+        "bandId": "band:varied-dry-corridor-upper",
+        "actionType": "resource_scout",
+        "originTileId": "tile:74:107",
+        "targetTileId": "tile:64:107",
+        "selectedDay": 2340,
+        "selectedTick": 26,
+        "expiresAfterDay": 2430,
+        "scoutKind": "water_refuge",
+        "targetResourceClass": "water_resource",
+        "probePurpose": null
+      },
+      "resolution": {
+        "decisionId": "decision:band:varied-dry-corridor-upper:26",
+        "outcome": "beyond_same_day_reach",
+        "actionType": "resource_scout",
+        "targetTileId": "tile:64:107",
+        "resolvedDay": 2346,
+        "executionId": null,
+        "activityOutcome": null,
+        "partyWorkers": null,
+        "routeDistanceTiles": 10,
+        "observedTileCount": null
+      }
+    },
+    {
+      "scenario": "map2",
+      "seed": "s1",
+      "selection": {
+        "decisionId": "decision:band:varied-dry-corridor-mid:27",
+        "bandId": "band:varied-dry-corridor-mid",
+        "actionType": "resource_scout",
+        "originTileId": "tile:68:110",
+        "targetTileId": "tile:68:108",
+        "selectedDay": 2430,
+        "selectedTick": 27,
+        "expiresAfterDay": 2520,
+        "scoutKind": "fallback_food",
+        "targetResourceClass": "fallback_food",
+        "probePurpose": null
+      },
+      "resolution": {
+        "decisionId": "decision:band:varied-dry-corridor-mid:27",
+        "outcome": "route_unavailable",
+        "actionType": "resource_scout",
+        "targetTileId": "tile:68:108",
+        "resolvedDay": 2436,
+        "executionId": null,
+        "activityOutcome": null,
+        "partyWorkers": 0,
+        "routeDistanceTiles": null,
+        "observedTileCount": null
+      }
+    },
+    {
+      "scenario": "map2",
+      "seed": "s1",
+      "selection": {
+        "decisionId": "decision:band:varied-dry-corridor-upper:27",
+        "bandId": "band:varied-dry-corridor-upper",
+        "actionType": "resource_scout",
+        "originTileId": "tile:74:107",
+        "targetTileId": "tile:64:107",
+        "selectedDay": 2430,
+        "selectedTick": 27,
+        "expiresAfterDay": 2520,
+        "scoutKind": "water_refuge",
+        "targetResourceClass": "water_resource",
+        "probePurpose": null
+      },
+      "resolution": {
+        "decisionId": "decision:band:varied-dry-corridor-upper:27",
+        "outcome": "beyond_same_day_reach",
+        "actionType": "resource_scout",
+        "targetTileId": "tile:64:107",
+        "resolvedDay": 2436,
+        "executionId": null,
+        "activityOutcome": null,
+        "partyWorkers": null,
+        "routeDistanceTiles": 10,
+        "observedTileCount": null
+      }
+    },
+    {
+      "scenario": "map2",
+      "seed": "s1",
+      "selection": {
+        "decisionId": "decision:band:varied-dry-corridor-mid:28",
+        "bandId": "band:varied-dry-corridor-mid",
+        "actionType": "resource_scout",
+        "originTileId": "tile:68:110",
+        "targetTileId": "tile:68:108",
+        "selectedDay": 2520,
+        "selectedTick": 28,
+        "expiresAfterDay": 2610,
+        "scoutKind": "fallback_food",
+        "targetResourceClass": "fallback_food",
+        "probePurpose": null
+      },
+      "resolution": {
+        "decisionId": "decision:band:varied-dry-corridor-mid:28",
+        "outcome": "route_unavailable",
+        "actionType": "resource_scout",
+        "targetTileId": "tile:68:108",
+        "resolvedDay": 2526,
+        "executionId": null,
+        "activityOutcome": null,
+        "partyWorkers": 0,
+        "routeDistanceTiles": null,
+        "observedTileCount": null
+      }
+    }
+  ],
+  "invariants": {
+    "everySelectionResolvedOrStillPending": true,
+    "noTargetMemoryChangeWithoutExecution": true,
+    "noTaskPartyRecordWithoutExecution": true,
+    "noInvestigationFoodReceipt": true,
+    "pendingCapHeld": true,
+    "outcomeRingBounded": true,
+    "noDuplicateExecution": true
+  }
+}

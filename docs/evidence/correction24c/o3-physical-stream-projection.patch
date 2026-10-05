@@ -1,0 +1,56 @@
+diff --git a/src/sim/agents/expedition.ts b/src/sim/agents/expedition.ts
+index cf64cba..2c04c73 100644
+--- a/src/sim/agents/expedition.ts
++++ b/src/sim/agents/expedition.ts
+@@ -2752,6 +2752,14 @@ function applyExpeditionDay(world: WorldState, day: DayNumber): WorldState {
+             forcedReturn: terminalReason === "frontier_barrier_blocked" || terminalReason === "party_lost",
+             durationDays: Number(day) - Number(result.expedition.departedDay),
+             partyWorkers: result.expedition.partyWorkers,
++            ...(result.expedition.partyComposition === undefined
++              ? {}
++              : { partyComposition: result.expedition.partyComposition }),
++            provisionsLoaded: round4(
++              result.expedition.partyWorkers *
++                EXPEDITION_PROVISION_UNITS_PER_WORKER_DAY *
++                EXPEDITION_MAX_DURATION_DAYS,
++            ),
+             headingX: plan?.headingX ?? 0,
+             headingY: plan?.headingY ?? 0,
+             headingBasis: String(plan?.basis ?? "none"),
+@@ -2765,6 +2773,9 @@ function applyExpeditionDay(world: WorldState, day: DayNumber): WorldState {
+             partyLocalObservations: result.expedition.carriedObservations.length,
+             provisionsConsumed: result.expedition.cargo.provisionUnitsConsumed,
+             riskEpisodes: (result.expedition.riskEpisodeIds ?? []).length,
++            riskEpisodeIds: [...(result.expedition.riskEpisodeIds ?? [])],
++            terminalOutcome: String(result.expedition.outcomeReason ?? result.expedition.phase),
++            terminalPositionTileId: String(result.expedition.positionTileId),
+             // E5 — filled by the return seam below. A lost party never reaches it, so these
+             // stay zero and the no-transfer control is structural rather than asserted.
+             newRecordsCreated: 0,
+diff --git a/src/sim/diagnostics/explorationFunnelDiagnostics.ts b/src/sim/diagnostics/explorationFunnelDiagnostics.ts
+index 1d24560..4595790 100644
+--- a/src/sim/diagnostics/explorationFunnelDiagnostics.ts
++++ b/src/sim/diagnostics/explorationFunnelDiagnostics.ts
+@@ -522,6 +522,12 @@ export interface ExplorationJourneyRow {
+   readonly forcedReturn: boolean;
+   readonly durationDays?: number;
+   readonly partyWorkers: number;
++  readonly partyComposition?: {
++    readonly limited: number;
++    readonly typical: number;
++    readonly high: number;
++  };
++  readonly provisionsLoaded: number;
+   readonly headingX: number;
+   readonly headingY: number;
+   readonly headingBasis: string;
+@@ -537,6 +543,9 @@ export interface ExplorationJourneyRow {
+   readonly partyLocalObservations: number;
+   readonly provisionsConsumed: number;
+   readonly riskEpisodes: number;
++  readonly riskEpisodeIds: readonly string[];
++  readonly terminalOutcome: string;
++  readonly terminalPositionTileId: string;
+   /** E5 — what actually reached the canonical writer. Zero for a lost party. */
+   readonly newRecordsCreated: number;
+   readonly existingRecordsRefreshed: number;

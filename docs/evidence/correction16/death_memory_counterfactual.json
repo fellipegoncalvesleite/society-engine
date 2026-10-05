@@ -1,0 +1,312 @@
+{
+ "check": "CORRECTION-16 §6 death-memory same-snapshot counterfactual",
+ "method": "ONE identical spring pre-demography snapshot per seed, cloned into arms differing ONLY in band.deathMemory, each run through EXACTLY ONE production annual demographic update (updateBandDemography). Support, cohorts, place, ecology, water, risk, logistics, population and the world object are identical references across arms.",
+ "replaces": "the 40-year trajectory-mean ordering assertions directFoodTermRedundant and deathMemoryFertilityBounded in demographicDeathMemoryPathAudit.mjs",
+ "seeds": [
+  "c16-dm-a",
+  "c16-dm-b",
+  "c16-dm-c",
+  "c16-dm-d",
+  "c16-dm-e"
+ ],
+ "perSeed": {
+  "c16-dm-a": {
+   "bandId": "band:delta-coastal-foragers",
+   "snapshotPopulation": 34,
+   "season": "spring",
+   "tick": 40,
+   "results": {
+    "noDeathMemory": {
+     "fertilityPressure": 0.41,
+     "mortalityPressure": 0.25,
+     "netDemographicRate": 0.0035,
+     "uncappedDemographicRate": 0.0035,
+     "population": 35
+    },
+    "lowDeathMemory": {
+     "fertilityPressure": 0.4,
+     "mortalityPressure": 0.25,
+     "netDemographicRate": 0.0034,
+     "uncappedDemographicRate": 0.0034,
+     "population": 35
+    },
+    "highDeathMemory": {
+     "fertilityPressure": 0.34,
+     "mortalityPressure": 0.25,
+     "netDemographicRate": 0.0027,
+     "uncappedDemographicRate": 0.0027,
+     "population": 34
+    },
+    "highDeathMemory_fertilityDisabled": {
+     "fertilityPressure": 0.41,
+     "mortalityPressure": 0.25,
+     "netDemographicRate": 0.0035,
+     "uncappedDemographicRate": 0.0035,
+     "population": 35
+    }
+   },
+   "checks": {
+    "fertilityMonotoneNonIncreasing": true,
+    "netRateMonotoneNonIncreasing": true,
+    "uncappedRateMonotoneNonIncreasing": true,
+    "suppressionBounded": true,
+    "mortalityUnchangedAcrossDeathMemory": true,
+    "disablingFertilityConsumerRestoresNoMemoryFertility": true
+   }
+  },
+  "c16-dm-b": {
+   "bandId": "band:delta-coastal-foragers",
+   "snapshotPopulation": 34,
+   "season": "spring",
+   "tick": 40,
+   "results": {
+    "noDeathMemory": {
+     "fertilityPressure": 0.34,
+     "mortalityPressure": 0.29,
+     "netDemographicRate": 0.002,
+     "uncappedDemographicRate": 0.002,
+     "population": 35
+    },
+    "lowDeathMemory": {
+     "fertilityPressure": 0.33,
+     "mortalityPressure": 0.29,
+     "netDemographicRate": 0.0019,
+     "uncappedDemographicRate": 0.0019,
+     "population": 35
+    },
+    "highDeathMemory": {
+     "fertilityPressure": 0.27,
+     "mortalityPressure": 0.29,
+     "netDemographicRate": 0.0011,
+     "uncappedDemographicRate": 0.0011,
+     "population": 35
+    },
+    "highDeathMemory_fertilityDisabled": {
+     "fertilityPressure": 0.34,
+     "mortalityPressure": 0.29,
+     "netDemographicRate": 0.002,
+     "uncappedDemographicRate": 0.002,
+     "population": 35
+    }
+   },
+   "checks": {
+    "fertilityMonotoneNonIncreasing": true,
+    "netRateMonotoneNonIncreasing": true,
+    "uncappedRateMonotoneNonIncreasing": true,
+    "suppressionBounded": true,
+    "mortalityUnchangedAcrossDeathMemory": true,
+    "disablingFertilityConsumerRestoresNoMemoryFertility": true
+   }
+  },
+  "c16-dm-c": {
+   "bandId": "band:delta-coastal-foragers",
+   "snapshotPopulation": 34,
+   "season": "spring",
+   "tick": 40,
+   "results": {
+    "noDeathMemory": {
+     "fertilityPressure": 0.36,
+     "mortalityPressure": 0.24,
+     "netDemographicRate": 0.0029,
+     "uncappedDemographicRate": 0.0029,
+     "population": 34
+    },
+    "lowDeathMemory": {
+     "fertilityPressure": 0.35,
+     "mortalityPressure": 0.24,
+     "netDemographicRate": 0.0028,
+     "uncappedDemographicRate": 0.0028,
+     "population": 34
+    },
+    "highDeathMemory": {
+     "fertilityPressure": 0.29,
+     "mortalityPressure": 0.24,
+     "netDemographicRate": 0.0021,
+     "uncappedDemographicRate": 0.0021,
+     "population": 34
+    },
+    "highDeathMemory_fertilityDisabled": {
+     "fertilityPressure": 0.36,
+     "mortalityPressure": 0.24,
+     "netDemographicRate": 0.0029,
+     "uncappedDemographicRate": 0.0029,
+     "population": 34
+    }
+   },
+   "checks": {
+    "fertilityMonotoneNonIncreasing": true,
+    "netRateMonotoneNonIncreasing": true,
+    "uncappedRateMonotoneNonIncreasing": true,
+    "suppressionBounded": true,
+    "mortalityUnchangedAcrossDeathMemory": true,
+    "disablingFertilityConsumerRestoresNoMemoryFertility": true
+   }
+  },
+  "c16-dm-d": {
+   "bandId": "band:delta-coastal-foragers",
+   "snapshotPopulation": 35,
+   "season": "spring",
+   "tick": 40,
+   "results": {
+    "noDeathMemory": {
+     "fertilityPressure": 0.45,
+     "mortalityPressure": 0.23,
+     "netDemographicRate": 0.0043,
+     "uncappedDemographicRate": 0.0043,
+     "population": 35
+    },
+    "lowDeathMemory": {
+     "fertilityPressure": 0.45,
+     "mortalityPressure": 0.23,
+     "netDemographicRate": 0.0042,
+     "uncappedDemographicRate": 0.0042,
+     "population": 35
+    },
+    "highDeathMemory": {
+     "fertilityPressure": 0.38,
+     "mortalityPressure": 0.23,
+     "netDemographicRate": 0.0034,
+     "uncappedDemographicRate": 0.0034,
+     "population": 35
+    },
+    "highDeathMemory_fertilityDisabled": {
+     "fertilityPressure": 0.45,
+     "mortalityPressure": 0.23,
+     "netDemographicRate": 0.0043,
+     "uncappedDemographicRate": 0.0043,
+     "population": 35
+    }
+   },
+   "checks": {
+    "fertilityMonotoneNonIncreasing": true,
+    "netRateMonotoneNonIncreasing": true,
+    "uncappedRateMonotoneNonIncreasing": true,
+    "suppressionBounded": true,
+    "mortalityUnchangedAcrossDeathMemory": true,
+    "disablingFertilityConsumerRestoresNoMemoryFertility": true
+   }
+  },
+  "c16-dm-e": {
+   "bandId": "band:delta-coastal-foragers",
+   "snapshotPopulation": 35,
+   "season": "spring",
+   "tick": 40,
+   "results": {
+    "noDeathMemory": {
+     "fertilityPressure": 0.53,
+     "mortalityPressure": 0.23,
+     "netDemographicRate": 0.005,
+     "uncappedDemographicRate": 0.005,
+     "population": 35
+    },
+    "lowDeathMemory": {
+     "fertilityPressure": 0.52,
+     "mortalityPressure": 0.23,
+     "netDemographicRate": 0.0049,
+     "uncappedDemographicRate": 0.0049,
+     "population": 35
+    },
+    "highDeathMemory": {
+     "fertilityPressure": 0.46,
+     "mortalityPressure": 0.23,
+     "netDemographicRate": 0.0042,
+     "uncappedDemographicRate": 0.0042,
+     "population": 35
+    },
+    "highDeathMemory_fertilityDisabled": {
+     "fertilityPressure": 0.53,
+     "mortalityPressure": 0.23,
+     "netDemographicRate": 0.005,
+     "uncappedDemographicRate": 0.005,
+     "population": 35
+    }
+   },
+   "checks": {
+    "fertilityMonotoneNonIncreasing": true,
+    "netRateMonotoneNonIncreasing": true,
+    "uncappedRateMonotoneNonIncreasing": true,
+    "suppressionBounded": true,
+    "mortalityUnchangedAcrossDeathMemory": true,
+    "disablingFertilityConsumerRestoresNoMemoryFertility": true
+   }
+  }
+ },
+ "summary": {
+  "fertilityMonotoneNonIncreasing": {
+   "passedSeeds": 5,
+   "totalSeeds": 5,
+   "allPass": true
+  },
+  "netRateMonotoneNonIncreasing": {
+   "passedSeeds": 5,
+   "totalSeeds": 5,
+   "allPass": true
+  },
+  "uncappedRateMonotoneNonIncreasing": {
+   "passedSeeds": 5,
+   "totalSeeds": 5,
+   "allPass": true
+  },
+  "suppressionBounded": {
+   "passedSeeds": 5,
+   "totalSeeds": 5,
+   "allPass": true
+  },
+  "mortalityUnchangedAcrossDeathMemory": {
+   "passedSeeds": 5,
+   "totalSeeds": 5,
+   "allPass": true
+  },
+  "disablingFertilityConsumerRestoresNoMemoryFertility": {
+   "passedSeeds": 5,
+   "totalSeeds": 5,
+   "allPass": true
+  }
+ },
+ "causeAttribution": {
+  "foodStressWithZeroDeathsCreatesNoSuppression": true,
+  "nonFoodDeathsUnderAdequateFoodCreateBoundedSuppression": true,
+  "foodLabelAloneDoesNotAlterProductionSeverity": true,
+  "cohortDeathsContributeOnlyThroughDocumentedCohortPath": true,
+  "values": {
+   "foodStressNoDeaths": {
+    "proportionalLossSeverity": 0,
+    "cohortLossSeverity": 0,
+    "directEnvironmentalSeverity": 0,
+    "severity": 0,
+    "fertilitySuppressionFromRecentDeaths": 0,
+    "cautionModifier": 0
+   },
+   "nonFoodDeathsAdequateFood": {
+    "proportionalLossSeverity": 0.125,
+    "cohortLossSeverity": 0.28,
+    "directEnvironmentalSeverity": 0,
+    "severity": 0.405,
+    "fertilitySuppressionFromRecentDeaths": 0.22440000000000002,
+    "cautionModifier": 0.3311
+   },
+   "labelledFood": {
+    "proportionalLossSeverity": 0.125,
+    "cohortLossSeverity": 0.28,
+    "directEnvironmentalSeverity": 0,
+    "severity": 0.405,
+    "fertilitySuppressionFromRecentDeaths": 0.22440000000000002,
+    "cautionModifier": 0.3311
+   },
+   "cohortNeutralized": {
+    "proportionalLossSeverity": 0.125,
+    "cohortLossSeverity": 0,
+    "directEnvironmentalSeverity": 0,
+    "severity": 0.125,
+    "fertilitySuppressionFromRecentDeaths": 0.06,
+    "cautionModifier": 0.1575
+   }
+  }
+ },
+ "localMechanismCorrect": true,
+ "classificationOfOldFailure": "INVALID AUDIT EXPECTATION — the local mechanism is correct under a same-snapshot counterfactual; the old assertions compared trajectory means of arms that had diverged, where density-dependent food feedback (mean currentFoodStress R0 0.4233 -> R1 0.4347 -> R3 0.4526) reverses the asserted ordering.",
+ "notProven": [
+  "§6.3 recovery/decay of death-memory suppression under identical scripted future support is NOT measured here.",
+  "This audit measures the annual vital-rate response only; it does not re-measure multi-year population outcomes."
+ ]
+}

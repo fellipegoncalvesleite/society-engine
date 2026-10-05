@@ -106,6 +106,85 @@ export function deriveCanonicalNutritionState(
   };
 }
 
+// REPEATED-BAND-EXPANSION-FISSION-14 — the ANNUAL nutrition read.
+//
+// `deriveCanonicalNutritionState` above is the SEASONAL read: it answers "how is
+// this band eating RIGHT NOW", which is exactly what movement, pressure, hardship
+// and social readability need. Demography is different: it runs ONCE A YEAR (see
+// `shouldRunAnnualDemography` — spring), and it integrates a whole year of births
+// and deaths. Feeding it the seasonal read made the annual vital rates a sample of
+// ONE season, and because the annual step always lands on the same season, that
+// sample is the SAME phase of the seasonal cycle every year.
+//
+// Measured on the physically richest map2 catchment (CORRECTION-14 baseline): the
+// four seasonal reads of one year were 2.03 / 1.65 / 1.06 / 0.09 raw support ratio,
+// i.e. an annual mean well above demand with one deep lean season — and the annual
+// demographic step read the 0.09 season every single year, for 500 years. Two
+// terms carried that error: `currentFoodStress` (instantaneous) and
+// `recoveryRelief` (a TRAILING streak, which a lean trailing season zeroes, which
+// in turn zeroed `nutritionalSurplus` no matter how good the year was). The other
+// two terms (`recentFoodStress`, `chronicFoodStress`) were already windowed.
+//
+// The annual read replaces exactly those two instantaneous terms with their
+// four-season (one-year) counterparts and changes nothing else:
+//   - currentFoodStress -> mean seasonal food stress across the year
+//   - recoveryRelief    -> share of the year's seasons that met the SAME recovery
+//                          condition the seasonal streak uses
+// It adds no food, changes no yield, demand, coefficient or threshold. A band that
+// is hungry all year still reads a full-year deficit, so deficits stay harmful and
+// severe deficit still declines faster than moderate deficit.
+export function deriveAnnualNutritionState(
+  support: SeasonalSupportState | undefined,
+): CanonicalNutritionState {
+  const seasonal = deriveCanonicalNutritionState(support);
+
+  if (support === undefined) {
+    return seasonal;
+  }
+
+  const year = support.recentSamples.slice(-SHORT_WINDOW);
+
+  if (year.length === 0) {
+    return seasonal;
+  }
+
+  const currentFoodStress = clamp01(mean(year.map((entry) => clamp01(entry.foodStress))));
+  const recoveryRelief = clamp01(year.filter(isRecoverySeason).length / year.length);
+  const meanRawSupport = support.rolling8SeasonRawSupport
+    ?? (support.recentSamples.length > 0
+      ? support.recentSamples.reduce((sum, entry) => sum + Math.max(0, entry.rawSupportRatio), 0) /
+          support.recentSamples.length
+      : 1);
+  const nutritionalSurplus = clamp01(
+    clamp01((meanRawSupport - SURPLUS_ONSET) / SURPLUS_SPAN) * recoveryRelief,
+  );
+
+  return {
+    ...seasonal,
+    currentFoodStress: round2(currentFoodStress),
+    recoveryRelief: round2(recoveryRelief),
+    nutritionalSurplus: round2(nutritionalSurplus),
+    foodDemographicPressure: round2(clamp01(
+      currentFoodStress * 0.38 +
+        seasonal.recentFoodStress * 0.26 +
+        seasonal.chronicFoodStress * 0.48 -
+        recoveryRelief * 0.14,
+    )),
+  };
+}
+
+// The recovery condition used by `seasonalRecoveryStreak` in
+// `updateSeasonalSupportState`, factored out so the annual read applies exactly the
+// same test per season rather than a second, divergent definition of "recovered".
+function isRecoverySeason(entry: SeasonalSupportSample): boolean {
+  return (
+    entry.rawSupportRatio >= 0.98 &&
+    entry.perCapitaReturn >= 0.48 &&
+    entry.foodStress < 0.32 &&
+    entry.waterStress < 0.42
+  );
+}
+
 export function getCanonicalFoodStress(band: Band): number {
   return deriveCanonicalNutritionState(band.seasonalSupport).foodMovementPressure;
 }
@@ -157,7 +236,43 @@ export function updateSeasonalSupportState(
     }),
   };
 
-  const sameTick = previous !== undefined && Number(previous.lastUpdatedTick) === Number(time.tick);
+  return recordSupportInterval(previous, sample, band, time, {
+    topSeasonalSupportReasons: getTopSeasonalSupportReasons(carrying, sample),
+    replaceSameTickSample: true,
+  });
+}
+
+/**
+ * ROADMAP ITEM 4 — THE ONE WRITER OF DERIVED SUPPORT STATE.
+ *
+ * Extracted from `updateSeasonalSupportState` so that a measured interval can come from more than one
+ * PHYSICAL SITUATION without there being more than one answer to "how fed is this group".
+ *
+ * There are exactly two producers of a sample and they describe genuinely different physical
+ * arrangements — a band working a residential catchment, and a group walking across country with no
+ * camp at all — but the rolling windows, the streaks, the hunger classification and the canonical
+ * nutrition consequences are computed HERE, once, for both. A second copy of this arithmetic is how a
+ * travelling group would have acquired a second, divergent definition of hunger.
+ *
+ * It adds no food. A sample is a measurement; every quantity below is derived from samples.
+ */
+export function recordSupportInterval(
+  previous: SeasonalSupportState | undefined,
+  sample: SeasonalSupportSample,
+  band: Band,
+  time: WorldTime,
+  options: {
+    readonly topSeasonalSupportReasons: readonly string[];
+    /**
+     * True for the seasonal writer, which runs up to three times per tick and must converge to one
+     * sample per tick. False for interval producers whose intervals are their own unit and may close
+     * more than once inside a season — replacing there would silently delete a real measurement.
+     */
+    readonly replaceSameTickSample: boolean;
+  },
+): SeasonalSupportState {
+  const sameTick = options.replaceSameTickSample &&
+    previous !== undefined && Number(previous.lastUpdatedTick) === Number(time.tick);
   const baseSamples = sameTick ? previous.recentSamples.slice(0, -1) : previous?.recentSamples ?? [];
   const recentSamples = [...baseSamples, sample].slice(-SEASONAL_MEMORY_WINDOW);
   const lastSeasonSupport = baseSamples[baseSamples.length - 1];
@@ -166,14 +281,7 @@ export function updateSeasonalSupportState(
     recentSamples,
     (entry) => entry.deficitRatio >= 0.16 || entry.rawSupportRatio < 0.88,
   );
-  const seasonalRecoveryStreak = countTrailing(
-    recentSamples,
-    (entry) =>
-      entry.rawSupportRatio >= 0.98 &&
-      entry.perCapitaReturn >= 0.48 &&
-      entry.foodStress < 0.32 &&
-      entry.waterStress < 0.42,
-  );
+  const seasonalRecoveryStreak = countTrailing(recentSamples, isRecoverySeason);
   const last4 = recentSamples.slice(-SHORT_WINDOW);
   const deficitSeasonsLast4 = last4.filter((entry) => entry.deficitRatio >= 0.12 || entry.rawSupportRatio < 0.92).length;
   const deficitSeasonsLast8 = recentSamples.filter((entry) => entry.deficitRatio >= 0.12 || entry.rawSupportRatio < 0.92).length;
@@ -227,7 +335,7 @@ export function updateSeasonalSupportState(
     hungerClassification,
     chronicDeficitClassification,
     populationStableDespiteRecurringHunger: hasStablePopulationButRecurringHunger(band, deficitSeasonsLast8),
-    topSeasonalSupportReasons: getTopSeasonalSupportReasons(carrying, sample),
+    topSeasonalSupportReasons: options.topSeasonalSupportReasons,
     reasonIds: makeSeasonalSupportReasonIds(band, time, hungerClassification),
   };
   const nutrition = deriveCanonicalNutritionState(baseState);

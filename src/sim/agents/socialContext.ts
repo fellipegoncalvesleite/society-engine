@@ -21,7 +21,7 @@ import type {
   ReturnTrendMemory,
   TemporarySeparationPressure,
 } from "./types";
-import { preserveTerminalBandSnapshots } from "./bandLifecycle";
+import { preserveTerminalBandSnapshots, shareCurrentFissionLineage } from "./bandLifecycle";
 import { getNearbyBandPressure } from "./crowding";
 import { deriveCarryingCapacity } from "./carryingCapacity";
 import { deriveCanonicalNutritionState, updateSeasonalSupportState } from "./seasonalSurvival";
@@ -37,6 +37,7 @@ import { applyVisibleNatureContext } from "./visibleNature";
 import { applyForagingLearningAdaptationContext } from "./foragingAdaptation";
 import { applyBodyCampSurvivalLogisticsContext } from "./bodyCampLogistics";
 import { applyRelationshipMemorySocialEcologyContext } from "./relationshipMemory";
+import { applySocialReadSeam, hasSocialReadSeamHook } from "../diagnostics/socialReadSeamHook";
 // 2K.8 — second deliberate src/sim consumer of the patch-return/skill view (after the 2K.5
 // resourceScout selection hook): the band-known learned-support term for the candidate-vs-current
 // opportunity comparison. DECISION-SIDE ONLY — it feeds opportunity scoring, never realized
@@ -122,12 +123,29 @@ function countContext(
   profiler?.count?.(name, amount);
 }
 
+// CORRECTION-16 §4.3 — audit-only seam between the canonical writer of
+// `innerFission`/`socialTension` and their first production reader (`applyProtoCampContext`;
+// `applyForagingLearningAdaptationContext` and `pressure.ts` read them later still).
+// Unregistered — every production, worker and UI path — this is one boolean check and the
+// world reference is returned untouched, so diagnostics-off output is byte-identical.
+function applySocialReadSeamContext(world: WorldState): WorldState {
+  if (!hasSocialReadSeamHook()) return world;
+
+  const bands = Object.entries(world.bands)
+    .reduce<Record<string, Band>>((bandsById, [id, band]) => {
+      bandsById[id] = applySocialReadSeam(band);
+      return bandsById;
+    }, {});
+
+  return { ...world, bands: bands as Readonly<Record<BandId, Band>> };
+}
+
 export function updateBandContextStates(
   world: WorldState,
   cache = buildTickContextCache(world),
   diagnostics?: FoodDemographyDiagnostics,
 ): WorldState {
-  const updated = applyBandReadabilityContext(applyRelationshipMemorySocialEcologyContext(applyBodyCampSurvivalLogisticsContext(applyForagingLearningAdaptationContext(applyProtoAccessContext(applyVisibleNatureContext(applyResourceEcologyContext(applyProtoCampContext(applyInnerFissionSocialReadabilityContext(
+  const updated = applyBandReadabilityContext(applyRelationshipMemorySocialEcologyContext(applyBodyCampSurvivalLogisticsContext(applyForagingLearningAdaptationContext(applyProtoAccessContext(applyVisibleNatureContext(applyResourceEcologyContext(applyProtoCampContext(applySocialReadSeamContext(applyInnerFissionSocialReadabilityContext(
     advanceRangeFriction(
       advanceReportedKnowledge(
         applyEncounterContext(
@@ -145,7 +163,7 @@ export function updateBandContextStates(
       cache,
     ),
     cache,
-  )))))))));
+  ))))))))));
   return preserveTerminalBandSnapshots(world, updated);
 }
 
@@ -458,6 +476,25 @@ function deriveRangeSaturationState(
       seasonalStress -
       carryingBuffer * 0.18,
   );
+  // CORRECTION-32 — the same sum with EVERY other-band term removed, clamped identically.
+  //
+  // Two terms carry other bands, not one. `nearby.weightedCrowding * 0.34` is the obvious one.
+  // But `localPopulationEstimate` is a distance-weighted sum over every active band inside the
+  // radius INCLUDING the deciding band, so `populationPressure` is a second measurement of the
+  // same nearby bodies, differing only in weighting and in having no kin discount. The
+  // decision-facing value keeps the band's OWN density (its own population is a real and
+  // distinct fact about this ground) and drops the rest, because the decision score already
+  // charges other bands once, as `crowdingPenalty`.
+  //
+  // `saturationPressure` itself is UNCHANGED and remains what carryingCapacity, innerFission,
+  // reportedKnowledge, frontierDispersal and the UI read.
+  const ownPopulationPressure = clamp01(band.demography.population / (52 + carryingBuffer * 72));
+  const saturationPressureExcludingCrowding = clamp01(
+    localUsePressure * 0.32 +
+      ownPopulationPressure * 0.28 +
+      seasonalStress -
+      carryingBuffer * 0.18,
+  );
   const effectiveHabitatSuitability = clamp01(
     habitatSuitability - saturationPressure * 0.36 - nearby.weightedCrowding * 0.12,
   );
@@ -478,6 +515,7 @@ function deriveRangeSaturationState(
     effectiveHabitatSuitability: round2(effectiveHabitatSuitability),
     perCapitaReturnEstimate: round2(perCapitaReturnEstimate),
     saturationPressure: round2(saturationPressure),
+    saturationPressureExcludingCrowding: round2(saturationPressureExcludingCrowding),
     confidence: round2(knownRecord?.confidence ?? 0.44),
     reasonIds,
   };
@@ -1012,6 +1050,12 @@ export function applyEncounterContext(
   for (const pair of getEncounterCandidatePairs(world, cache)) {
     const left = bandsById[pair.leftBandId];
     const right = bandsById[pair.rightBandId];
+    if (left !== undefined && right !== undefined && shareCurrentFissionLineage(left, right)) {
+      // A parent and its in-flight successor are physically distinct groups, so crowding/ecology
+      // still see both bodies. They are not strangers merely because departure begins at the same
+      // tile, however; current lineage provenance blocks only the social encounter fiction.
+      continue;
+    }
     const encounter = left === undefined || right === undefined
       ? undefined
       : detectEncounter(world, left, right);
@@ -1058,8 +1102,7 @@ function detectEncounter(
 
   const distance = getGridDistance(leftTile, rightTile);
   const relation = getEncounterRelation(left, right);
-  const memoryOverlap = getSharedMemoryOverlap(world, left, right);
-  const kind = getEncounterKind(distance, relation, memoryOverlap);
+  const kind = getEncounterKind(distance, relation);
 
   if (kind === undefined) {
     return undefined;
@@ -1697,10 +1740,16 @@ function isKnownReachable(
   return true;
 }
 
+// CORRECTION-29 — every branch is now gated on CURRENT DISTANCE. The last
+// clause used to read `memoryOverlap > 0.24 || distance <= 3`, admitting a
+// direct encounter at ANY distance whenever the two bands' private place
+// memories happened to coincide. That was the only non-distance-gated path in
+// the encounter system, and its input came from reading the other band's
+// private placeMemory. Remembered prior contact and reported awareness are
+// different things from meeting, and neither is created here.
 function getEncounterKind(
   distance: number,
   relation: BandEncounterRelation,
-  memoryOverlap: number,
 ): BandEncounterKind | undefined {
   if (distance === 0) {
     return "same_tile";
@@ -1718,7 +1767,7 @@ function getEncounterKind(
     return "sibling_overlap";
   }
 
-  if (memoryOverlap > 0.24 || distance <= 3) {
+  if (distance <= 3) {
     return relation === "unrelated" || relation === "unknown"
       ? "unrelated_overlap"
       : "shared_resource_area";
@@ -1753,36 +1802,12 @@ function getContactMemoryRelation(
   return relation === "unknown" ? "unknown" : "unrelated";
 }
 
-function getSharedMemoryOverlap(world: WorldState, left: Band, right: Band): number {
-  const rightReturnTiles = new Set(
-    Object.values(right.placeMemory)
-      .filter((memory) => memory.isReturnPlace || memory.attachment > 0.48)
-      .map((memory) => String(memory.tileId)),
-  );
-
-  return Object.values(left.placeMemory)
-    .filter((memory) => memory.isReturnPlace || memory.attachment > 0.48)
-    .map((memory) => {
-      if (rightReturnTiles.has(String(memory.tileId))) {
-        return clamp01(memory.attachment);
-      }
-
-      const leftTile = getTile(world, memory.tileId);
-
-      if (leftTile === undefined) {
-        return 0;
-      }
-
-      return Object.values(right.placeMemory).some((otherMemory) => {
-        const rightTile = getTile(world, otherMemory.tileId);
-
-        return rightTile !== undefined && getGridDistance(leftTile, rightTile) <= 1;
-      })
-        ? 0.3
-        : 0;
-    })
-    .sort((leftScore, rightScore) => rightScore - leftScore)[0] ?? 0;
-}
+// CORRECTION-29 — `getSharedMemoryOverlap` is deleted. It compared the two
+// bands' private `placeMemory` stores directly and was the omniscient read that
+// fed the encounter admission gate above. Its only caller was `detectEncounter`.
+// A band's own remembered awareness of neighbours it has actually met still has
+// a home in `socialRangeRecognition.ts`, which reads only the observer's own
+// contact memories, lineage and familiar country.
 
 function getEncounterTolerance(
   relation: BandEncounterRelation,
@@ -1931,32 +1956,12 @@ function getEncounterCandidatePairs(
     }
   }
 
-  const memoryTileBands = new Map<string, BandId[]>();
-
-  for (const bandId of cache.activeBandIds) {
-    const summary = getSalientMemorySummary(cache, bandId);
-
-    if (summary === undefined) {
-      continue;
-    }
-
-    for (const tileId of summary.topReturnPlaceIds.slice(0, 12)) {
-      const key = String(tileId);
-      const ids = memoryTileBands.get(key) ?? [];
-      ids.push(bandId);
-      memoryTileBands.set(key, ids);
-    }
-  }
-
-  for (const bandIds of memoryTileBands.values()) {
-    const sorted = bandIds.sort(compareBandIds);
-
-    for (let index = 0; index < sorted.length; index += 1) {
-      for (let otherIndex = index + 1; otherIndex < sorted.length; otherIndex += 1) {
-        pairKeys.add(getEncounterPairKey(sorted[index], sorted[otherIndex]));
-      }
-    }
-  }
+  // CORRECTION-29 — candidacy is CURRENT PROXIMITY ONLY. This used to also pair
+  // any two bands whose top return places named the same tile, with no distance
+  // condition at all, so two bands ~44 tiles apart who independently remembered
+  // one old place were admitted as encounter candidates (AUDIT-27 C10b). Two
+  // bands remembering the same ground proves nothing about whether either one
+  // currently knows the other is there, and it is not a meeting.
 
   return [...pairKeys]
     .sort()

@@ -1,0 +1,309 @@
+{
+  "audit": "CORRECTION-33 behavioural comparison",
+  "before": "d11854153e76c2435bce9d53ffde49317e5e8f90",
+  "after": "checkpoint/social-access-unrelated-risk-provenance-33",
+  "method": "same maps, seeds and scenario shape as CORRECTION-32 natural audits; the removed term is the only production difference",
+  "classificationLegend": {
+    "hidden_global_count_influence_removed_with_secondary_behavioural_consequence": "the old term was armed in this world; removing it lowers socialAccessRisk by the removed constant and downstream movement follows",
+    "no_hidden_count_influence_to_remove_identical_outcome": "the world never held more than 8 band records, so the term never armed and every outcome is identical",
+    "unexplained_divergence": "none observed"
+  },
+  "unexplainedDivergences": 0,
+  "runs20y": [
+    {
+      "scenario": "map1",
+      "seed": "s1",
+      "oldConditionFires": 0,
+      "dryMarginReadings": 80,
+      "meanSocialAccessRisk": {
+        "before": 0.2988,
+        "after": 0.2988,
+        "delta": 0
+      },
+      "population": {
+        "before": 157,
+        "after": 157
+      },
+      "residentialMoves": {
+        "before": 265,
+        "after": 265
+      },
+      "livingBands": {
+        "before": 5,
+        "after": 5
+      },
+      "worldBandRecords": {
+        "before": 5,
+        "after": 5
+      },
+      "contactMemories": {
+        "before": 0,
+        "after": 0
+      },
+      "frictionRecords": {
+        "before": 0,
+        "after": 0
+      },
+      "classification": "no_hidden_count_influence_to_remove_identical_outcome"
+    },
+    {
+      "scenario": "map1",
+      "seed": "s2",
+      "oldConditionFires": 0,
+      "dryMarginReadings": 80,
+      "meanSocialAccessRisk": {
+        "before": 0.2989,
+        "after": 0.2989,
+        "delta": 0
+      },
+      "population": {
+        "before": 152,
+        "after": 152
+      },
+      "residentialMoves": {
+        "before": 224,
+        "after": 224
+      },
+      "livingBands": {
+        "before": 5,
+        "after": 5
+      },
+      "worldBandRecords": {
+        "before": 5,
+        "after": 5
+      },
+      "contactMemories": {
+        "before": 0,
+        "after": 0
+      },
+      "frictionRecords": {
+        "before": 0,
+        "after": 0
+      },
+      "classification": "no_hidden_count_influence_to_remove_identical_outcome"
+    },
+    {
+      "scenario": "map2",
+      "seed": "s1",
+      "oldConditionFires": 720,
+      "dryMarginReadings": 527,
+      "meanSocialAccessRisk": {
+        "before": 0.3855,
+        "after": 0.3059,
+        "delta": -0.0796
+      },
+      "population": {
+        "before": 226,
+        "after": 227
+      },
+      "residentialMoves": {
+        "before": 450,
+        "after": 444
+      },
+      "livingBands": {
+        "before": 9,
+        "after": 9
+      },
+      "worldBandRecords": {
+        "before": 9,
+        "after": 9
+      },
+      "contactMemories": {
+        "before": 0,
+        "after": 0
+      },
+      "frictionRecords": {
+        "before": 0,
+        "after": 0
+      },
+      "classification": "hidden_global_count_influence_removed_with_secondary_behavioural_consequence"
+    },
+    {
+      "scenario": "map2",
+      "seed": "s2",
+      "oldConditionFires": 590,
+      "dryMarginReadings": 527,
+      "meanSocialAccessRisk": {
+        "before": 0.3446,
+        "after": 0.2853,
+        "delta": -0.0593
+      },
+      "population": {
+        "before": 227,
+        "after": 223
+      },
+      "residentialMoves": {
+        "before": 401,
+        "after": 369
+      },
+      "livingBands": {
+        "before": 9,
+        "after": 9
+      },
+      "worldBandRecords": {
+        "before": 9,
+        "after": 9
+      },
+      "contactMemories": {
+        "before": 2,
+        "after": 2
+      },
+      "frictionRecords": {
+        "before": 0,
+        "after": 0
+      },
+      "classification": "hidden_global_count_influence_removed_with_secondary_behavioural_consequence"
+    }
+  ],
+  "runs50y": [
+    {
+      "scenario": "map1",
+      "seed": "s1",
+      "oldConditionFires": 0,
+      "dryMarginReadings": 200,
+      "meanSocialAccessRisk": {
+        "before": 0.2951,
+        "after": 0.2951,
+        "delta": 0
+      },
+      "population": {
+        "before": 164,
+        "after": 164
+      },
+      "residentialMoves": {
+        "before": 400,
+        "after": 400
+      },
+      "livingBands": {
+        "before": 5,
+        "after": 5
+      },
+      "worldBandRecords": {
+        "before": 5,
+        "after": 5
+      },
+      "contactMemories": {
+        "before": 2,
+        "after": 2
+      },
+      "frictionRecords": {
+        "before": 0,
+        "after": 0
+      },
+      "classification": "no_hidden_count_influence_to_remove_identical_outcome"
+    },
+    {
+      "scenario": "map1",
+      "seed": "s2",
+      "oldConditionFires": 0,
+      "dryMarginReadings": 240,
+      "meanSocialAccessRisk": {
+        "before": 0.3007,
+        "after": 0.3007,
+        "delta": 0
+      },
+      "population": {
+        "before": 154,
+        "after": 154
+      },
+      "residentialMoves": {
+        "before": 331,
+        "after": 331
+      },
+      "livingBands": {
+        "before": 5,
+        "after": 5
+      },
+      "worldBandRecords": {
+        "before": 5,
+        "after": 5
+      },
+      "contactMemories": {
+        "before": 0,
+        "after": 0
+      },
+      "frictionRecords": {
+        "before": 0,
+        "after": 0
+      },
+      "classification": "no_hidden_count_influence_to_remove_identical_outcome"
+    },
+    {
+      "scenario": "map2",
+      "seed": "s1",
+      "oldConditionFires": 1800,
+      "dryMarginReadings": 1367,
+      "meanSocialAccessRisk": {
+        "before": 0.3847,
+        "after": 0.3047,
+        "delta": -0.08
+      },
+      "population": {
+        "before": 209,
+        "after": 205
+      },
+      "residentialMoves": {
+        "before": 720,
+        "after": 692
+      },
+      "livingBands": {
+        "before": 9,
+        "after": 9
+      },
+      "worldBandRecords": {
+        "before": 9,
+        "after": 9
+      },
+      "contactMemories": {
+        "before": 0,
+        "after": 0
+      },
+      "frictionRecords": {
+        "before": 0,
+        "after": 0
+      },
+      "classification": "hidden_global_count_influence_removed_with_secondary_behavioural_consequence"
+    },
+    {
+      "scenario": "map2",
+      "seed": "s2",
+      "oldConditionFires": 1430,
+      "dryMarginReadings": 1367,
+      "meanSocialAccessRisk": {
+        "before": 0.3416,
+        "after": 0.2823,
+        "delta": -0.0593
+      },
+      "population": {
+        "before": 216,
+        "after": 204
+      },
+      "residentialMoves": {
+        "before": 676,
+        "after": 617
+      },
+      "livingBands": {
+        "before": 9,
+        "after": 9
+      },
+      "worldBandRecords": {
+        "before": 9,
+        "after": 9
+      },
+      "contactMemories": {
+        "before": 2,
+        "after": 2
+      },
+      "frictionRecords": {
+        "before": 0,
+        "after": 0
+      },
+      "classification": "hidden_global_count_influence_removed_with_secondary_behavioural_consequence"
+    }
+  ],
+  "caveats": [
+    "no outcome improvement is claimed",
+    "fingerprint parity is neither claimed nor possible",
+    "depletionSum read 0 on both arms and is reported as NOT MEASURED, not as zero: the field path used by this audit does not resolve"
+  ]
+}

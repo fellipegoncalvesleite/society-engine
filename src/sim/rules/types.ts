@@ -1534,6 +1534,7 @@ export interface DecisionContextSnapshot {
   readonly knownSettlementCount: number;
   readonly populationEstimate: number;
   readonly hungerPressure: number;
+  /** CORRECTION-35 — a record copy of the inert `Band.territorialPressure`. No reader. */
   readonly territorialPressure: number;
   readonly expansionPressure?: ExpansionPressure;
 }

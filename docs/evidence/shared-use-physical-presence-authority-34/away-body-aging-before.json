@@ -1,0 +1,264 @@
+{
+  "audit": "CORRECTION-34C-T1-COHORT-AGING",
+  "headline": "COHORT AGING TELEPORTS AWAY BODY",
+  "productionRule": "demography.ts:2532-2537 — `adults -= adultsAged; elders += adultsAged;` with population untouched",
+  "reconcilerBound": "reconcileExpeditionCommitment bounds committed workers by demography.workingAdults",
+  "construction": {
+    "population": 20,
+    "workingAdults": 6,
+    "elders": 6,
+    "dependents": 8,
+    "partyWorkers": 6,
+    "transition": "one adult becomes an elder; no death, no return, no route movement, no fission",
+    "reachability": "a party of 6 launches only at workingAdults >= 18 (deriveDepartableWorkers caps at workingAdults/3); the workforce then declines to 6 through ordinary demography, which is the CORRECTION-34A scenario. This fixture starts at that already-declined state."
+  },
+  "illustrativeCaseFromTheFinding": {
+    "construction": "population 20, workingAdults 10 -> 9, party 6",
+    "triggersReconciler": false,
+    "note": "reported as a TRUE NEGATIVE: 6 <= 9, so the reconciler does not fire. The finding's mechanism is real; its illustrative arithmetic is not the triggering case.",
+    "before": {
+      "label": "illustrative_after_aging",
+      "population": 20,
+      "workingAdults": 9,
+      "elders": 3,
+      "dependents": 8,
+      "residentialPeople": 14,
+      "residentialTile": "tile:74:111",
+      "awayPeople": 6,
+      "awayTiles": [
+        "tile:74:110"
+      ],
+      "partyWorkers": 6,
+      "partyComposition": {
+        "limited": 1,
+        "typical": 4,
+        "high": 1
+      },
+      "partyCompositionTotal": 6,
+      "partyPhase": "operating",
+      "represented": 20
+    },
+    "after": {
+      "label": "illustrative_after_reconciliation",
+      "population": 20,
+      "workingAdults": 9,
+      "elders": 3,
+      "dependents": 8,
+      "residentialPeople": 14,
+      "residentialTile": "tile:74:111",
+      "awayPeople": 6,
+      "awayTiles": [
+        "tile:74:110"
+      ],
+      "partyWorkers": 6,
+      "partyComposition": {
+        "limited": 1,
+        "typical": 4,
+        "high": 1
+      },
+      "partyCompositionTotal": 6,
+      "partyPhase": "operating",
+      "represented": 20
+    }
+  },
+  "snapshots": [
+    {
+      "label": "before_aging",
+      "population": 20,
+      "workingAdults": 6,
+      "elders": 6,
+      "dependents": 8,
+      "residentialPeople": 14,
+      "residentialTile": "tile:74:111",
+      "awayPeople": 6,
+      "awayTiles": [
+        "tile:74:110"
+      ],
+      "partyWorkers": 6,
+      "partyComposition": {
+        "limited": 1,
+        "typical": 4,
+        "high": 1
+      },
+      "partyCompositionTotal": 6,
+      "partyPhase": "operating",
+      "represented": 20
+    },
+    {
+      "label": "after_aging_before_reconciliation",
+      "population": 20,
+      "workingAdults": 5,
+      "elders": 7,
+      "dependents": 8,
+      "residentialPeople": 14,
+      "residentialTile": "tile:74:111",
+      "awayPeople": 6,
+      "awayTiles": [
+        "tile:74:110"
+      ],
+      "partyWorkers": 6,
+      "partyComposition": {
+        "limited": 1,
+        "typical": 4,
+        "high": 1
+      },
+      "partyCompositionTotal": 6,
+      "partyPhase": "operating",
+      "represented": 20
+    },
+    {
+      "label": "after_reconciliation",
+      "population": 20,
+      "workingAdults": 5,
+      "elders": 7,
+      "dependents": 8,
+      "residentialPeople": 15,
+      "residentialTile": "tile:74:111",
+      "awayPeople": 5,
+      "awayTiles": [
+        "tile:74:110"
+      ],
+      "partyWorkers": 5,
+      "partyComposition": {
+        "limited": 1,
+        "typical": 4,
+        "high": 0
+      },
+      "partyCompositionTotal": 5,
+      "partyPhase": "operating",
+      "represented": 20
+    }
+  ],
+  "physicalEventJustifyingLocationChange": null,
+  "analysis": {
+    "populationUnchangedAcrossAging": true,
+    "awayPeopleBefore": 6,
+    "awayPeopleAfter": 5,
+    "residentialBefore": 14,
+    "residentialAfter": 15,
+    "peopleRelocatedWithoutPhysicalEvent": 1,
+    "note": "a person left the distant party and appeared at the residence with no route, return, communication, death or transfer"
+  },
+  "T4_prepared_control": {
+    "scenario": "prepared party members are AT CAMP",
+    "before": {
+      "label": "prepared_before",
+      "population": 20,
+      "workingAdults": 5,
+      "elders": 7,
+      "dependents": 8,
+      "residentialPeople": 20,
+      "residentialTile": "tile:74:111",
+      "awayPeople": 0,
+      "awayTiles": [],
+      "partyWorkers": 6,
+      "partyComposition": {
+        "limited": 1,
+        "typical": 4,
+        "high": 1
+      },
+      "partyCompositionTotal": 6,
+      "partyPhase": "prepared",
+      "represented": 20
+    },
+    "after": {
+      "label": "prepared_after",
+      "population": 20,
+      "workingAdults": 5,
+      "elders": 7,
+      "dependents": 8,
+      "residentialPeople": 20,
+      "residentialTile": "tile:74:111",
+      "awayPeople": 0,
+      "awayTiles": [],
+      "partyWorkers": 5,
+      "partyComposition": {
+        "limited": 1,
+        "typical": 4,
+        "high": 0
+      },
+      "partyCompositionTotal": 5,
+      "partyPhase": "prepared",
+      "represented": 20
+    },
+    "physicallyDifferentFromAwayParty": true,
+    "why": "a prepared party has NOT departed (types.ts: 'labour committed at camp, not yet departed'); its people are already inside the residential remainder, so cancelling it moves nobody. Reducing an outbound/operating/returning party moves bodies that are standing somewhere else.",
+    "awayPresenceSourcesForPrepared": 0
+  },
+  "T2_demographic_death": {
+    "scenario": "T2_demographic_population_loss",
+    "beforeDeath": {
+      "label": "before_death",
+      "population": 20,
+      "workingAdults": 6,
+      "elders": 6,
+      "dependents": 8,
+      "residentialPeople": 14,
+      "residentialTile": "tile:74:111",
+      "awayPeople": 6,
+      "awayTiles": [
+        "tile:74:110"
+      ],
+      "partyWorkers": 6,
+      "partyComposition": {
+        "limited": 1,
+        "typical": 4,
+        "high": 1
+      },
+      "partyCompositionTotal": 6,
+      "partyPhase": "operating",
+      "represented": 20
+    },
+    "afterDeathBeforeReconciliation": {
+      "label": "after_death",
+      "population": 19,
+      "workingAdults": 5,
+      "elders": 6,
+      "dependents": 8,
+      "residentialPeople": 13,
+      "residentialTile": "tile:74:111",
+      "awayPeople": 6,
+      "awayTiles": [
+        "tile:74:110"
+      ],
+      "partyWorkers": 6,
+      "partyComposition": {
+        "limited": 1,
+        "typical": 4,
+        "high": 1
+      },
+      "partyCompositionTotal": 6,
+      "partyPhase": "operating",
+      "represented": 19
+    },
+    "afterReconciliation": {
+      "label": "after_reconciliation",
+      "population": 19,
+      "workingAdults": 5,
+      "elders": 6,
+      "dependents": 8,
+      "residentialPeople": 14,
+      "residentialTile": "tile:74:111",
+      "awayPeople": 5,
+      "awayTiles": [
+        "tile:74:110"
+      ],
+      "partyWorkers": 5,
+      "partyComposition": {
+        "limited": 1,
+        "typical": 4,
+        "high": 0
+      },
+      "partyCompositionTotal": 5,
+      "partyPhase": "operating",
+      "represented": 19
+    },
+    "doesTheArchitectureKnowWhereTheDeathOccurred": false,
+    "evidence": [
+      "demography.ts computes deaths as an aggregate net-rate quantity with no location field",
+      "demography.ts, viability.ts and demographicRenewal.ts contain ZERO references to expeditions",
+      "no death record carries a tile, a party id, or an at-camp/away flag"
+    ],
+    "note": "the party CAN be resized, but nothing in the model places the death inside it. Resizing on this evidence is an assumption, not a derivation."
+  }
+}

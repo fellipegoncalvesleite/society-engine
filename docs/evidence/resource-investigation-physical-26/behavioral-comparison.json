@@ -1,0 +1,277 @@
+{
+  "checkpoint": "CORRECTION-26",
+  "generatedFor": "behavioral comparison — before f947550 vs after the physical correction",
+  "generatedBy": "node scripts/investigationBeforeAfterAudit.mjs --merge",
+  "measurementSeam": "production audit-only decisionObserver (tick/advance.ts:213-215): the exact pre- and post-applyBandDecision band, nothing else in the window. Present unchanged at f947550, so both arms measure the identical seam.",
+  "terminology": {
+    "exactPendingIdentities": "updatedBand.pendingInvestigation.decisionId === decision.id, checked AT THE DECISION SEAM. Proves the selection created an exact pending identity. It does NOT prove a physical execution: nothing has executed at that instant.",
+    "laterPhysicalExecutions": "terminal ring entries carrying an executionId — a party was staffed and walked a route.",
+    "laterNamedNonExecutions": "terminal ring entries with no executionId — the outcome names why nobody went.",
+    "stillPendingAtMeasurementEnd": "selected in the final season, so the trip day had not arrived when measurement stopped."
+  },
+  "chain": {
+    "before": {
+      "selectedInvestigations": 192,
+      "exactPendingIdentities": 0,
+      "laterPhysicalExecutions": 0,
+      "laterNamedNonExecutions": 0,
+      "stillPendingAtMeasurementEnd": 0,
+      "targetAreaKnowledgeGainedAtSelection": 176,
+      "targetAreaKnowledgeLostAtSelection": 18,
+      "shareOfSelectionsThatGainedTargetAreaKnowledge": 0.9166666666666666
+    },
+    "after": {
+      "selectedInvestigations": 234,
+      "exactPendingIdentities": 234,
+      "laterPhysicalExecutions": 97,
+      "laterNamedNonExecutions": 132,
+      "stillPendingAtMeasurementEnd": 5,
+      "targetAreaKnowledgeGainedAtSelection": 0,
+      "targetAreaKnowledgeLostAtSelection": 2,
+      "shareOfSelectionsThatGainedTargetAreaKnowledge": 0
+    }
+  },
+  "arms": {
+    "before": {
+      "commit": "f94755047b2ea2a47b9453f3917e8eaf67816ca3",
+      "totals": {
+        "selections": 192,
+        "targetAreaChangedAtSelection": 181,
+        "targetAreaKnowledgeGainedAtSelection": 176,
+        "targetAreaKnowledgeLostAtSelection": 18,
+        "selectionsWithPendingIdentity": 0,
+        "executionsObserved": 0,
+        "namedNonExecutions": 0,
+        "stillPendingAtMeasurementEnd": 0
+      },
+      "runs": [
+        {
+          "label": "before",
+          "scenario": "map1",
+          "seed": "s1",
+          "years": 12,
+          "selections": 25,
+          "targetAreaChangedAtSelection": 25,
+          "targetAreaKnowledgeGainedAtSelection": 25,
+          "targetAreaKnowledgeLostAtSelection": 2,
+          "selectionsWithPendingIdentity": 0,
+          "executionsObserved": 0,
+          "namedNonExecutions": 0,
+          "stillPendingAtMeasurementEnd": 0
+        },
+        {
+          "label": "before",
+          "scenario": "map1",
+          "seed": "s2",
+          "years": 12,
+          "selections": 29,
+          "targetAreaChangedAtSelection": 24,
+          "targetAreaKnowledgeGainedAtSelection": 19,
+          "targetAreaKnowledgeLostAtSelection": 5,
+          "selectionsWithPendingIdentity": 0,
+          "executionsObserved": 0,
+          "namedNonExecutions": 0,
+          "stillPendingAtMeasurementEnd": 0
+        },
+        {
+          "label": "before",
+          "scenario": "map2",
+          "seed": "s1",
+          "years": 12,
+          "selections": 74,
+          "targetAreaChangedAtSelection": 73,
+          "targetAreaKnowledgeGainedAtSelection": 73,
+          "targetAreaKnowledgeLostAtSelection": 3,
+          "selectionsWithPendingIdentity": 0,
+          "executionsObserved": 0,
+          "namedNonExecutions": 0,
+          "stillPendingAtMeasurementEnd": 0
+        },
+        {
+          "label": "before",
+          "scenario": "map2",
+          "seed": "s2",
+          "years": 12,
+          "selections": 64,
+          "targetAreaChangedAtSelection": 59,
+          "targetAreaKnowledgeGainedAtSelection": 59,
+          "targetAreaKnowledgeLostAtSelection": 8,
+          "selectionsWithPendingIdentity": 0,
+          "executionsObserved": 0,
+          "namedNonExecutions": 0,
+          "stillPendingAtMeasurementEnd": 0
+        }
+      ]
+    },
+    "after": {
+      "commit": "checkpoint/resource-investigation-physical-26",
+      "totals": {
+        "selections": 234,
+        "targetAreaChangedAtSelection": 2,
+        "targetAreaKnowledgeGainedAtSelection": 0,
+        "targetAreaKnowledgeLostAtSelection": 2,
+        "selectionsWithPendingIdentity": 234,
+        "executionsObserved": 97,
+        "namedNonExecutions": 132,
+        "stillPendingAtMeasurementEnd": 5
+      },
+      "runs": [
+        {
+          "label": "after",
+          "scenario": "map1",
+          "seed": "s1",
+          "years": 12,
+          "selections": 51,
+          "targetAreaChangedAtSelection": 0,
+          "targetAreaKnowledgeGainedAtSelection": 0,
+          "targetAreaKnowledgeLostAtSelection": 0,
+          "selectionsWithPendingIdentity": 51,
+          "executionsObserved": 26,
+          "namedNonExecutions": 24,
+          "stillPendingAtMeasurementEnd": 1
+        },
+        {
+          "label": "after",
+          "scenario": "map1",
+          "seed": "s2",
+          "years": 12,
+          "selections": 27,
+          "targetAreaChangedAtSelection": 1,
+          "targetAreaKnowledgeGainedAtSelection": 0,
+          "targetAreaKnowledgeLostAtSelection": 1,
+          "selectionsWithPendingIdentity": 27,
+          "executionsObserved": 8,
+          "namedNonExecutions": 18,
+          "stillPendingAtMeasurementEnd": 1
+        },
+        {
+          "label": "after",
+          "scenario": "map2",
+          "seed": "s1",
+          "years": 12,
+          "selections": 80,
+          "targetAreaChangedAtSelection": 1,
+          "targetAreaKnowledgeGainedAtSelection": 0,
+          "targetAreaKnowledgeLostAtSelection": 1,
+          "selectionsWithPendingIdentity": 80,
+          "executionsObserved": 39,
+          "namedNonExecutions": 40,
+          "stillPendingAtMeasurementEnd": 1
+        },
+        {
+          "label": "after",
+          "scenario": "map2",
+          "seed": "s2",
+          "years": 12,
+          "selections": 76,
+          "targetAreaChangedAtSelection": 0,
+          "targetAreaKnowledgeGainedAtSelection": 0,
+          "targetAreaKnowledgeLostAtSelection": 0,
+          "selectionsWithPendingIdentity": 76,
+          "executionsObserved": 24,
+          "namedNonExecutions": 50,
+          "stillPendingAtMeasurementEnd": 2
+        }
+      ]
+    }
+  },
+  "residualAfterChanges": {
+    "knowledgeGained": 0,
+    "knowledgeLost": 2,
+    "note": "Any residual after-arm change is knowledge LOST (a ring tile forgotten under bounded retention), which is the opposite of the defect. The metric is directional for that reason."
+  },
+  "authorityLedger": {
+    "note": "CLOSURE-25's own audit rerun unmodified with --out redirected; the -25 evidence file was not touched.",
+    "before_25": {
+      "resource_scout": 51,
+      "logistical_probe": 78,
+      "same_day_water_check": 1101,
+      "same_day_resource_trip": 31836,
+      "distant_patch_verification": 6,
+      "route_reconnaissance": 11,
+      "frontier_exploration": 95,
+      "distant_physical_gathering": 92,
+      "expedition_task_camp": 103,
+      "camp_movement_temporary_record": 129,
+      "frontier_verification_temporary_use": 0,
+      "returned_physical_food_receipt": 8850,
+      "same_day_information_trip": 1
+    },
+    "after_26": {
+      "resource_scout": 79,
+      "logistical_probe": 91,
+      "same_day_water_check": 1074,
+      "same_day_resource_trip": 31824,
+      "distant_patch_verification": 9,
+      "route_reconnaissance": 6,
+      "frontier_exploration": 95,
+      "distant_physical_gathering": 105,
+      "expedition_task_camp": 113,
+      "camp_movement_temporary_record": 0,
+      "frontier_verification_temporary_use": 0,
+      "returned_physical_food_receipt": 8777,
+      "same_day_information_trip": 7
+    },
+    "campMovementTemporaryRecord": {
+      "before": 129,
+      "after": 0,
+      "expeditionTaskCampBefore": 103,
+      "expeditionTaskCampAfter": 113
+    }
+  },
+  "naturalOccurrence": {
+    "totals": {
+      "selectedInvestigations": 343,
+      "resolved": 340,
+      "stillPendingAtEnd": 3,
+      "byOutcome": {
+        "executed_and_returned": 139,
+        "route_unavailable": 54,
+        "arrival_failed": 0,
+        "beyond_same_day_reach": 147,
+        "insufficient_labor": 0,
+        "destination_blocked": 0,
+        "target_no_longer_valid": 0,
+        "band_moved_before_departure": 0,
+        "band_no_longer_active": 0,
+        "superseded": 0,
+        "expired_before_execution": 0
+      },
+      "byAction": {
+        "resource_scout": 158,
+        "logistical_probe": 185
+      },
+      "targetMemoryChangesWithoutExecution": 0,
+      "targetMemoryChangesAfterExecution": 73,
+      "investigationFoodReceipts": 0,
+      "investigationConsumedByEconomy": 0,
+      "taskPartyRecords": 139,
+      "taskPartyRecordsWithoutExecution": 0,
+      "maxPendingPerBand": 1,
+      "maxOutcomeRingPerBand": 6,
+      "duplicateExecutionIds": 0
+    },
+    "invariants": {
+      "everySelectionResolvedOrStillPending": true,
+      "noTargetMemoryChangeWithoutExecution": true,
+      "noTaskPartyRecordWithoutExecution": true,
+      "noInvestigationFoodReceipt": true,
+      "pendingCapHeld": true,
+      "outcomeRingBounded": true,
+      "noDuplicateExecution": true
+    }
+  },
+  "fixtures": {
+    "summary": {
+      "total": 37,
+      "passed": 37,
+      "failed": 0
+    }
+  },
+  "instrumentCorrectionsRecorded": [
+    "A first version of this probe compared band state across a whole advanceWorldByDays(world,1) step and reported 41/234 target-area changes on the corrected tree. That window contains a day of daily actions, so ordinary subsistence trips and returning expeditions were attributed to the decision. Moved to the decisionObserver seam: 2/234, all of them losses.",
+    "A first version of the metric was symmetric (any difference counted as a change). Free distant knowledge is a GAIN, so the metric is now directional and losses are reported separately.",
+    "The first version of fixture P13 compared only pendingInvestigation / recentInvestigationOutcomes / temporaryTaskParties and PASSED while step-mode invariance was genuinely broken. Observation timestamps were added; a negative control (bug reintroduced) now fails 3/3.",
+    "The field now named selectionsWithPendingIdentity was previously named selectionsWithExecutionIdentity. It checks a pending record created at selection and never proved an execution; the name overstated it and is corrected here."
+  ]
+}

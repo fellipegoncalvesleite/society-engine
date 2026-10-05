@@ -1,0 +1,1949 @@
+{
+  "instrument": "FIVE HISTORICAL RECEIPT/SUPPORT CAUSAL TRACES",
+  "sourceReplay": "docs/evidence/correction24c/production-reader-replay-40y.json",
+  "requiredCases": [
+    {
+      "scenario": "site_D_aquatic",
+      "seed": "s2"
+    },
+    {
+      "scenario": "site_D_aquatic",
+      "seed": "s4"
+    },
+    {
+      "scenario": "site_E_hills",
+      "seed": "s1"
+    },
+    {
+      "scenario": "site_E_hills",
+      "seed": "s3"
+    },
+    {
+      "scenario": "site_E_hills",
+      "seed": "s4"
+    }
+  ],
+  "requiredTraceCount": 5,
+  "completeRequiredTraces": 5,
+  "additionalNaturalReceiptDivergences": 3,
+  "verdict": "PASS",
+  "requiredTraces": [
+    {
+      "scenario": "site_D_aquatic",
+      "seed": "s2",
+      "recordEventId": "exploration-record:band:custom:0:expedition:band:custom:0:96:frontier_exploration:34d813df:tile:122:117:100",
+      "tileId": "tile:122:117",
+      "expeditionId": "expedition:band:custom:0:96:frontier_exploration:34d813df",
+      "returnDay": 100,
+      "suppressedReturnWrite": {
+        "recordEventId": "exploration-record:band:custom:0:expedition:band:custom:0:96:frontier_exploration:34d813df:tile:122:117:100",
+        "tileId": "tile:122:117",
+        "expeditionId": "expedition:band:custom:0:96:frontier_exploration:34d813df",
+        "returnDay": 100,
+        "newOrRefreshed": "new"
+      },
+      "firstReader": {
+        "readerFamily": "camp_movement",
+        "productionFunction": "deriveCampMovementDecisionSupport",
+        "invocationDay": 180,
+        "consultationRole": "pressure_relief_candidate"
+      },
+      "readerDay": 180,
+      "readerOutput": {
+        "control": {
+          "verdict": "no_camp_movement_influence",
+          "ranking": "",
+          "selectedActionId": "decision:band:custom:0:2",
+          "selectedActionKind": "stay",
+          "selectedTarget": "tile:120:116"
+        },
+        "counterfactual": {
+          "verdict": "no_camp_movement_influence",
+          "ranking": "",
+          "selectedActionId": "decision:band:custom:0:2",
+          "selectedActionKind": "stay",
+          "selectedTarget": "tile:120:116"
+        }
+      },
+      "firstChangedReader": {
+        "readerFamily": "movement_destination",
+        "productionFunction": "deriveFrontierDispersalPressure/getFrontierCandidates",
+        "invocationDay": 180,
+        "consultationRole": "frontier_known_neighbor_boundary+frontier_candidate",
+        "outputChanged": true,
+        "selectedOutputChanged": false,
+        "control": {
+          "verdict": "frontier_candidate:tile:122:116",
+          "ranking": "tile:122:116:0.6637|tile:119:118:0.6013|tile:118:115:0.5882|tile:121:115:0.5674|tile:119:114:0.5622|tile:120:114:0.5538|tile:126:117:0.4537|tile:120:118:0.3669",
+          "selectedActionId": "decision:band:custom:0:2",
+          "selectedActionKind": "stay",
+          "selectedTarget": "tile:120:116"
+        },
+        "counterfactual": {
+          "verdict": "frontier_candidate:tile:122:116",
+          "ranking": "tile:122:116:0.7487|tile:119:118:0.6013|tile:118:115:0.5882|tile:121:115:0.5674|tile:119:114:0.5622|tile:120:114:0.5538|tile:126:117:0.4537|tile:123:117:0.4376",
+          "selectedActionId": "decision:band:custom:0:2",
+          "selectedActionKind": "stay",
+          "selectedTarget": "tile:120:116"
+        }
+      },
+      "actionReader": null,
+      "actionId": "activity-action:daily-trip:band:custom:0:552:plant_gathering_group:tile:119:117",
+      "actionKind": "plant_gathering_group",
+      "target": "tile:119:117",
+      "workers": 4,
+      "route": [
+        "tile:119:116"
+      ],
+      "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:552:plant_gathering_group:tile:119:117:target_found",
+      "actionDifferences": {
+        "movement": null,
+        "camp": null,
+        "resource": {
+          "day": 552,
+          "control": [
+            {
+              "activityActionId": "activity-action:daily-trip:band:custom:0:552:plant_gathering_group:tile:119:117",
+              "bandId": "band:custom:0",
+              "day": 552,
+              "activityKind": "plant_gathering_group",
+              "selectedPatchId": "patch:tile:119:117:generic_plant_food",
+              "selectedTileId": "tile:119:117",
+              "tripOrTaskId": "daily-trip:band:custom:0:552:plant_gathering_group:tile:119:117",
+              "workers": 4,
+              "route": [
+                "tile:119:116"
+              ],
+              "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:552:plant_gathering_group:tile:119:117:target_found",
+              "receiptId": "receipt:daily-trip:band:custom:0:552:plant_gathering_group:tile:119:117",
+              "usableSupportReturned": 0.0242
+            }
+          ],
+          "counterfactual": [
+            {
+              "activityActionId": "activity-action:daily-trip:band:custom:0:552:plant_gathering_group:tile:119:118",
+              "bandId": "band:custom:0",
+              "day": 552,
+              "activityKind": "plant_gathering_group",
+              "selectedPatchId": "patch:tile:119:118:fallback_food",
+              "selectedTileId": "tile:119:118",
+              "tripOrTaskId": "daily-trip:band:custom:0:552:plant_gathering_group:tile:119:118",
+              "workers": 4,
+              "route": [
+                "tile:119:116"
+              ],
+              "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:552:plant_gathering_group:tile:119:118:failed_due_to_distance",
+              "receiptId": "receipt:daily-trip:band:custom:0:552:plant_gathering_group:tile:119:118",
+              "usableSupportReturned": 0
+            }
+          ]
+        },
+        "fission": null
+      },
+      "receiptDifference": {
+        "index": 452,
+        "day": 552,
+        "control": {
+          "day": 552,
+          "totalReceipts": 0.0326,
+          "totalSupport": 0.8,
+          "rows": [
+            {
+              "bandId": "band:custom:0",
+              "receipts": 0.0326,
+              "support": 0.8
+            }
+          ]
+        },
+        "counterfactual": {
+          "day": 552,
+          "totalReceipts": 0.0084,
+          "totalSupport": 0.8,
+          "rows": [
+            {
+              "bandId": "band:custom:0",
+              "receipts": 0.0084,
+              "support": 0.8
+            }
+          ]
+        }
+      },
+      "supportDifference": {
+        "day": 552,
+        "control": 0.8,
+        "counterfactual": 0.8
+      },
+      "typedPhysicalMechanism": "different_resource_trip",
+      "readerChain": [
+        {
+          "readerFamily": "camp_movement",
+          "productionFunction": "deriveCampMovementDecisionSupport",
+          "invocationDay": 180,
+          "consultationRole": "pressure_relief_candidate",
+          "outputChanged": false,
+          "selectedOutputChanged": false,
+          "control": {
+            "verdict": "no_camp_movement_influence",
+            "ranking": "",
+            "selectedActionId": "decision:band:custom:0:2",
+            "selectedActionKind": "stay",
+            "selectedTarget": "tile:120:116"
+          },
+          "counterfactual": {
+            "verdict": "no_camp_movement_influence",
+            "ranking": "",
+            "selectedActionId": "decision:band:custom:0:2",
+            "selectedActionKind": "stay",
+            "selectedTarget": "tile:120:116"
+          }
+        },
+        {
+          "readerFamily": "movement_destination",
+          "productionFunction": "deriveCarryingCapacity/deriveKnownUnusedHabitat",
+          "invocationDay": 180,
+          "consultationRole": "destination_candidate",
+          "outputChanged": false,
+          "selectedOutputChanged": false,
+          "control": {
+            "verdict": "remembered_underused:tile:120:118:rejected",
+            "ranking": "tile:120:118|0.2700|0.3700",
+            "selectedActionId": "decision:band:custom:0:2",
+            "selectedActionKind": "stay",
+            "selectedTarget": "tile:120:116"
+          },
+          "counterfactual": {
+            "verdict": "remembered_underused:tile:120:118:rejected",
+            "ranking": "tile:120:118|0.2700|0.3700",
+            "selectedActionId": "decision:band:custom:0:2",
+            "selectedActionKind": "stay",
+            "selectedTarget": "tile:120:116"
+          }
+        },
+        {
+          "readerFamily": "movement_destination",
+          "productionFunction": "deriveFrontierDispersalPressure/getFrontierCandidates",
+          "invocationDay": 180,
+          "consultationRole": "frontier_known_neighbor_boundary+frontier_candidate",
+          "outputChanged": true,
+          "selectedOutputChanged": false,
+          "control": {
+            "verdict": "frontier_candidate:tile:122:116",
+            "ranking": "tile:122:116:0.6637|tile:119:118:0.6013|tile:118:115:0.5882|tile:121:115:0.5674|tile:119:114:0.5622|tile:120:114:0.5538|tile:126:117:0.4537|tile:120:118:0.3669",
+            "selectedActionId": "decision:band:custom:0:2",
+            "selectedActionKind": "stay",
+            "selectedTarget": "tile:120:116"
+          },
+          "counterfactual": {
+            "verdict": "frontier_candidate:tile:122:116",
+            "ranking": "tile:122:116:0.7487|tile:119:118:0.6013|tile:118:115:0.5882|tile:121:115:0.5674|tile:119:114:0.5622|tile:120:114:0.5538|tile:126:117:0.4537|tile:123:117:0.4376",
+            "selectedActionId": "decision:band:custom:0:2",
+            "selectedActionKind": "stay",
+            "selectedTarget": "tile:120:116"
+          }
+        }
+      ]
+    },
+    {
+      "scenario": "site_D_aquatic",
+      "seed": "s4",
+      "recordEventId": "exploration-record:band:custom:0:expedition:band:custom:0:96:frontier_exploration:34d813df:tile:122:117:100",
+      "tileId": "tile:122:117",
+      "expeditionId": "expedition:band:custom:0:96:frontier_exploration:34d813df",
+      "returnDay": 100,
+      "suppressedReturnWrite": {
+        "recordEventId": "exploration-record:band:custom:0:expedition:band:custom:0:96:frontier_exploration:34d813df:tile:122:117:100",
+        "tileId": "tile:122:117",
+        "expeditionId": "expedition:band:custom:0:96:frontier_exploration:34d813df",
+        "returnDay": 100,
+        "newOrRefreshed": "new"
+      },
+      "firstReader": {
+        "readerFamily": "movement_destination",
+        "productionFunction": "deriveCarryingCapacity/deriveKnownUnusedHabitat",
+        "invocationDay": 180,
+        "consultationRole": "destination_candidate"
+      },
+      "readerDay": 180,
+      "readerOutput": {
+        "control": {
+          "verdict": "remembered_underused:tile:120:118:rejected",
+          "ranking": "tile:120:118|0.2700|0.3700",
+          "selectedActionId": "decision:band:custom:0:2",
+          "selectedActionKind": "stay",
+          "selectedTarget": "tile:120:116"
+        },
+        "counterfactual": {
+          "verdict": "remembered_underused:tile:120:118:rejected",
+          "ranking": "tile:120:118|0.2700|0.3700",
+          "selectedActionId": "decision:band:custom:0:2",
+          "selectedActionKind": "stay",
+          "selectedTarget": "tile:120:116"
+        }
+      },
+      "firstChangedReader": {
+        "readerFamily": "movement_destination",
+        "productionFunction": "deriveFrontierDispersalPressure/getFrontierCandidates",
+        "invocationDay": 180,
+        "consultationRole": "frontier_known_neighbor_boundary+frontier_candidate",
+        "outputChanged": true,
+        "selectedOutputChanged": false,
+        "control": {
+          "verdict": "frontier_candidate:tile:122:116",
+          "ranking": "tile:122:116:0.6637|tile:119:118:0.6013|tile:118:115:0.5882|tile:121:115:0.5674|tile:119:114:0.5622|tile:120:114:0.5538|tile:126:117:0.4537|tile:120:118:0.3669",
+          "selectedActionId": "decision:band:custom:0:2",
+          "selectedActionKind": "stay",
+          "selectedTarget": "tile:120:116"
+        },
+        "counterfactual": {
+          "verdict": "frontier_candidate:tile:122:116",
+          "ranking": "tile:122:116:0.7487|tile:119:118:0.6013|tile:118:115:0.5882|tile:121:115:0.5674|tile:119:114:0.5622|tile:120:114:0.5538|tile:126:117:0.4537|tile:123:117:0.4376",
+          "selectedActionId": "decision:band:custom:0:2",
+          "selectedActionKind": "stay",
+          "selectedTarget": "tile:120:116"
+        }
+      },
+      "actionReader": null,
+      "actionId": "activity-action:daily-trip:band:custom:0:552:plant_gathering_group:tile:119:117",
+      "actionKind": "plant_gathering_group",
+      "target": "tile:119:117",
+      "workers": 4,
+      "route": [
+        "tile:119:116"
+      ],
+      "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:552:plant_gathering_group:tile:119:117:target_found",
+      "actionDifferences": {
+        "movement": null,
+        "camp": null,
+        "resource": {
+          "day": 552,
+          "control": [
+            {
+              "activityActionId": "activity-action:daily-trip:band:custom:0:552:plant_gathering_group:tile:119:117",
+              "bandId": "band:custom:0",
+              "day": 552,
+              "activityKind": "plant_gathering_group",
+              "selectedPatchId": "patch:tile:119:117:generic_plant_food",
+              "selectedTileId": "tile:119:117",
+              "tripOrTaskId": "daily-trip:band:custom:0:552:plant_gathering_group:tile:119:117",
+              "workers": 4,
+              "route": [
+                "tile:119:116"
+              ],
+              "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:552:plant_gathering_group:tile:119:117:target_found",
+              "receiptId": "receipt:daily-trip:band:custom:0:552:plant_gathering_group:tile:119:117",
+              "usableSupportReturned": 0.0242
+            }
+          ],
+          "counterfactual": [
+            {
+              "activityActionId": "activity-action:daily-trip:band:custom:0:552:plant_gathering_group:tile:119:118",
+              "bandId": "band:custom:0",
+              "day": 552,
+              "activityKind": "plant_gathering_group",
+              "selectedPatchId": "patch:tile:119:118:fallback_food",
+              "selectedTileId": "tile:119:118",
+              "tripOrTaskId": "daily-trip:band:custom:0:552:plant_gathering_group:tile:119:118",
+              "workers": 4,
+              "route": [
+                "tile:119:116"
+              ],
+              "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:552:plant_gathering_group:tile:119:118:failed_due_to_distance",
+              "receiptId": "receipt:daily-trip:band:custom:0:552:plant_gathering_group:tile:119:118",
+              "usableSupportReturned": 0
+            }
+          ]
+        },
+        "fission": null
+      },
+      "receiptDifference": {
+        "index": 452,
+        "day": 552,
+        "control": {
+          "day": 552,
+          "totalReceipts": 0.0326,
+          "totalSupport": 0.8,
+          "rows": [
+            {
+              "bandId": "band:custom:0",
+              "receipts": 0.0326,
+              "support": 0.8
+            }
+          ]
+        },
+        "counterfactual": {
+          "day": 552,
+          "totalReceipts": 0.0084,
+          "totalSupport": 0.8,
+          "rows": [
+            {
+              "bandId": "band:custom:0",
+              "receipts": 0.0084,
+              "support": 0.8
+            }
+          ]
+        }
+      },
+      "supportDifference": {
+        "day": 552,
+        "control": 0.8,
+        "counterfactual": 0.8
+      },
+      "typedPhysicalMechanism": "different_resource_trip",
+      "readerChain": [
+        {
+          "readerFamily": "movement_destination",
+          "productionFunction": "deriveCarryingCapacity/deriveKnownUnusedHabitat",
+          "invocationDay": 180,
+          "consultationRole": "destination_candidate",
+          "outputChanged": false,
+          "selectedOutputChanged": false,
+          "control": {
+            "verdict": "remembered_underused:tile:120:118:rejected",
+            "ranking": "tile:120:118|0.2700|0.3700",
+            "selectedActionId": "decision:band:custom:0:2",
+            "selectedActionKind": "stay",
+            "selectedTarget": "tile:120:116"
+          },
+          "counterfactual": {
+            "verdict": "remembered_underused:tile:120:118:rejected",
+            "ranking": "tile:120:118|0.2700|0.3700",
+            "selectedActionId": "decision:band:custom:0:2",
+            "selectedActionKind": "stay",
+            "selectedTarget": "tile:120:116"
+          }
+        },
+        {
+          "readerFamily": "movement_destination",
+          "productionFunction": "deriveFrontierDispersalPressure/getFrontierCandidates",
+          "invocationDay": 180,
+          "consultationRole": "frontier_known_neighbor_boundary+frontier_candidate",
+          "outputChanged": true,
+          "selectedOutputChanged": false,
+          "control": {
+            "verdict": "frontier_candidate:tile:122:116",
+            "ranking": "tile:122:116:0.6637|tile:119:118:0.6013|tile:118:115:0.5882|tile:121:115:0.5674|tile:119:114:0.5622|tile:120:114:0.5538|tile:126:117:0.4537|tile:120:118:0.3669",
+            "selectedActionId": "decision:band:custom:0:2",
+            "selectedActionKind": "stay",
+            "selectedTarget": "tile:120:116"
+          },
+          "counterfactual": {
+            "verdict": "frontier_candidate:tile:122:116",
+            "ranking": "tile:122:116:0.7487|tile:119:118:0.6013|tile:118:115:0.5882|tile:121:115:0.5674|tile:119:114:0.5622|tile:120:114:0.5538|tile:126:117:0.4537|tile:123:117:0.4376",
+            "selectedActionId": "decision:band:custom:0:2",
+            "selectedActionKind": "stay",
+            "selectedTarget": "tile:120:116"
+          }
+        },
+        {
+          "readerFamily": "camp_movement",
+          "productionFunction": "deriveCampMovementDecisionSupport",
+          "invocationDay": 270,
+          "consultationRole": "pressure_relief_candidate",
+          "outputChanged": false,
+          "selectedOutputChanged": false,
+          "control": {
+            "verdict": "no_camp_movement_influence",
+            "ranking": "",
+            "selectedActionId": "decision:band:custom:0:3",
+            "selectedActionKind": "move_to_tile",
+            "selectedTarget": "tile:119:116"
+          },
+          "counterfactual": {
+            "verdict": "no_camp_movement_influence",
+            "ranking": "",
+            "selectedActionId": "decision:band:custom:0:3",
+            "selectedActionKind": "move_to_tile",
+            "selectedTarget": "tile:119:116"
+          }
+        }
+      ]
+    },
+    {
+      "scenario": "site_E_hills",
+      "seed": "s1",
+      "recordEventId": "exploration-record:band:custom:0:expedition:band:custom:0:96:frontier_exploration:1b466dbc:tile:137:41:104",
+      "tileId": "tile:137:41",
+      "expeditionId": "expedition:band:custom:0:96:frontier_exploration:1b466dbc",
+      "returnDay": 104,
+      "suppressedReturnWrite": {
+        "recordEventId": "exploration-record:band:custom:0:expedition:band:custom:0:96:frontier_exploration:1b466dbc:tile:137:41:104",
+        "tileId": "tile:137:41",
+        "expeditionId": "expedition:band:custom:0:96:frontier_exploration:1b466dbc",
+        "returnDay": 104,
+        "newOrRefreshed": "refreshed"
+      },
+      "firstReader": {
+        "readerFamily": "movement_destination",
+        "productionFunction": "deriveCarryingCapacity/deriveKnownUnusedHabitat",
+        "invocationDay": 180,
+        "consultationRole": "destination_candidate"
+      },
+      "readerDay": 180,
+      "readerOutput": {
+        "control": {
+          "verdict": "known_unused:tile:137:41:rejected",
+          "ranking": "tile:137:41|0.2800|0.4200",
+          "selectedActionId": "decision:band:custom:0:2",
+          "selectedActionKind": "move_to_tile",
+          "selectedTarget": "tile:140:41"
+        },
+        "counterfactual": {
+          "verdict": "known_unused:tile:136:41:rejected",
+          "ranking": "tile:136:41|0.2200|0.4200",
+          "selectedActionId": "decision:band:custom:0:2",
+          "selectedActionKind": "move_to_tile",
+          "selectedTarget": "tile:140:41"
+        }
+      },
+      "firstChangedReader": {
+        "readerFamily": "movement_destination",
+        "productionFunction": "deriveCarryingCapacity/deriveKnownUnusedHabitat",
+        "invocationDay": 180,
+        "consultationRole": "destination_candidate",
+        "outputChanged": true,
+        "selectedOutputChanged": false,
+        "control": {
+          "verdict": "known_unused:tile:137:41:rejected",
+          "ranking": "tile:137:41|0.2800|0.4200",
+          "selectedActionId": "decision:band:custom:0:2",
+          "selectedActionKind": "move_to_tile",
+          "selectedTarget": "tile:140:41"
+        },
+        "counterfactual": {
+          "verdict": "known_unused:tile:136:41:rejected",
+          "ranking": "tile:136:41|0.2200|0.4200",
+          "selectedActionId": "decision:band:custom:0:2",
+          "selectedActionKind": "move_to_tile",
+          "selectedTarget": "tile:140:41"
+        }
+      },
+      "actionReader": null,
+      "actionId": "camp-action:decision:band:custom:0:7:camp-shift:band:custom:0:7:tile:137:41:tile:137:43",
+      "actionKind": "local_shift",
+      "target": "tile:137:43",
+      "workers": null,
+      "route": null,
+      "physicalOutcomeId": "camp-shift:band:custom:0:7:tile:137:41:tile:137:43",
+      "actionDifferences": {
+        "movement": {
+          "day": 630,
+          "control": [
+            {
+              "decisionId": "decision:band:custom:0:7",
+              "bandId": "band:custom:0",
+              "day": 630,
+              "actionKind": "move_to_tile",
+              "targetTileId": "tile:137:43",
+              "movementRecordId": "movement-record:band:custom:0:7:decision:band:custom:0:7",
+              "positionBefore": "tile:137:41",
+              "positionAfter": "tile:137:43"
+            }
+          ],
+          "counterfactual": []
+        },
+        "camp": {
+          "day": 630,
+          "control": [
+            {
+              "campActionId": "camp-action:decision:band:custom:0:7:camp-shift:band:custom:0:7:tile:137:41:tile:137:43",
+              "bandId": "band:custom:0",
+              "day": 630,
+              "campActionKind": "local_shift",
+              "targetTileId": "tile:137:43",
+              "campRecordId": "camp-shift:band:custom:0:7:tile:137:41:tile:137:43",
+              "positionBefore": "tile:137:41",
+              "positionAfter": "tile:137:43"
+            }
+          ],
+          "counterfactual": [
+            {
+              "campActionId": "camp-action:decision:band:custom:0:7:temporary-task-camp:band:custom:0:7:tile:136:41",
+              "bandId": "band:custom:0",
+              "day": 630,
+              "campActionKind": "temporary_task_camp",
+              "targetTileId": "tile:136:41",
+              "campRecordId": "temporary-task-camp:band:custom:0:7:tile:136:41",
+              "positionBefore": "tile:137:41",
+              "positionAfter": "tile:137:41"
+            }
+          ]
+        },
+        "resource": {
+          "day": 636,
+          "control": [
+            {
+              "activityActionId": "activity-action:daily-trip:band:custom:0:636:plant_gathering_group:tile:137:41",
+              "bandId": "band:custom:0",
+              "day": 636,
+              "activityKind": "plant_gathering_group",
+              "selectedPatchId": "patch:tile:137:41:generic_plant_food",
+              "selectedTileId": "tile:137:41",
+              "tripOrTaskId": "daily-trip:band:custom:0:636:plant_gathering_group:tile:137:41",
+              "workers": 4,
+              "route": [
+                "tile:137:43",
+                "tile:137:42",
+                "tile:137:41"
+              ],
+              "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:636:plant_gathering_group:tile:137:41:partial_success",
+              "receiptId": "receipt:daily-trip:band:custom:0:636:plant_gathering_group:tile:137:41",
+              "usableSupportReturned": 0.0099
+            }
+          ],
+          "counterfactual": [
+            {
+              "activityActionId": "activity-action:daily-trip:band:custom:0:636:plant_gathering_group:tile:135:41",
+              "bandId": "band:custom:0",
+              "day": 636,
+              "activityKind": "plant_gathering_group",
+              "selectedPatchId": "patch:tile:135:41:fallback_food",
+              "selectedTileId": "tile:135:41",
+              "tripOrTaskId": "daily-trip:band:custom:0:636:plant_gathering_group:tile:135:41",
+              "workers": 4,
+              "route": [
+                "tile:137:41",
+                "tile:136:41",
+                "tile:135:41"
+              ],
+              "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:636:plant_gathering_group:tile:135:41:target_not_found",
+              "receiptId": "receipt:daily-trip:band:custom:0:636:plant_gathering_group:tile:135:41",
+              "usableSupportReturned": 0
+            }
+          ]
+        },
+        "fission": null
+      },
+      "receiptDifference": {
+        "index": 532,
+        "day": 636,
+        "control": {
+          "day": 636,
+          "totalReceipts": 0.0099,
+          "totalSupport": 0.09,
+          "rows": [
+            {
+              "bandId": "band:custom:0",
+              "receipts": 0.0099,
+              "support": 0.09
+            }
+          ]
+        },
+        "counterfactual": {
+          "day": 636,
+          "totalReceipts": 0.0189,
+          "totalSupport": 0.09,
+          "rows": [
+            {
+              "bandId": "band:custom:0",
+              "receipts": 0.0189,
+              "support": 0.09
+            }
+          ]
+        }
+      },
+      "supportDifference": {
+        "day": 636,
+        "control": 0.09,
+        "counterfactual": 0.09
+      },
+      "typedPhysicalMechanism": "changed_local_residential_action",
+      "readerChain": [
+        {
+          "readerFamily": "movement_destination",
+          "productionFunction": "deriveCarryingCapacity/deriveKnownUnusedHabitat",
+          "invocationDay": 180,
+          "consultationRole": "destination_candidate",
+          "outputChanged": true,
+          "selectedOutputChanged": false,
+          "control": {
+            "verdict": "known_unused:tile:137:41:rejected",
+            "ranking": "tile:137:41|0.2800|0.4200",
+            "selectedActionId": "decision:band:custom:0:2",
+            "selectedActionKind": "move_to_tile",
+            "selectedTarget": "tile:140:41"
+          },
+          "counterfactual": {
+            "verdict": "known_unused:tile:136:41:rejected",
+            "ranking": "tile:136:41|0.2200|0.4200",
+            "selectedActionId": "decision:band:custom:0:2",
+            "selectedActionKind": "move_to_tile",
+            "selectedTarget": "tile:140:41"
+          }
+        },
+        {
+          "readerFamily": "resource_activity",
+          "productionFunction": "collectResourceInferenceCandidates/inferResourceKnowledge",
+          "invocationDay": 180,
+          "consultationRole": "resource_inference_candidate",
+          "outputChanged": true,
+          "selectedOutputChanged": false,
+          "control": {
+            "verdict": "resource_candidates_read",
+            "ranking": "tile:137:41:{\"tileId\":\"tile:137:41\",\"season\":\"autumn\",\"contributionByClass\":[{\"classId\":\"generic_plant_food\",\"domain\":\"food\",\"availability\":0.42,\"supportContribution\":0.2,\"reliability\":0.48,\"seasonalModifier\":1,\"riskPlaceholder\":0.13,\"pressure\":0},{\"classId\":\"aquatic_food\",\"domain\":\"food\",\"availability\":0.02,\"supportContribution\":0.01,\"reliability\":0.52,\"seasonalModifier\":1,\"riskPlaceholder\":0.17,\"pressure\":0},{\"classId\":\"animal_food\",\"domain\":\"food\",\"availability\":0.34,\"supportContribution\":0.07,\"reliability\":0.33,\"seasonalModifier\":1,\"riskPlaceholder\":0.35,\"pressure\":0},{\"classId\":\"fallback_food\",\"domain\":\"food\",\"availability\":0.4,\"supportContribution\":0.06,\"reliability\":0.62,\"seasonalModifier\":1,\"riskPlaceholder\":0.23,\"pressure\":0},{\"classId\":\"fiber_material\",\"domain\":\"material\",\"availability\":0.15,\"supportContribution\":0,\"reliability\":0.55,\"seasonalModifier\":1,\"riskPlaceholder\":0.11,\"pressure\":0},{\"classId\":\"fuel_material\",\"domain\":\"material\",\"availability\":0.31,\"supportContribution\":0,\"reliability\":0.57,\"seasonalModifier\":1,\"riskPlaceholder\":0.15,\"pressure\":0},{\"classId\":\"medicinal_or_toxic\",\"domain\":\"medicinal_risk\",\"availability\":0.19,\"supportContribution\":0,\"reliability\":0.4,\"seasonalModifier\":1,\"riskPlaceholder\":0.58,\"pressure\":0},{\"classId\":\"water_resource\",\"domain\":\"water\",\"availability\":0.25,\"supportContribution\":0,\"reliability\":0.59,\"seasonalModifier\":1,\"riskPlaceholder\":0.15,\"pressure\":0}],\"dominantClass\":\"generic_plant_food\",\"resourceDiversity\":0.5,\"totalSupportFromResources\":0.34,\"limitingClassFlags\":[\"aquatic_food\"],\"sourceReasonId\":\"reason:resource_class:tile:137:41:2:availability_decomposed\"}|tile:138:41:{\"tileId\":\"tile:138:41\",\"season\":\"autumn\",\"contributionByClass\":[{\"classId\":\"generic_plant_food\",\"domain\":\"food\",\"availability\":0.42,\"supportContribution\":0.19,\"reliability\":0.47,\"seasonalModifier\":1,\"riskPlaceholder\":0.13,\"pressure\":0},{\"classId\":\"aquatic_food\",\"domain\":\"food\",\"availability\":0.01,\"supportContribution\":0,\"reliability\":0.52,\"seasonalModifier\":1,\"riskPlaceholder\":0.17,\"pressure\":0},{\"classId\":\"animal_food\",\"domain\":\"food\",\"availability\":0.34,\"supportContribution\":0.07,\"reliability\":0.33,\"seasonalModifier\":1,\"riskPlaceholder\":0.35,\"pressure\":0},{\"classId\":\"fallback_food\",\"domain\":\"food\",\"availability\":0.4,\"supportContribution\":0.06,\"reliability\":0.61,\"seasonalModifier\":1,\"riskPlaceholder\":0.23,\"pressure\":0},{\"classId\":\"fiber_material\",\"domain\":\"material\",\"availability\":0.11,\"supportContribution\":0,\"reliability\":0.55,\"seasonalModifier\":1,\"riskPlaceholder\":0.11,\"pressure\":0},{\"classId\":\"fuel_material\",\"domain\":\"material\",\"availability\":0.31,\"supportContribution\":0,\"reliability\":0.56,\"seasonalModifier\":1,\"riskPlaceholder\":0.15,\"pressure\":0},{\"classId\":\"medicinal_or_toxic\",\"domain\":\"medicinal_risk\",\"availability\":0.19,\"supportContribution\":0,\"reliability\":0.39,\"seasonalModifier\":1,\"riskPlaceholder\":0.58,\"pressure\":0},{\"classId\":\"water_resource\",\"domain\":\"water\",\"availability\":0.11,\"supportContribution\":0,\"reliability\":0.58,\"seasonalModifier\":1,\"riskPlaceholder\":0.15,\"pressure\":0}],\"dominantClass\":\"generic_plant_food\",\"resourceDiversity\":0.5,\"totalSupportFromResources\":0.32,\"limitingClassFlags\":[\"aquatic_food\"],\"sourceReasonId\":\"reason:resource_class:tile:138:41:2:availability_decomposed\"}|tile:138:42:{\"tileId\":\"tile:138:42\",\"season\":\"autumn\",\"contributionByClass\":[{\"classId\":\"generic_plant_food\",\"domain\":\"food\",\"availability\":0.41,\"supportContribution\":0.19,\"reliability\":0.48,\"seasonalModifier\":1,\"riskPlaceholder\":0.13,\"pressure\":0},{\"classId\":\"aquatic_food\",\"domain\":\"food\",\"availability\":0.02,\"supportContribution\":0.01,\"reliability\":0.53,\"seasonalModifier\":1,\"riskPlaceholder\":0.17,\"pressure\":0},{\"classId\":\"animal_food\",\"domain\":\"food\",\"availability\":0.34,\"supportContribution\":0.07,\"reliability\":0.34,\"seasonalModifier\":1,\"riskPlaceholder\":0.35,\"pressure\":0},{\"classId\":\"fallback_food\",\"domain\":\"food\",\"availability\":0.39,\"supportContribution\":0.06,\"reliability\":0.62,\"seasonalModifier\":1,\"riskPlaceholder\":0.23,\"pressure\":0},{\"classId\":\"fiber_material\",\"domain\":\"material\",\"availability\":0.13,\"supportContribution\":0,\"reliability\":0.56,\"seasonalModifier\":1,\"riskPlaceholder\":0.11,\"pressure\":0},{\"classId\":\"fuel_material\",\"domain\":\"material\",\"availability\":0.3,\"supportContribution\":0,\"reliability\":0.58,\"seasonalModifier\":1,\"riskPlaceholder\":0.15,\"pressure\":0},{\"classId\":\"medicinal_or_toxic\",\"domain\":\"medicinal_risk\",\"availability\":0.19,\"supportContribution\":0,\"reliability\":0.4,\"seasonalModifier\":1,\"riskPlaceholder\":0.58,\"pressure\":0},{\"classId\":\"water_resource\",\"domain\":\"water\",\"availability\":0.19,\"supportContribution\":0,\"reliability\":0.59,\"seasonalModifier\":1,\"riskPlaceholder\":0.15,\"pressure\":0}],\"dominantClass\":\"generic_plant_food\",\"resourceDiversity\":0.5,\"totalSupportFromResources\":0.33,\"limitingClassFlags\":[\"aquatic_food\"],\"sourceReasonId\":\"reason:resource_class:tile:138:42:2:availability_decomposed\"}|tile:132:42:{\"tileId\":\"tile:132:42\",\"season\":\"autumn\",\"contributionByClass\":[{\"classId\":\"generic_plant_food\",\"domain\":\"food\",\"availability\":0.39,\"supportContribution\":0.18,\"reliability\":0.47,\"seasonalModifier\":0.91,\"riskPlaceholder\":0.13,\"pressure\":0},{\"classId\":\"aquatic_food\",\"domain\":\"food\",\"availability\":0.02,\"supportContribution\":0.01,\"reliability\":0.52,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.17,\"pressure\":0},{\"classId\":\"animal_food\",\"domain\":\"food\",\"availability\":0.34,\"supportContribution\":0.08,\"reliability\":0.33,\"seasonalModifier\":0.92,\"riskPlaceholder\":0.35,\"pressure\":0},{\"classId\":\"fallback_food\",\"domain\":\"food\",\"availability\":0.4,\"supportContribution\":0.07,\"reliability\":0.61,\"seasonalModifier\":0.96,\"riskPlaceholder\":0.23,\"pressure\":0},{\"classId\":\"fiber_material\",\"domain\":\"material\",\"availability\":0.14,\"supportContribution\":0,\"reliability\":0.55,\"seasonalModifier\":0.94,\"riskPlaceholder\":0.11,\"pressure\":0},{\"classId\":\"fuel_material\",\"domain\":\"material\",\"availability\":0.28,\"supportContribution\":0,\"reliability\":0.56,\"seasonalModifier\":0.95,\"riskPlaceholder\":0.15,\"pressure\":0},{\"classId\":\"medicinal_or_toxic\",\"domain\":\"medicinal_risk\",\"availability\":0.19,\"supportContribution\":0,\"reliability\":0.39,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.58,\"pressure\":0},{\"classId\":\"water_resource\",\"domain\":\"water\",\"availability\":0.25,\"supportContribution\":0,\"reliability\":0.58,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.15,\"pressure\":0}],\"dominantClass\":\"generic_plant_food\",\"resourceDiversity\":0.5,\"totalSupportFromResources\":0.34,\"limitingClassFlags\":[\"aquatic_food\"],\"sourceReasonId\":\"reason:resource_class:tile:132:42:2:availability_decomposed\"}|tile:132:41:{\"tileId\":\"tile:132:41\",\"season\":\"autumn\",\"contributionByClass\":[{\"classId\":\"generic_plant_food\",\"domain\":\"food\",\"availability\":0.39,\"supportContribution\":0.18,\"reliability\":0.47,\"seasonalModifier\":0.91,\"riskPlaceholder\":0.13,\"pressure\":0},{\"classId\":\"aquatic_food\",\"domain\":\"food\",\"availability\":0.02,\"supportContribution\":0.01,\"reliability\":0.52,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.17,\"pressure\":0},{\"classId\":\"animal_food\",\"domain\":\"food\",\"availability\":0.34,\"supportContribution\":0.08,\"reliability\":0.33,\"seasonalModifier\":0.92,\"riskPlaceholder\":0.35,\"pressure\":0},{\"classId\":\"fallback_food\",\"domain\":\"food\",\"availability\":0.4,\"supportContribution\":0.07,\"reliability\":0.61,\"seasonalModifier\":0.96,\"riskPlaceholder\":0.23,\"pressure\":0},{\"classId\":\"fiber_material\",\"domain\":\"material\",\"availability\":0.14,\"supportContribution\":0,\"reliability\":0.55,\"seasonalModifier\":0.94,\"riskPlaceholder\":0.11,\"pressure\":0},{\"classId\":\"fuel_material\",\"domain\":\"material\",\"availability\":0.28,\"supportContribution\":0,\"reliability\":0.56,\"seasonalModifier\":0.95,\"riskPlaceholder\":0.15,\"pressure\":0},{\"classId\":\"medicinal_or_toxic\",\"domain\":\"medicinal_risk\",\"availability\":0.19,\"supportContribution\":0,\"reliability\":0.39,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.58,\"pressure\":0},{\"classId\":\"water_resource\",\"domain\":\"water\",\"availability\":0.25,\"supportContribution\":0,\"reliability\":0.58,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.15,\"pressure\":0}],\"dominantClass\":\"generic_plant_food\",\"resourceDiversity\":0.5,\"totalSupportFromResources\":0.34,\"limitingClassFlags\":[\"aquatic_food\"],\"sourceReasonId\":\"reason:resource_class:tile:132:41:2:availability_decomposed\"}|tile:133:41:{\"tileId\":\"tile:133:41\",\"season\":\"autumn\",\"contributionByClass\":[{\"classId\":\"generic_plant_food\",\"domain\":\"food\",\"availability\":0.39,\"supportContribution\":0.18,\"reliability\":0.47,\"seasonalModifier\":0.91,\"riskPlaceholder\":0.13,\"pressure\":0},{\"classId\":\"aquatic_food\",\"domain\":\"food\",\"availability\":0.02,\"supportContribution\":0.01,\"reliability\":0.52,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.17,\"pressure\":0},{\"classId\":\"animal_food\",\"domain\":\"food\",\"availability\":0.34,\"supportContribution\":0.08,\"reliability\":0.33,\"seasonalModifier\":0.92,\"riskPlaceholder\":0.35,\"pressure\":0},{\"classId\":\"fallback_food\",\"domain\":\"food\",\"availability\":0.4,\"supportContribution\":0.07,\"reliability\":0.61,\"seasonalModifier\":0.96,\"riskPlaceholder\":0.23,\"pressure\":0},{\"classId\":\"fiber_material\",\"domain\":\"material\",\"availability\":0.14,\"supportContribution\":0,\"reliability\":0.55,\"seasonalModifier\":0.94,\"riskPlaceholder\":0.11,\"pressure\":0},{\"classId\":\"fuel_material\",\"domain\":\"material\",\"availability\":0.28,\"supportContribution\":0,\"reliability\":0.56,\"seasonalModifier\":0.95,\"riskPlaceholder\":0.15,\"pressure\":0},{\"classId\":\"medicinal_or_toxic\",\"domain\":\"medicinal_risk\",\"availability\":0.19,\"supportContribution\":0,\"reliability\":0.39,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.58,\"pressure\":0},{\"classId\":\"water_resource\",\"domain\":\"water\",\"availability\":0.25,\"supportContribution\":0,\"reliability\":0.58,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.15,\"pressure\":0}],\"dominantClass\":\"generic_plant_food\",\"resourceDiversity\":0.5,\"totalSupportFromResources\":0.34,\"limitingClassFlags\":[\"aquatic_food\"],\"sourceReasonId\":\"reason:resource_class:tile:133:41:2:availability_decomposed\"}|tile:135:41:{\"tileId\":\"tile:135:41\",\"season\":\"autumn\",\"contributionByClass\":[{\"classId\":\"generic_plant_food\",\"domain\":\"food\",\"availability\":0.39,\"supportContribution\":0.18,\"reliability\":0.47,\"seasonalModifier\":0.91,\"riskPlaceholder\":0.13,\"pressure\":0},{\"classId\":\"aquatic_food\",\"domain\":\"food\",\"availability\":0.02,\"supportContribution\":0.01,\"reliability\":0.52,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.17,\"pressure\":0},{\"classId\":\"animal_food\",\"domain\":\"food\",\"availability\":0.34,\"supportContribution\":0.08,\"reliability\":0.33,\"seasonalModifier\":0.92,\"riskPlaceholder\":0.35,\"pressure\":0},{\"classId\":\"fallback_food\",\"domain\":\"food\",\"availability\":0.4,\"supportContribution\":0.07,\"reliability\":0.61,\"seasonalModifier\":0.96,\"riskPlaceholder\":0.23,\"pressure\":0},{\"classId\":\"fiber_material\",\"domain\":\"material\",\"availability\":0.14,\"supportContribution\":0,\"reliability\":0.55,\"seasonalModifier\":0.94,\"riskPlaceholder\":0.11,\"pressure\":0},{\"classId\":\"fuel_material\",\"domain\":\"material\",\"availability\":0.28,\"supportContribution\":0,\"reliability\":0.56,\"seasonalModifier\":0.95,\"riskPlaceholder\":0.15,\"pressure\":0},{\"classId\":\"medicinal_or_toxic\",\"domain\":\"medicinal_risk\",\"availability\":0.19,\"supportContribution\":0,\"reliability\":0.39,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.58,\"pressure\":0},{\"classId\":\"water_resource\",\"domain\":\"water\",\"availability\":0.25,\"supportContribution\":0,\"reliability\":0.58,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.15,\"pressure\":0}],\"dominantClass\":\"generic_plant_food\",\"resourceDiversity\":0.5,\"totalSupportFromResources\":0.34,\"limitingClassFlags\":[\"aquatic_food\"],\"sourceReasonId\":\"reason:resource_class:tile:135:41:2:availability_decomposed\"}|tile:136:41:{\"tileId\":\"tile:136:41\",\"season\":\"autumn\",\"contributionByClass\":[{\"classId\":\"generic_plant_food\",\"domain\":\"food\",\"availability\":0.39,\"supportContribution\":0.18,\"reliability\":0.47,\"seasonalModifier\":0.91,\"riskPlaceholder\":0.13,\"pressure\":0},{\"classId\":\"aquatic_food\",\"domain\":\"food\",\"availability\":0.02,\"supportContribution\":0.01,\"reliability\":0.52,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.17,\"pressure\":0},{\"classId\":\"animal_food\",\"domain\":\"food\",\"availability\":0.34,\"supportContribution\":0.08,\"reliability\":0.33,\"seasonalModifier\":0.92,\"riskPlaceholder\":0.35,\"pressure\":0},{\"classId\":\"fallback_food\",\"domain\":\"food\",\"availability\":0.4,\"supportContribution\":0.07,\"reliability\":0.61,\"seasonalModifier\":0.96,\"riskPlaceholder\":0.23,\"pressure\":0},{\"classId\":\"fiber_material\",\"domain\":\"material\",\"availability\":0.14,\"supportContribution\":0,\"reliability\":0.55,\"seasonalModifier\":0.94,\"riskPlaceholder\":0.11,\"pressure\":0},{\"classId\":\"fuel_material\",\"domain\":\"material\",\"availability\":0.28,\"supportContribution\":0,\"reliability\":0.56,\"seasonalModifier\":0.95,\"riskPlaceholder\":0.15,\"pressure\":0},{\"classId\":\"medicinal_or_toxic\",\"domain\":\"medicinal_risk\",\"availability\":0.19,\"supportContribution\":0,\"reliability\":0.39,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.58,\"pressure\":0},{\"classId\":\"water_resource\",\"domain\":\"water\",\"availability\":0.25,\"supportContribution\":0,\"reliability\":0.58,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.15,\"pressure\":0}],\"dominantClass\":\"generic_plant_food\",\"resourceDiversity\":0.5,\"totalSupportFromResources\":0.34,\"limitingClassFlags\":[\"aquatic_food\"],\"sourceReasonId\":\"reason:resource_class:tile:136:41:2:availability_decomposed\"}",
+            "selectedActionId": null,
+            "selectedActionKind": null,
+            "selectedTarget": null
+          },
+          "counterfactual": {
+            "verdict": "resource_candidates_read",
+            "ranking": "tile:138:41:{\"tileId\":\"tile:138:41\",\"season\":\"autumn\",\"contributionByClass\":[{\"classId\":\"generic_plant_food\",\"domain\":\"food\",\"availability\":0.42,\"supportContribution\":0.19,\"reliability\":0.47,\"seasonalModifier\":1,\"riskPlaceholder\":0.13,\"pressure\":0},{\"classId\":\"aquatic_food\",\"domain\":\"food\",\"availability\":0.01,\"supportContribution\":0,\"reliability\":0.52,\"seasonalModifier\":1,\"riskPlaceholder\":0.17,\"pressure\":0},{\"classId\":\"animal_food\",\"domain\":\"food\",\"availability\":0.34,\"supportContribution\":0.07,\"reliability\":0.33,\"seasonalModifier\":1,\"riskPlaceholder\":0.35,\"pressure\":0},{\"classId\":\"fallback_food\",\"domain\":\"food\",\"availability\":0.4,\"supportContribution\":0.06,\"reliability\":0.61,\"seasonalModifier\":1,\"riskPlaceholder\":0.23,\"pressure\":0},{\"classId\":\"fiber_material\",\"domain\":\"material\",\"availability\":0.11,\"supportContribution\":0,\"reliability\":0.55,\"seasonalModifier\":1,\"riskPlaceholder\":0.11,\"pressure\":0},{\"classId\":\"fuel_material\",\"domain\":\"material\",\"availability\":0.31,\"supportContribution\":0,\"reliability\":0.56,\"seasonalModifier\":1,\"riskPlaceholder\":0.15,\"pressure\":0},{\"classId\":\"medicinal_or_toxic\",\"domain\":\"medicinal_risk\",\"availability\":0.19,\"supportContribution\":0,\"reliability\":0.39,\"seasonalModifier\":1,\"riskPlaceholder\":0.58,\"pressure\":0},{\"classId\":\"water_resource\",\"domain\":\"water\",\"availability\":0.11,\"supportContribution\":0,\"reliability\":0.58,\"seasonalModifier\":1,\"riskPlaceholder\":0.15,\"pressure\":0}],\"dominantClass\":\"generic_plant_food\",\"resourceDiversity\":0.5,\"totalSupportFromResources\":0.32,\"limitingClassFlags\":[\"aquatic_food\"],\"sourceReasonId\":\"reason:resource_class:tile:138:41:2:availability_decomposed\"}|tile:138:42:{\"tileId\":\"tile:138:42\",\"season\":\"autumn\",\"contributionByClass\":[{\"classId\":\"generic_plant_food\",\"domain\":\"food\",\"availability\":0.41,\"supportContribution\":0.19,\"reliability\":0.48,\"seasonalModifier\":1,\"riskPlaceholder\":0.13,\"pressure\":0},{\"classId\":\"aquatic_food\",\"domain\":\"food\",\"availability\":0.02,\"supportContribution\":0.01,\"reliability\":0.53,\"seasonalModifier\":1,\"riskPlaceholder\":0.17,\"pressure\":0},{\"classId\":\"animal_food\",\"domain\":\"food\",\"availability\":0.34,\"supportContribution\":0.07,\"reliability\":0.34,\"seasonalModifier\":1,\"riskPlaceholder\":0.35,\"pressure\":0},{\"classId\":\"fallback_food\",\"domain\":\"food\",\"availability\":0.39,\"supportContribution\":0.06,\"reliability\":0.62,\"seasonalModifier\":1,\"riskPlaceholder\":0.23,\"pressure\":0},{\"classId\":\"fiber_material\",\"domain\":\"material\",\"availability\":0.13,\"supportContribution\":0,\"reliability\":0.56,\"seasonalModifier\":1,\"riskPlaceholder\":0.11,\"pressure\":0},{\"classId\":\"fuel_material\",\"domain\":\"material\",\"availability\":0.3,\"supportContribution\":0,\"reliability\":0.58,\"seasonalModifier\":1,\"riskPlaceholder\":0.15,\"pressure\":0},{\"classId\":\"medicinal_or_toxic\",\"domain\":\"medicinal_risk\",\"availability\":0.19,\"supportContribution\":0,\"reliability\":0.4,\"seasonalModifier\":1,\"riskPlaceholder\":0.58,\"pressure\":0},{\"classId\":\"water_resource\",\"domain\":\"water\",\"availability\":0.19,\"supportContribution\":0,\"reliability\":0.59,\"seasonalModifier\":1,\"riskPlaceholder\":0.15,\"pressure\":0}],\"dominantClass\":\"generic_plant_food\",\"resourceDiversity\":0.5,\"totalSupportFromResources\":0.33,\"limitingClassFlags\":[\"aquatic_food\"],\"sourceReasonId\":\"reason:resource_class:tile:138:42:2:availability_decomposed\"}|tile:137:41:{\"tileId\":\"tile:137:41\",\"season\":\"autumn\",\"contributionByClass\":[{\"classId\":\"generic_plant_food\",\"domain\":\"food\",\"availability\":0.42,\"supportContribution\":0.19,\"reliability\":0.48,\"seasonalModifier\":1,\"riskPlaceholder\":0.13,\"pressure\":0},{\"classId\":\"aquatic_food\",\"domain\":\"food\",\"availability\":0.01,\"supportContribution\":0,\"reliability\":0.52,\"seasonalModifier\":1,\"riskPlaceholder\":0.17,\"pressure\":0},{\"classId\":\"animal_food\",\"domain\":\"food\",\"availability\":0.34,\"supportContribution\":0.07,\"reliability\":0.33,\"seasonalModifier\":1,\"riskPlaceholder\":0.35,\"pressure\":0},{\"classId\":\"fallback_food\",\"domain\":\"food\",\"availability\":0.39,\"supportContribution\":0.06,\"reliability\":0.62,\"seasonalModifier\":1,\"riskPlaceholder\":0.23,\"pressure\":0},{\"classId\":\"fiber_material\",\"domain\":\"material\",\"availability\":0.12,\"supportContribution\":0,\"reliability\":0.55,\"seasonalModifier\":1,\"riskPlaceholder\":0.11,\"pressure\":0},{\"classId\":\"fuel_material\",\"domain\":\"material\",\"availability\":0.3,\"supportContribution\":0,\"reliability\":0.57,\"seasonalModifier\":1,\"riskPlaceholder\":0.15,\"pressure\":0},{\"classId\":\"medicinal_or_toxic\",\"domain\":\"medicinal_risk\",\"availability\":0.19,\"supportContribution\":0,\"reliability\":0.4,\"seasonalModifier\":1,\"riskPlaceholder\":0.58,\"pressure\":0},{\"classId\":\"water_resource\",\"domain\":\"water\",\"availability\":0.15,\"supportContribution\":0,\"reliability\":0.59,\"seasonalModifier\":1,\"riskPlaceholder\":0.15,\"pressure\":0}],\"dominantClass\":\"generic_plant_food\",\"resourceDiversity\":0.5,\"totalSupportFromResources\":0.32,\"limitingClassFlags\":[\"aquatic_food\"],\"sourceReasonId\":\"reason:resource_class:tile:137:41:2:availability_decomposed\"}|tile:132:42:{\"tileId\":\"tile:132:42\",\"season\":\"autumn\",\"contributionByClass\":[{\"classId\":\"generic_plant_food\",\"domain\":\"food\",\"availability\":0.39,\"supportContribution\":0.18,\"reliability\":0.47,\"seasonalModifier\":0.91,\"riskPlaceholder\":0.13,\"pressure\":0},{\"classId\":\"aquatic_food\",\"domain\":\"food\",\"availability\":0.02,\"supportContribution\":0.01,\"reliability\":0.52,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.17,\"pressure\":0},{\"classId\":\"animal_food\",\"domain\":\"food\",\"availability\":0.34,\"supportContribution\":0.08,\"reliability\":0.33,\"seasonalModifier\":0.92,\"riskPlaceholder\":0.35,\"pressure\":0},{\"classId\":\"fallback_food\",\"domain\":\"food\",\"availability\":0.4,\"supportContribution\":0.07,\"reliability\":0.61,\"seasonalModifier\":0.96,\"riskPlaceholder\":0.23,\"pressure\":0},{\"classId\":\"fiber_material\",\"domain\":\"material\",\"availability\":0.14,\"supportContribution\":0,\"reliability\":0.55,\"seasonalModifier\":0.94,\"riskPlaceholder\":0.11,\"pressure\":0},{\"classId\":\"fuel_material\",\"domain\":\"material\",\"availability\":0.28,\"supportContribution\":0,\"reliability\":0.56,\"seasonalModifier\":0.95,\"riskPlaceholder\":0.15,\"pressure\":0},{\"classId\":\"medicinal_or_toxic\",\"domain\":\"medicinal_risk\",\"availability\":0.19,\"supportContribution\":0,\"reliability\":0.39,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.58,\"pressure\":0},{\"classId\":\"water_resource\",\"domain\":\"water\",\"availability\":0.25,\"supportContribution\":0,\"reliability\":0.58,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.15,\"pressure\":0}],\"dominantClass\":\"generic_plant_food\",\"resourceDiversity\":0.5,\"totalSupportFromResources\":0.34,\"limitingClassFlags\":[\"aquatic_food\"],\"sourceReasonId\":\"reason:resource_class:tile:132:42:2:availability_decomposed\"}|tile:132:41:{\"tileId\":\"tile:132:41\",\"season\":\"autumn\",\"contributionByClass\":[{\"classId\":\"generic_plant_food\",\"domain\":\"food\",\"availability\":0.39,\"supportContribution\":0.18,\"reliability\":0.47,\"seasonalModifier\":0.91,\"riskPlaceholder\":0.13,\"pressure\":0},{\"classId\":\"aquatic_food\",\"domain\":\"food\",\"availability\":0.02,\"supportContribution\":0.01,\"reliability\":0.52,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.17,\"pressure\":0},{\"classId\":\"animal_food\",\"domain\":\"food\",\"availability\":0.34,\"supportContribution\":0.08,\"reliability\":0.33,\"seasonalModifier\":0.92,\"riskPlaceholder\":0.35,\"pressure\":0},{\"classId\":\"fallback_food\",\"domain\":\"food\",\"availability\":0.4,\"supportContribution\":0.07,\"reliability\":0.61,\"seasonalModifier\":0.96,\"riskPlaceholder\":0.23,\"pressure\":0},{\"classId\":\"fiber_material\",\"domain\":\"material\",\"availability\":0.14,\"supportContribution\":0,\"reliability\":0.55,\"seasonalModifier\":0.94,\"riskPlaceholder\":0.11,\"pressure\":0},{\"classId\":\"fuel_material\",\"domain\":\"material\",\"availability\":0.28,\"supportContribution\":0,\"reliability\":0.56,\"seasonalModifier\":0.95,\"riskPlaceholder\":0.15,\"pressure\":0},{\"classId\":\"medicinal_or_toxic\",\"domain\":\"medicinal_risk\",\"availability\":0.19,\"supportContribution\":0,\"reliability\":0.39,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.58,\"pressure\":0},{\"classId\":\"water_resource\",\"domain\":\"water\",\"availability\":0.25,\"supportContribution\":0,\"reliability\":0.58,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.15,\"pressure\":0}],\"dominantClass\":\"generic_plant_food\",\"resourceDiversity\":0.5,\"totalSupportFromResources\":0.34,\"limitingClassFlags\":[\"aquatic_food\"],\"sourceReasonId\":\"reason:resource_class:tile:132:41:2:availability_decomposed\"}|tile:133:41:{\"tileId\":\"tile:133:41\",\"season\":\"autumn\",\"contributionByClass\":[{\"classId\":\"generic_plant_food\",\"domain\":\"food\",\"availability\":0.39,\"supportContribution\":0.18,\"reliability\":0.47,\"seasonalModifier\":0.91,\"riskPlaceholder\":0.13,\"pressure\":0},{\"classId\":\"aquatic_food\",\"domain\":\"food\",\"availability\":0.02,\"supportContribution\":0.01,\"reliability\":0.52,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.17,\"pressure\":0},{\"classId\":\"animal_food\",\"domain\":\"food\",\"availability\":0.34,\"supportContribution\":0.08,\"reliability\":0.33,\"seasonalModifier\":0.92,\"riskPlaceholder\":0.35,\"pressure\":0},{\"classId\":\"fallback_food\",\"domain\":\"food\",\"availability\":0.4,\"supportContribution\":0.07,\"reliability\":0.61,\"seasonalModifier\":0.96,\"riskPlaceholder\":0.23,\"pressure\":0},{\"classId\":\"fiber_material\",\"domain\":\"material\",\"availability\":0.14,\"supportContribution\":0,\"reliability\":0.55,\"seasonalModifier\":0.94,\"riskPlaceholder\":0.11,\"pressure\":0},{\"classId\":\"fuel_material\",\"domain\":\"material\",\"availability\":0.28,\"supportContribution\":0,\"reliability\":0.56,\"seasonalModifier\":0.95,\"riskPlaceholder\":0.15,\"pressure\":0},{\"classId\":\"medicinal_or_toxic\",\"domain\":\"medicinal_risk\",\"availability\":0.19,\"supportContribution\":0,\"reliability\":0.39,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.58,\"pressure\":0},{\"classId\":\"water_resource\",\"domain\":\"water\",\"availability\":0.25,\"supportContribution\":0,\"reliability\":0.58,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.15,\"pressure\":0}],\"dominantClass\":\"generic_plant_food\",\"resourceDiversity\":0.5,\"totalSupportFromResources\":0.34,\"limitingClassFlags\":[\"aquatic_food\"],\"sourceReasonId\":\"reason:resource_class:tile:133:41:2:availability_decomposed\"}|tile:135:41:{\"tileId\":\"tile:135:41\",\"season\":\"autumn\",\"contributionByClass\":[{\"classId\":\"generic_plant_food\",\"domain\":\"food\",\"availability\":0.39,\"supportContribution\":0.18,\"reliability\":0.47,\"seasonalModifier\":0.91,\"riskPlaceholder\":0.13,\"pressure\":0},{\"classId\":\"aquatic_food\",\"domain\":\"food\",\"availability\":0.02,\"supportContribution\":0.01,\"reliability\":0.52,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.17,\"pressure\":0},{\"classId\":\"animal_food\",\"domain\":\"food\",\"availability\":0.34,\"supportContribution\":0.08,\"reliability\":0.33,\"seasonalModifier\":0.92,\"riskPlaceholder\":0.35,\"pressure\":0},{\"classId\":\"fallback_food\",\"domain\":\"food\",\"availability\":0.4,\"supportContribution\":0.07,\"reliability\":0.61,\"seasonalModifier\":0.96,\"riskPlaceholder\":0.23,\"pressure\":0},{\"classId\":\"fiber_material\",\"domain\":\"material\",\"availability\":0.14,\"supportContribution\":0,\"reliability\":0.55,\"seasonalModifier\":0.94,\"riskPlaceholder\":0.11,\"pressure\":0},{\"classId\":\"fuel_material\",\"domain\":\"material\",\"availability\":0.28,\"supportContribution\":0,\"reliability\":0.56,\"seasonalModifier\":0.95,\"riskPlaceholder\":0.15,\"pressure\":0},{\"classId\":\"medicinal_or_toxic\",\"domain\":\"medicinal_risk\",\"availability\":0.19,\"supportContribution\":0,\"reliability\":0.39,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.58,\"pressure\":0},{\"classId\":\"water_resource\",\"domain\":\"water\",\"availability\":0.25,\"supportContribution\":0,\"reliability\":0.58,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.15,\"pressure\":0}],\"dominantClass\":\"generic_plant_food\",\"resourceDiversity\":0.5,\"totalSupportFromResources\":0.34,\"limitingClassFlags\":[\"aquatic_food\"],\"sourceReasonId\":\"reason:resource_class:tile:135:41:2:availability_decomposed\"}|tile:136:41:{\"tileId\":\"tile:136:41\",\"season\":\"autumn\",\"contributionByClass\":[{\"classId\":\"generic_plant_food\",\"domain\":\"food\",\"availability\":0.39,\"supportContribution\":0.18,\"reliability\":0.47,\"seasonalModifier\":0.91,\"riskPlaceholder\":0.13,\"pressure\":0},{\"classId\":\"aquatic_food\",\"domain\":\"food\",\"availability\":0.02,\"supportContribution\":0.01,\"reliability\":0.52,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.17,\"pressure\":0},{\"classId\":\"animal_food\",\"domain\":\"food\",\"availability\":0.34,\"supportContribution\":0.08,\"reliability\":0.33,\"seasonalModifier\":0.92,\"riskPlaceholder\":0.35,\"pressure\":0},{\"classId\":\"fallback_food\",\"domain\":\"food\",\"availability\":0.4,\"supportContribution\":0.07,\"reliability\":0.61,\"seasonalModifier\":0.96,\"riskPlaceholder\":0.23,\"pressure\":0},{\"classId\":\"fiber_material\",\"domain\":\"material\",\"availability\":0.14,\"supportContribution\":0,\"reliability\":0.55,\"seasonalModifier\":0.94,\"riskPlaceholder\":0.11,\"pressure\":0},{\"classId\":\"fuel_material\",\"domain\":\"material\",\"availability\":0.28,\"supportContribution\":0,\"reliability\":0.56,\"seasonalModifier\":0.95,\"riskPlaceholder\":0.15,\"pressure\":0},{\"classId\":\"medicinal_or_toxic\",\"domain\":\"medicinal_risk\",\"availability\":0.19,\"supportContribution\":0,\"reliability\":0.39,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.58,\"pressure\":0},{\"classId\":\"water_resource\",\"domain\":\"water\",\"availability\":0.25,\"supportContribution\":0,\"reliability\":0.58,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.15,\"pressure\":0}],\"dominantClass\":\"generic_plant_food\",\"resourceDiversity\":0.5,\"totalSupportFromResources\":0.34,\"limitingClassFlags\":[\"aquatic_food\"],\"sourceReasonId\":\"reason:resource_class:tile:136:41:2:availability_decomposed\"}",
+            "selectedActionId": null,
+            "selectedActionKind": null,
+            "selectedTarget": null
+          }
+        },
+        {
+          "readerFamily": "camp_movement",
+          "productionFunction": "deriveCampMovementDecisionSupport",
+          "invocationDay": 270,
+          "consultationRole": "pressure_relief_candidate",
+          "outputChanged": false,
+          "selectedOutputChanged": false,
+          "control": {
+            "verdict": "local_camp_shift:tile:139:41,hard_move_recovery:tile:141:41,temporary_task_camp:tile:141:41",
+            "ranking": "local_camp_shift|tile:139:41|0.2000,hard_move_recovery|tile:141:41|0.1400,temporary_task_camp|tile:141:41|0.1200",
+            "selectedActionId": "decision:band:custom:0:3",
+            "selectedActionKind": "move_to_tile",
+            "selectedTarget": "tile:140:41"
+          },
+          "counterfactual": {
+            "verdict": "local_camp_shift:tile:139:41,hard_move_recovery:tile:141:41,temporary_task_camp:tile:141:41",
+            "ranking": "local_camp_shift|tile:139:41|0.2000,hard_move_recovery|tile:141:41|0.1400,temporary_task_camp|tile:141:41|0.1200",
+            "selectedActionId": "decision:band:custom:0:3",
+            "selectedActionKind": "move_to_tile",
+            "selectedTarget": "tile:140:41"
+          }
+        },
+        {
+          "readerFamily": "camp_movement",
+          "productionFunction": "deriveCampMovementDecisionSupport",
+          "invocationDay": 630,
+          "consultationRole": "current_camp_baseline+current_shift_baseline",
+          "outputChanged": false,
+          "selectedOutputChanged": true,
+          "control": {
+            "verdict": "local_camp_shift:tile:137:43,temporary_task_camp:tile:137:41,hard_move_recovery:tile:137:41",
+            "ranking": "local_camp_shift|tile:137:43|0.2200,temporary_task_camp|tile:137:41|0.1500,hard_move_recovery|tile:137:41|0.1400",
+            "selectedActionId": "decision:band:custom:0:7",
+            "selectedActionKind": "move_to_tile",
+            "selectedTarget": "tile:137:43"
+          },
+          "counterfactual": {
+            "verdict": "local_camp_shift:tile:137:43,temporary_task_camp:tile:137:41,hard_move_recovery:tile:137:41",
+            "ranking": "local_camp_shift|tile:137:43|0.2200,temporary_task_camp|tile:137:41|0.1500,hard_move_recovery|tile:137:41|0.1400",
+            "selectedActionId": "decision:band:custom:0:7",
+            "selectedActionKind": "resource_scout",
+            "selectedTarget": "tile:136:41"
+          }
+        }
+      ]
+    },
+    {
+      "scenario": "site_E_hills",
+      "seed": "s3",
+      "recordEventId": "exploration-record:band:custom:0:expedition:band:custom:0:96:frontier_exploration:1b466dbc:tile:137:41:104",
+      "tileId": "tile:137:41",
+      "expeditionId": "expedition:band:custom:0:96:frontier_exploration:1b466dbc",
+      "returnDay": 104,
+      "suppressedReturnWrite": {
+        "recordEventId": "exploration-record:band:custom:0:expedition:band:custom:0:96:frontier_exploration:1b466dbc:tile:137:41:104",
+        "tileId": "tile:137:41",
+        "expeditionId": "expedition:band:custom:0:96:frontier_exploration:1b466dbc",
+        "returnDay": 104,
+        "newOrRefreshed": "refreshed"
+      },
+      "firstReader": {
+        "readerFamily": "movement_destination",
+        "productionFunction": "deriveCarryingCapacity/deriveKnownUnusedHabitat",
+        "invocationDay": 180,
+        "consultationRole": "destination_candidate"
+      },
+      "readerDay": 180,
+      "readerOutput": {
+        "control": {
+          "verdict": "known_unused:tile:137:41:rejected",
+          "ranking": "tile:137:41|0.2800|0.4200",
+          "selectedActionId": "decision:band:custom:0:2",
+          "selectedActionKind": "move_to_tile",
+          "selectedTarget": "tile:140:41"
+        },
+        "counterfactual": {
+          "verdict": "known_unused:tile:136:41:rejected",
+          "ranking": "tile:136:41|0.2200|0.4200",
+          "selectedActionId": "decision:band:custom:0:2",
+          "selectedActionKind": "move_to_tile",
+          "selectedTarget": "tile:140:41"
+        }
+      },
+      "firstChangedReader": {
+        "readerFamily": "movement_destination",
+        "productionFunction": "deriveCarryingCapacity/deriveKnownUnusedHabitat",
+        "invocationDay": 180,
+        "consultationRole": "destination_candidate",
+        "outputChanged": true,
+        "selectedOutputChanged": false,
+        "control": {
+          "verdict": "known_unused:tile:137:41:rejected",
+          "ranking": "tile:137:41|0.2800|0.4200",
+          "selectedActionId": "decision:band:custom:0:2",
+          "selectedActionKind": "move_to_tile",
+          "selectedTarget": "tile:140:41"
+        },
+        "counterfactual": {
+          "verdict": "known_unused:tile:136:41:rejected",
+          "ranking": "tile:136:41|0.2200|0.4200",
+          "selectedActionId": "decision:band:custom:0:2",
+          "selectedActionKind": "move_to_tile",
+          "selectedTarget": "tile:140:41"
+        }
+      },
+      "actionReader": null,
+      "actionId": "camp-action:decision:band:custom:0:7:camp-shift:band:custom:0:7:tile:137:41:tile:137:43",
+      "actionKind": "local_shift",
+      "target": "tile:137:43",
+      "workers": null,
+      "route": null,
+      "physicalOutcomeId": "camp-shift:band:custom:0:7:tile:137:41:tile:137:43",
+      "actionDifferences": {
+        "movement": {
+          "day": 630,
+          "control": [
+            {
+              "decisionId": "decision:band:custom:0:7",
+              "bandId": "band:custom:0",
+              "day": 630,
+              "actionKind": "move_to_tile",
+              "targetTileId": "tile:137:43",
+              "movementRecordId": "movement-record:band:custom:0:7:decision:band:custom:0:7",
+              "positionBefore": "tile:137:41",
+              "positionAfter": "tile:137:43"
+            }
+          ],
+          "counterfactual": []
+        },
+        "camp": {
+          "day": 630,
+          "control": [
+            {
+              "campActionId": "camp-action:decision:band:custom:0:7:camp-shift:band:custom:0:7:tile:137:41:tile:137:43",
+              "bandId": "band:custom:0",
+              "day": 630,
+              "campActionKind": "local_shift",
+              "targetTileId": "tile:137:43",
+              "campRecordId": "camp-shift:band:custom:0:7:tile:137:41:tile:137:43",
+              "positionBefore": "tile:137:41",
+              "positionAfter": "tile:137:43"
+            }
+          ],
+          "counterfactual": [
+            {
+              "campActionId": "camp-action:decision:band:custom:0:7:temporary-task-camp:band:custom:0:7:tile:136:41",
+              "bandId": "band:custom:0",
+              "day": 630,
+              "campActionKind": "temporary_task_camp",
+              "targetTileId": "tile:136:41",
+              "campRecordId": "temporary-task-camp:band:custom:0:7:tile:136:41",
+              "positionBefore": "tile:137:41",
+              "positionAfter": "tile:137:41"
+            }
+          ]
+        },
+        "resource": {
+          "day": 636,
+          "control": [
+            {
+              "activityActionId": "activity-action:daily-trip:band:custom:0:636:plant_gathering_group:tile:137:41",
+              "bandId": "band:custom:0",
+              "day": 636,
+              "activityKind": "plant_gathering_group",
+              "selectedPatchId": "patch:tile:137:41:generic_plant_food",
+              "selectedTileId": "tile:137:41",
+              "tripOrTaskId": "daily-trip:band:custom:0:636:plant_gathering_group:tile:137:41",
+              "workers": 4,
+              "route": [
+                "tile:137:43",
+                "tile:137:42",
+                "tile:137:41"
+              ],
+              "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:636:plant_gathering_group:tile:137:41:partial_success",
+              "receiptId": "receipt:daily-trip:band:custom:0:636:plant_gathering_group:tile:137:41",
+              "usableSupportReturned": 0.0099
+            }
+          ],
+          "counterfactual": [
+            {
+              "activityActionId": "activity-action:daily-trip:band:custom:0:636:plant_gathering_group:tile:135:41",
+              "bandId": "band:custom:0",
+              "day": 636,
+              "activityKind": "plant_gathering_group",
+              "selectedPatchId": "patch:tile:135:41:fallback_food",
+              "selectedTileId": "tile:135:41",
+              "tripOrTaskId": "daily-trip:band:custom:0:636:plant_gathering_group:tile:135:41",
+              "workers": 4,
+              "route": [
+                "tile:137:41",
+                "tile:136:41",
+                "tile:135:41"
+              ],
+              "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:636:plant_gathering_group:tile:135:41:target_not_found",
+              "receiptId": "receipt:daily-trip:band:custom:0:636:plant_gathering_group:tile:135:41",
+              "usableSupportReturned": 0
+            }
+          ]
+        },
+        "fission": null
+      },
+      "receiptDifference": {
+        "index": 532,
+        "day": 636,
+        "control": {
+          "day": 636,
+          "totalReceipts": 0.0099,
+          "totalSupport": 0.09,
+          "rows": [
+            {
+              "bandId": "band:custom:0",
+              "receipts": 0.0099,
+              "support": 0.09
+            }
+          ]
+        },
+        "counterfactual": {
+          "day": 636,
+          "totalReceipts": 0.0189,
+          "totalSupport": 0.09,
+          "rows": [
+            {
+              "bandId": "band:custom:0",
+              "receipts": 0.0189,
+              "support": 0.09
+            }
+          ]
+        }
+      },
+      "supportDifference": {
+        "day": 636,
+        "control": 0.09,
+        "counterfactual": 0.09
+      },
+      "typedPhysicalMechanism": "changed_local_residential_action",
+      "readerChain": [
+        {
+          "readerFamily": "movement_destination",
+          "productionFunction": "deriveCarryingCapacity/deriveKnownUnusedHabitat",
+          "invocationDay": 180,
+          "consultationRole": "destination_candidate",
+          "outputChanged": true,
+          "selectedOutputChanged": false,
+          "control": {
+            "verdict": "known_unused:tile:137:41:rejected",
+            "ranking": "tile:137:41|0.2800|0.4200",
+            "selectedActionId": "decision:band:custom:0:2",
+            "selectedActionKind": "move_to_tile",
+            "selectedTarget": "tile:140:41"
+          },
+          "counterfactual": {
+            "verdict": "known_unused:tile:136:41:rejected",
+            "ranking": "tile:136:41|0.2200|0.4200",
+            "selectedActionId": "decision:band:custom:0:2",
+            "selectedActionKind": "move_to_tile",
+            "selectedTarget": "tile:140:41"
+          }
+        },
+        {
+          "readerFamily": "resource_activity",
+          "productionFunction": "collectResourceInferenceCandidates/inferResourceKnowledge",
+          "invocationDay": 180,
+          "consultationRole": "resource_inference_candidate",
+          "outputChanged": true,
+          "selectedOutputChanged": false,
+          "control": {
+            "verdict": "resource_candidates_read",
+            "ranking": "tile:137:41:{\"tileId\":\"tile:137:41\",\"season\":\"autumn\",\"contributionByClass\":[{\"classId\":\"generic_plant_food\",\"domain\":\"food\",\"availability\":0.42,\"supportContribution\":0.2,\"reliability\":0.48,\"seasonalModifier\":1,\"riskPlaceholder\":0.13,\"pressure\":0},{\"classId\":\"aquatic_food\",\"domain\":\"food\",\"availability\":0.02,\"supportContribution\":0.01,\"reliability\":0.52,\"seasonalModifier\":1,\"riskPlaceholder\":0.17,\"pressure\":0},{\"classId\":\"animal_food\",\"domain\":\"food\",\"availability\":0.34,\"supportContribution\":0.07,\"reliability\":0.33,\"seasonalModifier\":1,\"riskPlaceholder\":0.35,\"pressure\":0},{\"classId\":\"fallback_food\",\"domain\":\"food\",\"availability\":0.4,\"supportContribution\":0.06,\"reliability\":0.62,\"seasonalModifier\":1,\"riskPlaceholder\":0.23,\"pressure\":0},{\"classId\":\"fiber_material\",\"domain\":\"material\",\"availability\":0.15,\"supportContribution\":0,\"reliability\":0.55,\"seasonalModifier\":1,\"riskPlaceholder\":0.11,\"pressure\":0},{\"classId\":\"fuel_material\",\"domain\":\"material\",\"availability\":0.31,\"supportContribution\":0,\"reliability\":0.57,\"seasonalModifier\":1,\"riskPlaceholder\":0.15,\"pressure\":0},{\"classId\":\"medicinal_or_toxic\",\"domain\":\"medicinal_risk\",\"availability\":0.19,\"supportContribution\":0,\"reliability\":0.4,\"seasonalModifier\":1,\"riskPlaceholder\":0.58,\"pressure\":0},{\"classId\":\"water_resource\",\"domain\":\"water\",\"availability\":0.25,\"supportContribution\":0,\"reliability\":0.59,\"seasonalModifier\":1,\"riskPlaceholder\":0.15,\"pressure\":0}],\"dominantClass\":\"generic_plant_food\",\"resourceDiversity\":0.5,\"totalSupportFromResources\":0.34,\"limitingClassFlags\":[\"aquatic_food\"],\"sourceReasonId\":\"reason:resource_class:tile:137:41:2:availability_decomposed\"}|tile:138:41:{\"tileId\":\"tile:138:41\",\"season\":\"autumn\",\"contributionByClass\":[{\"classId\":\"generic_plant_food\",\"domain\":\"food\",\"availability\":0.42,\"supportContribution\":0.19,\"reliability\":0.47,\"seasonalModifier\":1,\"riskPlaceholder\":0.13,\"pressure\":0},{\"classId\":\"aquatic_food\",\"domain\":\"food\",\"availability\":0.01,\"supportContribution\":0,\"reliability\":0.52,\"seasonalModifier\":1,\"riskPlaceholder\":0.17,\"pressure\":0},{\"classId\":\"animal_food\",\"domain\":\"food\",\"availability\":0.34,\"supportContribution\":0.07,\"reliability\":0.33,\"seasonalModifier\":1,\"riskPlaceholder\":0.35,\"pressure\":0},{\"classId\":\"fallback_food\",\"domain\":\"food\",\"availability\":0.4,\"supportContribution\":0.06,\"reliability\":0.61,\"seasonalModifier\":1,\"riskPlaceholder\":0.23,\"pressure\":0},{\"classId\":\"fiber_material\",\"domain\":\"material\",\"availability\":0.11,\"supportContribution\":0,\"reliability\":0.55,\"seasonalModifier\":1,\"riskPlaceholder\":0.11,\"pressure\":0},{\"classId\":\"fuel_material\",\"domain\":\"material\",\"availability\":0.31,\"supportContribution\":0,\"reliability\":0.56,\"seasonalModifier\":1,\"riskPlaceholder\":0.15,\"pressure\":0},{\"classId\":\"medicinal_or_toxic\",\"domain\":\"medicinal_risk\",\"availability\":0.19,\"supportContribution\":0,\"reliability\":0.39,\"seasonalModifier\":1,\"riskPlaceholder\":0.58,\"pressure\":0},{\"classId\":\"water_resource\",\"domain\":\"water\",\"availability\":0.11,\"supportContribution\":0,\"reliability\":0.58,\"seasonalModifier\":1,\"riskPlaceholder\":0.15,\"pressure\":0}],\"dominantClass\":\"generic_plant_food\",\"resourceDiversity\":0.5,\"totalSupportFromResources\":0.32,\"limitingClassFlags\":[\"aquatic_food\"],\"sourceReasonId\":\"reason:resource_class:tile:138:41:2:availability_decomposed\"}|tile:138:42:{\"tileId\":\"tile:138:42\",\"season\":\"autumn\",\"contributionByClass\":[{\"classId\":\"generic_plant_food\",\"domain\":\"food\",\"availability\":0.41,\"supportContribution\":0.19,\"reliability\":0.48,\"seasonalModifier\":1,\"riskPlaceholder\":0.13,\"pressure\":0},{\"classId\":\"aquatic_food\",\"domain\":\"food\",\"availability\":0.02,\"supportContribution\":0.01,\"reliability\":0.53,\"seasonalModifier\":1,\"riskPlaceholder\":0.17,\"pressure\":0},{\"classId\":\"animal_food\",\"domain\":\"food\",\"availability\":0.34,\"supportContribution\":0.07,\"reliability\":0.34,\"seasonalModifier\":1,\"riskPlaceholder\":0.35,\"pressure\":0},{\"classId\":\"fallback_food\",\"domain\":\"food\",\"availability\":0.39,\"supportContribution\":0.06,\"reliability\":0.62,\"seasonalModifier\":1,\"riskPlaceholder\":0.23,\"pressure\":0},{\"classId\":\"fiber_material\",\"domain\":\"material\",\"availability\":0.13,\"supportContribution\":0,\"reliability\":0.56,\"seasonalModifier\":1,\"riskPlaceholder\":0.11,\"pressure\":0},{\"classId\":\"fuel_material\",\"domain\":\"material\",\"availability\":0.3,\"supportContribution\":0,\"reliability\":0.58,\"seasonalModifier\":1,\"riskPlaceholder\":0.15,\"pressure\":0},{\"classId\":\"medicinal_or_toxic\",\"domain\":\"medicinal_risk\",\"availability\":0.19,\"supportContribution\":0,\"reliability\":0.4,\"seasonalModifier\":1,\"riskPlaceholder\":0.58,\"pressure\":0},{\"classId\":\"water_resource\",\"domain\":\"water\",\"availability\":0.19,\"supportContribution\":0,\"reliability\":0.59,\"seasonalModifier\":1,\"riskPlaceholder\":0.15,\"pressure\":0}],\"dominantClass\":\"generic_plant_food\",\"resourceDiversity\":0.5,\"totalSupportFromResources\":0.33,\"limitingClassFlags\":[\"aquatic_food\"],\"sourceReasonId\":\"reason:resource_class:tile:138:42:2:availability_decomposed\"}|tile:132:42:{\"tileId\":\"tile:132:42\",\"season\":\"autumn\",\"contributionByClass\":[{\"classId\":\"generic_plant_food\",\"domain\":\"food\",\"availability\":0.39,\"supportContribution\":0.18,\"reliability\":0.47,\"seasonalModifier\":0.91,\"riskPlaceholder\":0.13,\"pressure\":0},{\"classId\":\"aquatic_food\",\"domain\":\"food\",\"availability\":0.02,\"supportContribution\":0.01,\"reliability\":0.52,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.17,\"pressure\":0},{\"classId\":\"animal_food\",\"domain\":\"food\",\"availability\":0.34,\"supportContribution\":0.08,\"reliability\":0.33,\"seasonalModifier\":0.92,\"riskPlaceholder\":0.35,\"pressure\":0},{\"classId\":\"fallback_food\",\"domain\":\"food\",\"availability\":0.4,\"supportContribution\":0.07,\"reliability\":0.61,\"seasonalModifier\":0.96,\"riskPlaceholder\":0.23,\"pressure\":0},{\"classId\":\"fiber_material\",\"domain\":\"material\",\"availability\":0.14,\"supportContribution\":0,\"reliability\":0.55,\"seasonalModifier\":0.94,\"riskPlaceholder\":0.11,\"pressure\":0},{\"classId\":\"fuel_material\",\"domain\":\"material\",\"availability\":0.28,\"supportContribution\":0,\"reliability\":0.56,\"seasonalModifier\":0.95,\"riskPlaceholder\":0.15,\"pressure\":0},{\"classId\":\"medicinal_or_toxic\",\"domain\":\"medicinal_risk\",\"availability\":0.19,\"supportContribution\":0,\"reliability\":0.39,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.58,\"pressure\":0},{\"classId\":\"water_resource\",\"domain\":\"water\",\"availability\":0.25,\"supportContribution\":0,\"reliability\":0.58,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.15,\"pressure\":0}],\"dominantClass\":\"generic_plant_food\",\"resourceDiversity\":0.5,\"totalSupportFromResources\":0.34,\"limitingClassFlags\":[\"aquatic_food\"],\"sourceReasonId\":\"reason:resource_class:tile:132:42:2:availability_decomposed\"}|tile:132:41:{\"tileId\":\"tile:132:41\",\"season\":\"autumn\",\"contributionByClass\":[{\"classId\":\"generic_plant_food\",\"domain\":\"food\",\"availability\":0.39,\"supportContribution\":0.18,\"reliability\":0.47,\"seasonalModifier\":0.91,\"riskPlaceholder\":0.13,\"pressure\":0},{\"classId\":\"aquatic_food\",\"domain\":\"food\",\"availability\":0.02,\"supportContribution\":0.01,\"reliability\":0.52,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.17,\"pressure\":0},{\"classId\":\"animal_food\",\"domain\":\"food\",\"availability\":0.34,\"supportContribution\":0.08,\"reliability\":0.33,\"seasonalModifier\":0.92,\"riskPlaceholder\":0.35,\"pressure\":0},{\"classId\":\"fallback_food\",\"domain\":\"food\",\"availability\":0.4,\"supportContribution\":0.07,\"reliability\":0.61,\"seasonalModifier\":0.96,\"riskPlaceholder\":0.23,\"pressure\":0},{\"classId\":\"fiber_material\",\"domain\":\"material\",\"availability\":0.14,\"supportContribution\":0,\"reliability\":0.55,\"seasonalModifier\":0.94,\"riskPlaceholder\":0.11,\"pressure\":0},{\"classId\":\"fuel_material\",\"domain\":\"material\",\"availability\":0.28,\"supportContribution\":0,\"reliability\":0.56,\"seasonalModifier\":0.95,\"riskPlaceholder\":0.15,\"pressure\":0},{\"classId\":\"medicinal_or_toxic\",\"domain\":\"medicinal_risk\",\"availability\":0.19,\"supportContribution\":0,\"reliability\":0.39,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.58,\"pressure\":0},{\"classId\":\"water_resource\",\"domain\":\"water\",\"availability\":0.25,\"supportContribution\":0,\"reliability\":0.58,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.15,\"pressure\":0}],\"dominantClass\":\"generic_plant_food\",\"resourceDiversity\":0.5,\"totalSupportFromResources\":0.34,\"limitingClassFlags\":[\"aquatic_food\"],\"sourceReasonId\":\"reason:resource_class:tile:132:41:2:availability_decomposed\"}|tile:133:41:{\"tileId\":\"tile:133:41\",\"season\":\"autumn\",\"contributionByClass\":[{\"classId\":\"generic_plant_food\",\"domain\":\"food\",\"availability\":0.39,\"supportContribution\":0.18,\"reliability\":0.47,\"seasonalModifier\":0.91,\"riskPlaceholder\":0.13,\"pressure\":0},{\"classId\":\"aquatic_food\",\"domain\":\"food\",\"availability\":0.02,\"supportContribution\":0.01,\"reliability\":0.52,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.17,\"pressure\":0},{\"classId\":\"animal_food\",\"domain\":\"food\",\"availability\":0.34,\"supportContribution\":0.08,\"reliability\":0.33,\"seasonalModifier\":0.92,\"riskPlaceholder\":0.35,\"pressure\":0},{\"classId\":\"fallback_food\",\"domain\":\"food\",\"availability\":0.4,\"supportContribution\":0.07,\"reliability\":0.61,\"seasonalModifier\":0.96,\"riskPlaceholder\":0.23,\"pressure\":0},{\"classId\":\"fiber_material\",\"domain\":\"material\",\"availability\":0.14,\"supportContribution\":0,\"reliability\":0.55,\"seasonalModifier\":0.94,\"riskPlaceholder\":0.11,\"pressure\":0},{\"classId\":\"fuel_material\",\"domain\":\"material\",\"availability\":0.28,\"supportContribution\":0,\"reliability\":0.56,\"seasonalModifier\":0.95,\"riskPlaceholder\":0.15,\"pressure\":0},{\"classId\":\"medicinal_or_toxic\",\"domain\":\"medicinal_risk\",\"availability\":0.19,\"supportContribution\":0,\"reliability\":0.39,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.58,\"pressure\":0},{\"classId\":\"water_resource\",\"domain\":\"water\",\"availability\":0.25,\"supportContribution\":0,\"reliability\":0.58,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.15,\"pressure\":0}],\"dominantClass\":\"generic_plant_food\",\"resourceDiversity\":0.5,\"totalSupportFromResources\":0.34,\"limitingClassFlags\":[\"aquatic_food\"],\"sourceReasonId\":\"reason:resource_class:tile:133:41:2:availability_decomposed\"}|tile:135:41:{\"tileId\":\"tile:135:41\",\"season\":\"autumn\",\"contributionByClass\":[{\"classId\":\"generic_plant_food\",\"domain\":\"food\",\"availability\":0.39,\"supportContribution\":0.18,\"reliability\":0.47,\"seasonalModifier\":0.91,\"riskPlaceholder\":0.13,\"pressure\":0},{\"classId\":\"aquatic_food\",\"domain\":\"food\",\"availability\":0.02,\"supportContribution\":0.01,\"reliability\":0.52,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.17,\"pressure\":0},{\"classId\":\"animal_food\",\"domain\":\"food\",\"availability\":0.34,\"supportContribution\":0.08,\"reliability\":0.33,\"seasonalModifier\":0.92,\"riskPlaceholder\":0.35,\"pressure\":0},{\"classId\":\"fallback_food\",\"domain\":\"food\",\"availability\":0.4,\"supportContribution\":0.07,\"reliability\":0.61,\"seasonalModifier\":0.96,\"riskPlaceholder\":0.23,\"pressure\":0},{\"classId\":\"fiber_material\",\"domain\":\"material\",\"availability\":0.14,\"supportContribution\":0,\"reliability\":0.55,\"seasonalModifier\":0.94,\"riskPlaceholder\":0.11,\"pressure\":0},{\"classId\":\"fuel_material\",\"domain\":\"material\",\"availability\":0.28,\"supportContribution\":0,\"reliability\":0.56,\"seasonalModifier\":0.95,\"riskPlaceholder\":0.15,\"pressure\":0},{\"classId\":\"medicinal_or_toxic\",\"domain\":\"medicinal_risk\",\"availability\":0.19,\"supportContribution\":0,\"reliability\":0.39,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.58,\"pressure\":0},{\"classId\":\"water_resource\",\"domain\":\"water\",\"availability\":0.25,\"supportContribution\":0,\"reliability\":0.58,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.15,\"pressure\":0}],\"dominantClass\":\"generic_plant_food\",\"resourceDiversity\":0.5,\"totalSupportFromResources\":0.34,\"limitingClassFlags\":[\"aquatic_food\"],\"sourceReasonId\":\"reason:resource_class:tile:135:41:2:availability_decomposed\"}|tile:136:41:{\"tileId\":\"tile:136:41\",\"season\":\"autumn\",\"contributionByClass\":[{\"classId\":\"generic_plant_food\",\"domain\":\"food\",\"availability\":0.39,\"supportContribution\":0.18,\"reliability\":0.47,\"seasonalModifier\":0.91,\"riskPlaceholder\":0.13,\"pressure\":0},{\"classId\":\"aquatic_food\",\"domain\":\"food\",\"availability\":0.02,\"supportContribution\":0.01,\"reliability\":0.52,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.17,\"pressure\":0},{\"classId\":\"animal_food\",\"domain\":\"food\",\"availability\":0.34,\"supportContribution\":0.08,\"reliability\":0.33,\"seasonalModifier\":0.92,\"riskPlaceholder\":0.35,\"pressure\":0},{\"classId\":\"fallback_food\",\"domain\":\"food\",\"availability\":0.4,\"supportContribution\":0.07,\"reliability\":0.61,\"seasonalModifier\":0.96,\"riskPlaceholder\":0.23,\"pressure\":0},{\"classId\":\"fiber_material\",\"domain\":\"material\",\"availability\":0.14,\"supportContribution\":0,\"reliability\":0.55,\"seasonalModifier\":0.94,\"riskPlaceholder\":0.11,\"pressure\":0},{\"classId\":\"fuel_material\",\"domain\":\"material\",\"availability\":0.28,\"supportContribution\":0,\"reliability\":0.56,\"seasonalModifier\":0.95,\"riskPlaceholder\":0.15,\"pressure\":0},{\"classId\":\"medicinal_or_toxic\",\"domain\":\"medicinal_risk\",\"availability\":0.19,\"supportContribution\":0,\"reliability\":0.39,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.58,\"pressure\":0},{\"classId\":\"water_resource\",\"domain\":\"water\",\"availability\":0.25,\"supportContribution\":0,\"reliability\":0.58,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.15,\"pressure\":0}],\"dominantClass\":\"generic_plant_food\",\"resourceDiversity\":0.5,\"totalSupportFromResources\":0.34,\"limitingClassFlags\":[\"aquatic_food\"],\"sourceReasonId\":\"reason:resource_class:tile:136:41:2:availability_decomposed\"}",
+            "selectedActionId": null,
+            "selectedActionKind": null,
+            "selectedTarget": null
+          },
+          "counterfactual": {
+            "verdict": "resource_candidates_read",
+            "ranking": "tile:138:41:{\"tileId\":\"tile:138:41\",\"season\":\"autumn\",\"contributionByClass\":[{\"classId\":\"generic_plant_food\",\"domain\":\"food\",\"availability\":0.42,\"supportContribution\":0.19,\"reliability\":0.47,\"seasonalModifier\":1,\"riskPlaceholder\":0.13,\"pressure\":0},{\"classId\":\"aquatic_food\",\"domain\":\"food\",\"availability\":0.01,\"supportContribution\":0,\"reliability\":0.52,\"seasonalModifier\":1,\"riskPlaceholder\":0.17,\"pressure\":0},{\"classId\":\"animal_food\",\"domain\":\"food\",\"availability\":0.34,\"supportContribution\":0.07,\"reliability\":0.33,\"seasonalModifier\":1,\"riskPlaceholder\":0.35,\"pressure\":0},{\"classId\":\"fallback_food\",\"domain\":\"food\",\"availability\":0.4,\"supportContribution\":0.06,\"reliability\":0.61,\"seasonalModifier\":1,\"riskPlaceholder\":0.23,\"pressure\":0},{\"classId\":\"fiber_material\",\"domain\":\"material\",\"availability\":0.11,\"supportContribution\":0,\"reliability\":0.55,\"seasonalModifier\":1,\"riskPlaceholder\":0.11,\"pressure\":0},{\"classId\":\"fuel_material\",\"domain\":\"material\",\"availability\":0.31,\"supportContribution\":0,\"reliability\":0.56,\"seasonalModifier\":1,\"riskPlaceholder\":0.15,\"pressure\":0},{\"classId\":\"medicinal_or_toxic\",\"domain\":\"medicinal_risk\",\"availability\":0.19,\"supportContribution\":0,\"reliability\":0.39,\"seasonalModifier\":1,\"riskPlaceholder\":0.58,\"pressure\":0},{\"classId\":\"water_resource\",\"domain\":\"water\",\"availability\":0.11,\"supportContribution\":0,\"reliability\":0.58,\"seasonalModifier\":1,\"riskPlaceholder\":0.15,\"pressure\":0}],\"dominantClass\":\"generic_plant_food\",\"resourceDiversity\":0.5,\"totalSupportFromResources\":0.32,\"limitingClassFlags\":[\"aquatic_food\"],\"sourceReasonId\":\"reason:resource_class:tile:138:41:2:availability_decomposed\"}|tile:138:42:{\"tileId\":\"tile:138:42\",\"season\":\"autumn\",\"contributionByClass\":[{\"classId\":\"generic_plant_food\",\"domain\":\"food\",\"availability\":0.41,\"supportContribution\":0.19,\"reliability\":0.48,\"seasonalModifier\":1,\"riskPlaceholder\":0.13,\"pressure\":0},{\"classId\":\"aquatic_food\",\"domain\":\"food\",\"availability\":0.02,\"supportContribution\":0.01,\"reliability\":0.53,\"seasonalModifier\":1,\"riskPlaceholder\":0.17,\"pressure\":0},{\"classId\":\"animal_food\",\"domain\":\"food\",\"availability\":0.34,\"supportContribution\":0.07,\"reliability\":0.34,\"seasonalModifier\":1,\"riskPlaceholder\":0.35,\"pressure\":0},{\"classId\":\"fallback_food\",\"domain\":\"food\",\"availability\":0.39,\"supportContribution\":0.06,\"reliability\":0.62,\"seasonalModifier\":1,\"riskPlaceholder\":0.23,\"pressure\":0},{\"classId\":\"fiber_material\",\"domain\":\"material\",\"availability\":0.13,\"supportContribution\":0,\"reliability\":0.56,\"seasonalModifier\":1,\"riskPlaceholder\":0.11,\"pressure\":0},{\"classId\":\"fuel_material\",\"domain\":\"material\",\"availability\":0.3,\"supportContribution\":0,\"reliability\":0.58,\"seasonalModifier\":1,\"riskPlaceholder\":0.15,\"pressure\":0},{\"classId\":\"medicinal_or_toxic\",\"domain\":\"medicinal_risk\",\"availability\":0.19,\"supportContribution\":0,\"reliability\":0.4,\"seasonalModifier\":1,\"riskPlaceholder\":0.58,\"pressure\":0},{\"classId\":\"water_resource\",\"domain\":\"water\",\"availability\":0.19,\"supportContribution\":0,\"reliability\":0.59,\"seasonalModifier\":1,\"riskPlaceholder\":0.15,\"pressure\":0}],\"dominantClass\":\"generic_plant_food\",\"resourceDiversity\":0.5,\"totalSupportFromResources\":0.33,\"limitingClassFlags\":[\"aquatic_food\"],\"sourceReasonId\":\"reason:resource_class:tile:138:42:2:availability_decomposed\"}|tile:137:41:{\"tileId\":\"tile:137:41\",\"season\":\"autumn\",\"contributionByClass\":[{\"classId\":\"generic_plant_food\",\"domain\":\"food\",\"availability\":0.42,\"supportContribution\":0.19,\"reliability\":0.48,\"seasonalModifier\":1,\"riskPlaceholder\":0.13,\"pressure\":0},{\"classId\":\"aquatic_food\",\"domain\":\"food\",\"availability\":0.01,\"supportContribution\":0,\"reliability\":0.52,\"seasonalModifier\":1,\"riskPlaceholder\":0.17,\"pressure\":0},{\"classId\":\"animal_food\",\"domain\":\"food\",\"availability\":0.34,\"supportContribution\":0.07,\"reliability\":0.33,\"seasonalModifier\":1,\"riskPlaceholder\":0.35,\"pressure\":0},{\"classId\":\"fallback_food\",\"domain\":\"food\",\"availability\":0.39,\"supportContribution\":0.06,\"reliability\":0.62,\"seasonalModifier\":1,\"riskPlaceholder\":0.23,\"pressure\":0},{\"classId\":\"fiber_material\",\"domain\":\"material\",\"availability\":0.12,\"supportContribution\":0,\"reliability\":0.55,\"seasonalModifier\":1,\"riskPlaceholder\":0.11,\"pressure\":0},{\"classId\":\"fuel_material\",\"domain\":\"material\",\"availability\":0.3,\"supportContribution\":0,\"reliability\":0.57,\"seasonalModifier\":1,\"riskPlaceholder\":0.15,\"pressure\":0},{\"classId\":\"medicinal_or_toxic\",\"domain\":\"medicinal_risk\",\"availability\":0.19,\"supportContribution\":0,\"reliability\":0.4,\"seasonalModifier\":1,\"riskPlaceholder\":0.58,\"pressure\":0},{\"classId\":\"water_resource\",\"domain\":\"water\",\"availability\":0.15,\"supportContribution\":0,\"reliability\":0.59,\"seasonalModifier\":1,\"riskPlaceholder\":0.15,\"pressure\":0}],\"dominantClass\":\"generic_plant_food\",\"resourceDiversity\":0.5,\"totalSupportFromResources\":0.32,\"limitingClassFlags\":[\"aquatic_food\"],\"sourceReasonId\":\"reason:resource_class:tile:137:41:2:availability_decomposed\"}|tile:132:42:{\"tileId\":\"tile:132:42\",\"season\":\"autumn\",\"contributionByClass\":[{\"classId\":\"generic_plant_food\",\"domain\":\"food\",\"availability\":0.39,\"supportContribution\":0.18,\"reliability\":0.47,\"seasonalModifier\":0.91,\"riskPlaceholder\":0.13,\"pressure\":0},{\"classId\":\"aquatic_food\",\"domain\":\"food\",\"availability\":0.02,\"supportContribution\":0.01,\"reliability\":0.52,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.17,\"pressure\":0},{\"classId\":\"animal_food\",\"domain\":\"food\",\"availability\":0.34,\"supportContribution\":0.08,\"reliability\":0.33,\"seasonalModifier\":0.92,\"riskPlaceholder\":0.35,\"pressure\":0},{\"classId\":\"fallback_food\",\"domain\":\"food\",\"availability\":0.4,\"supportContribution\":0.07,\"reliability\":0.61,\"seasonalModifier\":0.96,\"riskPlaceholder\":0.23,\"pressure\":0},{\"classId\":\"fiber_material\",\"domain\":\"material\",\"availability\":0.14,\"supportContribution\":0,\"reliability\":0.55,\"seasonalModifier\":0.94,\"riskPlaceholder\":0.11,\"pressure\":0},{\"classId\":\"fuel_material\",\"domain\":\"material\",\"availability\":0.28,\"supportContribution\":0,\"reliability\":0.56,\"seasonalModifier\":0.95,\"riskPlaceholder\":0.15,\"pressure\":0},{\"classId\":\"medicinal_or_toxic\",\"domain\":\"medicinal_risk\",\"availability\":0.19,\"supportContribution\":0,\"reliability\":0.39,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.58,\"pressure\":0},{\"classId\":\"water_resource\",\"domain\":\"water\",\"availability\":0.25,\"supportContribution\":0,\"reliability\":0.58,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.15,\"pressure\":0}],\"dominantClass\":\"generic_plant_food\",\"resourceDiversity\":0.5,\"totalSupportFromResources\":0.34,\"limitingClassFlags\":[\"aquatic_food\"],\"sourceReasonId\":\"reason:resource_class:tile:132:42:2:availability_decomposed\"}|tile:132:41:{\"tileId\":\"tile:132:41\",\"season\":\"autumn\",\"contributionByClass\":[{\"classId\":\"generic_plant_food\",\"domain\":\"food\",\"availability\":0.39,\"supportContribution\":0.18,\"reliability\":0.47,\"seasonalModifier\":0.91,\"riskPlaceholder\":0.13,\"pressure\":0},{\"classId\":\"aquatic_food\",\"domain\":\"food\",\"availability\":0.02,\"supportContribution\":0.01,\"reliability\":0.52,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.17,\"pressure\":0},{\"classId\":\"animal_food\",\"domain\":\"food\",\"availability\":0.34,\"supportContribution\":0.08,\"reliability\":0.33,\"seasonalModifier\":0.92,\"riskPlaceholder\":0.35,\"pressure\":0},{\"classId\":\"fallback_food\",\"domain\":\"food\",\"availability\":0.4,\"supportContribution\":0.07,\"reliability\":0.61,\"seasonalModifier\":0.96,\"riskPlaceholder\":0.23,\"pressure\":0},{\"classId\":\"fiber_material\",\"domain\":\"material\",\"availability\":0.14,\"supportContribution\":0,\"reliability\":0.55,\"seasonalModifier\":0.94,\"riskPlaceholder\":0.11,\"pressure\":0},{\"classId\":\"fuel_material\",\"domain\":\"material\",\"availability\":0.28,\"supportContribution\":0,\"reliability\":0.56,\"seasonalModifier\":0.95,\"riskPlaceholder\":0.15,\"pressure\":0},{\"classId\":\"medicinal_or_toxic\",\"domain\":\"medicinal_risk\",\"availability\":0.19,\"supportContribution\":0,\"reliability\":0.39,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.58,\"pressure\":0},{\"classId\":\"water_resource\",\"domain\":\"water\",\"availability\":0.25,\"supportContribution\":0,\"reliability\":0.58,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.15,\"pressure\":0}],\"dominantClass\":\"generic_plant_food\",\"resourceDiversity\":0.5,\"totalSupportFromResources\":0.34,\"limitingClassFlags\":[\"aquatic_food\"],\"sourceReasonId\":\"reason:resource_class:tile:132:41:2:availability_decomposed\"}|tile:133:41:{\"tileId\":\"tile:133:41\",\"season\":\"autumn\",\"contributionByClass\":[{\"classId\":\"generic_plant_food\",\"domain\":\"food\",\"availability\":0.39,\"supportContribution\":0.18,\"reliability\":0.47,\"seasonalModifier\":0.91,\"riskPlaceholder\":0.13,\"pressure\":0},{\"classId\":\"aquatic_food\",\"domain\":\"food\",\"availability\":0.02,\"supportContribution\":0.01,\"reliability\":0.52,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.17,\"pressure\":0},{\"classId\":\"animal_food\",\"domain\":\"food\",\"availability\":0.34,\"supportContribution\":0.08,\"reliability\":0.33,\"seasonalModifier\":0.92,\"riskPlaceholder\":0.35,\"pressure\":0},{\"classId\":\"fallback_food\",\"domain\":\"food\",\"availability\":0.4,\"supportContribution\":0.07,\"reliability\":0.61,\"seasonalModifier\":0.96,\"riskPlaceholder\":0.23,\"pressure\":0},{\"classId\":\"fiber_material\",\"domain\":\"material\",\"availability\":0.14,\"supportContribution\":0,\"reliability\":0.55,\"seasonalModifier\":0.94,\"riskPlaceholder\":0.11,\"pressure\":0},{\"classId\":\"fuel_material\",\"domain\":\"material\",\"availability\":0.28,\"supportContribution\":0,\"reliability\":0.56,\"seasonalModifier\":0.95,\"riskPlaceholder\":0.15,\"pressure\":0},{\"classId\":\"medicinal_or_toxic\",\"domain\":\"medicinal_risk\",\"availability\":0.19,\"supportContribution\":0,\"reliability\":0.39,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.58,\"pressure\":0},{\"classId\":\"water_resource\",\"domain\":\"water\",\"availability\":0.25,\"supportContribution\":0,\"reliability\":0.58,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.15,\"pressure\":0}],\"dominantClass\":\"generic_plant_food\",\"resourceDiversity\":0.5,\"totalSupportFromResources\":0.34,\"limitingClassFlags\":[\"aquatic_food\"],\"sourceReasonId\":\"reason:resource_class:tile:133:41:2:availability_decomposed\"}|tile:135:41:{\"tileId\":\"tile:135:41\",\"season\":\"autumn\",\"contributionByClass\":[{\"classId\":\"generic_plant_food\",\"domain\":\"food\",\"availability\":0.39,\"supportContribution\":0.18,\"reliability\":0.47,\"seasonalModifier\":0.91,\"riskPlaceholder\":0.13,\"pressure\":0},{\"classId\":\"aquatic_food\",\"domain\":\"food\",\"availability\":0.02,\"supportContribution\":0.01,\"reliability\":0.52,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.17,\"pressure\":0},{\"classId\":\"animal_food\",\"domain\":\"food\",\"availability\":0.34,\"supportContribution\":0.08,\"reliability\":0.33,\"seasonalModifier\":0.92,\"riskPlaceholder\":0.35,\"pressure\":0},{\"classId\":\"fallback_food\",\"domain\":\"food\",\"availability\":0.4,\"supportContribution\":0.07,\"reliability\":0.61,\"seasonalModifier\":0.96,\"riskPlaceholder\":0.23,\"pressure\":0},{\"classId\":\"fiber_material\",\"domain\":\"material\",\"availability\":0.14,\"supportContribution\":0,\"reliability\":0.55,\"seasonalModifier\":0.94,\"riskPlaceholder\":0.11,\"pressure\":0},{\"classId\":\"fuel_material\",\"domain\":\"material\",\"availability\":0.28,\"supportContribution\":0,\"reliability\":0.56,\"seasonalModifier\":0.95,\"riskPlaceholder\":0.15,\"pressure\":0},{\"classId\":\"medicinal_or_toxic\",\"domain\":\"medicinal_risk\",\"availability\":0.19,\"supportContribution\":0,\"reliability\":0.39,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.58,\"pressure\":0},{\"classId\":\"water_resource\",\"domain\":\"water\",\"availability\":0.25,\"supportContribution\":0,\"reliability\":0.58,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.15,\"pressure\":0}],\"dominantClass\":\"generic_plant_food\",\"resourceDiversity\":0.5,\"totalSupportFromResources\":0.34,\"limitingClassFlags\":[\"aquatic_food\"],\"sourceReasonId\":\"reason:resource_class:tile:135:41:2:availability_decomposed\"}|tile:136:41:{\"tileId\":\"tile:136:41\",\"season\":\"autumn\",\"contributionByClass\":[{\"classId\":\"generic_plant_food\",\"domain\":\"food\",\"availability\":0.39,\"supportContribution\":0.18,\"reliability\":0.47,\"seasonalModifier\":0.91,\"riskPlaceholder\":0.13,\"pressure\":0},{\"classId\":\"aquatic_food\",\"domain\":\"food\",\"availability\":0.02,\"supportContribution\":0.01,\"reliability\":0.52,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.17,\"pressure\":0},{\"classId\":\"animal_food\",\"domain\":\"food\",\"availability\":0.34,\"supportContribution\":0.08,\"reliability\":0.33,\"seasonalModifier\":0.92,\"riskPlaceholder\":0.35,\"pressure\":0},{\"classId\":\"fallback_food\",\"domain\":\"food\",\"availability\":0.4,\"supportContribution\":0.07,\"reliability\":0.61,\"seasonalModifier\":0.96,\"riskPlaceholder\":0.23,\"pressure\":0},{\"classId\":\"fiber_material\",\"domain\":\"material\",\"availability\":0.14,\"supportContribution\":0,\"reliability\":0.55,\"seasonalModifier\":0.94,\"riskPlaceholder\":0.11,\"pressure\":0},{\"classId\":\"fuel_material\",\"domain\":\"material\",\"availability\":0.28,\"supportContribution\":0,\"reliability\":0.56,\"seasonalModifier\":0.95,\"riskPlaceholder\":0.15,\"pressure\":0},{\"classId\":\"medicinal_or_toxic\",\"domain\":\"medicinal_risk\",\"availability\":0.19,\"supportContribution\":0,\"reliability\":0.39,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.58,\"pressure\":0},{\"classId\":\"water_resource\",\"domain\":\"water\",\"availability\":0.25,\"supportContribution\":0,\"reliability\":0.58,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.15,\"pressure\":0}],\"dominantClass\":\"generic_plant_food\",\"resourceDiversity\":0.5,\"totalSupportFromResources\":0.34,\"limitingClassFlags\":[\"aquatic_food\"],\"sourceReasonId\":\"reason:resource_class:tile:136:41:2:availability_decomposed\"}",
+            "selectedActionId": null,
+            "selectedActionKind": null,
+            "selectedTarget": null
+          }
+        },
+        {
+          "readerFamily": "camp_movement",
+          "productionFunction": "deriveCampMovementDecisionSupport",
+          "invocationDay": 270,
+          "consultationRole": "pressure_relief_candidate",
+          "outputChanged": false,
+          "selectedOutputChanged": false,
+          "control": {
+            "verdict": "local_camp_shift:tile:139:41,hard_move_recovery:tile:141:41,temporary_task_camp:tile:141:41",
+            "ranking": "local_camp_shift|tile:139:41|0.2000,hard_move_recovery|tile:141:41|0.1400,temporary_task_camp|tile:141:41|0.1200",
+            "selectedActionId": "decision:band:custom:0:3",
+            "selectedActionKind": "move_to_tile",
+            "selectedTarget": "tile:140:41"
+          },
+          "counterfactual": {
+            "verdict": "local_camp_shift:tile:139:41,hard_move_recovery:tile:141:41,temporary_task_camp:tile:141:41",
+            "ranking": "local_camp_shift|tile:139:41|0.2000,hard_move_recovery|tile:141:41|0.1400,temporary_task_camp|tile:141:41|0.1200",
+            "selectedActionId": "decision:band:custom:0:3",
+            "selectedActionKind": "move_to_tile",
+            "selectedTarget": "tile:140:41"
+          }
+        },
+        {
+          "readerFamily": "camp_movement",
+          "productionFunction": "deriveCampMovementDecisionSupport",
+          "invocationDay": 630,
+          "consultationRole": "current_camp_baseline+current_shift_baseline",
+          "outputChanged": false,
+          "selectedOutputChanged": true,
+          "control": {
+            "verdict": "local_camp_shift:tile:137:43,temporary_task_camp:tile:137:41,hard_move_recovery:tile:137:41",
+            "ranking": "local_camp_shift|tile:137:43|0.2200,temporary_task_camp|tile:137:41|0.1500,hard_move_recovery|tile:137:41|0.1400",
+            "selectedActionId": "decision:band:custom:0:7",
+            "selectedActionKind": "move_to_tile",
+            "selectedTarget": "tile:137:43"
+          },
+          "counterfactual": {
+            "verdict": "local_camp_shift:tile:137:43,temporary_task_camp:tile:137:41,hard_move_recovery:tile:137:41",
+            "ranking": "local_camp_shift|tile:137:43|0.2200,temporary_task_camp|tile:137:41|0.1500,hard_move_recovery|tile:137:41|0.1400",
+            "selectedActionId": "decision:band:custom:0:7",
+            "selectedActionKind": "resource_scout",
+            "selectedTarget": "tile:136:41"
+          }
+        }
+      ]
+    },
+    {
+      "scenario": "site_E_hills",
+      "seed": "s4",
+      "recordEventId": "exploration-record:band:custom:0:expedition:band:custom:0:96:frontier_exploration:1b466dbc:tile:137:41:104",
+      "tileId": "tile:137:41",
+      "expeditionId": "expedition:band:custom:0:96:frontier_exploration:1b466dbc",
+      "returnDay": 104,
+      "suppressedReturnWrite": {
+        "recordEventId": "exploration-record:band:custom:0:expedition:band:custom:0:96:frontier_exploration:1b466dbc:tile:137:41:104",
+        "tileId": "tile:137:41",
+        "expeditionId": "expedition:band:custom:0:96:frontier_exploration:1b466dbc",
+        "returnDay": 104,
+        "newOrRefreshed": "refreshed"
+      },
+      "firstReader": {
+        "readerFamily": "movement_destination",
+        "productionFunction": "deriveCarryingCapacity/deriveKnownUnusedHabitat",
+        "invocationDay": 180,
+        "consultationRole": "destination_candidate"
+      },
+      "readerDay": 180,
+      "readerOutput": {
+        "control": {
+          "verdict": "known_unused:tile:137:41:rejected",
+          "ranking": "tile:137:41|0.2800|0.4200",
+          "selectedActionId": "decision:band:custom:0:2",
+          "selectedActionKind": "move_to_tile",
+          "selectedTarget": "tile:140:41"
+        },
+        "counterfactual": {
+          "verdict": "known_unused:tile:136:41:rejected",
+          "ranking": "tile:136:41|0.2200|0.4200",
+          "selectedActionId": "decision:band:custom:0:2",
+          "selectedActionKind": "move_to_tile",
+          "selectedTarget": "tile:140:41"
+        }
+      },
+      "firstChangedReader": {
+        "readerFamily": "movement_destination",
+        "productionFunction": "deriveCarryingCapacity/deriveKnownUnusedHabitat",
+        "invocationDay": 180,
+        "consultationRole": "destination_candidate",
+        "outputChanged": true,
+        "selectedOutputChanged": false,
+        "control": {
+          "verdict": "known_unused:tile:137:41:rejected",
+          "ranking": "tile:137:41|0.2800|0.4200",
+          "selectedActionId": "decision:band:custom:0:2",
+          "selectedActionKind": "move_to_tile",
+          "selectedTarget": "tile:140:41"
+        },
+        "counterfactual": {
+          "verdict": "known_unused:tile:136:41:rejected",
+          "ranking": "tile:136:41|0.2200|0.4200",
+          "selectedActionId": "decision:band:custom:0:2",
+          "selectedActionKind": "move_to_tile",
+          "selectedTarget": "tile:140:41"
+        }
+      },
+      "actionReader": null,
+      "actionId": "camp-action:decision:band:custom:0:7:camp-shift:band:custom:0:7:tile:137:41:tile:137:43",
+      "actionKind": "local_shift",
+      "target": "tile:137:43",
+      "workers": null,
+      "route": null,
+      "physicalOutcomeId": "camp-shift:band:custom:0:7:tile:137:41:tile:137:43",
+      "actionDifferences": {
+        "movement": {
+          "day": 630,
+          "control": [
+            {
+              "decisionId": "decision:band:custom:0:7",
+              "bandId": "band:custom:0",
+              "day": 630,
+              "actionKind": "move_to_tile",
+              "targetTileId": "tile:137:43",
+              "movementRecordId": "movement-record:band:custom:0:7:decision:band:custom:0:7",
+              "positionBefore": "tile:137:41",
+              "positionAfter": "tile:137:43"
+            }
+          ],
+          "counterfactual": []
+        },
+        "camp": {
+          "day": 630,
+          "control": [
+            {
+              "campActionId": "camp-action:decision:band:custom:0:7:camp-shift:band:custom:0:7:tile:137:41:tile:137:43",
+              "bandId": "band:custom:0",
+              "day": 630,
+              "campActionKind": "local_shift",
+              "targetTileId": "tile:137:43",
+              "campRecordId": "camp-shift:band:custom:0:7:tile:137:41:tile:137:43",
+              "positionBefore": "tile:137:41",
+              "positionAfter": "tile:137:43"
+            }
+          ],
+          "counterfactual": [
+            {
+              "campActionId": "camp-action:decision:band:custom:0:7:temporary-task-camp:band:custom:0:7:tile:136:41",
+              "bandId": "band:custom:0",
+              "day": 630,
+              "campActionKind": "temporary_task_camp",
+              "targetTileId": "tile:136:41",
+              "campRecordId": "temporary-task-camp:band:custom:0:7:tile:136:41",
+              "positionBefore": "tile:137:41",
+              "positionAfter": "tile:137:41"
+            }
+          ]
+        },
+        "resource": {
+          "day": 636,
+          "control": [
+            {
+              "activityActionId": "activity-action:daily-trip:band:custom:0:636:plant_gathering_group:tile:137:41",
+              "bandId": "band:custom:0",
+              "day": 636,
+              "activityKind": "plant_gathering_group",
+              "selectedPatchId": "patch:tile:137:41:generic_plant_food",
+              "selectedTileId": "tile:137:41",
+              "tripOrTaskId": "daily-trip:band:custom:0:636:plant_gathering_group:tile:137:41",
+              "workers": 4,
+              "route": [
+                "tile:137:43",
+                "tile:137:42",
+                "tile:137:41"
+              ],
+              "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:636:plant_gathering_group:tile:137:41:partial_success",
+              "receiptId": "receipt:daily-trip:band:custom:0:636:plant_gathering_group:tile:137:41",
+              "usableSupportReturned": 0.0099
+            }
+          ],
+          "counterfactual": [
+            {
+              "activityActionId": "activity-action:daily-trip:band:custom:0:636:plant_gathering_group:tile:135:41",
+              "bandId": "band:custom:0",
+              "day": 636,
+              "activityKind": "plant_gathering_group",
+              "selectedPatchId": "patch:tile:135:41:fallback_food",
+              "selectedTileId": "tile:135:41",
+              "tripOrTaskId": "daily-trip:band:custom:0:636:plant_gathering_group:tile:135:41",
+              "workers": 4,
+              "route": [
+                "tile:137:41",
+                "tile:136:41",
+                "tile:135:41"
+              ],
+              "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:636:plant_gathering_group:tile:135:41:target_not_found",
+              "receiptId": "receipt:daily-trip:band:custom:0:636:plant_gathering_group:tile:135:41",
+              "usableSupportReturned": 0
+            }
+          ]
+        },
+        "fission": null
+      },
+      "receiptDifference": {
+        "index": 532,
+        "day": 636,
+        "control": {
+          "day": 636,
+          "totalReceipts": 0.0099,
+          "totalSupport": 0.09,
+          "rows": [
+            {
+              "bandId": "band:custom:0",
+              "receipts": 0.0099,
+              "support": 0.09
+            }
+          ]
+        },
+        "counterfactual": {
+          "day": 636,
+          "totalReceipts": 0.0189,
+          "totalSupport": 0.09,
+          "rows": [
+            {
+              "bandId": "band:custom:0",
+              "receipts": 0.0189,
+              "support": 0.09
+            }
+          ]
+        }
+      },
+      "supportDifference": {
+        "day": 636,
+        "control": 0.09,
+        "counterfactual": 0.09
+      },
+      "typedPhysicalMechanism": "changed_local_residential_action",
+      "readerChain": [
+        {
+          "readerFamily": "movement_destination",
+          "productionFunction": "deriveCarryingCapacity/deriveKnownUnusedHabitat",
+          "invocationDay": 180,
+          "consultationRole": "destination_candidate",
+          "outputChanged": true,
+          "selectedOutputChanged": false,
+          "control": {
+            "verdict": "known_unused:tile:137:41:rejected",
+            "ranking": "tile:137:41|0.2800|0.4200",
+            "selectedActionId": "decision:band:custom:0:2",
+            "selectedActionKind": "move_to_tile",
+            "selectedTarget": "tile:140:41"
+          },
+          "counterfactual": {
+            "verdict": "known_unused:tile:136:41:rejected",
+            "ranking": "tile:136:41|0.2200|0.4200",
+            "selectedActionId": "decision:band:custom:0:2",
+            "selectedActionKind": "move_to_tile",
+            "selectedTarget": "tile:140:41"
+          }
+        },
+        {
+          "readerFamily": "resource_activity",
+          "productionFunction": "collectResourceInferenceCandidates/inferResourceKnowledge",
+          "invocationDay": 180,
+          "consultationRole": "resource_inference_candidate",
+          "outputChanged": true,
+          "selectedOutputChanged": false,
+          "control": {
+            "verdict": "resource_candidates_read",
+            "ranking": "tile:137:41:{\"tileId\":\"tile:137:41\",\"season\":\"autumn\",\"contributionByClass\":[{\"classId\":\"generic_plant_food\",\"domain\":\"food\",\"availability\":0.42,\"supportContribution\":0.2,\"reliability\":0.48,\"seasonalModifier\":1,\"riskPlaceholder\":0.13,\"pressure\":0},{\"classId\":\"aquatic_food\",\"domain\":\"food\",\"availability\":0.02,\"supportContribution\":0.01,\"reliability\":0.52,\"seasonalModifier\":1,\"riskPlaceholder\":0.17,\"pressure\":0},{\"classId\":\"animal_food\",\"domain\":\"food\",\"availability\":0.34,\"supportContribution\":0.07,\"reliability\":0.33,\"seasonalModifier\":1,\"riskPlaceholder\":0.35,\"pressure\":0},{\"classId\":\"fallback_food\",\"domain\":\"food\",\"availability\":0.4,\"supportContribution\":0.06,\"reliability\":0.62,\"seasonalModifier\":1,\"riskPlaceholder\":0.23,\"pressure\":0},{\"classId\":\"fiber_material\",\"domain\":\"material\",\"availability\":0.15,\"supportContribution\":0,\"reliability\":0.55,\"seasonalModifier\":1,\"riskPlaceholder\":0.11,\"pressure\":0},{\"classId\":\"fuel_material\",\"domain\":\"material\",\"availability\":0.31,\"supportContribution\":0,\"reliability\":0.57,\"seasonalModifier\":1,\"riskPlaceholder\":0.15,\"pressure\":0},{\"classId\":\"medicinal_or_toxic\",\"domain\":\"medicinal_risk\",\"availability\":0.19,\"supportContribution\":0,\"reliability\":0.4,\"seasonalModifier\":1,\"riskPlaceholder\":0.58,\"pressure\":0},{\"classId\":\"water_resource\",\"domain\":\"water\",\"availability\":0.25,\"supportContribution\":0,\"reliability\":0.59,\"seasonalModifier\":1,\"riskPlaceholder\":0.15,\"pressure\":0}],\"dominantClass\":\"generic_plant_food\",\"resourceDiversity\":0.5,\"totalSupportFromResources\":0.34,\"limitingClassFlags\":[\"aquatic_food\"],\"sourceReasonId\":\"reason:resource_class:tile:137:41:2:availability_decomposed\"}|tile:138:41:{\"tileId\":\"tile:138:41\",\"season\":\"autumn\",\"contributionByClass\":[{\"classId\":\"generic_plant_food\",\"domain\":\"food\",\"availability\":0.42,\"supportContribution\":0.19,\"reliability\":0.47,\"seasonalModifier\":1,\"riskPlaceholder\":0.13,\"pressure\":0},{\"classId\":\"aquatic_food\",\"domain\":\"food\",\"availability\":0.01,\"supportContribution\":0,\"reliability\":0.52,\"seasonalModifier\":1,\"riskPlaceholder\":0.17,\"pressure\":0},{\"classId\":\"animal_food\",\"domain\":\"food\",\"availability\":0.34,\"supportContribution\":0.07,\"reliability\":0.33,\"seasonalModifier\":1,\"riskPlaceholder\":0.35,\"pressure\":0},{\"classId\":\"fallback_food\",\"domain\":\"food\",\"availability\":0.4,\"supportContribution\":0.06,\"reliability\":0.61,\"seasonalModifier\":1,\"riskPlaceholder\":0.23,\"pressure\":0},{\"classId\":\"fiber_material\",\"domain\":\"material\",\"availability\":0.11,\"supportContribution\":0,\"reliability\":0.55,\"seasonalModifier\":1,\"riskPlaceholder\":0.11,\"pressure\":0},{\"classId\":\"fuel_material\",\"domain\":\"material\",\"availability\":0.31,\"supportContribution\":0,\"reliability\":0.56,\"seasonalModifier\":1,\"riskPlaceholder\":0.15,\"pressure\":0},{\"classId\":\"medicinal_or_toxic\",\"domain\":\"medicinal_risk\",\"availability\":0.19,\"supportContribution\":0,\"reliability\":0.39,\"seasonalModifier\":1,\"riskPlaceholder\":0.58,\"pressure\":0},{\"classId\":\"water_resource\",\"domain\":\"water\",\"availability\":0.11,\"supportContribution\":0,\"reliability\":0.58,\"seasonalModifier\":1,\"riskPlaceholder\":0.15,\"pressure\":0}],\"dominantClass\":\"generic_plant_food\",\"resourceDiversity\":0.5,\"totalSupportFromResources\":0.32,\"limitingClassFlags\":[\"aquatic_food\"],\"sourceReasonId\":\"reason:resource_class:tile:138:41:2:availability_decomposed\"}|tile:138:42:{\"tileId\":\"tile:138:42\",\"season\":\"autumn\",\"contributionByClass\":[{\"classId\":\"generic_plant_food\",\"domain\":\"food\",\"availability\":0.41,\"supportContribution\":0.19,\"reliability\":0.48,\"seasonalModifier\":1,\"riskPlaceholder\":0.13,\"pressure\":0},{\"classId\":\"aquatic_food\",\"domain\":\"food\",\"availability\":0.02,\"supportContribution\":0.01,\"reliability\":0.53,\"seasonalModifier\":1,\"riskPlaceholder\":0.17,\"pressure\":0},{\"classId\":\"animal_food\",\"domain\":\"food\",\"availability\":0.34,\"supportContribution\":0.07,\"reliability\":0.34,\"seasonalModifier\":1,\"riskPlaceholder\":0.35,\"pressure\":0},{\"classId\":\"fallback_food\",\"domain\":\"food\",\"availability\":0.39,\"supportContribution\":0.06,\"reliability\":0.62,\"seasonalModifier\":1,\"riskPlaceholder\":0.23,\"pressure\":0},{\"classId\":\"fiber_material\",\"domain\":\"material\",\"availability\":0.13,\"supportContribution\":0,\"reliability\":0.56,\"seasonalModifier\":1,\"riskPlaceholder\":0.11,\"pressure\":0},{\"classId\":\"fuel_material\",\"domain\":\"material\",\"availability\":0.3,\"supportContribution\":0,\"reliability\":0.58,\"seasonalModifier\":1,\"riskPlaceholder\":0.15,\"pressure\":0},{\"classId\":\"medicinal_or_toxic\",\"domain\":\"medicinal_risk\",\"availability\":0.19,\"supportContribution\":0,\"reliability\":0.4,\"seasonalModifier\":1,\"riskPlaceholder\":0.58,\"pressure\":0},{\"classId\":\"water_resource\",\"domain\":\"water\",\"availability\":0.19,\"supportContribution\":0,\"reliability\":0.59,\"seasonalModifier\":1,\"riskPlaceholder\":0.15,\"pressure\":0}],\"dominantClass\":\"generic_plant_food\",\"resourceDiversity\":0.5,\"totalSupportFromResources\":0.33,\"limitingClassFlags\":[\"aquatic_food\"],\"sourceReasonId\":\"reason:resource_class:tile:138:42:2:availability_decomposed\"}|tile:132:42:{\"tileId\":\"tile:132:42\",\"season\":\"autumn\",\"contributionByClass\":[{\"classId\":\"generic_plant_food\",\"domain\":\"food\",\"availability\":0.39,\"supportContribution\":0.18,\"reliability\":0.47,\"seasonalModifier\":0.91,\"riskPlaceholder\":0.13,\"pressure\":0},{\"classId\":\"aquatic_food\",\"domain\":\"food\",\"availability\":0.02,\"supportContribution\":0.01,\"reliability\":0.52,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.17,\"pressure\":0},{\"classId\":\"animal_food\",\"domain\":\"food\",\"availability\":0.34,\"supportContribution\":0.08,\"reliability\":0.33,\"seasonalModifier\":0.92,\"riskPlaceholder\":0.35,\"pressure\":0},{\"classId\":\"fallback_food\",\"domain\":\"food\",\"availability\":0.4,\"supportContribution\":0.07,\"reliability\":0.61,\"seasonalModifier\":0.96,\"riskPlaceholder\":0.23,\"pressure\":0},{\"classId\":\"fiber_material\",\"domain\":\"material\",\"availability\":0.14,\"supportContribution\":0,\"reliability\":0.55,\"seasonalModifier\":0.94,\"riskPlaceholder\":0.11,\"pressure\":0},{\"classId\":\"fuel_material\",\"domain\":\"material\",\"availability\":0.28,\"supportContribution\":0,\"reliability\":0.56,\"seasonalModifier\":0.95,\"riskPlaceholder\":0.15,\"pressure\":0},{\"classId\":\"medicinal_or_toxic\",\"domain\":\"medicinal_risk\",\"availability\":0.19,\"supportContribution\":0,\"reliability\":0.39,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.58,\"pressure\":0},{\"classId\":\"water_resource\",\"domain\":\"water\",\"availability\":0.25,\"supportContribution\":0,\"reliability\":0.58,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.15,\"pressure\":0}],\"dominantClass\":\"generic_plant_food\",\"resourceDiversity\":0.5,\"totalSupportFromResources\":0.34,\"limitingClassFlags\":[\"aquatic_food\"],\"sourceReasonId\":\"reason:resource_class:tile:132:42:2:availability_decomposed\"}|tile:132:41:{\"tileId\":\"tile:132:41\",\"season\":\"autumn\",\"contributionByClass\":[{\"classId\":\"generic_plant_food\",\"domain\":\"food\",\"availability\":0.39,\"supportContribution\":0.18,\"reliability\":0.47,\"seasonalModifier\":0.91,\"riskPlaceholder\":0.13,\"pressure\":0},{\"classId\":\"aquatic_food\",\"domain\":\"food\",\"availability\":0.02,\"supportContribution\":0.01,\"reliability\":0.52,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.17,\"pressure\":0},{\"classId\":\"animal_food\",\"domain\":\"food\",\"availability\":0.34,\"supportContribution\":0.08,\"reliability\":0.33,\"seasonalModifier\":0.92,\"riskPlaceholder\":0.35,\"pressure\":0},{\"classId\":\"fallback_food\",\"domain\":\"food\",\"availability\":0.4,\"supportContribution\":0.07,\"reliability\":0.61,\"seasonalModifier\":0.96,\"riskPlaceholder\":0.23,\"pressure\":0},{\"classId\":\"fiber_material\",\"domain\":\"material\",\"availability\":0.14,\"supportContribution\":0,\"reliability\":0.55,\"seasonalModifier\":0.94,\"riskPlaceholder\":0.11,\"pressure\":0},{\"classId\":\"fuel_material\",\"domain\":\"material\",\"availability\":0.28,\"supportContribution\":0,\"reliability\":0.56,\"seasonalModifier\":0.95,\"riskPlaceholder\":0.15,\"pressure\":0},{\"classId\":\"medicinal_or_toxic\",\"domain\":\"medicinal_risk\",\"availability\":0.19,\"supportContribution\":0,\"reliability\":0.39,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.58,\"pressure\":0},{\"classId\":\"water_resource\",\"domain\":\"water\",\"availability\":0.25,\"supportContribution\":0,\"reliability\":0.58,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.15,\"pressure\":0}],\"dominantClass\":\"generic_plant_food\",\"resourceDiversity\":0.5,\"totalSupportFromResources\":0.34,\"limitingClassFlags\":[\"aquatic_food\"],\"sourceReasonId\":\"reason:resource_class:tile:132:41:2:availability_decomposed\"}|tile:133:41:{\"tileId\":\"tile:133:41\",\"season\":\"autumn\",\"contributionByClass\":[{\"classId\":\"generic_plant_food\",\"domain\":\"food\",\"availability\":0.39,\"supportContribution\":0.18,\"reliability\":0.47,\"seasonalModifier\":0.91,\"riskPlaceholder\":0.13,\"pressure\":0},{\"classId\":\"aquatic_food\",\"domain\":\"food\",\"availability\":0.02,\"supportContribution\":0.01,\"reliability\":0.52,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.17,\"pressure\":0},{\"classId\":\"animal_food\",\"domain\":\"food\",\"availability\":0.34,\"supportContribution\":0.08,\"reliability\":0.33,\"seasonalModifier\":0.92,\"riskPlaceholder\":0.35,\"pressure\":0},{\"classId\":\"fallback_food\",\"domain\":\"food\",\"availability\":0.4,\"supportContribution\":0.07,\"reliability\":0.61,\"seasonalModifier\":0.96,\"riskPlaceholder\":0.23,\"pressure\":0},{\"classId\":\"fiber_material\",\"domain\":\"material\",\"availability\":0.14,\"supportContribution\":0,\"reliability\":0.55,\"seasonalModifier\":0.94,\"riskPlaceholder\":0.11,\"pressure\":0},{\"classId\":\"fuel_material\",\"domain\":\"material\",\"availability\":0.28,\"supportContribution\":0,\"reliability\":0.56,\"seasonalModifier\":0.95,\"riskPlaceholder\":0.15,\"pressure\":0},{\"classId\":\"medicinal_or_toxic\",\"domain\":\"medicinal_risk\",\"availability\":0.19,\"supportContribution\":0,\"reliability\":0.39,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.58,\"pressure\":0},{\"classId\":\"water_resource\",\"domain\":\"water\",\"availability\":0.25,\"supportContribution\":0,\"reliability\":0.58,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.15,\"pressure\":0}],\"dominantClass\":\"generic_plant_food\",\"resourceDiversity\":0.5,\"totalSupportFromResources\":0.34,\"limitingClassFlags\":[\"aquatic_food\"],\"sourceReasonId\":\"reason:resource_class:tile:133:41:2:availability_decomposed\"}|tile:135:41:{\"tileId\":\"tile:135:41\",\"season\":\"autumn\",\"contributionByClass\":[{\"classId\":\"generic_plant_food\",\"domain\":\"food\",\"availability\":0.39,\"supportContribution\":0.18,\"reliability\":0.47,\"seasonalModifier\":0.91,\"riskPlaceholder\":0.13,\"pressure\":0},{\"classId\":\"aquatic_food\",\"domain\":\"food\",\"availability\":0.02,\"supportContribution\":0.01,\"reliability\":0.52,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.17,\"pressure\":0},{\"classId\":\"animal_food\",\"domain\":\"food\",\"availability\":0.34,\"supportContribution\":0.08,\"reliability\":0.33,\"seasonalModifier\":0.92,\"riskPlaceholder\":0.35,\"pressure\":0},{\"classId\":\"fallback_food\",\"domain\":\"food\",\"availability\":0.4,\"supportContribution\":0.07,\"reliability\":0.61,\"seasonalModifier\":0.96,\"riskPlaceholder\":0.23,\"pressure\":0},{\"classId\":\"fiber_material\",\"domain\":\"material\",\"availability\":0.14,\"supportContribution\":0,\"reliability\":0.55,\"seasonalModifier\":0.94,\"riskPlaceholder\":0.11,\"pressure\":0},{\"classId\":\"fuel_material\",\"domain\":\"material\",\"availability\":0.28,\"supportContribution\":0,\"reliability\":0.56,\"seasonalModifier\":0.95,\"riskPlaceholder\":0.15,\"pressure\":0},{\"classId\":\"medicinal_or_toxic\",\"domain\":\"medicinal_risk\",\"availability\":0.19,\"supportContribution\":0,\"reliability\":0.39,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.58,\"pressure\":0},{\"classId\":\"water_resource\",\"domain\":\"water\",\"availability\":0.25,\"supportContribution\":0,\"reliability\":0.58,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.15,\"pressure\":0}],\"dominantClass\":\"generic_plant_food\",\"resourceDiversity\":0.5,\"totalSupportFromResources\":0.34,\"limitingClassFlags\":[\"aquatic_food\"],\"sourceReasonId\":\"reason:resource_class:tile:135:41:2:availability_decomposed\"}|tile:136:41:{\"tileId\":\"tile:136:41\",\"season\":\"autumn\",\"contributionByClass\":[{\"classId\":\"generic_plant_food\",\"domain\":\"food\",\"availability\":0.39,\"supportContribution\":0.18,\"reliability\":0.47,\"seasonalModifier\":0.91,\"riskPlaceholder\":0.13,\"pressure\":0},{\"classId\":\"aquatic_food\",\"domain\":\"food\",\"availability\":0.02,\"supportContribution\":0.01,\"reliability\":0.52,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.17,\"pressure\":0},{\"classId\":\"animal_food\",\"domain\":\"food\",\"availability\":0.34,\"supportContribution\":0.08,\"reliability\":0.33,\"seasonalModifier\":0.92,\"riskPlaceholder\":0.35,\"pressure\":0},{\"classId\":\"fallback_food\",\"domain\":\"food\",\"availability\":0.4,\"supportContribution\":0.07,\"reliability\":0.61,\"seasonalModifier\":0.96,\"riskPlaceholder\":0.23,\"pressure\":0},{\"classId\":\"fiber_material\",\"domain\":\"material\",\"availability\":0.14,\"supportContribution\":0,\"reliability\":0.55,\"seasonalModifier\":0.94,\"riskPlaceholder\":0.11,\"pressure\":0},{\"classId\":\"fuel_material\",\"domain\":\"material\",\"availability\":0.28,\"supportContribution\":0,\"reliability\":0.56,\"seasonalModifier\":0.95,\"riskPlaceholder\":0.15,\"pressure\":0},{\"classId\":\"medicinal_or_toxic\",\"domain\":\"medicinal_risk\",\"availability\":0.19,\"supportContribution\":0,\"reliability\":0.39,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.58,\"pressure\":0},{\"classId\":\"water_resource\",\"domain\":\"water\",\"availability\":0.25,\"supportContribution\":0,\"reliability\":0.58,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.15,\"pressure\":0}],\"dominantClass\":\"generic_plant_food\",\"resourceDiversity\":0.5,\"totalSupportFromResources\":0.34,\"limitingClassFlags\":[\"aquatic_food\"],\"sourceReasonId\":\"reason:resource_class:tile:136:41:2:availability_decomposed\"}",
+            "selectedActionId": null,
+            "selectedActionKind": null,
+            "selectedTarget": null
+          },
+          "counterfactual": {
+            "verdict": "resource_candidates_read",
+            "ranking": "tile:138:41:{\"tileId\":\"tile:138:41\",\"season\":\"autumn\",\"contributionByClass\":[{\"classId\":\"generic_plant_food\",\"domain\":\"food\",\"availability\":0.42,\"supportContribution\":0.19,\"reliability\":0.47,\"seasonalModifier\":1,\"riskPlaceholder\":0.13,\"pressure\":0},{\"classId\":\"aquatic_food\",\"domain\":\"food\",\"availability\":0.01,\"supportContribution\":0,\"reliability\":0.52,\"seasonalModifier\":1,\"riskPlaceholder\":0.17,\"pressure\":0},{\"classId\":\"animal_food\",\"domain\":\"food\",\"availability\":0.34,\"supportContribution\":0.07,\"reliability\":0.33,\"seasonalModifier\":1,\"riskPlaceholder\":0.35,\"pressure\":0},{\"classId\":\"fallback_food\",\"domain\":\"food\",\"availability\":0.4,\"supportContribution\":0.06,\"reliability\":0.61,\"seasonalModifier\":1,\"riskPlaceholder\":0.23,\"pressure\":0},{\"classId\":\"fiber_material\",\"domain\":\"material\",\"availability\":0.11,\"supportContribution\":0,\"reliability\":0.55,\"seasonalModifier\":1,\"riskPlaceholder\":0.11,\"pressure\":0},{\"classId\":\"fuel_material\",\"domain\":\"material\",\"availability\":0.31,\"supportContribution\":0,\"reliability\":0.56,\"seasonalModifier\":1,\"riskPlaceholder\":0.15,\"pressure\":0},{\"classId\":\"medicinal_or_toxic\",\"domain\":\"medicinal_risk\",\"availability\":0.19,\"supportContribution\":0,\"reliability\":0.39,\"seasonalModifier\":1,\"riskPlaceholder\":0.58,\"pressure\":0},{\"classId\":\"water_resource\",\"domain\":\"water\",\"availability\":0.11,\"supportContribution\":0,\"reliability\":0.58,\"seasonalModifier\":1,\"riskPlaceholder\":0.15,\"pressure\":0}],\"dominantClass\":\"generic_plant_food\",\"resourceDiversity\":0.5,\"totalSupportFromResources\":0.32,\"limitingClassFlags\":[\"aquatic_food\"],\"sourceReasonId\":\"reason:resource_class:tile:138:41:2:availability_decomposed\"}|tile:138:42:{\"tileId\":\"tile:138:42\",\"season\":\"autumn\",\"contributionByClass\":[{\"classId\":\"generic_plant_food\",\"domain\":\"food\",\"availability\":0.41,\"supportContribution\":0.19,\"reliability\":0.48,\"seasonalModifier\":1,\"riskPlaceholder\":0.13,\"pressure\":0},{\"classId\":\"aquatic_food\",\"domain\":\"food\",\"availability\":0.02,\"supportContribution\":0.01,\"reliability\":0.53,\"seasonalModifier\":1,\"riskPlaceholder\":0.17,\"pressure\":0},{\"classId\":\"animal_food\",\"domain\":\"food\",\"availability\":0.34,\"supportContribution\":0.07,\"reliability\":0.34,\"seasonalModifier\":1,\"riskPlaceholder\":0.35,\"pressure\":0},{\"classId\":\"fallback_food\",\"domain\":\"food\",\"availability\":0.39,\"supportContribution\":0.06,\"reliability\":0.62,\"seasonalModifier\":1,\"riskPlaceholder\":0.23,\"pressure\":0},{\"classId\":\"fiber_material\",\"domain\":\"material\",\"availability\":0.13,\"supportContribution\":0,\"reliability\":0.56,\"seasonalModifier\":1,\"riskPlaceholder\":0.11,\"pressure\":0},{\"classId\":\"fuel_material\",\"domain\":\"material\",\"availability\":0.3,\"supportContribution\":0,\"reliability\":0.58,\"seasonalModifier\":1,\"riskPlaceholder\":0.15,\"pressure\":0},{\"classId\":\"medicinal_or_toxic\",\"domain\":\"medicinal_risk\",\"availability\":0.19,\"supportContribution\":0,\"reliability\":0.4,\"seasonalModifier\":1,\"riskPlaceholder\":0.58,\"pressure\":0},{\"classId\":\"water_resource\",\"domain\":\"water\",\"availability\":0.19,\"supportContribution\":0,\"reliability\":0.59,\"seasonalModifier\":1,\"riskPlaceholder\":0.15,\"pressure\":0}],\"dominantClass\":\"generic_plant_food\",\"resourceDiversity\":0.5,\"totalSupportFromResources\":0.33,\"limitingClassFlags\":[\"aquatic_food\"],\"sourceReasonId\":\"reason:resource_class:tile:138:42:2:availability_decomposed\"}|tile:137:41:{\"tileId\":\"tile:137:41\",\"season\":\"autumn\",\"contributionByClass\":[{\"classId\":\"generic_plant_food\",\"domain\":\"food\",\"availability\":0.42,\"supportContribution\":0.19,\"reliability\":0.48,\"seasonalModifier\":1,\"riskPlaceholder\":0.13,\"pressure\":0},{\"classId\":\"aquatic_food\",\"domain\":\"food\",\"availability\":0.01,\"supportContribution\":0,\"reliability\":0.52,\"seasonalModifier\":1,\"riskPlaceholder\":0.17,\"pressure\":0},{\"classId\":\"animal_food\",\"domain\":\"food\",\"availability\":0.34,\"supportContribution\":0.07,\"reliability\":0.33,\"seasonalModifier\":1,\"riskPlaceholder\":0.35,\"pressure\":0},{\"classId\":\"fallback_food\",\"domain\":\"food\",\"availability\":0.39,\"supportContribution\":0.06,\"reliability\":0.62,\"seasonalModifier\":1,\"riskPlaceholder\":0.23,\"pressure\":0},{\"classId\":\"fiber_material\",\"domain\":\"material\",\"availability\":0.12,\"supportContribution\":0,\"reliability\":0.55,\"seasonalModifier\":1,\"riskPlaceholder\":0.11,\"pressure\":0},{\"classId\":\"fuel_material\",\"domain\":\"material\",\"availability\":0.3,\"supportContribution\":0,\"reliability\":0.57,\"seasonalModifier\":1,\"riskPlaceholder\":0.15,\"pressure\":0},{\"classId\":\"medicinal_or_toxic\",\"domain\":\"medicinal_risk\",\"availability\":0.19,\"supportContribution\":0,\"reliability\":0.4,\"seasonalModifier\":1,\"riskPlaceholder\":0.58,\"pressure\":0},{\"classId\":\"water_resource\",\"domain\":\"water\",\"availability\":0.15,\"supportContribution\":0,\"reliability\":0.59,\"seasonalModifier\":1,\"riskPlaceholder\":0.15,\"pressure\":0}],\"dominantClass\":\"generic_plant_food\",\"resourceDiversity\":0.5,\"totalSupportFromResources\":0.32,\"limitingClassFlags\":[\"aquatic_food\"],\"sourceReasonId\":\"reason:resource_class:tile:137:41:2:availability_decomposed\"}|tile:132:42:{\"tileId\":\"tile:132:42\",\"season\":\"autumn\",\"contributionByClass\":[{\"classId\":\"generic_plant_food\",\"domain\":\"food\",\"availability\":0.39,\"supportContribution\":0.18,\"reliability\":0.47,\"seasonalModifier\":0.91,\"riskPlaceholder\":0.13,\"pressure\":0},{\"classId\":\"aquatic_food\",\"domain\":\"food\",\"availability\":0.02,\"supportContribution\":0.01,\"reliability\":0.52,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.17,\"pressure\":0},{\"classId\":\"animal_food\",\"domain\":\"food\",\"availability\":0.34,\"supportContribution\":0.08,\"reliability\":0.33,\"seasonalModifier\":0.92,\"riskPlaceholder\":0.35,\"pressure\":0},{\"classId\":\"fallback_food\",\"domain\":\"food\",\"availability\":0.4,\"supportContribution\":0.07,\"reliability\":0.61,\"seasonalModifier\":0.96,\"riskPlaceholder\":0.23,\"pressure\":0},{\"classId\":\"fiber_material\",\"domain\":\"material\",\"availability\":0.14,\"supportContribution\":0,\"reliability\":0.55,\"seasonalModifier\":0.94,\"riskPlaceholder\":0.11,\"pressure\":0},{\"classId\":\"fuel_material\",\"domain\":\"material\",\"availability\":0.28,\"supportContribution\":0,\"reliability\":0.56,\"seasonalModifier\":0.95,\"riskPlaceholder\":0.15,\"pressure\":0},{\"classId\":\"medicinal_or_toxic\",\"domain\":\"medicinal_risk\",\"availability\":0.19,\"supportContribution\":0,\"reliability\":0.39,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.58,\"pressure\":0},{\"classId\":\"water_resource\",\"domain\":\"water\",\"availability\":0.25,\"supportContribution\":0,\"reliability\":0.58,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.15,\"pressure\":0}],\"dominantClass\":\"generic_plant_food\",\"resourceDiversity\":0.5,\"totalSupportFromResources\":0.34,\"limitingClassFlags\":[\"aquatic_food\"],\"sourceReasonId\":\"reason:resource_class:tile:132:42:2:availability_decomposed\"}|tile:132:41:{\"tileId\":\"tile:132:41\",\"season\":\"autumn\",\"contributionByClass\":[{\"classId\":\"generic_plant_food\",\"domain\":\"food\",\"availability\":0.39,\"supportContribution\":0.18,\"reliability\":0.47,\"seasonalModifier\":0.91,\"riskPlaceholder\":0.13,\"pressure\":0},{\"classId\":\"aquatic_food\",\"domain\":\"food\",\"availability\":0.02,\"supportContribution\":0.01,\"reliability\":0.52,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.17,\"pressure\":0},{\"classId\":\"animal_food\",\"domain\":\"food\",\"availability\":0.34,\"supportContribution\":0.08,\"reliability\":0.33,\"seasonalModifier\":0.92,\"riskPlaceholder\":0.35,\"pressure\":0},{\"classId\":\"fallback_food\",\"domain\":\"food\",\"availability\":0.4,\"supportContribution\":0.07,\"reliability\":0.61,\"seasonalModifier\":0.96,\"riskPlaceholder\":0.23,\"pressure\":0},{\"classId\":\"fiber_material\",\"domain\":\"material\",\"availability\":0.14,\"supportContribution\":0,\"reliability\":0.55,\"seasonalModifier\":0.94,\"riskPlaceholder\":0.11,\"pressure\":0},{\"classId\":\"fuel_material\",\"domain\":\"material\",\"availability\":0.28,\"supportContribution\":0,\"reliability\":0.56,\"seasonalModifier\":0.95,\"riskPlaceholder\":0.15,\"pressure\":0},{\"classId\":\"medicinal_or_toxic\",\"domain\":\"medicinal_risk\",\"availability\":0.19,\"supportContribution\":0,\"reliability\":0.39,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.58,\"pressure\":0},{\"classId\":\"water_resource\",\"domain\":\"water\",\"availability\":0.25,\"supportContribution\":0,\"reliability\":0.58,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.15,\"pressure\":0}],\"dominantClass\":\"generic_plant_food\",\"resourceDiversity\":0.5,\"totalSupportFromResources\":0.34,\"limitingClassFlags\":[\"aquatic_food\"],\"sourceReasonId\":\"reason:resource_class:tile:132:41:2:availability_decomposed\"}|tile:133:41:{\"tileId\":\"tile:133:41\",\"season\":\"autumn\",\"contributionByClass\":[{\"classId\":\"generic_plant_food\",\"domain\":\"food\",\"availability\":0.39,\"supportContribution\":0.18,\"reliability\":0.47,\"seasonalModifier\":0.91,\"riskPlaceholder\":0.13,\"pressure\":0},{\"classId\":\"aquatic_food\",\"domain\":\"food\",\"availability\":0.02,\"supportContribution\":0.01,\"reliability\":0.52,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.17,\"pressure\":0},{\"classId\":\"animal_food\",\"domain\":\"food\",\"availability\":0.34,\"supportContribution\":0.08,\"reliability\":0.33,\"seasonalModifier\":0.92,\"riskPlaceholder\":0.35,\"pressure\":0},{\"classId\":\"fallback_food\",\"domain\":\"food\",\"availability\":0.4,\"supportContribution\":0.07,\"reliability\":0.61,\"seasonalModifier\":0.96,\"riskPlaceholder\":0.23,\"pressure\":0},{\"classId\":\"fiber_material\",\"domain\":\"material\",\"availability\":0.14,\"supportContribution\":0,\"reliability\":0.55,\"seasonalModifier\":0.94,\"riskPlaceholder\":0.11,\"pressure\":0},{\"classId\":\"fuel_material\",\"domain\":\"material\",\"availability\":0.28,\"supportContribution\":0,\"reliability\":0.56,\"seasonalModifier\":0.95,\"riskPlaceholder\":0.15,\"pressure\":0},{\"classId\":\"medicinal_or_toxic\",\"domain\":\"medicinal_risk\",\"availability\":0.19,\"supportContribution\":0,\"reliability\":0.39,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.58,\"pressure\":0},{\"classId\":\"water_resource\",\"domain\":\"water\",\"availability\":0.25,\"supportContribution\":0,\"reliability\":0.58,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.15,\"pressure\":0}],\"dominantClass\":\"generic_plant_food\",\"resourceDiversity\":0.5,\"totalSupportFromResources\":0.34,\"limitingClassFlags\":[\"aquatic_food\"],\"sourceReasonId\":\"reason:resource_class:tile:133:41:2:availability_decomposed\"}|tile:135:41:{\"tileId\":\"tile:135:41\",\"season\":\"autumn\",\"contributionByClass\":[{\"classId\":\"generic_plant_food\",\"domain\":\"food\",\"availability\":0.39,\"supportContribution\":0.18,\"reliability\":0.47,\"seasonalModifier\":0.91,\"riskPlaceholder\":0.13,\"pressure\":0},{\"classId\":\"aquatic_food\",\"domain\":\"food\",\"availability\":0.02,\"supportContribution\":0.01,\"reliability\":0.52,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.17,\"pressure\":0},{\"classId\":\"animal_food\",\"domain\":\"food\",\"availability\":0.34,\"supportContribution\":0.08,\"reliability\":0.33,\"seasonalModifier\":0.92,\"riskPlaceholder\":0.35,\"pressure\":0},{\"classId\":\"fallback_food\",\"domain\":\"food\",\"availability\":0.4,\"supportContribution\":0.07,\"reliability\":0.61,\"seasonalModifier\":0.96,\"riskPlaceholder\":0.23,\"pressure\":0},{\"classId\":\"fiber_material\",\"domain\":\"material\",\"availability\":0.14,\"supportContribution\":0,\"reliability\":0.55,\"seasonalModifier\":0.94,\"riskPlaceholder\":0.11,\"pressure\":0},{\"classId\":\"fuel_material\",\"domain\":\"material\",\"availability\":0.28,\"supportContribution\":0,\"reliability\":0.56,\"seasonalModifier\":0.95,\"riskPlaceholder\":0.15,\"pressure\":0},{\"classId\":\"medicinal_or_toxic\",\"domain\":\"medicinal_risk\",\"availability\":0.19,\"supportContribution\":0,\"reliability\":0.39,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.58,\"pressure\":0},{\"classId\":\"water_resource\",\"domain\":\"water\",\"availability\":0.25,\"supportContribution\":0,\"reliability\":0.58,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.15,\"pressure\":0}],\"dominantClass\":\"generic_plant_food\",\"resourceDiversity\":0.5,\"totalSupportFromResources\":0.34,\"limitingClassFlags\":[\"aquatic_food\"],\"sourceReasonId\":\"reason:resource_class:tile:135:41:2:availability_decomposed\"}|tile:136:41:{\"tileId\":\"tile:136:41\",\"season\":\"autumn\",\"contributionByClass\":[{\"classId\":\"generic_plant_food\",\"domain\":\"food\",\"availability\":0.39,\"supportContribution\":0.18,\"reliability\":0.47,\"seasonalModifier\":0.91,\"riskPlaceholder\":0.13,\"pressure\":0},{\"classId\":\"aquatic_food\",\"domain\":\"food\",\"availability\":0.02,\"supportContribution\":0.01,\"reliability\":0.52,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.17,\"pressure\":0},{\"classId\":\"animal_food\",\"domain\":\"food\",\"availability\":0.34,\"supportContribution\":0.08,\"reliability\":0.33,\"seasonalModifier\":0.92,\"riskPlaceholder\":0.35,\"pressure\":0},{\"classId\":\"fallback_food\",\"domain\":\"food\",\"availability\":0.4,\"supportContribution\":0.07,\"reliability\":0.61,\"seasonalModifier\":0.96,\"riskPlaceholder\":0.23,\"pressure\":0},{\"classId\":\"fiber_material\",\"domain\":\"material\",\"availability\":0.14,\"supportContribution\":0,\"reliability\":0.55,\"seasonalModifier\":0.94,\"riskPlaceholder\":0.11,\"pressure\":0},{\"classId\":\"fuel_material\",\"domain\":\"material\",\"availability\":0.28,\"supportContribution\":0,\"reliability\":0.56,\"seasonalModifier\":0.95,\"riskPlaceholder\":0.15,\"pressure\":0},{\"classId\":\"medicinal_or_toxic\",\"domain\":\"medicinal_risk\",\"availability\":0.19,\"supportContribution\":0,\"reliability\":0.39,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.58,\"pressure\":0},{\"classId\":\"water_resource\",\"domain\":\"water\",\"availability\":0.25,\"supportContribution\":0,\"reliability\":0.58,\"seasonalModifier\":0.93,\"riskPlaceholder\":0.15,\"pressure\":0}],\"dominantClass\":\"generic_plant_food\",\"resourceDiversity\":0.5,\"totalSupportFromResources\":0.34,\"limitingClassFlags\":[\"aquatic_food\"],\"sourceReasonId\":\"reason:resource_class:tile:136:41:2:availability_decomposed\"}",
+            "selectedActionId": null,
+            "selectedActionKind": null,
+            "selectedTarget": null
+          }
+        },
+        {
+          "readerFamily": "camp_movement",
+          "productionFunction": "deriveCampMovementDecisionSupport",
+          "invocationDay": 270,
+          "consultationRole": "pressure_relief_candidate",
+          "outputChanged": false,
+          "selectedOutputChanged": false,
+          "control": {
+            "verdict": "local_camp_shift:tile:139:41,hard_move_recovery:tile:141:41,temporary_task_camp:tile:141:41",
+            "ranking": "local_camp_shift|tile:139:41|0.1900,hard_move_recovery|tile:141:41|0.1400,temporary_task_camp|tile:141:41|0.1200",
+            "selectedActionId": "decision:band:custom:0:3",
+            "selectedActionKind": "move_to_tile",
+            "selectedTarget": "tile:140:41"
+          },
+          "counterfactual": {
+            "verdict": "local_camp_shift:tile:139:41,hard_move_recovery:tile:141:41,temporary_task_camp:tile:141:41",
+            "ranking": "local_camp_shift|tile:139:41|0.1900,hard_move_recovery|tile:141:41|0.1400,temporary_task_camp|tile:141:41|0.1200",
+            "selectedActionId": "decision:band:custom:0:3",
+            "selectedActionKind": "move_to_tile",
+            "selectedTarget": "tile:140:41"
+          }
+        },
+        {
+          "readerFamily": "camp_movement",
+          "productionFunction": "deriveCampMovementDecisionSupport",
+          "invocationDay": 630,
+          "consultationRole": "current_camp_baseline+current_shift_baseline",
+          "outputChanged": false,
+          "selectedOutputChanged": true,
+          "control": {
+            "verdict": "local_camp_shift:tile:137:43,temporary_task_camp:tile:137:41,hard_move_recovery:tile:137:41",
+            "ranking": "local_camp_shift|tile:137:43|0.2200,temporary_task_camp|tile:137:41|0.1500,hard_move_recovery|tile:137:41|0.1400",
+            "selectedActionId": "decision:band:custom:0:7",
+            "selectedActionKind": "move_to_tile",
+            "selectedTarget": "tile:137:43"
+          },
+          "counterfactual": {
+            "verdict": "local_camp_shift:tile:137:43,temporary_task_camp:tile:137:41,hard_move_recovery:tile:137:41",
+            "ranking": "local_camp_shift|tile:137:43|0.2200,temporary_task_camp|tile:137:41|0.1500,hard_move_recovery|tile:137:41|0.1400",
+            "selectedActionId": "decision:band:custom:0:7",
+            "selectedActionKind": "resource_scout",
+            "selectedTarget": "tile:136:41"
+          }
+        }
+      ]
+    }
+  ],
+  "additionalTraces": [
+    {
+      "scenario": "site_D_aquatic",
+      "seed": "s1",
+      "recordEventId": "exploration-record:band:custom:0:expedition:band:custom:0:96:frontier_exploration:34d813df:tile:122:117:100",
+      "tileId": "tile:122:117",
+      "expeditionId": "expedition:band:custom:0:96:frontier_exploration:34d813df",
+      "returnDay": 100,
+      "suppressedReturnWrite": {
+        "recordEventId": "exploration-record:band:custom:0:expedition:band:custom:0:96:frontier_exploration:34d813df:tile:122:117:100",
+        "tileId": "tile:122:117",
+        "expeditionId": "expedition:band:custom:0:96:frontier_exploration:34d813df",
+        "returnDay": 100,
+        "newOrRefreshed": "new"
+      },
+      "firstReader": {
+        "readerFamily": "camp_movement",
+        "productionFunction": "deriveCampMovementDecisionSupport",
+        "invocationDay": 180,
+        "consultationRole": "pressure_relief_candidate"
+      },
+      "readerDay": 180,
+      "readerOutput": {
+        "control": {
+          "verdict": "no_camp_movement_influence",
+          "ranking": "",
+          "selectedActionId": "decision:band:custom:0:2",
+          "selectedActionKind": "stay",
+          "selectedTarget": "tile:120:116"
+        },
+        "counterfactual": {
+          "verdict": "no_camp_movement_influence",
+          "ranking": "",
+          "selectedActionId": "decision:band:custom:0:2",
+          "selectedActionKind": "stay",
+          "selectedTarget": "tile:120:116"
+        }
+      },
+      "firstChangedReader": {
+        "readerFamily": "movement_destination",
+        "productionFunction": "deriveFrontierDispersalPressure/getFrontierCandidates",
+        "invocationDay": 180,
+        "consultationRole": "frontier_known_neighbor_boundary+frontier_candidate",
+        "outputChanged": true,
+        "selectedOutputChanged": false,
+        "control": {
+          "verdict": "frontier_candidate:tile:122:116",
+          "ranking": "tile:122:116:0.6637|tile:119:118:0.6013|tile:118:115:0.5882|tile:121:115:0.5674|tile:119:114:0.5622|tile:120:114:0.5538|tile:126:117:0.4537|tile:120:118:0.3669",
+          "selectedActionId": "decision:band:custom:0:2",
+          "selectedActionKind": "stay",
+          "selectedTarget": "tile:120:116"
+        },
+        "counterfactual": {
+          "verdict": "frontier_candidate:tile:122:116",
+          "ranking": "tile:122:116:0.7487|tile:119:118:0.6013|tile:118:115:0.5882|tile:121:115:0.5674|tile:119:114:0.5622|tile:120:114:0.5538|tile:126:117:0.4537|tile:123:117:0.4376",
+          "selectedActionId": "decision:band:custom:0:2",
+          "selectedActionKind": "stay",
+          "selectedTarget": "tile:120:116"
+        }
+      },
+      "actionReader": null,
+      "actionId": "activity-action:daily-trip:band:custom:0:552:plant_gathering_group:tile:119:117",
+      "actionKind": "plant_gathering_group",
+      "target": "tile:119:117",
+      "workers": 4,
+      "route": [
+        "tile:119:116"
+      ],
+      "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:552:plant_gathering_group:tile:119:117:target_found",
+      "actionDifferences": {
+        "movement": null,
+        "camp": null,
+        "resource": {
+          "day": 552,
+          "control": [
+            {
+              "activityActionId": "activity-action:daily-trip:band:custom:0:552:plant_gathering_group:tile:119:117",
+              "bandId": "band:custom:0",
+              "day": 552,
+              "activityKind": "plant_gathering_group",
+              "selectedPatchId": "patch:tile:119:117:generic_plant_food",
+              "selectedTileId": "tile:119:117",
+              "tripOrTaskId": "daily-trip:band:custom:0:552:plant_gathering_group:tile:119:117",
+              "workers": 4,
+              "route": [
+                "tile:119:116"
+              ],
+              "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:552:plant_gathering_group:tile:119:117:target_found",
+              "receiptId": "receipt:daily-trip:band:custom:0:552:plant_gathering_group:tile:119:117",
+              "usableSupportReturned": 0.0246
+            }
+          ],
+          "counterfactual": [
+            {
+              "activityActionId": "activity-action:daily-trip:band:custom:0:552:plant_gathering_group:tile:119:118",
+              "bandId": "band:custom:0",
+              "day": 552,
+              "activityKind": "plant_gathering_group",
+              "selectedPatchId": "patch:tile:119:118:fallback_food",
+              "selectedTileId": "tile:119:118",
+              "tripOrTaskId": "daily-trip:band:custom:0:552:plant_gathering_group:tile:119:118",
+              "workers": 4,
+              "route": [
+                "tile:119:116"
+              ],
+              "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:552:plant_gathering_group:tile:119:118:failed_due_to_distance",
+              "receiptId": "receipt:daily-trip:band:custom:0:552:plant_gathering_group:tile:119:118",
+              "usableSupportReturned": 0
+            }
+          ]
+        },
+        "fission": null
+      },
+      "receiptDifference": {
+        "index": 452,
+        "day": 552,
+        "control": {
+          "day": 552,
+          "totalReceipts": 0.033,
+          "totalSupport": 0.8,
+          "rows": [
+            {
+              "bandId": "band:custom:0",
+              "receipts": 0.033,
+              "support": 0.8
+            }
+          ]
+        },
+        "counterfactual": {
+          "day": 552,
+          "totalReceipts": 0.0084,
+          "totalSupport": 0.8,
+          "rows": [
+            {
+              "bandId": "band:custom:0",
+              "receipts": 0.0084,
+              "support": 0.8
+            }
+          ]
+        }
+      },
+      "supportDifference": {
+        "day": 552,
+        "control": 0.8,
+        "counterfactual": 0.8
+      },
+      "typedPhysicalMechanism": "different_resource_trip",
+      "readerChain": [
+        {
+          "readerFamily": "camp_movement",
+          "productionFunction": "deriveCampMovementDecisionSupport",
+          "invocationDay": 180,
+          "consultationRole": "pressure_relief_candidate",
+          "outputChanged": false,
+          "selectedOutputChanged": false,
+          "control": {
+            "verdict": "no_camp_movement_influence",
+            "ranking": "",
+            "selectedActionId": "decision:band:custom:0:2",
+            "selectedActionKind": "stay",
+            "selectedTarget": "tile:120:116"
+          },
+          "counterfactual": {
+            "verdict": "no_camp_movement_influence",
+            "ranking": "",
+            "selectedActionId": "decision:band:custom:0:2",
+            "selectedActionKind": "stay",
+            "selectedTarget": "tile:120:116"
+          }
+        },
+        {
+          "readerFamily": "movement_destination",
+          "productionFunction": "deriveCarryingCapacity/deriveKnownUnusedHabitat",
+          "invocationDay": 180,
+          "consultationRole": "destination_candidate",
+          "outputChanged": false,
+          "selectedOutputChanged": false,
+          "control": {
+            "verdict": "remembered_underused:tile:120:118:rejected",
+            "ranking": "tile:120:118|0.2700|0.3700",
+            "selectedActionId": "decision:band:custom:0:2",
+            "selectedActionKind": "stay",
+            "selectedTarget": "tile:120:116"
+          },
+          "counterfactual": {
+            "verdict": "remembered_underused:tile:120:118:rejected",
+            "ranking": "tile:120:118|0.2700|0.3700",
+            "selectedActionId": "decision:band:custom:0:2",
+            "selectedActionKind": "stay",
+            "selectedTarget": "tile:120:116"
+          }
+        },
+        {
+          "readerFamily": "movement_destination",
+          "productionFunction": "deriveFrontierDispersalPressure/getFrontierCandidates",
+          "invocationDay": 180,
+          "consultationRole": "frontier_known_neighbor_boundary+frontier_candidate",
+          "outputChanged": true,
+          "selectedOutputChanged": false,
+          "control": {
+            "verdict": "frontier_candidate:tile:122:116",
+            "ranking": "tile:122:116:0.6637|tile:119:118:0.6013|tile:118:115:0.5882|tile:121:115:0.5674|tile:119:114:0.5622|tile:120:114:0.5538|tile:126:117:0.4537|tile:120:118:0.3669",
+            "selectedActionId": "decision:band:custom:0:2",
+            "selectedActionKind": "stay",
+            "selectedTarget": "tile:120:116"
+          },
+          "counterfactual": {
+            "verdict": "frontier_candidate:tile:122:116",
+            "ranking": "tile:122:116:0.7487|tile:119:118:0.6013|tile:118:115:0.5882|tile:121:115:0.5674|tile:119:114:0.5622|tile:120:114:0.5538|tile:126:117:0.4537|tile:123:117:0.4376",
+            "selectedActionId": "decision:band:custom:0:2",
+            "selectedActionKind": "stay",
+            "selectedTarget": "tile:120:116"
+          }
+        }
+      ]
+    },
+    {
+      "scenario": "site_D_aquatic",
+      "seed": "s3",
+      "recordEventId": "exploration-record:band:custom:0:expedition:band:custom:0:96:frontier_exploration:34d813df:tile:122:117:100",
+      "tileId": "tile:122:117",
+      "expeditionId": "expedition:band:custom:0:96:frontier_exploration:34d813df",
+      "returnDay": 100,
+      "suppressedReturnWrite": {
+        "recordEventId": "exploration-record:band:custom:0:expedition:band:custom:0:96:frontier_exploration:34d813df:tile:122:117:100",
+        "tileId": "tile:122:117",
+        "expeditionId": "expedition:band:custom:0:96:frontier_exploration:34d813df",
+        "returnDay": 100,
+        "newOrRefreshed": "new"
+      },
+      "firstReader": {
+        "readerFamily": "camp_movement",
+        "productionFunction": "deriveCampMovementDecisionSupport",
+        "invocationDay": 180,
+        "consultationRole": "pressure_relief_candidate"
+      },
+      "readerDay": 180,
+      "readerOutput": {
+        "control": {
+          "verdict": "no_camp_movement_influence",
+          "ranking": "",
+          "selectedActionId": "decision:band:custom:0:2",
+          "selectedActionKind": "stay",
+          "selectedTarget": "tile:120:116"
+        },
+        "counterfactual": {
+          "verdict": "no_camp_movement_influence",
+          "ranking": "",
+          "selectedActionId": "decision:band:custom:0:2",
+          "selectedActionKind": "stay",
+          "selectedTarget": "tile:120:116"
+        }
+      },
+      "firstChangedReader": {
+        "readerFamily": "movement_destination",
+        "productionFunction": "deriveFrontierDispersalPressure/getFrontierCandidates",
+        "invocationDay": 180,
+        "consultationRole": "frontier_known_neighbor_boundary+frontier_candidate",
+        "outputChanged": true,
+        "selectedOutputChanged": false,
+        "control": {
+          "verdict": "frontier_candidate:tile:122:116",
+          "ranking": "tile:122:116:0.6637|tile:119:118:0.6013|tile:118:115:0.5882|tile:121:115:0.5674|tile:119:114:0.5622|tile:120:114:0.5538|tile:126:117:0.4537|tile:120:118:0.3669",
+          "selectedActionId": "decision:band:custom:0:2",
+          "selectedActionKind": "stay",
+          "selectedTarget": "tile:120:116"
+        },
+        "counterfactual": {
+          "verdict": "frontier_candidate:tile:122:116",
+          "ranking": "tile:122:116:0.7487|tile:119:118:0.6013|tile:118:115:0.5882|tile:121:115:0.5674|tile:119:114:0.5622|tile:120:114:0.5538|tile:126:117:0.4537|tile:123:117:0.4376",
+          "selectedActionId": "decision:band:custom:0:2",
+          "selectedActionKind": "stay",
+          "selectedTarget": "tile:120:116"
+        }
+      },
+      "actionReader": null,
+      "actionId": "activity-action:daily-trip:band:custom:0:552:plant_gathering_group:tile:119:117",
+      "actionKind": "plant_gathering_group",
+      "target": "tile:119:117",
+      "workers": 4,
+      "route": [
+        "tile:119:116"
+      ],
+      "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:552:plant_gathering_group:tile:119:117:target_found",
+      "actionDifferences": {
+        "movement": null,
+        "camp": null,
+        "resource": {
+          "day": 552,
+          "control": [
+            {
+              "activityActionId": "activity-action:daily-trip:band:custom:0:552:plant_gathering_group:tile:119:117",
+              "bandId": "band:custom:0",
+              "day": 552,
+              "activityKind": "plant_gathering_group",
+              "selectedPatchId": "patch:tile:119:117:generic_plant_food",
+              "selectedTileId": "tile:119:117",
+              "tripOrTaskId": "daily-trip:band:custom:0:552:plant_gathering_group:tile:119:117",
+              "workers": 4,
+              "route": [
+                "tile:119:116"
+              ],
+              "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:552:plant_gathering_group:tile:119:117:target_found",
+              "receiptId": "receipt:daily-trip:band:custom:0:552:plant_gathering_group:tile:119:117",
+              "usableSupportReturned": 0.0246
+            }
+          ],
+          "counterfactual": [
+            {
+              "activityActionId": "activity-action:daily-trip:band:custom:0:552:plant_gathering_group:tile:119:118",
+              "bandId": "band:custom:0",
+              "day": 552,
+              "activityKind": "plant_gathering_group",
+              "selectedPatchId": "patch:tile:119:118:fallback_food",
+              "selectedTileId": "tile:119:118",
+              "tripOrTaskId": "daily-trip:band:custom:0:552:plant_gathering_group:tile:119:118",
+              "workers": 4,
+              "route": [
+                "tile:119:116"
+              ],
+              "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:552:plant_gathering_group:tile:119:118:failed_due_to_distance",
+              "receiptId": "receipt:daily-trip:band:custom:0:552:plant_gathering_group:tile:119:118",
+              "usableSupportReturned": 0
+            }
+          ]
+        },
+        "fission": null
+      },
+      "receiptDifference": {
+        "index": 452,
+        "day": 552,
+        "control": {
+          "day": 552,
+          "totalReceipts": 0.033,
+          "totalSupport": 0.8,
+          "rows": [
+            {
+              "bandId": "band:custom:0",
+              "receipts": 0.033,
+              "support": 0.8
+            }
+          ]
+        },
+        "counterfactual": {
+          "day": 552,
+          "totalReceipts": 0.0084,
+          "totalSupport": 0.8,
+          "rows": [
+            {
+              "bandId": "band:custom:0",
+              "receipts": 0.0084,
+              "support": 0.8
+            }
+          ]
+        }
+      },
+      "supportDifference": {
+        "day": 552,
+        "control": 0.8,
+        "counterfactual": 0.8
+      },
+      "typedPhysicalMechanism": "different_resource_trip",
+      "readerChain": [
+        {
+          "readerFamily": "camp_movement",
+          "productionFunction": "deriveCampMovementDecisionSupport",
+          "invocationDay": 180,
+          "consultationRole": "pressure_relief_candidate",
+          "outputChanged": false,
+          "selectedOutputChanged": false,
+          "control": {
+            "verdict": "no_camp_movement_influence",
+            "ranking": "",
+            "selectedActionId": "decision:band:custom:0:2",
+            "selectedActionKind": "stay",
+            "selectedTarget": "tile:120:116"
+          },
+          "counterfactual": {
+            "verdict": "no_camp_movement_influence",
+            "ranking": "",
+            "selectedActionId": "decision:band:custom:0:2",
+            "selectedActionKind": "stay",
+            "selectedTarget": "tile:120:116"
+          }
+        },
+        {
+          "readerFamily": "movement_destination",
+          "productionFunction": "deriveCarryingCapacity/deriveKnownUnusedHabitat",
+          "invocationDay": 180,
+          "consultationRole": "destination_candidate",
+          "outputChanged": false,
+          "selectedOutputChanged": false,
+          "control": {
+            "verdict": "remembered_underused:tile:120:118:rejected",
+            "ranking": "tile:120:118|0.2700|0.3700",
+            "selectedActionId": "decision:band:custom:0:2",
+            "selectedActionKind": "stay",
+            "selectedTarget": "tile:120:116"
+          },
+          "counterfactual": {
+            "verdict": "remembered_underused:tile:120:118:rejected",
+            "ranking": "tile:120:118|0.2700|0.3700",
+            "selectedActionId": "decision:band:custom:0:2",
+            "selectedActionKind": "stay",
+            "selectedTarget": "tile:120:116"
+          }
+        },
+        {
+          "readerFamily": "movement_destination",
+          "productionFunction": "deriveFrontierDispersalPressure/getFrontierCandidates",
+          "invocationDay": 180,
+          "consultationRole": "frontier_known_neighbor_boundary+frontier_candidate",
+          "outputChanged": true,
+          "selectedOutputChanged": false,
+          "control": {
+            "verdict": "frontier_candidate:tile:122:116",
+            "ranking": "tile:122:116:0.6637|tile:119:118:0.6013|tile:118:115:0.5882|tile:121:115:0.5674|tile:119:114:0.5622|tile:120:114:0.5538|tile:126:117:0.4537|tile:120:118:0.3669",
+            "selectedActionId": "decision:band:custom:0:2",
+            "selectedActionKind": "stay",
+            "selectedTarget": "tile:120:116"
+          },
+          "counterfactual": {
+            "verdict": "frontier_candidate:tile:122:116",
+            "ranking": "tile:122:116:0.7487|tile:119:118:0.6013|tile:118:115:0.5882|tile:121:115:0.5674|tile:119:114:0.5622|tile:120:114:0.5538|tile:126:117:0.4537|tile:123:117:0.4376",
+            "selectedActionId": "decision:band:custom:0:2",
+            "selectedActionKind": "stay",
+            "selectedTarget": "tile:120:116"
+          }
+        }
+      ]
+    },
+    {
+      "scenario": "site_D_aquatic",
+      "seed": "s5",
+      "recordEventId": "exploration-record:band:custom:0:expedition:band:custom:0:96:frontier_exploration:34d813df:tile:122:117:100",
+      "tileId": "tile:122:117",
+      "expeditionId": "expedition:band:custom:0:96:frontier_exploration:34d813df",
+      "returnDay": 100,
+      "suppressedReturnWrite": {
+        "recordEventId": "exploration-record:band:custom:0:expedition:band:custom:0:96:frontier_exploration:34d813df:tile:122:117:100",
+        "tileId": "tile:122:117",
+        "expeditionId": "expedition:band:custom:0:96:frontier_exploration:34d813df",
+        "returnDay": 100,
+        "newOrRefreshed": "new"
+      },
+      "firstReader": {
+        "readerFamily": "camp_movement",
+        "productionFunction": "deriveCampMovementDecisionSupport",
+        "invocationDay": 180,
+        "consultationRole": "pressure_relief_candidate"
+      },
+      "readerDay": 180,
+      "readerOutput": {
+        "control": {
+          "verdict": "no_camp_movement_influence",
+          "ranking": "",
+          "selectedActionId": "decision:band:custom:0:2",
+          "selectedActionKind": "stay",
+          "selectedTarget": "tile:120:116"
+        },
+        "counterfactual": {
+          "verdict": "no_camp_movement_influence",
+          "ranking": "",
+          "selectedActionId": "decision:band:custom:0:2",
+          "selectedActionKind": "stay",
+          "selectedTarget": "tile:120:116"
+        }
+      },
+      "firstChangedReader": {
+        "readerFamily": "movement_destination",
+        "productionFunction": "deriveFrontierDispersalPressure/getFrontierCandidates",
+        "invocationDay": 180,
+        "consultationRole": "frontier_known_neighbor_boundary+frontier_candidate",
+        "outputChanged": true,
+        "selectedOutputChanged": false,
+        "control": {
+          "verdict": "frontier_candidate:tile:122:116",
+          "ranking": "tile:122:116:0.6637|tile:119:118:0.6013|tile:118:115:0.5882|tile:121:115:0.5674|tile:119:114:0.5622|tile:120:114:0.5538|tile:126:117:0.4537|tile:120:118:0.3669",
+          "selectedActionId": "decision:band:custom:0:2",
+          "selectedActionKind": "stay",
+          "selectedTarget": "tile:120:116"
+        },
+        "counterfactual": {
+          "verdict": "frontier_candidate:tile:122:116",
+          "ranking": "tile:122:116:0.7487|tile:119:118:0.6013|tile:118:115:0.5882|tile:121:115:0.5674|tile:119:114:0.5622|tile:120:114:0.5538|tile:126:117:0.4537|tile:123:117:0.4376",
+          "selectedActionId": "decision:band:custom:0:2",
+          "selectedActionKind": "stay",
+          "selectedTarget": "tile:120:116"
+        }
+      },
+      "actionReader": null,
+      "actionId": "activity-action:daily-trip:band:custom:0:732:plant_gathering_group:tile:119:117",
+      "actionKind": "plant_gathering_group",
+      "target": "tile:119:117",
+      "workers": 4,
+      "route": [
+        "tile:119:116"
+      ],
+      "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:732:plant_gathering_group:tile:119:117:target_found",
+      "actionDifferences": {
+        "movement": null,
+        "camp": null,
+        "resource": {
+          "day": 732,
+          "control": [
+            {
+              "activityActionId": "activity-action:daily-trip:band:custom:0:732:plant_gathering_group:tile:119:117",
+              "bandId": "band:custom:0",
+              "day": 732,
+              "activityKind": "plant_gathering_group",
+              "selectedPatchId": "patch:tile:119:117:generic_plant_food",
+              "selectedTileId": "tile:119:117",
+              "tripOrTaskId": "daily-trip:band:custom:0:732:plant_gathering_group:tile:119:117",
+              "workers": 4,
+              "route": [
+                "tile:119:116"
+              ],
+              "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:732:plant_gathering_group:tile:119:117:target_found",
+              "receiptId": "receipt:daily-trip:band:custom:0:732:plant_gathering_group:tile:119:117",
+              "usableSupportReturned": 0.0247
+            }
+          ],
+          "counterfactual": [
+            {
+              "activityActionId": "activity-action:daily-trip:band:custom:0:732:plant_gathering_group:tile:119:118",
+              "bandId": "band:custom:0",
+              "day": 732,
+              "activityKind": "plant_gathering_group",
+              "selectedPatchId": "patch:tile:119:118:fallback_food",
+              "selectedTileId": "tile:119:118",
+              "tripOrTaskId": "daily-trip:band:custom:0:732:plant_gathering_group:tile:119:118",
+              "workers": 4,
+              "route": [
+                "tile:119:116"
+              ],
+              "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:732:plant_gathering_group:tile:119:118:failed_due_to_distance",
+              "receiptId": "receipt:daily-trip:band:custom:0:732:plant_gathering_group:tile:119:118",
+              "usableSupportReturned": 0
+            }
+          ]
+        },
+        "fission": null
+      },
+      "receiptDifference": {
+        "index": 632,
+        "day": 732,
+        "control": {
+          "day": 732,
+          "totalReceipts": 0.0396,
+          "totalSupport": 0.74,
+          "rows": [
+            {
+              "bandId": "band:custom:0",
+              "receipts": 0.0396,
+              "support": 0.74
+            }
+          ]
+        },
+        "counterfactual": {
+          "day": 732,
+          "totalReceipts": 0.0149,
+          "totalSupport": 0.74,
+          "rows": [
+            {
+              "bandId": "band:custom:0",
+              "receipts": 0.0149,
+              "support": 0.74
+            }
+          ]
+        }
+      },
+      "supportDifference": {
+        "day": 732,
+        "control": 0.74,
+        "counterfactual": 0.74
+      },
+      "typedPhysicalMechanism": "different_resource_trip",
+      "readerChain": [
+        {
+          "readerFamily": "camp_movement",
+          "productionFunction": "deriveCampMovementDecisionSupport",
+          "invocationDay": 180,
+          "consultationRole": "pressure_relief_candidate",
+          "outputChanged": false,
+          "selectedOutputChanged": false,
+          "control": {
+            "verdict": "no_camp_movement_influence",
+            "ranking": "",
+            "selectedActionId": "decision:band:custom:0:2",
+            "selectedActionKind": "stay",
+            "selectedTarget": "tile:120:116"
+          },
+          "counterfactual": {
+            "verdict": "no_camp_movement_influence",
+            "ranking": "",
+            "selectedActionId": "decision:band:custom:0:2",
+            "selectedActionKind": "stay",
+            "selectedTarget": "tile:120:116"
+          }
+        },
+        {
+          "readerFamily": "movement_destination",
+          "productionFunction": "deriveCarryingCapacity/deriveKnownUnusedHabitat",
+          "invocationDay": 180,
+          "consultationRole": "destination_candidate",
+          "outputChanged": false,
+          "selectedOutputChanged": false,
+          "control": {
+            "verdict": "remembered_underused:tile:120:118:rejected",
+            "ranking": "tile:120:118|0.2700|0.3700",
+            "selectedActionId": "decision:band:custom:0:2",
+            "selectedActionKind": "stay",
+            "selectedTarget": "tile:120:116"
+          },
+          "counterfactual": {
+            "verdict": "remembered_underused:tile:120:118:rejected",
+            "ranking": "tile:120:118|0.2700|0.3700",
+            "selectedActionId": "decision:band:custom:0:2",
+            "selectedActionKind": "stay",
+            "selectedTarget": "tile:120:116"
+          }
+        },
+        {
+          "readerFamily": "movement_destination",
+          "productionFunction": "deriveFrontierDispersalPressure/getFrontierCandidates",
+          "invocationDay": 180,
+          "consultationRole": "frontier_known_neighbor_boundary+frontier_candidate",
+          "outputChanged": true,
+          "selectedOutputChanged": false,
+          "control": {
+            "verdict": "frontier_candidate:tile:122:116",
+            "ranking": "tile:122:116:0.6637|tile:119:118:0.6013|tile:118:115:0.5882|tile:121:115:0.5674|tile:119:114:0.5622|tile:120:114:0.5538|tile:126:117:0.4537|tile:120:118:0.3669",
+            "selectedActionId": "decision:band:custom:0:2",
+            "selectedActionKind": "stay",
+            "selectedTarget": "tile:120:116"
+          },
+          "counterfactual": {
+            "verdict": "frontier_candidate:tile:122:116",
+            "ranking": "tile:122:116:0.7487|tile:119:118:0.6013|tile:118:115:0.5882|tile:121:115:0.5674|tile:119:114:0.5622|tile:120:114:0.5538|tile:126:117:0.4537|tile:123:117:0.4376",
+            "selectedActionId": "decision:band:custom:0:2",
+            "selectedActionKind": "stay",
+            "selectedTarget": "tile:120:116"
+          }
+        }
+      ]
+    }
+  ]
+}

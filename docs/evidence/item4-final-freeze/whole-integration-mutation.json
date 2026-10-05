@@ -1,0 +1,32 @@
+{
+  "checkpoint": "ROADMAP ITEM 4 — FINAL WHOLE-INTEGRATION FREEZE MUTATION",
+  "generatedAt": "2026-08-18T14:03:46.523Z",
+  "baseline": {
+    "exitStatus": 0,
+    "verdict": "PASS",
+    "nonVacuousFixtures": 6
+  },
+  "mutation": {
+    "id": "M1_disable_band_history_successor_lifecycle_projection",
+    "file": "src/sim/agents/bandHistory.ts",
+    "physicalLifecycleStillRan": true,
+    "historySpecificallyLost": true,
+    "mutantExitStatus": 1,
+    "mutantVerdict": "FAIL",
+    "failedFixtureIds": [
+      "F1_stabilized_successor_retains_physical_separation_history",
+      "F5_retained_departure_projection_survives_episode_cap_pressure",
+      "F6_in_flight_successor_history_stays_open_without_elapsed_time_inference",
+      "F2_post_return_establishment_preserves_distinct_terminal_outcome",
+      "F4_provisional_extinction_remains_a_distinct_terminal_history",
+      "F3_parent_history_closes_real_reintegration_without_fabricating_daughter_success"
+    ],
+    "caught": true
+  },
+  "restoration": {
+    "sourceSha256Before": "6a06e06fc5edb6889fc9fc56def0b3396d0088bc2acd334c52b3727b35c7cb28",
+    "sourceSha256After": "6a06e06fc5edb6889fc9fc56def0b3396d0088bc2acd334c52b3727b35c7cb28",
+    "byteIdentical": true
+  },
+  "verdict": "PASS"
+}

@@ -1,0 +1,325 @@
+{
+  "generatedAt": "2026-08-11T23:03:08.718Z",
+  "checkpoint": "ROADMAP ITEM 4 — successor stabilization mutation controls",
+  "controls": [
+    {
+      "id": "M1_lived_operation_requirement",
+      "barrier": "removing the real-take/depletion conjunct makes N1/N3's fabricated-support arm stabilize",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "baselineHeld": true,
+      "mutantViolated": true,
+      "correspondingFixtureWouldFail": true,
+      "detail": {
+        "mutantStabilized": [
+          {
+            "successorBandId": "band:successor-stabilization-positive",
+            "parentBandId": "band:varied-estuary",
+            "lineageId": "LIN-SUCCESSOR-STABILIZATION-POSITIVE",
+            "departureRecordId": "event:successor-departure:band:varied-estuary:band:successor-stabilization-positive:2100",
+            "stabilizationEventId": "event:successor-stabilized:band:varied-estuary:band:successor-stabilization-positive:2111",
+            "day": 2111,
+            "tileId": "tile:193:87",
+            "population": 3,
+            "evidence": {
+              "authority": "successor_independent_operation_v1",
+              "successorBandId": "band:successor-stabilization-positive",
+              "lineageId": "LIN-SUCCESSOR-STABILIZATION-POSITIVE",
+              "assessedOnDay": 2111,
+              "departureDay": 2100,
+              "arrivalDay": 2105,
+              "assessmentWindow": {
+                "startDay": 2101,
+                "endDay": 2111,
+                "days": 11,
+                "tileIds": [
+                  "tile:194:89",
+                  "tile:193:89",
+                  "tile:193:88",
+                  "tile:193:87"
+                ],
+                "supportUnits": 0.1412,
+                "demandUnits": 0.3663,
+                "supportRatio": 0.3855,
+                "daysWithAnyPhysicalTake": 0,
+                "workerDays": 12,
+                "depletionApplied": 0,
+                "meanWaterStress": 0,
+                "closedBy": "demand_window_complete"
+              },
+              "currentCondition": {
+                "population": 3,
+                "workingAdults": 3,
+                "mortalityRiskBump": 0.022,
+                "returnDecisionWouldAbandon": false
+              },
+              "requirements": {
+                "physicallyArrivedAtAcceptedTarget": true,
+                "postDepartureDemandWindowCompleted": true,
+                "demandWasMeasured": true,
+                "productiveLaborWasLived": true,
+                "realFoodWasTakenAndDepleted": true,
+                "supportStayedAboveReturnFailureFloor": true,
+                "waterStayedBelowNoWaterFailureLine": true,
+                "livingPopulationRemains": true,
+                "workingPopulationRemains": true,
+                "embodiedBurdenRemainsBelowReturnLine": true,
+                "currentReturnAuthorityDoesNotAbandon": true
+              },
+              "allRequirementsMet": true,
+              "sourceAuthorities": [
+                "provisionalTravel.requestTransition(travelling -> establishing)",
+                "provisionalTravelSubsistence.ProvisionalOperationHistory",
+                "plantStock.resolvePlantFoodHarvest",
+                "carryingCapacity.derivePopulationDemand",
+                "provisionalTravelSubsistence standing-tile water stress",
+                "Band.demography cohorts",
+                "Band.acuteRisk active embodied effect",
+                "provisionalReturnDecision.deriveProvisionalReturnDecision"
+              ]
+            }
+          }
+        ],
+        "mutantRefusals": []
+      }
+    },
+    {
+      "id": "M2_consumed_departure_provenance",
+      "barrier": "removing the consumed-provenance kernel claim makes K6's named missing-provenance fixture succeed",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "baselineHeld": true,
+      "mutantViolated": true,
+      "correspondingFixtureWouldFail": true,
+      "detail": {
+        "ok": true,
+        "state": {
+          "phase": "stabilized",
+          "phaseEnteredDay": 2111,
+          "history": [
+            "travelling",
+            "establishing"
+          ]
+        },
+        "timedOut": false
+      }
+    },
+    {
+      "id": "M3_monotonic_never_returned_proof",
+      "barrier": "forcing the monotonic predicate true makes N6's real-return/overflow arm stabilize on stale evidence",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "baselineHeld": true,
+      "mutantViolated": true,
+      "correspondingFixtureWouldFail": true,
+      "detail": {
+        "mutantStabilized": [
+          {
+            "successorBandId": "band:successor-stabilization-positive",
+            "parentBandId": "band:varied-estuary",
+            "lineageId": "LIN-SUCCESSOR-STABILIZATION-POSITIVE",
+            "departureRecordId": "event:successor-departure:band:varied-estuary:band:successor-stabilization-positive:2100",
+            "stabilizationEventId": "event:successor-stabilized:band:varied-estuary:band:successor-stabilization-positive:2111",
+            "day": 2111,
+            "tileId": "tile:193:87",
+            "population": 3,
+            "evidence": {
+              "authority": "successor_independent_operation_v1",
+              "successorBandId": "band:successor-stabilization-positive",
+              "lineageId": "LIN-SUCCESSOR-STABILIZATION-POSITIVE",
+              "assessedOnDay": 2111,
+              "departureDay": 2100,
+              "arrivalDay": 2105,
+              "assessmentWindow": {
+                "startDay": 2101,
+                "endDay": 2111,
+                "days": 11,
+                "tileIds": [
+                  "tile:194:89",
+                  "tile:193:89",
+                  "tile:193:88",
+                  "tile:193:87"
+                ],
+                "supportUnits": 0.1412,
+                "demandUnits": 0.3663,
+                "supportRatio": 0.3855,
+                "daysWithAnyPhysicalTake": 6,
+                "workerDays": 12,
+                "depletionApplied": 0.1618,
+                "meanWaterStress": 0,
+                "closedBy": "demand_window_complete"
+              },
+              "currentCondition": {
+                "population": 3,
+                "workingAdults": 3,
+                "mortalityRiskBump": 0.022,
+                "returnDecisionWouldAbandon": false
+              },
+              "requirements": {
+                "physicallyArrivedAtAcceptedTarget": true,
+                "postDepartureDemandWindowCompleted": true,
+                "demandWasMeasured": true,
+                "productiveLaborWasLived": true,
+                "realFoodWasTakenAndDepleted": true,
+                "supportStayedAboveReturnFailureFloor": true,
+                "waterStayedBelowNoWaterFailureLine": true,
+                "livingPopulationRemains": true,
+                "workingPopulationRemains": true,
+                "embodiedBurdenRemainsBelowReturnLine": true,
+                "currentReturnAuthorityDoesNotAbandon": true
+              },
+              "allRequirementsMet": true,
+              "sourceAuthorities": [
+                "provisionalTravel.requestTransition(travelling -> establishing)",
+                "provisionalTravelSubsistence.ProvisionalOperationHistory",
+                "plantStock.resolvePlantFoodHarvest",
+                "carryingCapacity.derivePopulationDemand",
+                "provisionalTravelSubsistence standing-tile water stress",
+                "Band.demography cohorts",
+                "Band.acuteRisk active embodied effect",
+                "provisionalReturnDecision.deriveProvisionalReturnDecision"
+              ]
+            }
+          }
+        ],
+        "mutantRefusals": []
+      }
+    },
+    {
+      "id": "M4_timer_success_prohibition",
+      "barrier": "reclassifying stabilized as elapsed-time-permitted makes N2/E3's full-proof timer request succeed",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "baselineHeld": true,
+      "mutantViolated": true,
+      "correspondingFixtureWouldFail": true,
+      "detail": {
+        "ok": true,
+        "state": {
+          "phase": "stabilized",
+          "phaseEnteredDay": 2111,
+          "history": [
+            "travelling",
+            "establishing"
+          ]
+        },
+        "timedOut": false
+      }
+    },
+    {
+      "id": "M5_quarantine_release_initialization",
+      "barrier": "removing the release camp initialization makes S7's real qualifying positive fixture refuse instead of publishing half-initialized established state",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "baselineHeld": true,
+      "mutantViolated": true,
+      "correspondingFixtureWouldFail": true,
+      "detail": {
+        "mutantStabilized": [],
+        "mutantRefusals": [
+          {
+            "successorBandId": "band:successor-stabilization-positive",
+            "day": 2111,
+            "refusal": "quarantine_release_initialization_failed",
+            "evidence": {
+              "authority": "successor_independent_operation_v1",
+              "successorBandId": "band:successor-stabilization-positive",
+              "lineageId": "LIN-SUCCESSOR-STABILIZATION-POSITIVE",
+              "assessedOnDay": 2111,
+              "departureDay": 2100,
+              "arrivalDay": 2105,
+              "assessmentWindow": {
+                "startDay": 2101,
+                "endDay": 2111,
+                "days": 11,
+                "tileIds": [
+                  "tile:194:89",
+                  "tile:193:89",
+                  "tile:193:88",
+                  "tile:193:87"
+                ],
+                "supportUnits": 0.1412,
+                "demandUnits": 0.3663,
+                "supportRatio": 0.3855,
+                "daysWithAnyPhysicalTake": 6,
+                "workerDays": 12,
+                "depletionApplied": 0.1618,
+                "meanWaterStress": 0,
+                "closedBy": "demand_window_complete"
+              },
+              "currentCondition": {
+                "population": 3,
+                "workingAdults": 3,
+                "mortalityRiskBump": 0.022,
+                "returnDecisionWouldAbandon": false
+              },
+              "requirements": {
+                "physicallyArrivedAtAcceptedTarget": true,
+                "postDepartureDemandWindowCompleted": true,
+                "demandWasMeasured": true,
+                "productiveLaborWasLived": true,
+                "realFoodWasTakenAndDepleted": true,
+                "supportStayedAboveReturnFailureFloor": true,
+                "waterStayedBelowNoWaterFailureLine": true,
+                "livingPopulationRemains": true,
+                "workingPopulationRemains": true,
+                "embodiedBurdenRemainsBelowReturnLine": true,
+                "currentReturnAuthorityDoesNotAbandon": true
+              },
+              "allRequirementsMet": true,
+              "sourceAuthorities": [
+                "provisionalTravel.requestTransition(travelling -> establishing)",
+                "provisionalTravelSubsistence.ProvisionalOperationHistory",
+                "plantStock.resolvePlantFoodHarvest",
+                "carryingCapacity.derivePopulationDemand",
+                "provisionalTravelSubsistence standing-tile water stress",
+                "Band.demography cohorts",
+                "Band.acuteRisk active embodied effect",
+                "provisionalReturnDecision.deriveProvisionalReturnDecision"
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "M6_historical_completion_timing",
+      "barrier": "removing the phase guard and hiding a stabilized write inside release makes N9's establishing-state call create completed history",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "baselineHeld": true,
+      "mutantViolated": true,
+      "correspondingFixtureWouldFail": true,
+      "detail": {
+        "phase": "stabilized",
+        "lineage": true,
+        "deepHistory": true,
+        "completionEvents": 1
+      }
+    }
+  ],
+  "restoration": {
+    "src/sim/agents/successorStabilization.ts": {
+      "startingSha256": "2618d5b075e0dc50cd059ffc8b42b7f50e109647944e60a699b40d2205645e8c",
+      "endingSha256": "2618d5b075e0dc50cd059ffc8b42b7f50e109647944e60a699b40d2205645e8c",
+      "byteIdentical": true
+    },
+    "src/sim/agents/fissionLifecycleKernel.ts": {
+      "startingSha256": "a8c54ef5c84afd0b1f4831bcc52730bdce15b24f5fbd19a51063ce92bffb2752",
+      "endingSha256": "a8c54ef5c84afd0b1f4831bcc52730bdce15b24f5fbd19a51063ce92bffb2752",
+      "byteIdentical": true
+    },
+    "src/sim/agents/provisionalSeparationCourse.ts": {
+      "startingSha256": "febc89cbcf84156567359e2ddf2e80dc336110d9ead155439f911ef198d0fc31",
+      "endingSha256": "febc89cbcf84156567359e2ddf2e80dc336110d9ead155439f911ef198d0fc31",
+      "byteIdentical": true
+    }
+  },
+  "summary": {
+    "total": 6,
+    "passing": 6,
+    "failing": 0,
+    "vacuous": 0,
+    "productionRestoredByteIdentically": true
+  }
+}

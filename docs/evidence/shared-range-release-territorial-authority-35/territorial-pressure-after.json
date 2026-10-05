@@ -1,0 +1,1033 @@
+{
+  "audit": "CORRECTION-35B-TERRITORIAL-PRESSURE-AUTHORITY",
+  "phase": "after",
+  "seed": "audit27:natural:s1",
+  "warmDays": 3600,
+  "valuesTested": [
+    0,
+    0.12,
+    0.8
+  ],
+  "headline": "TERRITORIAL PRESSURE IS BEHAVIORALLY INERT",
+  "inventory": [
+    {
+      "field": "Band.territorialPressure",
+      "writers": [
+        "spawn.ts:922 — constant 0.12 at band creation",
+        "demography.ts:1008 — daughter inheritance clamp01(parent * 0.72 + 0.04)"
+      ],
+      "cadence": "once at spawn; once more at fission",
+      "provenance": "NONE — no lived shared-range process writes it",
+      "readers": [
+        "pressure.ts:293 — mobilityPressure += territorialPressure * 0.08  (DECISION: -> netMovePressure -> candidate score)",
+        "rules/mobilityIntent.ts:930 — mobilityPressure += territorialPressure * 0.12  (DECISION: -> intent candidate scores and the 0.44 expansion threshold)",
+        "rules/bandDecision.ts:5544 — getMobilityPressure += territorialPressure * 0.14  (ATTRIBUTION: fills a reason record's `pressure` field only)",
+        "rules/bandDecision.ts:5225 — copied into DecisionContextSnapshot (record only, no reader)",
+        "agents/campMovement.ts:1708 — copied into a DecisionContextSnapshot (record only, no reader)",
+        "runner/simRunner.ts:480 — copied into the UI projection (read-only)"
+      ],
+      "changesFromLivedEvidence": false,
+      "alreadyOwnedByAnAcceptedSignal": "yes — crowding (getCrowdingPenalty), friction (rangeFriction) and access expectation (accessNorms) already own every shared-range consequence Item 3 recognises"
+    },
+    {
+      "field": "SocialPressureProfile.territorialPressure",
+      "writers": [
+        "spawn.ts:1266 — constant 0.08 inside getInitialSocialPressure()",
+        "demography.ts:2300 applyDemographyToSocialPressure spreads ...socialPressure, so it is carried forward unchanged forever"
+      ],
+      "cadence": "once at spawn",
+      "provenance": "NONE",
+      "readers": [],
+      "changesFromLivedEvidence": false,
+      "alreadyOwnedByAnAcceptedSignal": "n/a — it has no reader at all"
+    },
+    {
+      "field": "DecisionContextSnapshot.territorialPressure",
+      "writers": [
+        "copied from Band.territorialPressure at bandDecision.ts:5225 and campMovement.ts:1708"
+      ],
+      "cadence": "per decision record",
+      "provenance": "copy",
+      "readers": [],
+      "changesFromLivedEvidence": false,
+      "alreadyOwnedByAnAcceptedSignal": "n/a — projection"
+    }
+  ],
+  "inventoryNote": "the prompt named two behavioural readers; there are THREE, and they are not equivalent. pressure.ts and mobilityIntent.ts reach the DECISION; bandDecision.ts:5544 only fills a reason record's `pressure` field and is ATTRIBUTION. The two copies and the UI projection have no reader at all.",
+  "perBand": [
+    {
+      "band": "band:varied-dry-corridor-mid",
+      "spawnValue": 0.12,
+      "rows": [
+        {
+          "territorialPressure": 0,
+          "mobilityPressure": 0.9,
+          "netMovePressure": 1,
+          "riskPressure": 0.43,
+          "crowdingPenalty": 0,
+          "nearbyBandPressure": 0,
+          "selectedAction": "move_to_tile",
+          "selectedTarget": "tile:61:108",
+          "candidateCount": 11,
+          "candidates": [
+            {
+              "type": "move_to_tile",
+              "target": "tile:58:108",
+              "score": 0.67
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:59:108",
+              "score": 1.39
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:59:109",
+              "score": -0.3
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:60:106",
+              "score": 0.05
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:60:109",
+              "score": 0.59
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:60:110",
+              "score": -0.45
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:61:108",
+              "score": 3.48
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:61:109",
+              "score": 0.85
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:62:108",
+              "score": 1.48
+            },
+            {
+              "type": "resource_scout",
+              "target": "tile:61:108",
+              "score": 3.17
+            },
+            {
+              "type": "stay",
+              "target": "-",
+              "score": 0.99
+            }
+          ],
+          "primaryReasonType": "seek_better_water",
+          "primaryReasonPressure": 0,
+          "intentStatus": "continued_intent",
+          "intentKind": "seek_better_water",
+          "intentReasonPressure": -1
+        },
+        {
+          "territorialPressure": 0.12,
+          "mobilityPressure": 0.9,
+          "netMovePressure": 1,
+          "riskPressure": 0.43,
+          "crowdingPenalty": 0,
+          "nearbyBandPressure": 0,
+          "selectedAction": "move_to_tile",
+          "selectedTarget": "tile:61:108",
+          "candidateCount": 11,
+          "candidates": [
+            {
+              "type": "move_to_tile",
+              "target": "tile:58:108",
+              "score": 0.67
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:59:108",
+              "score": 1.39
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:59:109",
+              "score": -0.3
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:60:106",
+              "score": 0.05
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:60:109",
+              "score": 0.59
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:60:110",
+              "score": -0.45
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:61:108",
+              "score": 3.48
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:61:109",
+              "score": 0.85
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:62:108",
+              "score": 1.48
+            },
+            {
+              "type": "resource_scout",
+              "target": "tile:61:108",
+              "score": 3.17
+            },
+            {
+              "type": "stay",
+              "target": "-",
+              "score": 0.99
+            }
+          ],
+          "primaryReasonType": "seek_better_water",
+          "primaryReasonPressure": 0,
+          "intentStatus": "continued_intent",
+          "intentKind": "seek_better_water",
+          "intentReasonPressure": -1
+        },
+        {
+          "territorialPressure": 0.8,
+          "mobilityPressure": 0.9,
+          "netMovePressure": 1,
+          "riskPressure": 0.43,
+          "crowdingPenalty": 0,
+          "nearbyBandPressure": 0,
+          "selectedAction": "move_to_tile",
+          "selectedTarget": "tile:61:108",
+          "candidateCount": 11,
+          "candidates": [
+            {
+              "type": "move_to_tile",
+              "target": "tile:58:108",
+              "score": 0.67
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:59:108",
+              "score": 1.39
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:59:109",
+              "score": -0.3
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:60:106",
+              "score": 0.05
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:60:109",
+              "score": 0.59
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:60:110",
+              "score": -0.45
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:61:108",
+              "score": 3.48
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:61:109",
+              "score": 0.85
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:62:108",
+              "score": 1.48
+            },
+            {
+              "type": "resource_scout",
+              "target": "tile:61:108",
+              "score": 3.17
+            },
+            {
+              "type": "stay",
+              "target": "-",
+              "score": 0.99
+            }
+          ],
+          "primaryReasonType": "seek_better_water",
+          "primaryReasonPressure": 0,
+          "intentStatus": "continued_intent",
+          "intentKind": "seek_better_water",
+          "intentReasonPressure": -1
+        }
+      ],
+      "movesMobilityPressure": false,
+      "movesNetMovePressure": false,
+      "movesDecisionScore": false,
+      "movesSelectedAction": false,
+      "movesCandidateScores": false,
+      "movesReasonAttribution": false,
+      "movesIntentPressure": false
+    },
+    {
+      "band": "band:varied-dry-corridor-upper",
+      "spawnValue": 0.12,
+      "rows": [
+        {
+          "territorialPressure": 0,
+          "mobilityPressure": 0.91,
+          "netMovePressure": 1,
+          "riskPressure": 0.43,
+          "crowdingPenalty": 0,
+          "nearbyBandPressure": 0,
+          "selectedAction": "resource_scout",
+          "selectedTarget": "tile:64:107",
+          "candidateCount": 11,
+          "candidates": [
+            {
+              "type": "move_to_tile",
+              "target": "tile:61:106",
+              "score": 1.86
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:62:105",
+              "score": 0.48
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:62:106",
+              "score": 1.75
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:63:104",
+              "score": -0.18
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:63:105",
+              "score": 0.77
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:64:105",
+              "score": -0.11
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:64:106",
+              "score": 1.03
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:64:107",
+              "score": 0.4
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:65:106",
+              "score": 0.35
+            },
+            {
+              "type": "resource_scout",
+              "target": "tile:64:107",
+              "score": 2.23
+            },
+            {
+              "type": "stay",
+              "target": "-",
+              "score": 0.76
+            }
+          ],
+          "primaryReasonType": "frontier_probe",
+          "primaryReasonPressure": 0,
+          "intentStatus": "continued_intent",
+          "intentKind": "return_to_known_good_area",
+          "intentReasonPressure": -1
+        },
+        {
+          "territorialPressure": 0.12,
+          "mobilityPressure": 0.91,
+          "netMovePressure": 1,
+          "riskPressure": 0.43,
+          "crowdingPenalty": 0,
+          "nearbyBandPressure": 0,
+          "selectedAction": "resource_scout",
+          "selectedTarget": "tile:64:107",
+          "candidateCount": 11,
+          "candidates": [
+            {
+              "type": "move_to_tile",
+              "target": "tile:61:106",
+              "score": 1.86
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:62:105",
+              "score": 0.48
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:62:106",
+              "score": 1.75
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:63:104",
+              "score": -0.18
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:63:105",
+              "score": 0.77
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:64:105",
+              "score": -0.11
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:64:106",
+              "score": 1.03
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:64:107",
+              "score": 0.4
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:65:106",
+              "score": 0.35
+            },
+            {
+              "type": "resource_scout",
+              "target": "tile:64:107",
+              "score": 2.23
+            },
+            {
+              "type": "stay",
+              "target": "-",
+              "score": 0.76
+            }
+          ],
+          "primaryReasonType": "frontier_probe",
+          "primaryReasonPressure": 0,
+          "intentStatus": "continued_intent",
+          "intentKind": "return_to_known_good_area",
+          "intentReasonPressure": -1
+        },
+        {
+          "territorialPressure": 0.8,
+          "mobilityPressure": 0.91,
+          "netMovePressure": 1,
+          "riskPressure": 0.43,
+          "crowdingPenalty": 0,
+          "nearbyBandPressure": 0,
+          "selectedAction": "resource_scout",
+          "selectedTarget": "tile:64:107",
+          "candidateCount": 11,
+          "candidates": [
+            {
+              "type": "move_to_tile",
+              "target": "tile:61:106",
+              "score": 1.86
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:62:105",
+              "score": 0.48
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:62:106",
+              "score": 1.75
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:63:104",
+              "score": -0.18
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:63:105",
+              "score": 0.77
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:64:105",
+              "score": -0.11
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:64:106",
+              "score": 1.03
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:64:107",
+              "score": 0.4
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:65:106",
+              "score": 0.35
+            },
+            {
+              "type": "resource_scout",
+              "target": "tile:64:107",
+              "score": 2.23
+            },
+            {
+              "type": "stay",
+              "target": "-",
+              "score": 0.76
+            }
+          ],
+          "primaryReasonType": "frontier_probe",
+          "primaryReasonPressure": 0,
+          "intentStatus": "continued_intent",
+          "intentKind": "return_to_known_good_area",
+          "intentReasonPressure": -1
+        }
+      ],
+      "movesMobilityPressure": false,
+      "movesNetMovePressure": false,
+      "movesDecisionScore": false,
+      "movesSelectedAction": false,
+      "movesCandidateScores": false,
+      "movesReasonAttribution": false,
+      "movesIntentPressure": false
+    },
+    {
+      "band": "band:varied-estuary",
+      "spawnValue": 0.12,
+      "rows": [
+        {
+          "territorialPressure": 0,
+          "mobilityPressure": 0.56,
+          "netMovePressure": 0.4,
+          "riskPressure": 0.59,
+          "crowdingPenalty": 0,
+          "nearbyBandPressure": 0,
+          "selectedAction": "move_to_tile",
+          "selectedTarget": "tile:192:88",
+          "candidateCount": 14,
+          "candidates": [
+            {
+              "type": "logistical_probe",
+              "target": "tile:191:87",
+              "score": 4.86
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:191:88",
+              "score": 6.64
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:192:87",
+              "score": 5.17
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:192:88",
+              "score": 7
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:192:89",
+              "score": 4.57
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:193:86",
+              "score": 4.76
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:193:87",
+              "score": 5.66
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:193:89",
+              "score": 4.92
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:194:87",
+              "score": 3.91
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:194:88",
+              "score": 4.66
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:194:89",
+              "score": 3.42
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:195:88",
+              "score": 4.09
+            },
+            {
+              "type": "resource_scout",
+              "target": "tile:194:90",
+              "score": 1.8
+            },
+            {
+              "type": "stay",
+              "target": "-",
+              "score": 5.01
+            }
+          ],
+          "primaryReasonType": "return_to_known_good_area",
+          "primaryReasonPressure": 0,
+          "intentStatus": "continued_intent",
+          "intentKind": "return_to_known_good_area",
+          "intentReasonPressure": -1
+        },
+        {
+          "territorialPressure": 0.12,
+          "mobilityPressure": 0.56,
+          "netMovePressure": 0.4,
+          "riskPressure": 0.59,
+          "crowdingPenalty": 0,
+          "nearbyBandPressure": 0,
+          "selectedAction": "move_to_tile",
+          "selectedTarget": "tile:192:88",
+          "candidateCount": 14,
+          "candidates": [
+            {
+              "type": "logistical_probe",
+              "target": "tile:191:87",
+              "score": 4.86
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:191:88",
+              "score": 6.64
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:192:87",
+              "score": 5.17
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:192:88",
+              "score": 7
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:192:89",
+              "score": 4.57
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:193:86",
+              "score": 4.76
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:193:87",
+              "score": 5.66
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:193:89",
+              "score": 4.92
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:194:87",
+              "score": 3.91
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:194:88",
+              "score": 4.66
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:194:89",
+              "score": 3.42
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:195:88",
+              "score": 4.09
+            },
+            {
+              "type": "resource_scout",
+              "target": "tile:194:90",
+              "score": 1.8
+            },
+            {
+              "type": "stay",
+              "target": "-",
+              "score": 5.01
+            }
+          ],
+          "primaryReasonType": "return_to_known_good_area",
+          "primaryReasonPressure": 0,
+          "intentStatus": "continued_intent",
+          "intentKind": "return_to_known_good_area",
+          "intentReasonPressure": -1
+        },
+        {
+          "territorialPressure": 0.8,
+          "mobilityPressure": 0.56,
+          "netMovePressure": 0.4,
+          "riskPressure": 0.59,
+          "crowdingPenalty": 0,
+          "nearbyBandPressure": 0,
+          "selectedAction": "move_to_tile",
+          "selectedTarget": "tile:192:88",
+          "candidateCount": 14,
+          "candidates": [
+            {
+              "type": "logistical_probe",
+              "target": "tile:191:87",
+              "score": 4.86
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:191:88",
+              "score": 6.64
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:192:87",
+              "score": 5.17
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:192:88",
+              "score": 7
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:192:89",
+              "score": 4.57
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:193:86",
+              "score": 4.76
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:193:87",
+              "score": 5.66
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:193:89",
+              "score": 4.92
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:194:87",
+              "score": 3.91
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:194:88",
+              "score": 4.66
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:194:89",
+              "score": 3.42
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:195:88",
+              "score": 4.09
+            },
+            {
+              "type": "resource_scout",
+              "target": "tile:194:90",
+              "score": 1.8
+            },
+            {
+              "type": "stay",
+              "target": "-",
+              "score": 5.01
+            }
+          ],
+          "primaryReasonType": "return_to_known_good_area",
+          "primaryReasonPressure": 0,
+          "intentStatus": "continued_intent",
+          "intentKind": "return_to_known_good_area",
+          "intentReasonPressure": -1
+        }
+      ],
+      "movesMobilityPressure": false,
+      "movesNetMovePressure": false,
+      "movesDecisionScore": false,
+      "movesSelectedAction": false,
+      "movesCandidateScores": false,
+      "movesReasonAttribution": false,
+      "movesIntentPressure": false
+    },
+    {
+      "band": "band:varied-lake-east",
+      "spawnValue": 0.12,
+      "rows": [
+        {
+          "territorialPressure": 0,
+          "mobilityPressure": 0.75,
+          "netMovePressure": 0.66,
+          "riskPressure": 0.55,
+          "crowdingPenalty": 0,
+          "nearbyBandPressure": 0,
+          "selectedAction": "logistical_probe",
+          "selectedTarget": "tile:87:75",
+          "candidateCount": 10,
+          "candidates": [
+            {
+              "type": "logistical_probe",
+              "target": "tile:87:75",
+              "score": 5.63
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:86:73",
+              "score": 3.85
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:86:76",
+              "score": 2.75
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:86:77",
+              "score": 2.44
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:87:74",
+              "score": 4.13
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:87:75",
+              "score": 5.27
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:87:76",
+              "score": 2.97
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:88:75",
+              "score": 3.39
+            },
+            {
+              "type": "resource_scout",
+              "target": "tile:86:80",
+              "score": 1.66
+            },
+            {
+              "type": "stay",
+              "target": "-",
+              "score": 3.11
+            }
+          ],
+          "primaryReasonType": "logistical_probe_selected",
+          "primaryReasonPressure": 0,
+          "intentStatus": "continued_intent",
+          "intentKind": "follow_river_corridor",
+          "intentReasonPressure": -1
+        },
+        {
+          "territorialPressure": 0.12,
+          "mobilityPressure": 0.75,
+          "netMovePressure": 0.66,
+          "riskPressure": 0.55,
+          "crowdingPenalty": 0,
+          "nearbyBandPressure": 0,
+          "selectedAction": "logistical_probe",
+          "selectedTarget": "tile:87:75",
+          "candidateCount": 10,
+          "candidates": [
+            {
+              "type": "logistical_probe",
+              "target": "tile:87:75",
+              "score": 5.63
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:86:73",
+              "score": 3.85
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:86:76",
+              "score": 2.75
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:86:77",
+              "score": 2.44
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:87:74",
+              "score": 4.13
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:87:75",
+              "score": 5.27
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:87:76",
+              "score": 2.97
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:88:75",
+              "score": 3.39
+            },
+            {
+              "type": "resource_scout",
+              "target": "tile:86:80",
+              "score": 1.66
+            },
+            {
+              "type": "stay",
+              "target": "-",
+              "score": 3.11
+            }
+          ],
+          "primaryReasonType": "logistical_probe_selected",
+          "primaryReasonPressure": 0,
+          "intentStatus": "continued_intent",
+          "intentKind": "follow_river_corridor",
+          "intentReasonPressure": -1
+        },
+        {
+          "territorialPressure": 0.8,
+          "mobilityPressure": 0.75,
+          "netMovePressure": 0.66,
+          "riskPressure": 0.55,
+          "crowdingPenalty": 0,
+          "nearbyBandPressure": 0,
+          "selectedAction": "logistical_probe",
+          "selectedTarget": "tile:87:75",
+          "candidateCount": 10,
+          "candidates": [
+            {
+              "type": "logistical_probe",
+              "target": "tile:87:75",
+              "score": 5.63
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:86:73",
+              "score": 3.85
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:86:76",
+              "score": 2.75
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:86:77",
+              "score": 2.44
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:87:74",
+              "score": 4.13
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:87:75",
+              "score": 5.27
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:87:76",
+              "score": 2.97
+            },
+            {
+              "type": "move_to_tile",
+              "target": "tile:88:75",
+              "score": 3.39
+            },
+            {
+              "type": "resource_scout",
+              "target": "tile:86:80",
+              "score": 1.66
+            },
+            {
+              "type": "stay",
+              "target": "-",
+              "score": 3.11
+            }
+          ],
+          "primaryReasonType": "logistical_probe_selected",
+          "primaryReasonPressure": 0,
+          "intentStatus": "continued_intent",
+          "intentKind": "follow_river_corridor",
+          "intentReasonPressure": -1
+        }
+      ],
+      "movesMobilityPressure": false,
+      "movesNetMovePressure": false,
+      "movesDecisionScore": false,
+      "movesSelectedAction": false,
+      "movesCandidateScores": false,
+      "movesReasonAttribution": false,
+      "movesIntentPressure": false
+    }
+  ],
+  "anyBehaviouralEffect": false,
+  "heldConstant": [
+    "world",
+    "band object except the one field",
+    "tick context cache",
+    "crowding",
+    "encounters",
+    "friction",
+    "access memory",
+    "population",
+    "food",
+    "water",
+    "ecology",
+    "place memory",
+    "known tiles"
+  ]
+}

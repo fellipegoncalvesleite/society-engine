@@ -357,17 +357,40 @@ export function pruneDormantResourceMemories(
 }
 
 // Enforce the per-band cap by keeping the highest decay-aware retention (bounded).
+//
+// REPEATED-BAND-EXPANSION-FISSION-14 §9 Stage 2 — `justObservedPatchIds` are the
+// beliefs this very observation formed or re-confirmed. MEASURED DEFECT: once a band
+// filled the cap with strong beliefs about one catchment, a pure retention ranking
+// evicted every newly observed patch on the spot — a fresh, weak, first-sight memory
+// always ranks below a long-held confident one. A band that walked its residence into
+// new country therefore could not form knowledge of the ground under its feet, no
+// matter how many seasons it stood there: 48 saturated memories about a catchment it
+// could no longer reach, and no candidate to forage. That is a permanent learning
+// lock, not forgetting. Protecting what the band JUST physically observed keeps the
+// cap exactly as tight (the list is still truncated to `cap`) but makes the cost of
+// learning the loss of the least-retained OLD belief, which is what the lazy-forgetting
+// design intends. Absent the argument, behavior is unchanged.
 export function enforceResourceKnowledgeCap(
   state: ResourceKnowledgeState,
   currentTick: number,
+  justObservedPatchIds?: ReadonlySet<ResourcePatchId>,
 ): ResourceKnowledgeState {
   if (state.patchMemories.length <= state.cap) {
     return state;
   }
 
+  const ranked = rankResourcePatchMemoriesForRetention(state.patchMemories, currentTick);
+
+  if (justObservedPatchIds === undefined || justObservedPatchIds.size === 0) {
+    return { ...state, patchMemories: ranked.slice(0, state.cap) };
+  }
+
   return {
     ...state,
-    patchMemories: rankResourcePatchMemoriesForRetention(state.patchMemories, currentTick).slice(0, state.cap),
+    patchMemories: [
+      ...ranked.filter((memory) => justObservedPatchIds.has(memory.patchId)),
+      ...ranked.filter((memory) => !justObservedPatchIds.has(memory.patchId)),
+    ].slice(0, state.cap),
   };
 }
 
@@ -562,7 +585,11 @@ export function updateResourceKnowledgeFromObservation(
   // this only runs because the band is forming/refreshing a belief this tick).
   const pruned = pruneDormantResourceMemories(patchMemories, Number(context.tick));
 
-  return enforceResourceKnowledgeCap({ ...base, patchMemories: pruned }, Number(context.tick));
+  return enforceResourceKnowledgeCap(
+    { ...base, patchMemories: pruned },
+    Number(context.tick),
+    new Set(updatedByPatch.keys()),
+  );
 }
 
 function selectSalientObservations(

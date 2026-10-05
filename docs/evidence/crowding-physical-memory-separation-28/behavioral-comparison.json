@@ -1,0 +1,313 @@
+{
+  "audit": "CORRECTION-28 — BEHAVIOURAL COMPARISON",
+  "note": "Production behaviour changed, so no fingerprint parity is claimed. Aggregates are reported as measured, with no claim that any direction is an improvement.",
+  "perRun": [
+    {
+      "scenario": "map1",
+      "seed": "s1",
+      "firstDivergence": null,
+      "before": {
+        "seasons": 80,
+        "moves": 249,
+        "movesWithCrowdingReason": 0,
+        "crowdingReasonInstances": 0,
+        "fissions": 0,
+        "finalLivingBandCount": 5,
+        "finalPopulation": 158,
+        "survived": true,
+        "bandSeasonsWithCrowding": 0,
+        "crowdingContributorIdentities": 0,
+        "totalBandSeasons": 400
+      },
+      "after": {
+        "seasons": 80,
+        "moves": 249,
+        "movesWithCrowdingReason": 0,
+        "crowdingReasonInstances": 0,
+        "fissions": 0,
+        "finalLivingBandCount": 5,
+        "finalPopulation": 158,
+        "survived": true,
+        "bandSeasonsWithCrowding": 0,
+        "crowdingContributorIdentities": 0,
+        "totalBandSeasons": 400
+      },
+      "delta": {
+        "seasons": 0,
+        "moves": 0,
+        "movesWithCrowdingReason": 0,
+        "crowdingReasonInstances": 0,
+        "fissions": 0,
+        "finalLivingBandCount": 0,
+        "finalPopulation": 0,
+        "bandSeasonsWithCrowding": 0,
+        "crowdingContributorIdentities": 0,
+        "totalBandSeasons": 0
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s2",
+      "firstDivergence": null,
+      "before": {
+        "seasons": 80,
+        "moves": 276,
+        "movesWithCrowdingReason": 0,
+        "crowdingReasonInstances": 0,
+        "fissions": 0,
+        "finalLivingBandCount": 5,
+        "finalPopulation": 155,
+        "survived": true,
+        "bandSeasonsWithCrowding": 10,
+        "crowdingContributorIdentities": 10,
+        "totalBandSeasons": 400
+      },
+      "after": {
+        "seasons": 80,
+        "moves": 276,
+        "movesWithCrowdingReason": 0,
+        "crowdingReasonInstances": 0,
+        "fissions": 0,
+        "finalLivingBandCount": 5,
+        "finalPopulation": 155,
+        "survived": true,
+        "bandSeasonsWithCrowding": 10,
+        "crowdingContributorIdentities": 10,
+        "totalBandSeasons": 400
+      },
+      "delta": {
+        "seasons": 0,
+        "moves": 0,
+        "movesWithCrowdingReason": 0,
+        "crowdingReasonInstances": 0,
+        "fissions": 0,
+        "finalLivingBandCount": 0,
+        "finalPopulation": 0,
+        "bandSeasonsWithCrowding": 0,
+        "crowdingContributorIdentities": 0,
+        "totalBandSeasons": 0
+      }
+    },
+    {
+      "scenario": "map2",
+      "seed": "s1",
+      "firstDivergence": {
+        "tick": 37,
+        "bandId": "band:varied-dry-corridor-mid",
+        "field": "weightedCrowding",
+        "before": 0.12,
+        "after": 0.11
+      },
+      "before": {
+        "seasons": 80,
+        "moves": 431,
+        "movesWithCrowdingReason": 0,
+        "crowdingReasonInstances": 0,
+        "fissions": 0,
+        "finalLivingBandCount": 9,
+        "finalPopulation": 226,
+        "survived": true,
+        "bandSeasonsWithCrowding": 82,
+        "crowdingContributorIdentities": 82,
+        "totalBandSeasons": 720
+      },
+      "after": {
+        "seasons": 80,
+        "moves": 430,
+        "movesWithCrowdingReason": 0,
+        "crowdingReasonInstances": 0,
+        "fissions": 0,
+        "finalLivingBandCount": 9,
+        "finalPopulation": 226,
+        "survived": true,
+        "bandSeasonsWithCrowding": 40,
+        "crowdingContributorIdentities": 40,
+        "totalBandSeasons": 720
+      },
+      "delta": {
+        "seasons": 0,
+        "moves": -1,
+        "movesWithCrowdingReason": 0,
+        "crowdingReasonInstances": 0,
+        "fissions": 0,
+        "finalLivingBandCount": 0,
+        "finalPopulation": 0,
+        "bandSeasonsWithCrowding": -42,
+        "crowdingContributorIdentities": -42,
+        "totalBandSeasons": 0
+      }
+    },
+    {
+      "scenario": "map2",
+      "seed": "s2",
+      "firstDivergence": null,
+      "before": {
+        "seasons": 80,
+        "moves": 470,
+        "movesWithCrowdingReason": 0,
+        "crowdingReasonInstances": 0,
+        "fissions": 0,
+        "finalLivingBandCount": 9,
+        "finalPopulation": 225,
+        "survived": true,
+        "bandSeasonsWithCrowding": 4,
+        "crowdingContributorIdentities": 4,
+        "totalBandSeasons": 720
+      },
+      "after": {
+        "seasons": 80,
+        "moves": 470,
+        "movesWithCrowdingReason": 0,
+        "crowdingReasonInstances": 0,
+        "fissions": 0,
+        "finalLivingBandCount": 9,
+        "finalPopulation": 225,
+        "survived": true,
+        "bandSeasonsWithCrowding": 4,
+        "crowdingContributorIdentities": 4,
+        "totalBandSeasons": 720
+      },
+      "delta": {
+        "seasons": 0,
+        "moves": 0,
+        "movesWithCrowdingReason": 0,
+        "crowdingReasonInstances": 0,
+        "fissions": 0,
+        "finalLivingBandCount": 0,
+        "finalPopulation": 0,
+        "bandSeasonsWithCrowding": 0,
+        "crowdingContributorIdentities": 0,
+        "totalBandSeasons": 0
+      }
+    },
+    {
+      "scenario": "ordinary",
+      "seed": "s1",
+      "firstDivergence": null,
+      "before": {
+        "seasons": 80,
+        "moves": 54,
+        "movesWithCrowdingReason": 0,
+        "crowdingReasonInstances": 0,
+        "fissions": 0,
+        "finalLivingBandCount": 1,
+        "finalPopulation": 27,
+        "survived": true,
+        "bandSeasonsWithCrowding": 0,
+        "crowdingContributorIdentities": 0,
+        "totalBandSeasons": 80
+      },
+      "after": {
+        "seasons": 80,
+        "moves": 54,
+        "movesWithCrowdingReason": 0,
+        "crowdingReasonInstances": 0,
+        "fissions": 0,
+        "finalLivingBandCount": 1,
+        "finalPopulation": 27,
+        "survived": true,
+        "bandSeasonsWithCrowding": 0,
+        "crowdingContributorIdentities": 0,
+        "totalBandSeasons": 80
+      },
+      "delta": {
+        "seasons": 0,
+        "moves": 0,
+        "movesWithCrowdingReason": 0,
+        "crowdingReasonInstances": 0,
+        "fissions": 0,
+        "finalLivingBandCount": 0,
+        "finalPopulation": 0,
+        "bandSeasonsWithCrowding": 0,
+        "crowdingContributorIdentities": 0,
+        "totalBandSeasons": 0
+      }
+    },
+    {
+      "scenario": "ordinary",
+      "seed": "s2",
+      "firstDivergence": null,
+      "before": {
+        "seasons": 80,
+        "moves": 67,
+        "movesWithCrowdingReason": 0,
+        "crowdingReasonInstances": 0,
+        "fissions": 0,
+        "finalLivingBandCount": 1,
+        "finalPopulation": 26,
+        "survived": true,
+        "bandSeasonsWithCrowding": 0,
+        "crowdingContributorIdentities": 0,
+        "totalBandSeasons": 80
+      },
+      "after": {
+        "seasons": 80,
+        "moves": 67,
+        "movesWithCrowdingReason": 0,
+        "crowdingReasonInstances": 0,
+        "fissions": 0,
+        "finalLivingBandCount": 1,
+        "finalPopulation": 26,
+        "survived": true,
+        "bandSeasonsWithCrowding": 0,
+        "crowdingContributorIdentities": 0,
+        "totalBandSeasons": 80
+      },
+      "delta": {
+        "seasons": 0,
+        "moves": 0,
+        "movesWithCrowdingReason": 0,
+        "crowdingReasonInstances": 0,
+        "fissions": 0,
+        "finalLivingBandCount": 0,
+        "finalPopulation": 0,
+        "bandSeasonsWithCrowding": 0,
+        "crowdingContributorIdentities": 0,
+        "totalBandSeasons": 0
+      }
+    }
+  ],
+  "aggregate": {
+    "runs": 6,
+    "moves": {
+      "before": 1547,
+      "after": 1546
+    },
+    "movesWithCrowdingReason": {
+      "before": 0,
+      "after": 0
+    },
+    "crowdingReasonInstances": {
+      "before": 0,
+      "after": 0
+    },
+    "bandSeasonsWithCrowding": {
+      "before": 96,
+      "after": 54
+    },
+    "crowdingContributorIdentities": {
+      "before": 96,
+      "after": 54
+    },
+    "totalBandSeasons": {
+      "before": 2400,
+      "after": 2400
+    },
+    "fissions": {
+      "before": 0,
+      "after": 0
+    },
+    "finalPopulation": {
+      "before": 817,
+      "after": 817
+    },
+    "finalLivingBandCount": {
+      "before": 30,
+      "after": 30
+    },
+    "survivedRuns": {
+      "before": 6,
+      "after": 6
+    }
+  }
+}

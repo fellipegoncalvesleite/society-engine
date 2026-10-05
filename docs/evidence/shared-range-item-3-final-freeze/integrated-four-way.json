@@ -1,0 +1,92 @@
+{
+  "audit": "ROADMAP-ITEM-3-TIME-MODE-EQUIVALENCE",
+  "note": "TWO ARMS. The expedition seed exercises target work but produces no social evidence on this world; the shared-range seed exercises both. A four-way identity over a span containing none of the behaviour under audit is an identity claim about nothing, so both arms report what actually occurred in the compared run.",
+  "arms": {
+    "expeditionSeed": {
+      "audit": "ROADMAP-ITEM-3-TIME-MODE-EQUIVALENCE",
+      "seed": "audit27:natural:map2:s1",
+      "spanDays": 2520,
+      "digests": {
+        "daily": "6f086e6ee4eb9f7ea8c1bc858af6c2c79c93838ddc3660ebab7e3c00508939af",
+        "weekly": "6f086e6ee4eb9f7ea8c1bc858af6c2c79c93838ddc3660ebab7e3c00508939af",
+        "monthly": "6f086e6ee4eb9f7ea8c1bc858af6c2c79c93838ddc3660ebab7e3c00508939af",
+        "seasonal": "6f086e6ee4eb9f7ea8c1bc858af6c2c79c93838ddc3660ebab7e3c00508939af"
+      },
+      "allFourModesIdentical": true,
+      "dailyRepeatIdentical": true,
+      "occurrenceInTheComparedRun": {
+        "exploitationOutcomes": 6,
+        "outcomesDeliveringHarvest": 2,
+        "activePartiesAtEnd": 0,
+        "frictionRecords": 0,
+        "encounterRecords": 0,
+        "contactMemories": 0,
+        "livingBands": 9
+      },
+      "verdict": "ALL_FOUR_MODES_IDENTICAL_WITH_ITEM_3_BEHAVIOUR_PRESENT",
+      "nonVacuousPredicate": true,
+      "nonVacuity": {
+        "predicate": "the compared daily run must actually contain expedition target work and active parties, or a four-way identity is a claim about nothing",
+        "exploitationOutcomes": 6,
+        "outcomesDeliveringHarvest": 2,
+        "activePartiesAtEnd": 0,
+        "frictionRecords": 0,
+        "encounterRecords": 0
+      },
+      "canonicalProjectionIncludes": [
+        "band position, status, viability",
+        "population and every cohort",
+        "every expedition's phase, productive workers, non-working members, position and work days",
+        "the outcome ring including delivered harvest and party people",
+        "the friction ring by event id, interpretation and tension",
+        "encounter record count, contact-memory identities, trip record count"
+      ],
+      "publicTimeControlNote": "the eventual public Day/Season simplification remains DEFERRED and is not implemented; all four internal modes are retained as batch sizes over the same daily kernel."
+    },
+    "sharedRangeSeed": {
+      "audit": "ROADMAP-ITEM-3-TIME-MODE-EQUIVALENCE",
+      "seed": "audit27:natural:s1",
+      "spanDays": 5040,
+      "digests": {
+        "daily": "62195a9588fb6f831024a9e444de0b85069d807ce24277a07822eb8eed342e76",
+        "weekly": "62195a9588fb6f831024a9e444de0b85069d807ce24277a07822eb8eed342e76",
+        "monthly": "62195a9588fb6f831024a9e444de0b85069d807ce24277a07822eb8eed342e76",
+        "seasonal": "62195a9588fb6f831024a9e444de0b85069d807ce24277a07822eb8eed342e76"
+      },
+      "allFourModesIdentical": true,
+      "dailyRepeatIdentical": true,
+      "occurrenceInTheComparedRun": {
+        "exploitationOutcomes": 26,
+        "outcomesDeliveringHarvest": 3,
+        "activePartiesAtEnd": 3,
+        "frictionRecords": 16,
+        "encounterRecords": 48,
+        "contactMemories": 2,
+        "livingBands": 9
+      },
+      "verdict": "ALL_FOUR_MODES_IDENTICAL_WITH_ITEM_3_BEHAVIOUR_PRESENT",
+      "nonVacuousPredicate": true,
+      "nonVacuity": {
+        "predicate": "the compared daily run must actually contain expedition target work and active parties, or a four-way identity is a claim about nothing",
+        "exploitationOutcomes": 26,
+        "outcomesDeliveringHarvest": 3,
+        "activePartiesAtEnd": 3,
+        "frictionRecords": 16,
+        "encounterRecords": 48
+      },
+      "canonicalProjectionIncludes": [
+        "band position, status, viability",
+        "population and every cohort",
+        "every expedition's phase, productive workers, non-working members, position and work days",
+        "the outcome ring including delivered harvest and party people",
+        "the friction ring by event id, interpretation and tension",
+        "encounter record count, contact-memory identities, trip record count"
+      ],
+      "publicTimeControlNote": "the eventual public Day/Season simplification remains DEFERRED and is not implemented; all four internal modes are retained as batch sizes over the same daily kernel."
+    }
+  },
+  "bothArmsIdentical": true,
+  "bothArmsNonVacuous": true,
+  "socialLifecycleOccurredInTheComparedRun": true,
+  "verdict": "ALL_FOUR_MODES_IDENTICAL_ON_BOTH_ARMS_WITH_ITEM_3_BEHAVIOUR_PRESENT"
+}

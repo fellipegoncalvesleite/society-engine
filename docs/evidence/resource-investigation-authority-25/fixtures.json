@@ -1,0 +1,124 @@
+{
+  "instrument": "CLOSURE-25 — A1/A2 CONTROLLED FIXTURES",
+  "productionInstrumentation": "NONE",
+  "note": "A3-A10 are covered by existing repository audits and are recorded in FINDINGS.md from those runs rather than reimplemented here.",
+  "summary": {
+    "pass": 2,
+    "fail": 0,
+    "vacuous": 0
+  },
+  "verdict": "PASS",
+  "fixtures": [
+    {
+      "id": "A1",
+      "title": "seasonal resource_scout: information action, no physical execution identity",
+      "verdict": "PASS",
+      "vacuous": false,
+      "evidence": {
+        "scenario": "map2",
+        "seed": "s1",
+        "decisionId": "decision:band:varied-dry-corridor-mid:1",
+        "bandId": "band:varied-dry-corridor-mid",
+        "tick": 1,
+        "day": 90,
+        "action": {
+          "type": "resource_scout",
+          "originTileId": "tile:76:111",
+          "targetTileId": "tile:77:111",
+          "scoutKind": "fallback_food",
+          "targetResourceClass": "fallback_food"
+        },
+        "positionBefore": "tile:76:111",
+        "positionAfter": "tile:76:111",
+        "residenceUnchanged": true,
+        "resourceMemoryChanged": true,
+        "targetPatchMemoryBefore": {
+          "approximateTile": "tile:77:111",
+          "resourceClassId": "fallback_food",
+          "source": "direct",
+          "presenceConfidence": 0.54,
+          "accessConfidence": 0.46,
+          "yieldConfidence": 0.28,
+          "lastObservedTick": null
+        },
+        "targetPatchMemoryAfter": {
+          "approximateTile": "tile:77:111",
+          "resourceClassId": "fallback_food",
+          "source": "direct",
+          "presenceConfidence": 0.52,
+          "accessConfidence": 0.46,
+          "yieldConfidence": 0.22,
+          "lastObservedTick": null
+        },
+        "knownTileBefore": true,
+        "knownTileAfter": true,
+        "workerIdentityExists": false,
+        "workerIdentityBasis": "Action carries no worker field; no expedition and no same-day trip targets this tile on this decision.",
+        "matchingExpedition": null,
+        "sameTickTripsToTarget": 0,
+        "routePhysicallyTraversed": false,
+        "routeBasis": "collectProbeObservationTargets (bandDecision.ts:5539) observes the target tile and its 1-ring only; it never builds or walks a path from band.position. The origin is used solely to exclude itself from the neighbour set.",
+        "provisionsCharged": false,
+        "riskCharged": false,
+        "durationDays": null,
+        "laborChargeBasis": "resourceScout.ts:419 laborCost = clamp01(0.2 + distance/SCOUT_MAX_DISTANCE*0.5 + (1-capacity)*0.3) is a normalized score term consumed by movementCost and the VOI weighting; it debits no labour pool.",
+        "stockDrawn": null,
+        "cargo": null,
+        "physicalReceipt": null,
+        "maxSelectableDistanceTiles": 10,
+        "maxSelectableDistanceBasis": "resourceScout.ts:50 SCOUT_MAX_DISTANCE = 10"
+      },
+      "note": "The absent physical fields are MEASURED absences. They are not treated as implicit."
+    },
+    {
+      "id": "A2",
+      "title": "campMovement TemporaryTaskCampRecord carries no physical party identity",
+      "verdict": "PASS",
+      "vacuous": false,
+      "evidence": {
+        "campRecordsInspected": 1,
+        "directJoinPossible": false,
+        "joinAttempts": [
+          {
+            "campRecordId": "temporary-task-camp:band:varied-dry-corridor-mid:1:tile:77:111",
+            "tick": 1,
+            "purpose": "food_work",
+            "status": "active",
+            "targetTileId": "tile:77:111",
+            "confidence": 0.44,
+            "evidenceRefCount": 1,
+            "noSettlement": true,
+            "noInventory": true,
+            "fieldExpeditionId": null,
+            "fieldPartyWorkers": null,
+            "fieldRouteTileIds": null,
+            "fieldPhysicalOccupancy": null,
+            "fieldTaskWork": null,
+            "fieldReceiptId": null,
+            "opportunisticPartyAtSameTarget": null,
+            "opportunisticTripAtSameTarget": "75:food_resource_check"
+          }
+        ],
+        "readerAnalysis": {
+          "simulationBehavioralReaders": [],
+          "nonBehavioralReaders": [
+            "src/ui/band/CampMovement.tsx",
+            "src/ui/band/Technical.tsx",
+            "src/sim/agents/eventSystem.ts:637",
+            "src/sim/agents/publicHumanStory.ts:510"
+          ],
+          "writerAndSelfInvariants": "src/sim/agents/campMovement.ts",
+          "expeditionTaskCampBehavioralReaders": [
+            "src/sim/agents/expedition.ts (deriveTaskCampForOperating, usedDays, provisioning)",
+            "src/sim/agents/pendingOperation.ts:109",
+            "src/sim/agents/frontierVerification.ts:661 (taskCampRefusedByEvidence)"
+          ]
+        },
+        "classification": "HISTORICAL / STORY PROJECTION",
+        "classificationBasis": "It is written from a seasonal scout/probe decision (campMovement.ts:366), carries evidence and confidence rather than physical work, and has no simulation-behavioural reader. ExpeditionTaskCamp is a separate daily, party-level physical record with real behavioural readers. The two share a name, not a role, and neither reads the other.",
+        "duplicateAuthority": false
+      },
+      "note": "Neither record is repaired or renamed here; this is diagnostic only."
+    }
+  ]
+}

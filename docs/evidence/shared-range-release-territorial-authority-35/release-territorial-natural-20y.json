@@ -1,0 +1,55 @@
+{
+  "audit": "CORRECTION-35-NATURAL-OCCURRENCE",
+  "seed": "audit27:natural:s1",
+  "years": 20,
+  "days": 7200,
+  "samplingCadence": {
+    "territorialField": "daily (stored field)",
+    "protoAccessMemory": "once per tick (its own derivation cadence; there is no finer value to observe)"
+  },
+  "releaseLifecycle": {
+    "placeSamples": 5586,
+    "bandTicksSampled": 729,
+    "phaseActive": 15,
+    "phaseCooling": 3,
+    "phaseReleased": 0,
+    "phaseNone": 5568,
+    "placesInCorrectedInterval": 0,
+    "placesAtExactlyZeroWeight": 0,
+    "placesAtOrAboveThreshold": 18,
+    "releasedWithNonZeroWeight": 0,
+    "coolingWithZeroWeight": 0,
+    "countsDisagreeingWithRecordTotal": 0,
+    "activeCountZeroWithNonZeroWeight": 0,
+    "correctedIntervalExamples": [],
+    "correctedIntervalShare": 0,
+    "interpretation": "NO place in this world occupies the corrected interval, so at this seed and horizon the parent's labels were already right and the correction changes no published field. That is a NULL OBSERVATION about frequency, not evidence that the defect does not exist — the Item 3 audit found it once in 448 released samples over 200 years, and the controlled fixtures L1/L2 are the proof it is real.",
+    "contradictionsAfterCorrection": 0
+  },
+  "territorialPressure": {
+    "bandDaysSampled": 64800,
+    "distinctBandValues": [
+      0.12
+    ],
+    "valueChangesOutsideDaughterCreation": 0,
+    "daughterCreationsObserved": 0,
+    "bandsWithNoSocialEvidenceHoldingNonZeroValue": 56248,
+    "socialPressureProfileValues": [
+      0.08
+    ],
+    "changeExamples": [],
+    "bandsProbedOnFinalWorld": 9,
+    "bandsWhereVaryingTheFieldMovedPressure": 0,
+    "interpretation": "varying the field across its whole range moves no band's pressure on the final natural world"
+  },
+  "itemThreeIncidentReMeasured": {
+    "measured": false,
+    "incidentDay": 44640,
+    "horizonDays": 7200,
+    "incidentDayReached": false,
+    "incidentBandPresent": false,
+    "bandsPresentOnThatDay": [],
+    "reason": "the run is shorter than day 44640",
+    "incidentDayReachedNote": "reported explicitly so 'not measured' is never mistaken for 'measured zero'"
+  }
+}

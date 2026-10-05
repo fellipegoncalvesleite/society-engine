@@ -1,0 +1,68 @@
+{
+  "checkpoint": "CORRECTION-30",
+  "arm": "after",
+  "seed": "c30:fixtures",
+  "cascade": [
+    {
+      "case": "P1",
+      "stage": "writer",
+      "gainedAny": 0,
+      "gainedActivity": 0,
+      "separation": 42
+    },
+    {
+      "case": "P2",
+      "stage": "writer",
+      "gainedObserved": 0,
+      "separation": 42
+    },
+    {
+      "case": "P9",
+      "stage": "access",
+      "accessBefore": {
+        "placeExists": false,
+        "accessState": null,
+        "strangerCaution": 0,
+        "sharedUsePressure": 0,
+        "rememberedRefusalAvoidance": 0,
+        "placeSensitivity": 0,
+        "behaviorSensitivePlaceCautionBias": 0.01,
+        "behaviorContestedAvoidanceBias": 0,
+        "behaviorToleranceReductionBias": 0,
+        "behaviorMaxHook": 0.03,
+        "topPlaceCount": 8
+      },
+      "accessAfter": {
+        "placeExists": false,
+        "accessState": null,
+        "strangerCaution": 0,
+        "sharedUsePressure": 0,
+        "rememberedRefusalAvoidance": 0,
+        "placeSensitivity": 0,
+        "behaviorSensitivePlaceCautionBias": 0.01,
+        "behaviorContestedAvoidanceBias": 0,
+        "behaviorToleranceReductionBias": 0,
+        "behaviorMaxHook": 0.03,
+        "topPlaceCount": 8
+      },
+      "moved": false
+    },
+    {
+      "case": "P10",
+      "stage": "tension",
+      "tensionBefore": {
+        "socialTensionPressure": 0.25,
+        "rangeFrictionCauseStrength": null,
+        "cohesion": 0.78,
+        "tolerance": 0.59
+      },
+      "tensionAfter": {
+        "socialTensionPressure": 0.25,
+        "rangeFrictionCauseStrength": null,
+        "cohesion": 0.78,
+        "tolerance": 0.59
+      },
+      "moved": false
+    }
+  ]
+}

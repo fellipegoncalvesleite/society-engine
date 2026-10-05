@@ -1,0 +1,333 @@
+{
+  "audit": "opportunityCandidateOrdering",
+  "checkpoint": "CORRECTION-18 §11",
+  "years": 150,
+  "seeds": [
+    "c18:a",
+    "c18:b"
+  ],
+  "maps": [
+    "map1",
+    "map2"
+  ],
+  "productionStructure": "collect bounded candidates -> keep ONE best-by-score winner -> test viability on the winner only",
+  "requiredStructure": "collect bounded candidates by evidence family -> reserve bounded representation across families -> evaluate every retained candidate -> reject invalid -> identify viable -> rank viable -> retain best viable plus best rejected diagnostics",
+  "totals": {
+    "ledgers": 50462,
+    "candidateIdsCollected": 907267,
+    "candidatesEvaluated": 907174,
+    "ledgersWithAnyFrontierDerivedCandidate": 25128,
+    "frontierDerivedCandidatesSeen": 67572,
+    "ledgersWhereWinnerFailedViability": 31295,
+    "ledgersWhereWinnerFailedButAViableCandidateExisted": 1179,
+    "viableCandidatesDiscardedByMasking": 5023,
+    "ledgersWhereWinnerPassed": 19167,
+    "ledgersWhereRepairRescuedAViableCandidate": 813,
+    "ledgersWhereSelectedPassedViability": 19980,
+    "frontierDerivedThatWouldPassViability": 20328,
+    "frontierDerivedThatWonScore": 1452,
+    "maxEvaluatedCandidateDistance": 41,
+    "maxViableCandidateDistance": 41,
+    "maxWinnerDistance": 41
+  },
+  "derived": {
+    "meanCandidateIdsCollected": 17.979,
+    "meanCandidatesEvaluated": 17.977,
+    "winnerFailedViabilityRate": 0.62,
+    "maskingRate": 0.023,
+    "selectedPassedViabilityRate": 0.396,
+    "repairRescueRate": 0.016,
+    "frontierDerivedShareOfEvaluated": 0.074
+  },
+  "diagnosis": "MASKING — a viable candidate is discarded because a higher-scoring candidate wins and then fails viability",
+  "maskingExamples": [
+    {
+      "bandId": "band:lake-wetland-foragers",
+      "currentPerCapita": 0.49,
+      "winner": {
+        "tileId": "tile:100:57",
+        "distance": 1,
+        "score": 0.59,
+        "expectedPerCapita": 0.4,
+        "water": 0.67,
+        "risk": 0.14,
+        "acquisition": "residential_observation",
+        "wouldPassViability": false
+      },
+      "maskedViableCandidate": {
+        "tileId": "tile:104:58",
+        "distance": 4,
+        "score": 0.56,
+        "expectedPerCapita": 0.53,
+        "water": 0.72,
+        "risk": 0.15,
+        "acquisition": "residential_observation"
+      },
+      "viableCandidatesInLedger": 1
+    },
+    {
+      "bandId": "band:lake-wetland-foragers",
+      "currentPerCapita": 0.49,
+      "winner": {
+        "tileId": "tile:100:57",
+        "distance": 1,
+        "score": 0.59,
+        "expectedPerCapita": 0.4,
+        "water": 0.67,
+        "risk": 0.14,
+        "acquisition": "residential_observation",
+        "wouldPassViability": false
+      },
+      "maskedViableCandidate": {
+        "tileId": "tile:104:58",
+        "distance": 4,
+        "score": 0.56,
+        "expectedPerCapita": 0.53,
+        "water": 0.72,
+        "risk": 0.15,
+        "acquisition": "residential_observation"
+      },
+      "viableCandidatesInLedger": 1
+    },
+    {
+      "bandId": "band:dry-margin-foragers",
+      "currentPerCapita": 0.33,
+      "winner": {
+        "tileId": "tile:112:41",
+        "distance": 1,
+        "score": 0.43,
+        "expectedPerCapita": 0.28,
+        "water": 0.4,
+        "risk": 0.12,
+        "acquisition": "residential_observation",
+        "wouldPassViability": false
+      },
+      "maskedViableCandidate": {
+        "tileId": "tile:112:42",
+        "distance": 2,
+        "score": 0.42,
+        "expectedPerCapita": 0.29,
+        "water": 0.36,
+        "risk": 0.11,
+        "acquisition": "residential_observation"
+      },
+      "viableCandidatesInLedger": 1
+    },
+    {
+      "bandId": "band:dry-margin-foragers",
+      "currentPerCapita": 0.33,
+      "winner": {
+        "tileId": "tile:112:41",
+        "distance": 1,
+        "score": 0.43,
+        "expectedPerCapita": 0.28,
+        "water": 0.4,
+        "risk": 0.12,
+        "acquisition": "residential_observation",
+        "wouldPassViability": false
+      },
+      "maskedViableCandidate": {
+        "tileId": "tile:112:42",
+        "distance": 2,
+        "score": 0.42,
+        "expectedPerCapita": 0.29,
+        "water": 0.36,
+        "risk": 0.11,
+        "acquisition": "residential_observation"
+      },
+      "viableCandidatesInLedger": 1
+    },
+    {
+      "bandId": "band:delta-coastal-foragers",
+      "currentPerCapita": 0.59,
+      "winner": {
+        "tileId": "tile:126:60",
+        "distance": 2,
+        "score": 0.72,
+        "expectedPerCapita": 0.6,
+        "water": 0.99,
+        "risk": 0.43,
+        "acquisition": "residential_observation",
+        "wouldPassViability": false
+      },
+      "maskedViableCandidate": {
+        "tileId": "tile:132:62",
+        "distance": 10,
+        "score": 0.58,
+        "expectedPerCapita": 0.67,
+        "water": 1,
+        "risk": 0.54,
+        "acquisition": "returned_frontier_exploration"
+      },
+      "viableCandidatesInLedger": 1
+    },
+    {
+      "bandId": "band:delta-coastal-foragers",
+      "currentPerCapita": 0.89,
+      "winner": {
+        "tileId": "tile:125:61",
+        "distance": 1,
+        "score": 0.74,
+        "expectedPerCapita": 0.97,
+        "water": 1,
+        "risk": 0.43,
+        "acquisition": "residential_observation",
+        "wouldPassViability": false
+      },
+      "maskedViableCandidate": {
+        "tileId": "tile:126:61",
+        "distance": 2,
+        "score": 0.73,
+        "expectedPerCapita": 0.99,
+        "water": 1,
+        "risk": 0.45,
+        "acquisition": "residential_observation"
+      },
+      "viableCandidatesInLedger": 10
+    },
+    {
+      "bandId": "band:dry-margin-foragers",
+      "currentPerCapita": 0.34,
+      "winner": {
+        "tileId": "tile:113:43",
+        "distance": 2,
+        "score": 0.44,
+        "expectedPerCapita": 0.2,
+        "water": 0.4,
+        "risk": 0.09,
+        "acquisition": "residential_observation",
+        "wouldPassViability": false
+      },
+      "maskedViableCandidate": {
+        "tileId": "tile:113:58",
+        "distance": 17,
+        "score": 0.43,
+        "expectedPerCapita": 0.35,
+        "water": 0.7,
+        "risk": 0.15,
+        "acquisition": "returned_frontier_exploration"
+      },
+      "viableCandidatesInLedger": 2
+    },
+    {
+      "bandId": "band:dry-margin-foragers",
+      "currentPerCapita": 0.34,
+      "winner": {
+        "tileId": "tile:113:43",
+        "distance": 2,
+        "score": 0.44,
+        "expectedPerCapita": 0.2,
+        "water": 0.4,
+        "risk": 0.09,
+        "acquisition": "residential_observation",
+        "wouldPassViability": false
+      },
+      "maskedViableCandidate": {
+        "tileId": "tile:113:58",
+        "distance": 17,
+        "score": 0.43,
+        "expectedPerCapita": 0.35,
+        "water": 0.7,
+        "risk": 0.15,
+        "acquisition": "returned_frontier_exploration"
+      },
+      "viableCandidatesInLedger": 2
+    },
+    {
+      "bandId": "band:dry-margin-foragers",
+      "currentPerCapita": 0.34,
+      "winner": {
+        "tileId": "tile:113:43",
+        "distance": 2,
+        "score": 0.44,
+        "expectedPerCapita": 0.2,
+        "water": 0.4,
+        "risk": 0.09,
+        "acquisition": "residential_observation",
+        "wouldPassViability": false
+      },
+      "maskedViableCandidate": {
+        "tileId": "tile:113:58",
+        "distance": 17,
+        "score": 0.43,
+        "expectedPerCapita": 0.35,
+        "water": 0.7,
+        "risk": 0.15,
+        "acquisition": "returned_frontier_exploration"
+      },
+      "viableCandidatesInLedger": 2
+    },
+    {
+      "bandId": "band:river-valley-foragers",
+      "currentPerCapita": 0.71,
+      "winner": {
+        "tileId": "tile:123:64",
+        "distance": 2,
+        "score": 0.74,
+        "expectedPerCapita": 0.67,
+        "water": 1,
+        "risk": 0.39,
+        "acquisition": "residential_observation",
+        "wouldPassViability": false
+      },
+      "maskedViableCandidate": {
+        "tileId": "tile:124:64",
+        "distance": 1,
+        "score": 0.73,
+        "expectedPerCapita": 0.71,
+        "water": 1,
+        "risk": 0.42,
+        "acquisition": "residential_observation"
+      },
+      "viableCandidatesInLedger": 6
+    },
+    {
+      "bandId": "band:river-valley-foragers",
+      "currentPerCapita": 0.71,
+      "winner": {
+        "tileId": "tile:123:64",
+        "distance": 2,
+        "score": 0.74,
+        "expectedPerCapita": 0.67,
+        "water": 1,
+        "risk": 0.39,
+        "acquisition": "residential_observation",
+        "wouldPassViability": false
+      },
+      "maskedViableCandidate": {
+        "tileId": "tile:124:64",
+        "distance": 1,
+        "score": 0.73,
+        "expectedPerCapita": 0.71,
+        "water": 1,
+        "risk": 0.42,
+        "acquisition": "residential_observation"
+      },
+      "viableCandidatesInLedger": 6
+    },
+    {
+      "bandId": "band:delta-coastal-foragers",
+      "currentPerCapita": 0.82,
+      "winner": {
+        "tileId": "tile:127:61",
+        "distance": 1,
+        "score": 0.72,
+        "expectedPerCapita": 0.88,
+        "water": 1,
+        "risk": 0.47,
+        "acquisition": "residential_observation",
+        "wouldPassViability": false
+      },
+      "maskedViableCandidate": {
+        "tileId": "tile:130:60",
+        "distance": 5,
+        "score": 0.66,
+        "expectedPerCapita": 0.91,
+        "water": 1,
+        "risk": 0.49,
+        "acquisition": "residential_observation"
+      },
+      "viableCandidatesInLedger": 6
+    }
+  ]
+}

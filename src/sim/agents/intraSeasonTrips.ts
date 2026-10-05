@@ -34,6 +34,7 @@ import type {
   PhysicalFoodHarvestRecord,
 } from "./types";
 import type { DailyAction } from "./dailyActions";
+import { isProvisionalSuccessor } from "./bandLifecycle";
 import { deriveBaseHabitatPotential } from "./habitatYield";
 import {
   applyFaunaTripDepletion,
@@ -77,6 +78,30 @@ import type {
   ResourceUseHistory,
 } from "./resourceKnowledge";
 import type { ResourceClassId } from "./resourceClasses";
+// CORRECTION-26 — the pending-investigation lifecycle and the execution-neutral domain
+// half of a scout/probe observation. Both are `agents/` modules, so the daily physical path
+// reaches the same canonical operations the seasonal decision layer uses without an
+// `agents -> rules` runtime cycle.
+import {
+  appendInvestigationOutcome,
+  makeInvestigationExecutionId,
+  resolvePendingInvestigation,
+  toInvestigationOutcomeEntry,
+  type PendingInvestigationOutcome,
+  type PendingInvestigationRecord,
+} from "./pendingInvestigation";
+import {
+  applyResourceScoutObservation,
+  applySideEncounteredCautiousTest,
+  formSideCountryResourceMemory,
+} from "./resourceScoutObservation";
+import { appendRecentScoutLearning } from "./resourceScout";
+import { observeTileAndNearby } from "./tileObservation";
+import { recordProbe } from "./probeMemory";
+import { markVisibleLandscapeCueProbeChecked } from "./landscapeVisibility";
+import { advanceExploitationSkill } from "./exploitationSkill";
+import { appendRecentPlantUseTest, type PlantUseTestEvent } from "./plantUseTesting";
+import { appendRecentCauseSpecificEvent, type CauseSpecificEvent } from "./causeSpecificEvent";
 import type { BandId, DayNumber, ReasonId, ResourcePatchId, TickNumber, TileId } from "../core/types";
 import { SEASON_LENGTH_DAYS } from "../core/types";
 import { getWorldTimeForDay } from "../tick/time";
@@ -163,12 +188,60 @@ export function resolveExpeditionTargetWork(
   routeTiles: readonly TileId[],
   day: DayNumber,
   cause: IntraSeasonTripCause,
-  // §10 — verification parties look WITHOUT taking: the physical lookup runs (source
-  // found? availability? depletion?) but the harvest is forced ineligible, so no stock
-  // is depleted and no cargo/food can exist. The record still carries the physical
-  // presence evidence the party will walk home.
-  options?: { readonly verifyOnly?: boolean },
+  options: {
+    // §10 — verification parties look WITHOUT taking: the physical lookup runs (source
+    // found? availability? depletion?) but the harvest is forced ineligible, so no stock
+    // is depleted and no cargo/food can exist. The record still carries the physical
+    // presence evidence the party will walk home.
+    readonly verifyOnly?: boolean;
+    /**
+     * CORRECTION-34E — THE PRODUCTIVE LABOUR PHYSICALLY STANDING AT THIS TARGET.
+     *
+     * Required, and deliberately without a fallback. This resolver used to hand the whole
+     * residential `band` to `buildTripRecord`, which derived a task-group size from
+     * `workingAdults` MINUS the workers already committed to expeditions — the labour left AT
+     * HOME. The party doing the work was never consulted. Measured on one real patch: the same
+     * five-worker party removed 0.0086 of stock with one adult at home and 0.0354 with
+     * twenty-five, a 4.1x difference in distant physical depletion decided by people who never
+     * left camp, while changing the party from two workers to five changed nothing.
+     *
+     * A default here would silently restore that defect for any caller that forgot, so there is
+     * none: an expedition that cannot say how many of its people are working cannot resolve work.
+     *
+     * CORRECTION-34F — MUST BE A POSITIVE INTEGER. 34E required the field and left the value
+     * unconstrained, which let two impossible parties through. Zero workers were classified
+     * `target_found` (the outcome test is `>= 2`), given a request built from the confidence terms
+     * alone (`0 * 0.035 + yieldConfidence * 0.22 + presenceConfidence * 0.08`), and **removed
+     * 0.0047 of real stock**; and `0.4` and `1.6` people were silently rounded to 0 and 2. People
+     * are counted, not measured, and nobody cannot work.
+     *
+     * THE BOUND HERE IS ONE, NOT `EXPEDITION_MIN_PARTY_WORKERS`, and that is deliberate. One person
+     * can physically do a day's work — the two-worker minimum is an EXPEDITION POLICY about what is
+     * worth sending and what turns for home, enforced in `expedition.ts` by the launch gate
+     * (`partyWorkers < 2` never launches) and by `reconcileExpeditionLabor` (a party reduced below
+     * the minimum is turned `returning` or `aborted` before it can operate). This module is the
+     * physical work resolver and must not encode that policy: `expedition.ts` imports
+     * `intraSeasonTrips.ts` and never the reverse, so reaching for the constant would close a
+     * dependency cycle to share a number that belongs to the other module anyway.
+     */
+    readonly partyWorkers: number;
+  },
 ): { readonly world: WorldState; readonly record: IntraSeasonTripRecord } {
+  const productiveWorkers = options?.partyWorkers;
+
+  if (
+    typeof productiveWorkers !== "number" ||
+    !Number.isInteger(productiveWorkers) ||
+    productiveWorkers < 1
+  ) {
+    throw new Error(
+      "resolveExpeditionTargetWork requires options.partyWorkers to be a positive integer — the " +
+      "productive labour physically present in the party. Received " + String(productiveWorkers) + ". " +
+      "Zero or fractional labour cannot produce a physical request, stock removal, cargo or an " +
+      "observation, and falling back to residential labour is the CORRECTION-34E defect.",
+    );
+  }
+
   const time = getWorldTimeForDay(day);
   const faunaGeo = deriveFaunaStockGeography(world);
   // EXPEDITIONARY-4 §5.2 (multi-tile patch) — a remembered patch is anchored to an
@@ -198,6 +271,10 @@ export function resolveExpeditionTargetWork(
   // proven cause of the generic target_not_found dominance (218/362 in the 40y audit).
   const baseRecord = buildTripRecord(world, band, candidate, day, time.tick, time.season, faunaGeo, {
     physicallyAtTarget: true,
+    // CORRECTION-34F — passed through unaltered. The previous `Math.max(0, Math.round(...))` was
+    // the laundering step: it turned an impossible count into a plausible one and let the caller's
+    // mistake reach the stock. Validated above, so there is nothing left to clamp.
+    productiveWorkers,
   });
   // Override the route with the expedition's real, already-walked physical route so
   // `routeReached` reflects where the party is genuinely standing rather than
@@ -220,6 +297,10 @@ export function resolveExpeditionTargetWork(
 function applyTripDay(world: WorldState, day: number): WorldState {
   const time = getWorldTimeForDay(day as DayNumber);
   const bandsById: Record<string, Band> = { ...world.bands };
+  // CORRECTION-26 — how many same-day workers each band already committed to its ordinary
+  // subsistence trip today. The investigation party is staffed from what is LEFT, so the
+  // two cannot both spend the same people.
+  const tripWorkersByBandId = new Map<BandId, number>();
   // FAUNA/AQUATIC-1 — fauna geography is static (memoized by tiles); the dynamic
   // stock state is threaded through the day so each successful hunting/fishing
   // trip depletes the targeted stock and LATER bands the same day see the lower
@@ -234,7 +315,15 @@ function applyTripDay(world: WorldState, day: number): WorldState {
       continue;
     }
 
-    const candidate = selectTripCandidate(currentWorld, band, day);
+    // ROADMAP ITEM 4 — an ordinary same-day subsistence trip runs OUT FROM A RESIDENCE and back to
+    // it. A provisional successor has no residence yet, and the admission audit measured one running
+    // TWENTY-FOUR of these while a control band ran none. Whatever a travelling group eats is the
+    // travel authority's to model; it may not borrow the residential one. Inert today.
+    if (isProvisionalSuccessor(band)) {
+      continue;
+    }
+
+    const candidate = selectTripCandidate(currentWorld, band, day, MAX_TRIP_DISTANCE_TILES, false, true);
 
     if (candidate === undefined) {
       continue;
@@ -298,8 +387,43 @@ function applyTripDay(world: WorldState, day: number): WorldState {
       ),
       activityMemoryUpdateSummary: buildActivityMemoryUpdateSummary(activityBand, record, recentIntraSeasonTrips),
     };
+    tripWorkersByBandId.set(band.id, record.estimatedPeopleCount);
     changed = true;
 
+  }
+
+  // CORRECTION-26 §13 step 5 — THE SANCTIONED DAILY EXECUTION OF A SELECTED INVESTIGATION.
+  //
+  // A separate, explicitly ordered phase rather than a branch inside the loop above, for the
+  // same reason `dailyActionRegistry.ts` runs trips before expeditions: every band's ordinary
+  // subsistence trip is resolved first, so the labour an investigation party can draw on is a
+  // fact rather than a race. Band order is the same deterministic `compareBands` sort.
+  for (const band of Object.values(bandsById).sort(compareBands)) {
+    if (!isActiveBand(band) || band.pendingInvestigation === undefined) {
+      continue;
+    }
+
+    const executed = executePendingInvestigation(
+      // STEP-MODE CRITICAL — the world carried through `runDailyActions` keeps the time of
+      // the span's START, because the daily loop never advances `world.time`. Under
+      // seasonal stepping that is the previous boundary; under daily stepping it is the
+      // real day. Observing with it stamped observations at day 180 instead of 185 and
+      // broke step-mode invariance — the same defect CORRECTION-15 repaired for the
+      // expedition observation timestamp. The executor is handed the day it is actually
+      // running on, and `deriveTripDurationDays`/`buildOutboundPathTiles` are unaffected
+      // because they read tiles, not time.
+      { ...currentWorld, time },
+      band,
+      day as DayNumber,
+      tripWorkersByBandId.get(band.id) ?? 0,
+    );
+
+    if (executed === undefined) {
+      continue;
+    }
+
+    bandsById[band.id] = executed;
+    changed = true;
   }
 
   return changed
@@ -308,6 +432,408 @@ function applyTripDay(world: WorldState, day: number): WorldState {
         bands: bandsById as Readonly<Record<BandId, Band>>,
       }
     : world;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CORRECTION-26 — PHYSICAL EXECUTION OF A SELECTED RESOURCE INVESTIGATION.
+//
+// The seasonal decision leaves a bounded pending record and observes nothing. This is where
+// a party is actually staffed, walks a contiguous passable route, arrives or fails, and —
+// only on arrival — observes. Every physical primitive is the one the same-day trip path
+// already owns: `buildOutboundPathTiles`/`findPassablePath` for the route,
+// `isBandPassableDestination` for the destination, `deriveTripDurationDays` for the
+// same-day boundary, and the identical aquatic-adjacent arrival rule
+// `resolvePhysicalFoodHarvest` uses. Nothing new is scheduled and nothing is reserved.
+//
+// INFORMATION IS INFORMATION. This path never builds an `IntraSeasonTripRecord`, never
+// touches `recentIntraSeasonTrips`, and therefore can never reach `depositFoodReceipt`,
+// `resolvePlantFoodHarvest`/`resolveFaunaFoodHarvest`, or the canonical food ledger. The
+// §11 accounting invariant is structural here, not conditional.
+// ─────────────────────────────────────────────────────────────────────────────
+
+/** The smallest party that can be sent to look at something. Below this, nobody goes. */
+const INVESTIGATION_MIN_PARTY_WORKERS = 1;
+/** An information party is small — the same shape as a `memory_refresh_group`. */
+const INVESTIGATION_MAX_PARTY_WORKERS = 4;
+const INVESTIGATION_PARTY_SHARE = 0.12;
+/** Hard bound on how many tiles one executed investigation may observe. */
+const INVESTIGATION_OBSERVATION_CAP = 32;
+
+function executePendingInvestigation(
+  world: WorldState,
+  band: Band,
+  day: DayNumber,
+  tripWorkersUsedToday: number,
+): Band | undefined {
+  const record = band.pendingInvestigation;
+
+  if (record === undefined || record.status !== "pending") {
+    return undefined;
+  }
+
+  // NO DUPLICATE EXECUTION. An execution id is written exactly once; a record carrying one
+  // has already been attempted and is never attempted again.
+  if (record.executionId !== undefined) {
+    return undefined;
+  }
+
+  const settle = (
+    outcome: PendingInvestigationOutcome,
+    detail?: Parameters<typeof resolvePendingInvestigation>[1],
+  ): Band => {
+    const resolved = resolvePendingInvestigation(record, {
+      outcome,
+      resolvedDay: day,
+      ...(detail ?? {}),
+    });
+    return {
+      ...band,
+      pendingInvestigation: undefined,
+      recentInvestigationOutcomes: appendInvestigationOutcome(
+        band.recentInvestigationOutcomes,
+        toInvestigationOutcomeEntry(resolved),
+      ),
+    };
+  };
+
+  // (1) DETERMINISTIC EXPIRY, checked before anything physical and before any tile is read.
+  if (Number(day) > Number(record.expiresAfterDay)) {
+    return settle("expired_before_execution");
+  }
+
+  // (2) REVALIDATION. None of these reads resource truth; they read where the band is and
+  // whether the destination is a place a band may stand.
+  if (band.position !== record.originTileId) {
+    return settle("band_moved_before_departure");
+  }
+
+  const origin = world.tiles[record.originTileId];
+  const target = world.tiles[record.targetTileId];
+
+  if (origin === undefined || target === undefined) {
+    return settle("target_no_longer_valid");
+  }
+
+  if (!isBandPassableDestination(target) && resolveShoreApproachTile(world, origin, target) === undefined) {
+    return settle("destination_blocked");
+  }
+
+  // (3) SAME-DAY REACH, by the authoritative classifier, on the straight-line distance the
+  // selection itself used. A target the band can select at up to ten tiles is honestly
+  // same-day only inside the eight-tile round-trip budget — beyond that it takes an
+  // explicit NAMED NON-EXECUTION rather than being compressed into a fake one-day record.
+  const gridDistance = getGridDistance(origin, target);
+  const selectionDurationDays = deriveTripDurationDays(gridDistance);
+
+  if (selectionDurationDays > 1) {
+    return settle("beyond_same_day_reach", {
+      outcome: "beyond_same_day_reach",
+      resolvedDay: day,
+      routeDistanceTiles: gridDistance,
+      durationDays: selectionDurationDays,
+    });
+  }
+
+  // (4) LABOUR. Adults away on an expedition are not at camp; adults already out on today's
+  // ordinary trip are already spent. The party can never exceed what is left, and a band
+  // with nobody left sends nobody — the real `insufficient_labor` case, not a floor of one.
+  //
+  // CORRECTION-34D — this is a LABOUR question, so it correctly reads `partyWorkers`, which is now
+  // productive labour only. A non-working party member is deliberately NOT subtracted here: they
+  // are drawn from no cohort this sum counts, and subtracting them would charge the residence for
+  // labour that was never in `workingAdults`.
+  const awayWorkers = (band.expeditions ?? [])
+    .filter((expedition) =>
+      expedition.phase === "prepared" ||
+      expedition.phase === "outbound" ||
+      expedition.phase === "operating" ||
+      expedition.phase === "returning")
+    .reduce((total, expedition) => total + expedition.partyWorkers, 0);
+  const availableWorkers = Math.max(
+    0,
+    Math.round(band.demography.workingAdults - awayWorkers - tripWorkersUsedToday),
+  );
+
+  if (availableWorkers < INVESTIGATION_MIN_PARTY_WORKERS) {
+    return settle("insufficient_labor", {
+      outcome: "insufficient_labor",
+      resolvedDay: day,
+      availableWorkers,
+      partyWorkers: 0,
+    });
+  }
+
+  // (5) THE ROUTE. The same deterministic passable-path builder the daily trips use. A
+  // single-tile result means no contiguous passable route exists from where the band is
+  // standing — so NOBODY LEAVES. `partyWorkers` stays 0: labour was available, but there
+  // was nowhere to walk. No trip is resolved, so this case produces no
+  // `IntraSeasonTripActivityResult` at all.
+  const routeTiles = buildOutboundPathTiles(world, record.originTileId, record.targetTileId);
+
+  if (routeTiles.length <= 1) {
+    return settle("route_unavailable", {
+      outcome: "route_unavailable",
+      resolvedDay: day,
+      availableWorkers,
+      partyWorkers: 0,
+      routeTileIds: routeTiles,
+    });
+  }
+
+  // The party is staffed only once there is somewhere to walk, and never exceeds what is
+  // available after the expedition and same-day commitments above.
+  const partyWorkers = Math.min(
+    availableWorkers,
+    Math.max(
+      INVESTIGATION_MIN_PARTY_WORKERS,
+      Math.min(INVESTIGATION_MAX_PARTY_WORKERS, Math.round(availableWorkers * INVESTIGATION_PARTY_SHARE)),
+    ),
+  );
+
+  // (6) THE REAL WALK. Selection measures straight-line distance; the ground may be longer.
+  // Re-classify on the route actually walked, through the same authoritative helper.
+  const routeDistanceTiles = routeTiles.length - 1;
+  const durationDays = deriveTripDurationDays(routeDistanceTiles);
+
+  if (durationDays > 1) {
+    return settle("beyond_same_day_reach", {
+      outcome: "beyond_same_day_reach",
+      resolvedDay: day,
+      availableWorkers,
+      partyWorkers,
+      routeTileIds: routeTiles,
+      routeDistanceTiles,
+      durationDays,
+    });
+  }
+
+  // (7) ARRIVAL, by the identical rule `resolvePhysicalFoodHarvest:330-331` applies: the
+  // party stands on the target, or on a land tile adjacent to an aquatic target.
+  const standTileId = routeTiles[routeTiles.length - 1];
+  const arrived = standTileId === record.targetTileId ||
+    (target.isAquatic === true && world.tiles[standTileId]?.neighbors.includes(record.targetTileId) === true);
+  const executionId = makeInvestigationExecutionId(record, day);
+
+  if (!arrived) {
+    // The exact production result for a party that could not reach its target. The audit
+    // label `route_time_infeasible` is NOT a production name and is not used.
+    return settle("arrival_failed", {
+      outcome: "arrival_failed",
+      resolvedDay: day,
+      executionId,
+      activityOutcome: "failed_due_to_distance",
+      availableWorkers,
+      partyWorkers,
+      routeTileIds: routeTiles,
+      routeDistanceTiles,
+      durationDays,
+    });
+  }
+
+  // (8) LEGITIMATE OBSERVATION. Only here, and only through the canonical writer.
+  const observationTargets = collectInvestigationObservationTargets(world, routeTiles, target);
+  const observedTileIds = observationTargets.map((entry) => entry.tile.id);
+  const newTilesObserved = observedTileIds.some((id) => band.knowledge.observedTiles[id] === undefined);
+  const updatedKnowledge = observeTileAndNearby(world, band.knowledge, observationTargets);
+  const observedBand: Band = { ...band, knowledge: updatedKnowledge };
+  const learned = applyInvestigationLearning(world, observedBand, record, updatedKnowledge, newTilesObserved);
+  const resolved = resolvePendingInvestigation(record, {
+    outcome: "executed_and_returned",
+    resolvedDay: day,
+    executionId,
+    // A same-day information party comes home having looked. This is the only outcome that
+    // may carry `returned_with_information`, and that kind is not a physical food return
+    // (`physicalFoodReturn.ts`), so no receipt, cargo or support can follow from it.
+    activityOutcome: "returned_with_information",
+    availableWorkers,
+    partyWorkers,
+    routeTileIds: routeTiles,
+    routeDistanceTiles,
+    durationDays,
+    observedTileIds,
+  });
+
+  return {
+    ...band,
+    ...learned,
+    knowledge: updatedKnowledge,
+    // 2K.1G/2K.1H probe recency — now recorded against a REAL visit, with a real answer to
+    // "did this teach us anything the band did not already know".
+    probeMemory: recordProbe(band.probeMemory, record.targetTileId, world.time.tick, newTilesObserved),
+    // CORRECTION-26 — the cue is `partly_checked` because a party checked it.
+    visibleLandscapeCues: markVisibleLandscapeCueChecked(band, record),
+    pendingInvestigation: undefined,
+    recentInvestigationOutcomes: appendInvestigationOutcome(
+      band.recentInvestigationOutcomes,
+      toInvestigationOutcomeEntry(resolved),
+    ),
+  };
+}
+
+/**
+ * What a party that walked there and stood there legitimately perceives.
+ *
+ * Each tile it physically occupied is observed at distance 0 (`tileObservation.ts:259-268`
+ * — confidence 1.0, a real visit) and that tile's 4-neighbours at distance 1 (0.68). No
+ * second ring: standing somewhere does not teach the country two tiles beyond it.
+ *
+ * This is MORE per event than the removed free chain granted (target at 0.68, ring at
+ * 0.34, for nobody) and it is granted only to parties that actually arrived. Understating
+ * it to make the diff look conservative would be its own falsification.
+ */
+function collectInvestigationObservationTargets(
+  world: WorldState,
+  routeTiles: readonly TileId[],
+  target: Tile,
+): readonly { readonly tile: Tile; readonly distance: number }[] {
+  const byTileId = new Map<TileId, { readonly tile: Tile; readonly distance: number }>();
+  const stood: Tile[] = [];
+
+  for (const tileId of routeTiles) {
+    const tile = world.tiles[tileId];
+
+    if (tile !== undefined) {
+      stood.push(tile);
+    }
+  }
+
+  // An aquatic target is looked AT from the shore rather than stood upon; the walked route
+  // already ends on that shore tile, so the target itself joins at distance 1.
+  const targetStoodUpon = routeTiles[routeTiles.length - 1] === target.id;
+
+  for (const tile of stood) {
+    byTileId.set(tile.id, { tile, distance: 0 });
+  }
+
+  if (!targetStoodUpon && !byTileId.has(target.id)) {
+    byTileId.set(target.id, { tile: target, distance: 1 });
+  }
+
+  for (const tile of stood) {
+    for (const neighborId of tile.neighbors) {
+      const neighbor = world.tiles[neighborId];
+
+      if (neighbor === undefined || byTileId.has(neighborId) || getGridDistance(tile, neighbor) !== 1) {
+        continue;
+      }
+
+      byTileId.set(neighborId, { tile: neighbor, distance: 1 });
+    }
+  }
+
+  return Array.from(byTileId.values())
+    .sort((left, right) =>
+      left.distance === right.distance
+        ? String(left.tile.id).localeCompare(String(right.tile.id))
+        : left.distance - right.distance,
+    )
+    .slice(0, INVESTIGATION_OBSERVATION_CAP);
+}
+
+/**
+ * The domain half: interpret the observation the party just made, through the SAME
+ * canonical operations the seasonal applier used before CORRECTION-26 moved them to
+ * `agents/resourceScoutObservation.ts`. No second knowledge writer exists — `knowledge`
+ * was already written by `observeTileAndNearby` above and is passed in here read-only.
+ */
+function applyInvestigationLearning(
+  world: WorldState,
+  band: Band,
+  record: PendingInvestigationRecord,
+  updatedKnowledge: Band["knowledge"],
+  newTilesObserved: boolean,
+): Partial<Band> {
+  if (record.actionType === "resource_scout") {
+    if (record.scoutKind === undefined || record.targetResourceClass === undefined) {
+      return {};
+    }
+
+    const scoutUpdate = applyResourceScoutObservation(
+      world,
+      band,
+      {
+        type: "resource_scout",
+        originTileId: record.originTileId,
+        targetTileId: record.targetTileId,
+        scoutKind: record.scoutKind,
+        targetResourceClass: record.targetResourceClass,
+      },
+      updatedKnowledge,
+      newTilesObserved,
+      record.selectionEvidence,
+    );
+
+    return {
+      resourceKnowledgeState: scoutUpdate.resourceKnowledgeState,
+      lastResourceScout: scoutUpdate.debug,
+      recentScoutLearning: appendRecentScoutLearning(band.recentScoutLearning, scoutUpdate.debug.learning),
+      ...applyInvestigationPlantLearning(band, scoutUpdate.debug.plantUseTest, scoutUpdate.debug.causeSpecificEvent, world),
+    };
+  }
+
+  // 2K.10 / 2K.11 — a side-country probe that PHYSICALLY reached its inferred side tile may
+  // form bounded resource memory there and run one cautious test. Other probe purposes
+  // return information without forming patch memory, exactly as before.
+  if (record.probePurpose !== "side_country_observation") {
+    return {};
+  }
+
+  const sideState = formSideCountryResourceMemory(world, band, record.targetTileId, updatedKnowledge);
+
+  if (sideState === undefined) {
+    return {};
+  }
+
+  const sideTest = applySideEncounteredCautiousTest(world, band, record.targetTileId, sideState);
+
+  return {
+    resourceKnowledgeState: sideTest?.resourceKnowledgeState ?? sideState,
+    ...applyInvestigationPlantLearning(band, sideTest?.plantUseTest, sideTest?.causeSpecificEvent, world),
+  };
+}
+
+function applyInvestigationPlantLearning(
+  band: Band,
+  plantUseTest: PlantUseTestEvent | undefined,
+  causeSpecificEvent: CauseSpecificEvent | undefined,
+  world: WorldState,
+): Partial<Band> {
+  if (plantUseTest === undefined && causeSpecificEvent === undefined) {
+    return {};
+  }
+
+  return {
+    ...(plantUseTest === undefined
+      ? {}
+      : {
+          lastPlantUseTest: plantUseTest,
+          recentPlantUseTests: appendRecentPlantUseTest(band.recentPlantUseTests, plantUseTest),
+        }),
+    ...(causeSpecificEvent === undefined
+      ? {}
+      : {
+          lastCauseSpecificEvent: causeSpecificEvent,
+          recentCauseSpecificEvents: appendRecentCauseSpecificEvent(band.recentCauseSpecificEvents, causeSpecificEvent),
+        }),
+    // 2K.6 — learned competence accrues from the band's OWN test, which now required
+    // somebody to physically go and test it.
+    exploitationSkill: advanceExploitationSkill(
+      band.exploitationSkill,
+      band.id,
+      world.time.tick,
+      plantUseTest,
+      causeSpecificEvent,
+    ),
+  };
+}
+
+function markVisibleLandscapeCueChecked(
+  band: Band,
+  record: PendingInvestigationRecord,
+): Band["visibleLandscapeCues"] {
+  return record.actionType === "logistical_probe"
+    ? markVisibleLandscapeCueProbeChecked(band, record.targetTileId)
+    : band.visibleLandscapeCues;
 }
 
 function resolvePhysicalFoodHarvest(
@@ -501,16 +1027,56 @@ function selectTripCandidate(
   // filtering after it — closes that eligibility gap without a second distance
   // authority: multi-day-ness is still decided by deriveTripDurationDays.
   requireMultiDay: boolean = false,
+  // REPEATED-BAND-EXPANSION-FISSION-14 §9 Stage 2 — the SYMMETRIC half of
+  // CORRECTION-4's fix above. The same-day caller (`applyTripDay`) discards a winner
+  // that does not fit the same-day budget, and because a band evaluates ONE candidate
+  // per trip day, an out-of-budget argmax winner wasted the whole subsistence day.
+  // Measured (docs/evidence/correction14/): after a residence walk moved the founder
+  // 5-10 tiles from its nearest remembered patch, the argmax kept selecting that
+  // now-multi-day patch, `applyTripDay` kept skipping it, and the band recorded
+  // `trips: 0` for 17 consecutive seasons in the richest catchment on the map —
+  // 141 of 480 seasons at exactly zero support. Restricting the argmax DOMAIN to what
+  // the caller can actually execute (rather than filtering after it) is the same
+  // repair CORRECTION-4 made for the expedition selector; multi-day-ness is still
+  // decided only by `deriveTripDurationDays`, and expeditions still receive the best
+  // multi-day candidate from their own call.
+  requireSameDay: boolean = false,
 ): TripCandidate | undefined {
-  const seededResourceKnowledgeState =
-    (band.resourceKnowledgeState?.patchMemories.length ?? 0) === 0
-      ? buildStartingLocalReconnaissanceState(world, band, day)
-      : undefined;
-  const resourceKnowledgeState = seededResourceKnowledgeState ?? band.resourceKnowledgeState;
-  const memories = resourceKnowledgeState?.patchMemories ?? [];
   const origin = world.tiles[band.position];
 
-  if (origin === undefined || memories.length === 0) {
+  if (origin === undefined) {
+    return undefined;
+  }
+
+  // REPEATED-BAND-EXPANSION-FISSION-14 §9 Stage 2 — MEASURED DEFECT. Local
+  // reconnaissance used to bootstrap only when the band had NO patch memory AT ALL.
+  // A band that walks its residence away from its old catchment keeps every one of
+  // those memories, so the bootstrap stayed off while all of them sat further than
+  // `maxDistanceTiles` from where the band is now standing. No candidate could be
+  // built, so `applyTripDay` recorded NO trip, so no receipt existed, so the food
+  // ledger read exactly zero — for as long as the relocation lasted.
+  // Measured (docs/evidence/correction14/, richest map2 catchment, 500y): the founder
+  // hit runs of 17 consecutive seasons with `trips: 0` and `rawSupportRatio: 0`
+  // while standing in country whose reachable live plant stock was the highest on the
+  // map, and 141 of 480 seasons read zero support. That is not scarcity — it is a
+  // band unable to look at the ground under its feet because it remembers somewhere
+  // else. Repair: the bootstrap fires whenever the band has no patch memory it can
+  // actually REACH from here. It reads the band's OWN observed-tile records (the same
+  // knowledge-bounded path as before, capped at
+  // STARTING_LOCAL_RECON_OBSERVED_TILE_CAP tiles within
+  // STARTING_LOCAL_RECON_MAX_DISTANCE_TILES) — no hidden truth, no yield change, and
+  // a band that already has a reachable memory is byte-identical to before.
+  const seededResourceKnowledgeState = hasReachablePatchMemory(world, band, origin, {
+    maxDistanceTiles,
+    requireMultiDay,
+    requireSameDay,
+  })
+    ? undefined
+    : buildStartingLocalReconnaissanceState(world, band, day);
+  const resourceKnowledgeState = seededResourceKnowledgeState ?? band.resourceKnowledgeState;
+  const memories = resourceKnowledgeState?.patchMemories ?? [];
+
+  if (memories.length === 0) {
     return undefined;
   }
 
@@ -536,6 +1102,10 @@ function selectTripCandidate(
     }
 
     if (requireMultiDay && deriveTripDurationDays(distanceTiles) <= 1) {
+      continue;
+    }
+
+    if (requireSameDay && deriveTripDurationDays(distanceTiles) > 1) {
       continue;
     }
 
@@ -702,6 +1272,56 @@ function getLogisticsTripSelectionBias(
   return round4(Math.min(0.08, Math.max(-0.08, foodBias + materialRepairBias - sicknessDistancePenalty)));
 }
 
+// CORRECTION-14 — does the band hold any remembered patch it could actually USE from
+// where it is standing? It applies exactly the geometric filters the candidate loop
+// applies for this caller (different tile, positive distance, within
+// `maxDistanceTiles`, and the caller's same-day / multi-day duration domain), so
+// "reachable" has ONE definition: a memory that is reachable-in-principle but outside
+// the caller's duration budget is correctly treated as no memory at all, and the local
+// reconnaissance bootstrap fires instead of the band standing idle.
+function hasReachablePatchMemory(
+  world: WorldState,
+  band: Band,
+  origin: Tile,
+  domain: {
+    readonly maxDistanceTiles: number;
+    readonly requireMultiDay: boolean;
+    readonly requireSameDay: boolean;
+  },
+): boolean {
+  for (const memory of band.resourceKnowledgeState?.patchMemories ?? []) {
+    if (memory.approximateTile === band.position) {
+      continue;
+    }
+
+    const target = world.tiles[memory.approximateTile];
+
+    if (target === undefined) {
+      continue;
+    }
+
+    const distanceTiles = getGridDistance(origin, target);
+
+    if (distanceTiles <= 0 || distanceTiles > domain.maxDistanceTiles) {
+      continue;
+    }
+
+    const durationDays = deriveTripDurationDays(distanceTiles);
+
+    if (domain.requireMultiDay && durationDays <= 1) {
+      continue;
+    }
+
+    if (domain.requireSameDay && durationDays > 1) {
+      continue;
+    }
+
+    return true;
+  }
+
+  return false;
+}
+
 function buildStartingLocalReconnaissanceState(
   world: WorldState,
   band: Band,
@@ -862,11 +1482,22 @@ function buildTripRecord(
   tick: TickNumber,
   season: IntraSeasonTripRecord["season"],
   faunaGeo: FaunaStockGeography,
-  // EXPEDITIONARY-4 §5 — set only by the expedition work day: the party has already
-  // physically walked the route and is standing at the target, so the same-day
-  // travel-uncertainty gates must not zero its work request. Same-day trips never
-  // pass this and remain byte-identical.
-  presence?: { readonly physicallyAtTarget: boolean },
+  // EXPEDITIONARY-4 §5 / CORRECTION-34E — set ONLY by the expedition work day. It marks two
+  // facts a same-day trip cannot have: the party has already walked the route and is standing at
+  // the target (so the same-day travel-uncertainty gates must not zero its work request), and the
+  // productive labour doing the work is the PARTY's, not whatever is left at the residence.
+  //
+  // Same-day trips never pass this and keep deriving their own residential task-group size through
+  // `estimateTaskGroupPeople`, unchanged.
+  partyWork?: {
+    readonly physicallyAtTarget: boolean;
+    /**
+     * Authoritative, and never derived here. CORRECTION-34F — guaranteed a POSITIVE INTEGER by
+     * `resolveExpeditionTargetWork`, the only caller that sets this object; zero and fractional
+     * counts are rejected at that boundary rather than rounded into something plausible here.
+     */
+    readonly productiveWorkers: number;
+  },
 ): IntraSeasonTripRecord {
   const roundTripTiles = candidate.distanceTiles * 2;
   const estimatedDurationDays = Math.max(1, Math.ceil(roundTripTiles / SAME_DAY_ROUND_TRIP_TILE_BUDGET));
@@ -893,7 +1524,19 @@ function buildTripRecord(
     : isPlantTraceTrip && targetTile !== undefined
       ? derivePlantGatherReturnFactor(world, targetTile, world.time)
       : 1;
-  const estimatedPeopleCount = estimateTaskGroupPeople(band, taskGroupType);
+  // CORRECTION-34E — ONE variable feeds outcome classification, the resource-return value, the
+  // fauna trace, the shadow record and the record field itself, so choosing it correctly here
+  // propagates to every labour-dependent consumer by construction rather than by enumeration.
+  //
+  // The party path takes the party's own productive labour and applies NO floor of one: the
+  // residential estimator's `Math.max(1, ...)` exists so a band always fields someone at home, and
+  // importing it would let a party with no working members still request a person's work.
+  //
+  // CORRECTION-34F — and no rounding either. The value arrives validated as a positive integer, so
+  // clamping it here could only ever disguise a caller that broke the contract.
+  const estimatedPeopleCount = partyWork === undefined
+    ? estimateTaskGroupPeople(band, taskGroupType)
+    : partyWork.productiveWorkers;
   const objective = deriveObjective(candidate.cause);
   const pathTiles = buildOutboundPathTiles(world, band.position, candidate.targetTileId);
   const endDay = (Number(day) + estimatedDurationDays - 1) as DayNumber;
@@ -910,7 +1553,7 @@ function buildTripRecord(
     day,
     faunaReturnFactor,
     plantReturnFactor,
-    presence?.physicallyAtTarget === true,
+    partyWork?.physicallyAtTarget === true,
   );
   // ECO-SEASON-1: realized seasonal ecology the group observes at its target this season.
   // Recorded on the trip (debug) and used to scale the SHADOW estimate only — never the
@@ -2453,6 +3096,9 @@ function estimateTaskGroupPeople(band: Band, taskGroupType: IntraSeasonTripTaskG
   // the party departed and return to availability only when it comes home. This is read
   // straight off band state (rather than importing the expedition module) to keep the
   // dependency direction one-way: expedition -> intraSeasonTrips, never back.
+  //
+  // CORRECTION-34D — a labour question against a labour cohort, so `partyWorkers` (productive
+  // labour) is the right term and non-working party members are correctly absent from it.
   const awayWorkers = (band.expeditions ?? [])
     .filter((expedition) =>
       expedition.phase === "prepared" ||

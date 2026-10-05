@@ -130,7 +130,7 @@ export function buildTickContextCache(
   }
   const allBands = Object.values(world.bands);
   const activeBandIds = allBands
-    .filter(isActiveBand)
+    .filter(isLivingBand)
     .map((band) => band.id)
     .sort(compareBandIds);
   const nonDispersedBandCount = allBands.filter(isLivingBand).length;
@@ -181,7 +181,7 @@ export function buildTickContextCache(
 // decide whether a prior cache's derived band set is still valid.
 export function deriveActiveBandIds(world: WorldState): readonly BandId[] {
   return Object.values(world.bands)
-    .filter(isActiveBand)
+    .filter(isLivingBand)
     .map((band) => band.id)
     .sort(compareBandIds);
 }
@@ -632,10 +632,6 @@ function getRememberedOpportunityValue(record: Band["knowledge"]["observedTiles"
     record.confidence * 0.1 -
     (record.observedRisk ?? 0) * 0.12
   );
-}
-
-function isActiveBand(band: Band): boolean {
-  return isLivingBand(band);
 }
 
 function getBucketCoord(

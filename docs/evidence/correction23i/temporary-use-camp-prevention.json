@@ -1,0 +1,172 @@
+{
+  "years": 40,
+  "seeds": [
+    "s1",
+    "s2",
+    "s3",
+    "s4",
+    "s5"
+  ],
+  "scenarios": [
+    "map1",
+    "map2",
+    "site_A_coast",
+    "site_B_dry_plains",
+    "site_C_dry_plains",
+    "site_D_aquatic",
+    "site_E_hills",
+    "site_F_hills",
+    "ordinary",
+    "isolated_marginal",
+    "hostile"
+  ],
+  "totals": {
+    "campDecisions": 63265,
+    "attemptedCamps": 59286,
+    "preventedByEvidence": 10724,
+    "blockedBefore": {
+      "already_camped": 3649,
+      "unusable_ground": 330
+    },
+    "negativeAnswersReturned": 798,
+    "attemptRate": 0.9371,
+    "preventionRateOfAttempts": 0.1809
+  },
+  "byScenario": {
+    "map1": {
+      "campDecisions": 10358,
+      "attemptedCamps": 9167,
+      "preventedByEvidence": 729,
+      "blockedBefore": {
+        "already_camped": 1111,
+        "unusable_ground": 80
+      },
+      "negativeAnswersReturned": 28,
+      "distinctPlacesPrevented": 58,
+      "attemptRate": 0.885,
+      "preventionRateOfAttempts": 0.0795
+    },
+    "map2": {
+      "campDecisions": 26349,
+      "attemptedCamps": 24667,
+      "preventedByEvidence": 3829,
+      "blockedBefore": {
+        "already_camped": 1432,
+        "unusable_ground": 250
+      },
+      "negativeAnswersReturned": 267,
+      "distinctPlacesPrevented": 489,
+      "attemptRate": 0.9362,
+      "preventionRateOfAttempts": 0.1552
+    },
+    "site_A_coast": {
+      "campDecisions": 6673,
+      "attemptedCamps": 6637,
+      "preventedByEvidence": 1834,
+      "blockedBefore": {
+        "already_camped": 36
+      },
+      "negativeAnswersReturned": 65,
+      "distinctPlacesPrevented": 136,
+      "attemptRate": 0.9946,
+      "preventionRateOfAttempts": 0.2763
+    },
+    "site_B_dry_plains": {
+      "campDecisions": 844,
+      "attemptedCamps": 824,
+      "preventedByEvidence": 24,
+      "blockedBefore": {
+        "already_camped": 20
+      },
+      "negativeAnswersReturned": 2,
+      "distinctPlacesPrevented": 3,
+      "attemptRate": 0.9763,
+      "preventionRateOfAttempts": 0.0291
+    },
+    "site_C_dry_plains": {
+      "campDecisions": 3268,
+      "attemptedCamps": 3034,
+      "preventedByEvidence": 1599,
+      "blockedBefore": {
+        "already_camped": 234
+      },
+      "negativeAnswersReturned": 142,
+      "distinctPlacesPrevented": 142,
+      "attemptRate": 0.9284,
+      "preventionRateOfAttempts": 0.527
+    },
+    "site_D_aquatic": {
+      "campDecisions": 705,
+      "attemptedCamps": 590,
+      "preventedByEvidence": 34,
+      "blockedBefore": {
+        "already_camped": 115
+      },
+      "negativeAnswersReturned": 0,
+      "distinctPlacesPrevented": 1,
+      "attemptRate": 0.8369,
+      "preventionRateOfAttempts": 0.0576
+    },
+    "site_E_hills": {
+      "campDecisions": 5181,
+      "attemptedCamps": 4951,
+      "preventedByEvidence": 1770,
+      "blockedBefore": {
+        "already_camped": 230
+      },
+      "negativeAnswersReturned": 147,
+      "distinctPlacesPrevented": 228,
+      "attemptRate": 0.9556,
+      "preventionRateOfAttempts": 0.3575
+    },
+    "site_F_hills": {
+      "campDecisions": 1960,
+      "attemptedCamps": 1891,
+      "preventedByEvidence": 121,
+      "blockedBefore": {
+        "already_camped": 69
+      },
+      "negativeAnswersReturned": 17,
+      "distinctPlacesPrevented": 19,
+      "attemptRate": 0.9648,
+      "preventionRateOfAttempts": 0.064
+    },
+    "ordinary": {
+      "campDecisions": 1355,
+      "attemptedCamps": 1164,
+      "preventedByEvidence": 0,
+      "blockedBefore": {
+        "already_camped": 191
+      },
+      "negativeAnswersReturned": 0,
+      "distinctPlacesPrevented": 0,
+      "attemptRate": 0.859,
+      "preventionRateOfAttempts": 0
+    },
+    "isolated_marginal": {
+      "campDecisions": 2799,
+      "attemptedCamps": 2714,
+      "preventedByEvidence": 198,
+      "blockedBefore": {
+        "already_camped": 85
+      },
+      "negativeAnswersReturned": 53,
+      "distinctPlacesPrevented": 42,
+      "attemptRate": 0.9696,
+      "preventionRateOfAttempts": 0.073
+    },
+    "hostile": {
+      "campDecisions": 3773,
+      "attemptedCamps": 3647,
+      "preventedByEvidence": 586,
+      "blockedBefore": {
+        "already_camped": 126
+      },
+      "negativeAnswersReturned": 77,
+      "distinctPlacesPrevented": 84,
+      "attemptRate": 0.9666,
+      "preventionRateOfAttempts": 0.1607
+    }
+  },
+  "verdict": "EVIDENCE PREVENTS 10724 OF 59286 ATTEMPTED CAMPS — §7.1 applies, retain and gate"
+}

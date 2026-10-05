@@ -1,0 +1,2451 @@
+{
+  "audit": "expeditionLaborWaterfall",
+  "checkpoint": "CORRECTION-19 §5/§10/§11",
+  "years": 300,
+  "seeds": [
+    "c18:a",
+    "c18:b",
+    "c18:c",
+    "c18:d",
+    "c18:e"
+  ],
+  "normalizationRule": "§5 — world totals are never used without dividing by living-band count and working-adult exposure",
+  "decompositionMethod": "amplification = (enabled pop/band x disabled band count) - enabled population; direct = total gap - amplification",
+  "perMap": {
+    "map1": {
+      "population": {
+        "on": 188.4,
+        "off": 244.6,
+        "delta": -56.2,
+        "pct": -22.98
+      },
+      "bands": {
+        "on": 7,
+        "off": 8.8,
+        "delta": -1.8,
+        "pct": -20.45
+      },
+      "populationPerBand": {
+        "on": 27.082,
+        "off": 27.748,
+        "delta": -0.666,
+        "pct": -2.4
+      },
+      "tripsPerWorkingAdultYear": {
+        "on": 1.3965,
+        "off": 1.4447,
+        "delta": -0.0482,
+        "pct": -3.34
+      },
+      "usableSupportPerWorkingAdultYear": {
+        "on": 0.0044,
+        "off": 0.0045,
+        "delta": -0.0002,
+        "pct": -3.96
+      },
+      "meanRawSupportRatio": {
+        "on": 0.2529,
+        "off": 0.2537,
+        "delta": -0.0008,
+        "pct": -0.33
+      },
+      "meanAdultEquivalentDemand": {
+        "on": 25.72,
+        "off": 24.798,
+        "delta": 0.922,
+        "pct": 3.72
+      },
+      "fissionCount": {
+        "on": 2,
+        "off": 3.8,
+        "delta": -1.8,
+        "pct": -47.37
+      },
+      "firstFissionYear": {
+        "on": 107.6,
+        "off": 79.8,
+        "delta": 27.8,
+        "pct": 34.84
+      },
+      "expeditionPersonDays": 43330,
+      "expeditionShareOfWorkingAdultDays": 0.0039,
+      "terminalPhasePersonDaysHeld": 0,
+      "decomposition": {
+        "totalPopulationGap": 56.2,
+        "bandCountGap": 1.8,
+        "attributableToBandCount_amplification": 49.92,
+        "attributableToPerBandPopulation_direct": 6.28,
+        "amplificationSharePct": 88.83,
+        "directSharePct": 11.17
+      }
+    },
+    "map2": {
+      "population": {
+        "on": 196.4,
+        "off": 226,
+        "delta": -29.6,
+        "pct": -13.1
+      },
+      "bands": {
+        "on": 11,
+        "off": 11,
+        "delta": 0,
+        "pct": 0
+      },
+      "populationPerBand": {
+        "on": 17.97,
+        "off": 20.546,
+        "delta": -2.576,
+        "pct": -12.54
+      },
+      "tripsPerWorkingAdultYear": {
+        "on": 1.7606,
+        "off": 1.6657,
+        "delta": 0.0948,
+        "pct": 5.69
+      },
+      "usableSupportPerWorkingAdultYear": {
+        "on": 0.0043,
+        "off": 0.0044,
+        "delta": -0.0001,
+        "pct": -3.15
+      },
+      "meanRawSupportRatio": {
+        "on": 0.1487,
+        "off": 0.1636,
+        "delta": -0.0149,
+        "pct": -9.09
+      },
+      "meanAdultEquivalentDemand": {
+        "on": 18.944,
+        "off": 19.892,
+        "delta": -0.948,
+        "pct": -4.77
+      },
+      "fissionCount": {
+        "on": 2,
+        "off": 2,
+        "delta": 0,
+        "pct": 0
+      },
+      "firstFissionYear": {
+        "on": 151.4,
+        "off": 110.4,
+        "delta": 41,
+        "pct": 37.14
+      },
+      "expeditionPersonDays": 35138.6,
+      "expeditionShareOfWorkingAdultDays": 0.0028,
+      "terminalPhasePersonDaysHeld": 0,
+      "decomposition": {
+        "totalPopulationGap": 29.6,
+        "bandCountGap": 0,
+        "attributableToBandCount_amplification": 1.27,
+        "attributableToPerBandPopulation_direct": 28.33,
+        "amplificationSharePct": 4.29,
+        "directSharePct": 95.71
+      }
+    }
+  },
+  "results": [
+    {
+      "map": "map1",
+      "seed": "c18:a",
+      "explorationEnabled": true,
+      "world": {
+        "population": 204,
+        "bands": 7,
+        "populationPerBand": 29.14
+      },
+      "exposure": {
+        "bandYears": 1759,
+        "workingAdultYears": 30794
+      },
+      "waterfall": {
+        "tripsCompleted": 42164,
+        "tripsPerBandYear": 23.9704,
+        "tripsPerWorkingAdultYear": 1.3692,
+        "grossHarvest": 192.12,
+        "transportLoss": 13.32,
+        "processingLoss": 23.72,
+        "usableSupport": 155.08,
+        "usableSupportPerBandYear": 0.0882,
+        "usableSupportPerWorkingAdultYear": 0.005,
+        "receiptSeasons": 1757,
+        "meanAdultEquivalentDemand": 26.27,
+        "meanRawSupportRatio": 0.3019
+      },
+      "expeditionCost": {
+        "expeditions": 2382,
+        "completed": 2382,
+        "aborted": 0,
+        "lost": 0,
+        "personDays": 35745,
+        "personDaysPerBandYear": 20.3212,
+        "shareOfWorkingAdultDays": 0.0032,
+        "provisionUnitsConsumed": 35.2924,
+        "meanInjuryLoad": 0,
+        "terminalPhasePersonDaysHeld": 0,
+        "expeditionsPerBandYear": 1.3542
+      },
+      "fission": {
+        "count": 2,
+        "firstFissionYear": 102,
+        "firstFissionParentPopulation": 46,
+        "firstFissionParentSplitPressure": 0.61,
+        "secondGenerationFissions": 0,
+        "meanDaughterFoundingPopulation": 18,
+        "rootLineages": [
+          {
+            "root": "band:delta-coastal-foragers",
+            "population": 82,
+            "bands": 3
+          },
+          {
+            "root": "band:dry-margin-foragers",
+            "population": 11,
+            "bands": 1
+          },
+          {
+            "root": "band:highland-edge-foragers",
+            "population": 29,
+            "bands": 1
+          },
+          {
+            "root": "band:lake-wetland-foragers",
+            "population": 43,
+            "bands": 1
+          },
+          {
+            "root": "band:river-valley-foragers",
+            "population": 39,
+            "bands": 1
+          }
+        ],
+        "events": [
+          {
+            "year": 102,
+            "daughterId": "band:delta-coastal-foragers:daughter:1:t408",
+            "parentId": "band:delta-coastal-foragers",
+            "rootLineage": "band:delta-coastal-foragers",
+            "parentPopulationBefore": 46,
+            "parentSplitPressureBefore": 0.61,
+            "daughterFoundingPopulation": 18,
+            "destinationTileId": "tile:135:54",
+            "generation": 1
+          },
+          {
+            "year": 241,
+            "daughterId": "band:delta-coastal-foragers:daughter:2:t964",
+            "parentId": "band:delta-coastal-foragers",
+            "rootLineage": "band:delta-coastal-foragers",
+            "parentPopulationBefore": 46,
+            "parentSplitPressureBefore": 0.63,
+            "daughterFoundingPopulation": 18,
+            "destinationTileId": "tile:135:55",
+            "generation": 1
+          }
+        ]
+      }
+    },
+    {
+      "map": "map1",
+      "seed": "c18:a",
+      "explorationEnabled": false,
+      "world": {
+        "population": 265,
+        "bands": 10,
+        "populationPerBand": 26.5
+      },
+      "exposure": {
+        "bandYears": 2164,
+        "workingAdultYears": 35476
+      },
+      "waterfall": {
+        "tripsCompleted": 51710,
+        "tripsPerBandYear": 23.8956,
+        "tripsPerWorkingAdultYear": 1.4576,
+        "grossHarvest": 212.5,
+        "transportLoss": 12.25,
+        "processingLoss": 24.71,
+        "usableSupport": 175.57,
+        "usableSupportPerBandYear": 0.0811,
+        "usableSupportPerWorkingAdultYear": 0.0049,
+        "receiptSeasons": 2159,
+        "meanAdultEquivalentDemand": 24.7,
+        "meanRawSupportRatio": 0.2686
+      },
+      "expeditionCost": {
+        "expeditions": 1809,
+        "completed": 1809,
+        "aborted": 0,
+        "lost": 0,
+        "personDays": 25925,
+        "personDaysPerBandYear": 11.9801,
+        "shareOfWorkingAdultDays": 0.002,
+        "provisionUnitsConsumed": 25.9932,
+        "meanInjuryLoad": 0,
+        "terminalPhasePersonDaysHeld": 0,
+        "expeditionsPerBandYear": 0.836
+      },
+      "fission": {
+        "count": 5,
+        "firstFissionYear": 80,
+        "firstFissionParentPopulation": 49,
+        "firstFissionParentSplitPressure": 0.61,
+        "secondGenerationFissions": 0,
+        "meanDaughterFoundingPopulation": 18,
+        "rootLineages": [
+          {
+            "root": "band:delta-coastal-foragers",
+            "population": 86,
+            "bands": 3
+          },
+          {
+            "root": "band:dry-margin-foragers",
+            "population": 15,
+            "bands": 1
+          },
+          {
+            "root": "band:highland-edge-foragers",
+            "population": 24,
+            "bands": 1
+          },
+          {
+            "root": "band:lake-wetland-foragers",
+            "population": 55,
+            "bands": 2
+          },
+          {
+            "root": "band:river-valley-foragers",
+            "population": 85,
+            "bands": 3
+          }
+        ],
+        "events": [
+          {
+            "year": 80,
+            "daughterId": "band:river-valley-foragers:daughter:1:t320",
+            "parentId": "band:river-valley-foragers",
+            "rootLineage": "band:river-valley-foragers",
+            "parentPopulationBefore": 49,
+            "parentSplitPressureBefore": 0.61,
+            "daughterFoundingPopulation": 18,
+            "destinationTileId": "tile:124:64",
+            "generation": 1
+          },
+          {
+            "year": 106,
+            "daughterId": "band:delta-coastal-foragers:daughter:1:t424",
+            "parentId": "band:delta-coastal-foragers",
+            "rootLineage": "band:delta-coastal-foragers",
+            "parentPopulationBefore": 48,
+            "parentSplitPressureBefore": 0.63,
+            "daughterFoundingPopulation": 18,
+            "destinationTileId": "tile:125:61",
+            "generation": 1
+          },
+          {
+            "year": 188,
+            "daughterId": "band:river-valley-foragers:daughter:2:t752",
+            "parentId": "band:river-valley-foragers",
+            "rootLineage": "band:river-valley-foragers",
+            "parentPopulationBefore": 50,
+            "parentSplitPressureBefore": 0.63,
+            "daughterFoundingPopulation": 18,
+            "destinationTileId": "tile:124:68",
+            "generation": 1
+          },
+          {
+            "year": 233,
+            "daughterId": "band:delta-coastal-foragers:daughter:2:t932",
+            "parentId": "band:delta-coastal-foragers",
+            "rootLineage": "band:delta-coastal-foragers",
+            "parentPopulationBefore": 48,
+            "parentSplitPressureBefore": 0.62,
+            "daughterFoundingPopulation": 18,
+            "destinationTileId": "tile:122:60",
+            "generation": 1
+          },
+          {
+            "year": 234,
+            "daughterId": "band:lake-wetland-foragers:daughter:1:t936",
+            "parentId": "band:lake-wetland-foragers",
+            "rootLineage": "band:lake-wetland-foragers",
+            "parentPopulationBefore": 45,
+            "parentSplitPressureBefore": 0.67,
+            "daughterFoundingPopulation": 18,
+            "destinationTileId": "tile:104:58",
+            "generation": 1
+          }
+        ]
+      }
+    },
+    {
+      "map": "map1",
+      "seed": "c18:b",
+      "explorationEnabled": true,
+      "world": {
+        "population": 206,
+        "bands": 8,
+        "populationPerBand": 25.75
+      },
+      "exposure": {
+        "bandYears": 1974,
+        "workingAdultYears": 33465
+      },
+      "waterfall": {
+        "tripsCompleted": 47277,
+        "tripsPerBandYear": 23.9498,
+        "tripsPerWorkingAdultYear": 1.4127,
+        "grossHarvest": 159.33,
+        "transportLoss": 10.03,
+        "processingLoss": 19,
+        "usableSupport": 130.28,
+        "usableSupportPerBandYear": 0.066,
+        "usableSupportPerWorkingAdultYear": 0.0039,
+        "receiptSeasons": 1971,
+        "meanAdultEquivalentDemand": 25.55,
+        "meanRawSupportRatio": 0.2209
+      },
+      "expeditionCost": {
+        "expeditions": 2961,
+        "completed": 2961,
+        "aborted": 0,
+        "lost": 0,
+        "personDays": 47554,
+        "personDaysPerBandYear": 24.0902,
+        "shareOfWorkingAdultDays": 0.0039,
+        "provisionUnitsConsumed": 46.3172,
+        "meanInjuryLoad": 0,
+        "terminalPhasePersonDaysHeld": 0,
+        "expeditionsPerBandYear": 1.5
+      },
+      "fission": {
+        "count": 3,
+        "firstFissionYear": 70,
+        "firstFissionParentPopulation": 49,
+        "firstFissionParentSplitPressure": 0.62,
+        "secondGenerationFissions": 0,
+        "meanDaughterFoundingPopulation": 18,
+        "rootLineages": [
+          {
+            "root": "band:delta-coastal-foragers",
+            "population": 70,
+            "bands": 2
+          },
+          {
+            "root": "band:dry-margin-foragers",
+            "population": 11,
+            "bands": 1
+          },
+          {
+            "root": "band:highland-edge-foragers",
+            "population": 15,
+            "bands": 1
+          },
+          {
+            "root": "band:lake-wetland-foragers",
+            "population": 36,
+            "bands": 1
+          },
+          {
+            "root": "band:river-valley-foragers",
+            "population": 74,
+            "bands": 3
+          }
+        ],
+        "events": [
+          {
+            "year": 70,
+            "daughterId": "band:river-valley-foragers:daughter:1:t280",
+            "parentId": "band:river-valley-foragers",
+            "rootLineage": "band:river-valley-foragers",
+            "parentPopulationBefore": 49,
+            "parentSplitPressureBefore": 0.62,
+            "daughterFoundingPopulation": 18,
+            "destinationTileId": "tile:127:67",
+            "generation": 1
+          },
+          {
+            "year": 137,
+            "daughterId": "band:delta-coastal-foragers:daughter:1:t548",
+            "parentId": "band:delta-coastal-foragers",
+            "rootLineage": "band:delta-coastal-foragers",
+            "parentPopulationBefore": 46,
+            "parentSplitPressureBefore": 0.6,
+            "daughterFoundingPopulation": 18,
+            "destinationTileId": "tile:129:60",
+            "generation": 1
+          },
+          {
+            "year": 222,
+            "daughterId": "band:river-valley-foragers:daughter:2:t888",
+            "parentId": "band:river-valley-foragers",
+            "rootLineage": "band:river-valley-foragers",
+            "parentPopulationBefore": 46,
+            "parentSplitPressureBefore": 0.53,
+            "daughterFoundingPopulation": 18,
+            "destinationTileId": "tile:134:75",
+            "generation": 1
+          }
+        ]
+      }
+    },
+    {
+      "map": "map1",
+      "seed": "c18:b",
+      "explorationEnabled": false,
+      "world": {
+        "population": 217,
+        "bands": 8,
+        "populationPerBand": 27.13
+      },
+      "exposure": {
+        "bandYears": 1972,
+        "workingAdultYears": 31041
+      },
+      "waterfall": {
+        "tripsCompleted": 47238,
+        "tripsPerBandYear": 23.9544,
+        "tripsPerWorkingAdultYear": 1.5218,
+        "grossHarvest": 187.9,
+        "transportLoss": 11.41,
+        "processingLoss": 21.04,
+        "usableSupport": 155.48,
+        "usableSupportPerBandYear": 0.0788,
+        "usableSupportPerWorkingAdultYear": 0.005,
+        "receiptSeasons": 1969,
+        "meanAdultEquivalentDemand": 23.72,
+        "meanRawSupportRatio": 0.242
+      },
+      "expeditionCost": {
+        "expeditions": 1526,
+        "completed": 1526,
+        "aborted": 0,
+        "lost": 0,
+        "personDays": 23428,
+        "personDaysPerBandYear": 11.8803,
+        "shareOfWorkingAdultDays": 0.0021,
+        "provisionUnitsConsumed": 23.3152,
+        "meanInjuryLoad": 0,
+        "terminalPhasePersonDaysHeld": 0,
+        "expeditionsPerBandYear": 0.7738
+      },
+      "fission": {
+        "count": 3,
+        "firstFissionYear": 78,
+        "firstFissionParentPopulation": 50,
+        "firstFissionParentSplitPressure": 0.61,
+        "secondGenerationFissions": 0,
+        "meanDaughterFoundingPopulation": 18,
+        "rootLineages": [
+          {
+            "root": "band:delta-coastal-foragers",
+            "population": 77,
+            "bands": 2
+          },
+          {
+            "root": "band:dry-margin-foragers",
+            "population": 14,
+            "bands": 1
+          },
+          {
+            "root": "band:highland-edge-foragers",
+            "population": 14,
+            "bands": 1
+          },
+          {
+            "root": "band:lake-wetland-foragers",
+            "population": 49,
+            "bands": 2
+          },
+          {
+            "root": "band:river-valley-foragers",
+            "population": 63,
+            "bands": 2
+          }
+        ],
+        "events": [
+          {
+            "year": 78,
+            "daughterId": "band:river-valley-foragers:daughter:1:t312",
+            "parentId": "band:river-valley-foragers",
+            "rootLineage": "band:river-valley-foragers",
+            "parentPopulationBefore": 50,
+            "parentSplitPressureBefore": 0.61,
+            "daughterFoundingPopulation": 18,
+            "destinationTileId": "tile:127:67",
+            "generation": 1
+          },
+          {
+            "year": 85,
+            "daughterId": "band:delta-coastal-foragers:daughter:1:t340",
+            "parentId": "band:delta-coastal-foragers",
+            "rootLineage": "band:delta-coastal-foragers",
+            "parentPopulationBefore": 47,
+            "parentSplitPressureBefore": 0.62,
+            "daughterFoundingPopulation": 18,
+            "destinationTileId": "tile:130:60",
+            "generation": 1
+          },
+          {
+            "year": 268,
+            "daughterId": "band:lake-wetland-foragers:daughter:1:t1072",
+            "parentId": "band:lake-wetland-foragers",
+            "rootLineage": "band:lake-wetland-foragers",
+            "parentPopulationBefore": 46,
+            "parentSplitPressureBefore": 0.63,
+            "daughterFoundingPopulation": 18,
+            "destinationTileId": "tile:107:59",
+            "generation": 1
+          }
+        ]
+      }
+    },
+    {
+      "map": "map1",
+      "seed": "c18:c",
+      "explorationEnabled": true,
+      "world": {
+        "population": 190,
+        "bands": 6,
+        "populationPerBand": 31.67
+      },
+      "exposure": {
+        "bandYears": 1645,
+        "workingAdultYears": 29672
+      },
+      "waterfall": {
+        "tripsCompleted": 39450,
+        "tripsPerBandYear": 23.9818,
+        "tripsPerWorkingAdultYear": 1.3295,
+        "grossHarvest": 174.25,
+        "transportLoss": 11.55,
+        "processingLoss": 21.43,
+        "usableSupport": 141.27,
+        "usableSupportPerBandYear": 0.0859,
+        "usableSupportPerWorkingAdultYear": 0.0048,
+        "receiptSeasons": 1644,
+        "meanAdultEquivalentDemand": 27.16,
+        "meanRawSupportRatio": 0.2965
+      },
+      "expeditionCost": {
+        "expeditions": 2362,
+        "completed": 2362,
+        "aborted": 0,
+        "lost": 0,
+        "personDays": 37186,
+        "personDaysPerBandYear": 22.6055,
+        "shareOfWorkingAdultDays": 0.0035,
+        "provisionUnitsConsumed": 36.6368,
+        "meanInjuryLoad": 0,
+        "terminalPhasePersonDaysHeld": 0,
+        "expeditionsPerBandYear": 1.4359
+      },
+      "fission": {
+        "count": 1,
+        "firstFissionYear": 156,
+        "firstFissionParentPopulation": 46,
+        "firstFissionParentSplitPressure": 0.61,
+        "secondGenerationFissions": 0,
+        "meanDaughterFoundingPopulation": 18,
+        "rootLineages": [
+          {
+            "root": "band:delta-coastal-foragers",
+            "population": 53,
+            "bands": 2
+          },
+          {
+            "root": "band:dry-margin-foragers",
+            "population": 39,
+            "bands": 1
+          },
+          {
+            "root": "band:highland-edge-foragers",
+            "population": 25,
+            "bands": 1
+          },
+          {
+            "root": "band:lake-wetland-foragers",
+            "population": 39,
+            "bands": 1
+          },
+          {
+            "root": "band:river-valley-foragers",
+            "population": 34,
+            "bands": 1
+          }
+        ],
+        "events": [
+          {
+            "year": 156,
+            "daughterId": "band:delta-coastal-foragers:daughter:1:t624",
+            "parentId": "band:delta-coastal-foragers",
+            "rootLineage": "band:delta-coastal-foragers",
+            "parentPopulationBefore": 46,
+            "parentSplitPressureBefore": 0.61,
+            "daughterFoundingPopulation": 18,
+            "destinationTileId": "tile:136:53",
+            "generation": 1
+          }
+        ]
+      }
+    },
+    {
+      "map": "map1",
+      "seed": "c18:c",
+      "explorationEnabled": false,
+      "world": {
+        "population": 264,
+        "bands": 9,
+        "populationPerBand": 29.33
+      },
+      "exposure": {
+        "bandYears": 2132,
+        "workingAdultYears": 35814
+      },
+      "waterfall": {
+        "tripsCompleted": 51072,
+        "tripsPerBandYear": 23.955,
+        "tripsPerWorkingAdultYear": 1.426,
+        "grossHarvest": 186.61,
+        "transportLoss": 10.79,
+        "processingLoss": 21.83,
+        "usableSupport": 154,
+        "usableSupportPerBandYear": 0.0722,
+        "usableSupportPerWorkingAdultYear": 0.0043,
+        "receiptSeasons": 2128,
+        "meanAdultEquivalentDemand": 25.27,
+        "meanRawSupportRatio": 0.2392
+      },
+      "expeditionCost": {
+        "expeditions": 1375,
+        "completed": 1375,
+        "aborted": 0,
+        "lost": 0,
+        "personDays": 20480,
+        "personDaysPerBandYear": 9.606,
+        "shareOfWorkingAdultDays": 0.0016,
+        "provisionUnitsConsumed": 20.6168,
+        "meanInjuryLoad": 0,
+        "terminalPhasePersonDaysHeld": 0,
+        "expeditionsPerBandYear": 0.6449
+      },
+      "fission": {
+        "count": 4,
+        "firstFissionYear": 54,
+        "firstFissionParentPopulation": 47,
+        "firstFissionParentSplitPressure": 0.55,
+        "secondGenerationFissions": 0,
+        "meanDaughterFoundingPopulation": 18,
+        "rootLineages": [
+          {
+            "root": "band:delta-coastal-foragers",
+            "population": 99,
+            "bands": 3
+          },
+          {
+            "root": "band:dry-margin-foragers",
+            "population": 10,
+            "bands": 1
+          },
+          {
+            "root": "band:highland-edge-foragers",
+            "population": 28,
+            "bands": 1
+          },
+          {
+            "root": "band:lake-wetland-foragers",
+            "population": 42,
+            "bands": 1
+          },
+          {
+            "root": "band:river-valley-foragers",
+            "population": 85,
+            "bands": 3
+          }
+        ],
+        "events": [
+          {
+            "year": 54,
+            "daughterId": "band:river-valley-foragers:daughter:1:t216",
+            "parentId": "band:river-valley-foragers",
+            "rootLineage": "band:river-valley-foragers",
+            "parentPopulationBefore": 47,
+            "parentSplitPressureBefore": 0.55,
+            "daughterFoundingPopulation": 18,
+            "destinationTileId": "tile:132:72",
+            "generation": 1
+          },
+          {
+            "year": 86,
+            "daughterId": "band:delta-coastal-foragers:daughter:1:t344",
+            "parentId": "band:delta-coastal-foragers",
+            "rootLineage": "band:delta-coastal-foragers",
+            "parentPopulationBefore": 47,
+            "parentSplitPressureBefore": 0.61,
+            "daughterFoundingPopulation": 18,
+            "destinationTileId": "tile:123:60",
+            "generation": 1
+          },
+          {
+            "year": 213,
+            "daughterId": "band:delta-coastal-foragers:daughter:2:t852",
+            "parentId": "band:delta-coastal-foragers",
+            "rootLineage": "band:delta-coastal-foragers",
+            "parentPopulationBefore": 50,
+            "parentSplitPressureBefore": 0.61,
+            "daughterFoundingPopulation": 18,
+            "destinationTileId": "tile:130:60",
+            "generation": 1
+          },
+          {
+            "year": 219,
+            "daughterId": "band:river-valley-foragers:daughter:2:t876",
+            "parentId": "band:river-valley-foragers",
+            "rootLineage": "band:river-valley-foragers",
+            "parentPopulationBefore": 49,
+            "parentSplitPressureBefore": 0.53,
+            "daughterFoundingPopulation": 18,
+            "destinationTileId": "tile:134:74",
+            "generation": 1
+          }
+        ]
+      }
+    },
+    {
+      "map": "map1",
+      "seed": "c18:d",
+      "explorationEnabled": true,
+      "world": {
+        "population": 138,
+        "bands": 7,
+        "populationPerBand": 19.71
+      },
+      "exposure": {
+        "bandYears": 1811,
+        "workingAdultYears": 27701
+      },
+      "waterfall": {
+        "tripsCompleted": 41712,
+        "tripsPerBandYear": 23.0326,
+        "tripsPerWorkingAdultYear": 1.5058,
+        "grossHarvest": 152.36,
+        "transportLoss": 11.15,
+        "processingLoss": 17.99,
+        "usableSupport": 123.23,
+        "usableSupportPerBandYear": 0.068,
+        "usableSupportPerWorkingAdultYear": 0.0044,
+        "receiptSeasons": 1809,
+        "meanAdultEquivalentDemand": 23.28,
+        "meanRawSupportRatio": 0.2199
+      },
+      "expeditionCost": {
+        "expeditions": 3039,
+        "completed": 3039,
+        "aborted": 0,
+        "lost": 0,
+        "personDays": 48226,
+        "personDaysPerBandYear": 26.6295,
+        "shareOfWorkingAdultDays": 0.0048,
+        "provisionUnitsConsumed": 47.3268,
+        "meanInjuryLoad": 0,
+        "terminalPhasePersonDaysHeld": 0,
+        "expeditionsPerBandYear": 1.6781
+      },
+      "fission": {
+        "count": 2,
+        "firstFissionYear": 107,
+        "firstFissionParentPopulation": 46,
+        "firstFissionParentSplitPressure": 0.59,
+        "secondGenerationFissions": 0,
+        "meanDaughterFoundingPopulation": 18,
+        "rootLineages": [
+          {
+            "root": "band:delta-coastal-foragers",
+            "population": 29,
+            "bands": 2
+          },
+          {
+            "root": "band:dry-margin-foragers",
+            "population": 0,
+            "bands": 1
+          },
+          {
+            "root": "band:highland-edge-foragers",
+            "population": 17,
+            "bands": 1
+          },
+          {
+            "root": "band:lake-wetland-foragers",
+            "population": 28,
+            "bands": 1
+          },
+          {
+            "root": "band:river-valley-foragers",
+            "population": 64,
+            "bands": 2
+          }
+        ],
+        "events": [
+          {
+            "year": 107,
+            "daughterId": "band:delta-coastal-foragers:daughter:1:t428",
+            "parentId": "band:delta-coastal-foragers",
+            "rootLineage": "band:delta-coastal-foragers",
+            "parentPopulationBefore": 46,
+            "parentSplitPressureBefore": 0.59,
+            "daughterFoundingPopulation": 18,
+            "destinationTileId": "tile:133:58",
+            "generation": 1
+          },
+          {
+            "year": 184,
+            "daughterId": "band:river-valley-foragers:daughter:1:t736",
+            "parentId": "band:river-valley-foragers",
+            "rootLineage": "band:river-valley-foragers",
+            "parentPopulationBefore": 46,
+            "parentSplitPressureBefore": 0.6,
+            "daughterFoundingPopulation": 18,
+            "destinationTileId": "tile:135:76",
+            "generation": 1
+          }
+        ]
+      }
+    },
+    {
+      "map": "map1",
+      "seed": "c18:d",
+      "explorationEnabled": false,
+      "world": {
+        "population": 277,
+        "bands": 9,
+        "populationPerBand": 30.78
+      },
+      "exposure": {
+        "bandYears": 2112,
+        "workingAdultYears": 36106
+      },
+      "waterfall": {
+        "tripsCompleted": 50580,
+        "tripsPerBandYear": 23.9489,
+        "tripsPerWorkingAdultYear": 1.4009,
+        "grossHarvest": 185.87,
+        "transportLoss": 11.05,
+        "processingLoss": 22.79,
+        "usableSupport": 152.02,
+        "usableSupportPerBandYear": 0.072,
+        "usableSupportPerWorkingAdultYear": 0.0042,
+        "receiptSeasons": 2108,
+        "meanAdultEquivalentDemand": 25.73,
+        "meanRawSupportRatio": 0.2606
+      },
+      "expeditionCost": {
+        "expeditions": 1596,
+        "completed": 1596,
+        "aborted": 0,
+        "lost": 0,
+        "personDays": 23475,
+        "personDaysPerBandYear": 11.1151,
+        "shareOfWorkingAdultDays": 0.0018,
+        "provisionUnitsConsumed": 23.5332,
+        "meanInjuryLoad": 0,
+        "terminalPhasePersonDaysHeld": 0,
+        "expeditionsPerBandYear": 0.7557
+      },
+      "fission": {
+        "count": 4,
+        "firstFissionYear": 90,
+        "firstFissionParentPopulation": 48,
+        "firstFissionParentSplitPressure": 0.63,
+        "secondGenerationFissions": 0,
+        "meanDaughterFoundingPopulation": 18,
+        "rootLineages": [
+          {
+            "root": "band:delta-coastal-foragers",
+            "population": 103,
+            "bands": 3
+          },
+          {
+            "root": "band:dry-margin-foragers",
+            "population": 28,
+            "bands": 1
+          },
+          {
+            "root": "band:highland-edge-foragers",
+            "population": 27,
+            "bands": 1
+          },
+          {
+            "root": "band:lake-wetland-foragers",
+            "population": 40,
+            "bands": 1
+          },
+          {
+            "root": "band:river-valley-foragers",
+            "population": 79,
+            "bands": 3
+          }
+        ],
+        "events": [
+          {
+            "year": 90,
+            "daughterId": "band:river-valley-foragers:daughter:1:t360",
+            "parentId": "band:river-valley-foragers",
+            "rootLineage": "band:river-valley-foragers",
+            "parentPopulationBefore": 48,
+            "parentSplitPressureBefore": 0.63,
+            "daughterFoundingPopulation": 18,
+            "destinationTileId": "tile:134:75",
+            "generation": 1
+          },
+          {
+            "year": 91,
+            "daughterId": "band:delta-coastal-foragers:daughter:1:t364",
+            "parentId": "band:delta-coastal-foragers",
+            "rootLineage": "band:delta-coastal-foragers",
+            "parentPopulationBefore": 48,
+            "parentSplitPressureBefore": 0.6,
+            "daughterFoundingPopulation": 18,
+            "destinationTileId": "tile:130:60",
+            "generation": 1
+          },
+          {
+            "year": 202,
+            "daughterId": "band:delta-coastal-foragers:daughter:2:t808",
+            "parentId": "band:delta-coastal-foragers",
+            "rootLineage": "band:delta-coastal-foragers",
+            "parentPopulationBefore": 49,
+            "parentSplitPressureBefore": 0.63,
+            "daughterFoundingPopulation": 18,
+            "destinationTileId": "tile:127:62",
+            "generation": 1
+          },
+          {
+            "year": 209,
+            "daughterId": "band:river-valley-foragers:daughter:2:t836",
+            "parentId": "band:river-valley-foragers",
+            "rootLineage": "band:river-valley-foragers",
+            "parentPopulationBefore": 48,
+            "parentSplitPressureBefore": 0.63,
+            "daughterFoundingPopulation": 18,
+            "destinationTileId": "tile:135:76",
+            "generation": 1
+          }
+        ]
+      }
+    },
+    {
+      "map": "map1",
+      "seed": "c18:e",
+      "explorationEnabled": true,
+      "world": {
+        "population": 204,
+        "bands": 7,
+        "populationPerBand": 29.14
+      },
+      "exposure": {
+        "bandYears": 1842,
+        "workingAdultYears": 32317
+      },
+      "waterfall": {
+        "tripsCompleted": 44119,
+        "tripsPerBandYear": 23.9517,
+        "tripsPerWorkingAdultYear": 1.3652,
+        "grossHarvest": 147.17,
+        "transportLoss": 9.55,
+        "processingLoss": 17.87,
+        "usableSupport": 119.69,
+        "usableSupportPerBandYear": 0.065,
+        "usableSupportPerWorkingAdultYear": 0.0037,
+        "receiptSeasons": 1840,
+        "meanAdultEquivalentDemand": 26.34,
+        "meanRawSupportRatio": 0.2252
+      },
+      "expeditionCost": {
+        "expeditions": 3017,
+        "completed": 3017,
+        "aborted": 0,
+        "lost": 0,
+        "personDays": 47939,
+        "personDaysPerBandYear": 26.0255,
+        "shareOfWorkingAdultDays": 0.0041,
+        "provisionUnitsConsumed": 47.1316,
+        "meanInjuryLoad": 0,
+        "terminalPhasePersonDaysHeld": 0,
+        "expeditionsPerBandYear": 1.6379
+      },
+      "fission": {
+        "count": 2,
+        "firstFissionYear": 103,
+        "firstFissionParentPopulation": 48,
+        "firstFissionParentSplitPressure": 0.61,
+        "secondGenerationFissions": 0,
+        "meanDaughterFoundingPopulation": 18,
+        "rootLineages": [
+          {
+            "root": "band:delta-coastal-foragers",
+            "population": 43,
+            "bands": 2
+          },
+          {
+            "root": "band:dry-margin-foragers",
+            "population": 38,
+            "bands": 1
+          },
+          {
+            "root": "band:highland-edge-foragers",
+            "population": 20,
+            "bands": 1
+          },
+          {
+            "root": "band:lake-wetland-foragers",
+            "population": 37,
+            "bands": 1
+          },
+          {
+            "root": "band:river-valley-foragers",
+            "population": 66,
+            "bands": 2
+          }
+        ],
+        "events": [
+          {
+            "year": 103,
+            "daughterId": "band:delta-coastal-foragers:daughter:1:t412",
+            "parentId": "band:delta-coastal-foragers",
+            "rootLineage": "band:delta-coastal-foragers",
+            "parentPopulationBefore": 48,
+            "parentSplitPressureBefore": 0.61,
+            "daughterFoundingPopulation": 18,
+            "destinationTileId": "tile:130:60",
+            "generation": 1
+          },
+          {
+            "year": 157,
+            "daughterId": "band:river-valley-foragers:daughter:1:t628",
+            "parentId": "band:river-valley-foragers",
+            "rootLineage": "band:river-valley-foragers",
+            "parentPopulationBefore": 47,
+            "parentSplitPressureBefore": 0.62,
+            "daughterFoundingPopulation": 18,
+            "destinationTileId": "tile:134:72",
+            "generation": 1
+          }
+        ]
+      }
+    },
+    {
+      "map": "map1",
+      "seed": "c18:e",
+      "explorationEnabled": false,
+      "world": {
+        "population": 200,
+        "bands": 8,
+        "populationPerBand": 25
+      },
+      "exposure": {
+        "bandYears": 2001,
+        "workingAdultYears": 32093
+      },
+      "waterfall": {
+        "tripsCompleted": 45486,
+        "tripsPerBandYear": 22.7316,
+        "tripsPerWorkingAdultYear": 1.4173,
+        "grossHarvest": 167.83,
+        "transportLoss": 10.63,
+        "processingLoss": 20.57,
+        "usableSupport": 136.65,
+        "usableSupportPerBandYear": 0.0683,
+        "usableSupportPerWorkingAdultYear": 0.0043,
+        "receiptSeasons": 1998,
+        "meanAdultEquivalentDemand": 24.57,
+        "meanRawSupportRatio": 0.2582
+      },
+      "expeditionCost": {
+        "expeditions": 2231,
+        "completed": 2231,
+        "aborted": 0,
+        "lost": 0,
+        "personDays": 36561,
+        "personDaysPerBandYear": 18.2714,
+        "shareOfWorkingAdultDays": 0.0032,
+        "provisionUnitsConsumed": 35.764,
+        "meanInjuryLoad": 0,
+        "terminalPhasePersonDaysHeld": 0,
+        "expeditionsPerBandYear": 1.1149
+      },
+      "fission": {
+        "count": 3,
+        "firstFissionYear": 97,
+        "firstFissionParentPopulation": 47,
+        "firstFissionParentSplitPressure": 0.63,
+        "secondGenerationFissions": 0,
+        "meanDaughterFoundingPopulation": 18,
+        "rootLineages": [
+          {
+            "root": "band:delta-coastal-foragers",
+            "population": 80,
+            "bands": 3
+          },
+          {
+            "root": "band:dry-margin-foragers",
+            "population": 0,
+            "bands": 1
+          },
+          {
+            "root": "band:highland-edge-foragers",
+            "population": 18,
+            "bands": 1
+          },
+          {
+            "root": "band:lake-wetland-foragers",
+            "population": 45,
+            "bands": 1
+          },
+          {
+            "root": "band:river-valley-foragers",
+            "population": 57,
+            "bands": 2
+          }
+        ],
+        "events": [
+          {
+            "year": 97,
+            "daughterId": "band:delta-coastal-foragers:daughter:1:t388",
+            "parentId": "band:delta-coastal-foragers",
+            "rootLineage": "band:delta-coastal-foragers",
+            "parentPopulationBefore": 47,
+            "parentSplitPressureBefore": 0.63,
+            "daughterFoundingPopulation": 18,
+            "destinationTileId": "tile:131:60",
+            "generation": 1
+          },
+          {
+            "year": 98,
+            "daughterId": "band:river-valley-foragers:daughter:1:t392",
+            "parentId": "band:river-valley-foragers",
+            "rootLineage": "band:river-valley-foragers",
+            "parentPopulationBefore": 48,
+            "parentSplitPressureBefore": 0.62,
+            "daughterFoundingPopulation": 18,
+            "destinationTileId": "tile:124:65",
+            "generation": 1
+          },
+          {
+            "year": 207,
+            "daughterId": "band:delta-coastal-foragers:daughter:2:t828",
+            "parentId": "band:delta-coastal-foragers",
+            "rootLineage": "band:delta-coastal-foragers",
+            "parentPopulationBefore": 47,
+            "parentSplitPressureBefore": 0.53,
+            "daughterFoundingPopulation": 18,
+            "destinationTileId": "tile:130:60",
+            "generation": 1
+          }
+        ]
+      }
+    },
+    {
+      "map": "map2",
+      "seed": "c18:a",
+      "explorationEnabled": true,
+      "world": {
+        "population": 210,
+        "bands": 11,
+        "populationPerBand": 19.09
+      },
+      "exposure": {
+        "bandYears": 2895,
+        "workingAdultYears": 35541
+      },
+      "waterfall": {
+        "tripsCompleted": 60792,
+        "tripsPerBandYear": 20.999,
+        "tripsPerWorkingAdultYear": 1.7105,
+        "grossHarvest": 155.2,
+        "transportLoss": 8.98,
+        "processingLoss": 16.44,
+        "usableSupport": 129.78,
+        "usableSupportPerBandYear": 0.0448,
+        "usableSupportPerWorkingAdultYear": 0.0037,
+        "receiptSeasons": 2893,
+        "meanAdultEquivalentDemand": 19.41,
+        "meanRawSupportRatio": 0.1397
+      },
+      "expeditionCost": {
+        "expeditions": 2438,
+        "completed": 2436,
+        "aborted": 0,
+        "lost": 2,
+        "personDays": 38024,
+        "personDaysPerBandYear": 13.1344,
+        "shareOfWorkingAdultDays": 0.003,
+        "provisionUnitsConsumed": 37.03,
+        "meanInjuryLoad": 0,
+        "terminalPhasePersonDaysHeld": 0,
+        "expeditionsPerBandYear": 0.8421
+      },
+      "fission": {
+        "count": 2,
+        "firstFissionYear": 160,
+        "firstFissionParentPopulation": 46,
+        "firstFissionParentSplitPressure": 0.63,
+        "secondGenerationFissions": 0,
+        "meanDaughterFoundingPopulation": 18,
+        "rootLineages": [
+          {
+            "root": "band:varied-dry-corridor-mid",
+            "population": 0,
+            "bands": 1
+          },
+          {
+            "root": "band:varied-dry-corridor-upper",
+            "population": 0,
+            "bands": 1
+          },
+          {
+            "root": "band:varied-estuary",
+            "population": 73,
+            "bands": 2
+          },
+          {
+            "root": "band:varied-lake-east",
+            "population": 39,
+            "bands": 2
+          },
+          {
+            "root": "band:varied-lake-north",
+            "population": 19,
+            "bands": 1
+          },
+          {
+            "root": "band:varied-lake-west",
+            "population": 10,
+            "bands": 1
+          },
+          {
+            "root": "band:varied-pass-frontier",
+            "population": 9,
+            "bands": 1
+          },
+          {
+            "root": "band:varied-plains-creek",
+            "population": 23,
+            "bands": 1
+          },
+          {
+            "root": "band:varied-river-mid",
+            "population": 37,
+            "bands": 1
+          }
+        ],
+        "events": [
+          {
+            "year": 160,
+            "daughterId": "band:varied-estuary:daughter:1:t640",
+            "parentId": "band:varied-estuary",
+            "rootLineage": "band:varied-estuary",
+            "parentPopulationBefore": 46,
+            "parentSplitPressureBefore": 0.63,
+            "daughterFoundingPopulation": 18,
+            "destinationTileId": "tile:187:88",
+            "generation": 1
+          },
+          {
+            "year": 247,
+            "daughterId": "band:varied-lake-east:daughter:1:t988",
+            "parentId": "band:varied-lake-east",
+            "rootLineage": "band:varied-lake-east",
+            "parentPopulationBefore": 36,
+            "parentSplitPressureBefore": 0.59,
+            "daughterFoundingPopulation": 18,
+            "destinationTileId": "tile:86:73",
+            "generation": 1
+          }
+        ]
+      }
+    },
+    {
+      "map": "map2",
+      "seed": "c18:a",
+      "explorationEnabled": false,
+      "world": {
+        "population": 238,
+        "bands": 11,
+        "populationPerBand": 21.64
+      },
+      "exposure": {
+        "bandYears": 2973,
+        "workingAdultYears": 38168
+      },
+      "waterfall": {
+        "tripsCompleted": 61464,
+        "tripsPerBandYear": 20.6741,
+        "tripsPerWorkingAdultYear": 1.6104,
+        "grossHarvest": 188.39,
+        "transportLoss": 9.89,
+        "processingLoss": 20.11,
+        "usableSupport": 158.41,
+        "usableSupportPerBandYear": 0.0533,
+        "usableSupportPerWorkingAdultYear": 0.0042,
+        "receiptSeasons": 2971,
+        "meanAdultEquivalentDemand": 20.33,
+        "meanRawSupportRatio": 0.1713
+      },
+      "expeditionCost": {
+        "expeditions": 1079,
+        "completed": 1078,
+        "aborted": 0,
+        "lost": 1,
+        "personDays": 14831,
+        "personDaysPerBandYear": 4.9886,
+        "shareOfWorkingAdultDays": 0.0011,
+        "provisionUnitsConsumed": 15.0516,
+        "meanInjuryLoad": 0,
+        "terminalPhasePersonDaysHeld": 0,
+        "expeditionsPerBandYear": 0.3629
+      },
+      "fission": {
+        "count": 2,
+        "firstFissionYear": 118,
+        "firstFissionParentPopulation": 50,
+        "firstFissionParentSplitPressure": 0.63,
+        "secondGenerationFissions": 0,
+        "meanDaughterFoundingPopulation": 18,
+        "rootLineages": [
+          {
+            "root": "band:varied-dry-corridor-mid",
+            "population": 0,
+            "bands": 1
+          },
+          {
+            "root": "band:varied-dry-corridor-upper",
+            "population": 0,
+            "bands": 1
+          },
+          {
+            "root": "band:varied-estuary",
+            "population": 90,
+            "bands": 3
+          },
+          {
+            "root": "band:varied-lake-east",
+            "population": 39,
+            "bands": 1
+          },
+          {
+            "root": "band:varied-lake-north",
+            "population": 19,
+            "bands": 1
+          },
+          {
+            "root": "band:varied-lake-west",
+            "population": 18,
+            "bands": 1
+          },
+          {
+            "root": "band:varied-pass-frontier",
+            "population": 10,
+            "bands": 1
+          },
+          {
+            "root": "band:varied-plains-creek",
+            "population": 24,
+            "bands": 1
+          },
+          {
+            "root": "band:varied-river-mid",
+            "population": 38,
+            "bands": 1
+          }
+        ],
+        "events": [
+          {
+            "year": 118,
+            "daughterId": "band:varied-estuary:daughter:1:t472",
+            "parentId": "band:varied-estuary",
+            "rootLineage": "band:varied-estuary",
+            "parentPopulationBefore": 50,
+            "parentSplitPressureBefore": 0.63,
+            "daughterFoundingPopulation": 18,
+            "destinationTileId": "tile:186:88",
+            "generation": 1
+          },
+          {
+            "year": 211,
+            "daughterId": "band:varied-estuary:daughter:2:t844",
+            "parentId": "band:varied-estuary",
+            "rootLineage": "band:varied-estuary",
+            "parentPopulationBefore": 45,
+            "parentSplitPressureBefore": 0.66,
+            "daughterFoundingPopulation": 18,
+            "destinationTileId": "tile:194:90",
+            "generation": 1
+          }
+        ]
+      }
+    },
+    {
+      "map": "map2",
+      "seed": "c18:b",
+      "explorationEnabled": true,
+      "world": {
+        "population": 167,
+        "bands": 12,
+        "populationPerBand": 13.92
+      },
+      "exposure": {
+        "bandYears": 2983,
+        "workingAdultYears": 32080
+      },
+      "waterfall": {
+        "tripsCompleted": 59055,
+        "tripsPerBandYear": 19.7972,
+        "tripsPerWorkingAdultYear": 1.8409,
+        "grossHarvest": 169.55,
+        "transportLoss": 10.54,
+        "processingLoss": 18.07,
+        "usableSupport": 140.92,
+        "usableSupportPerBandYear": 0.0472,
+        "usableSupportPerWorkingAdultYear": 0.0044,
+        "receiptSeasons": 2980,
+        "meanAdultEquivalentDemand": 17.53,
+        "meanRawSupportRatio": 0.1347
+      },
+      "expeditionCost": {
+        "expeditions": 2367,
+        "completed": 2367,
+        "aborted": 0,
+        "lost": 0,
+        "personDays": 34986,
+        "personDaysPerBandYear": 11.7285,
+        "shareOfWorkingAdultDays": 0.003,
+        "provisionUnitsConsumed": 34.294,
+        "meanInjuryLoad": 0,
+        "terminalPhasePersonDaysHeld": 0,
+        "expeditionsPerBandYear": 0.7935
+      },
+      "fission": {
+        "count": 3,
+        "firstFissionYear": 130,
+        "firstFissionParentPopulation": 46,
+        "firstFissionParentSplitPressure": 0.56,
+        "secondGenerationFissions": 0,
+        "meanDaughterFoundingPopulation": 18,
+        "rootLineages": [
+          {
+            "root": "band:varied-dry-corridor-mid",
+            "population": 0,
+            "bands": 1
+          },
+          {
+            "root": "band:varied-dry-corridor-upper",
+            "population": 0,
+            "bands": 1
+          },
+          {
+            "root": "band:varied-estuary",
+            "population": 76,
+            "bands": 3
+          },
+          {
+            "root": "band:varied-lake-east",
+            "population": 0,
+            "bands": 1
+          },
+          {
+            "root": "band:varied-lake-north",
+            "population": 16,
+            "bands": 1
+          },
+          {
+            "root": "band:varied-lake-west",
+            "population": 11,
+            "bands": 1
+          },
+          {
+            "root": "band:varied-pass-frontier",
+            "population": 0,
+            "bands": 1
+          },
+          {
+            "root": "band:varied-plains-creek",
+            "population": 24,
+            "bands": 1
+          },
+          {
+            "root": "band:varied-river-mid",
+            "population": 40,
+            "bands": 2
+          }
+        ],
+        "events": [
+          {
+            "year": 130,
+            "daughterId": "band:varied-estuary:daughter:1:t520",
+            "parentId": "band:varied-estuary",
+            "rootLineage": "band:varied-estuary",
+            "parentPopulationBefore": 46,
+            "parentSplitPressureBefore": 0.56,
+            "daughterFoundingPopulation": 18,
+            "destinationTileId": "tile:200:85",
+            "generation": 1
+          },
+          {
+            "year": 208,
+            "daughterId": "band:varied-river-mid:daughter:1:t832",
+            "parentId": "band:varied-river-mid",
+            "rootLineage": "band:varied-river-mid",
+            "parentPopulationBefore": 35,
+            "parentSplitPressureBefore": 0.44,
+            "daughterFoundingPopulation": 18,
+            "destinationTileId": "tile:114:58",
+            "generation": 1
+          },
+          {
+            "year": 282,
+            "daughterId": "band:varied-estuary:daughter:2:t1128",
+            "parentId": "band:varied-estuary",
+            "rootLineage": "band:varied-estuary",
+            "parentPopulationBefore": 47,
+            "parentSplitPressureBefore": 0.58,
+            "daughterFoundingPopulation": 18,
+            "destinationTileId": "tile:191:88",
+            "generation": 1
+          }
+        ]
+      }
+    },
+    {
+      "map": "map2",
+      "seed": "c18:b",
+      "explorationEnabled": false,
+      "world": {
+        "population": 210,
+        "bands": 11,
+        "populationPerBand": 19.09
+      },
+      "exposure": {
+        "bandYears": 2900,
+        "workingAdultYears": 36286
+      },
+      "waterfall": {
+        "tripsCompleted": 62124,
+        "tripsPerBandYear": 21.4221,
+        "tripsPerWorkingAdultYear": 1.7121,
+        "grossHarvest": 215.17,
+        "transportLoss": 11.41,
+        "processingLoss": 21.98,
+        "usableSupport": 181.76,
+        "usableSupportPerBandYear": 0.0627,
+        "usableSupportPerWorkingAdultYear": 0.005,
+        "receiptSeasons": 2898,
+        "meanAdultEquivalentDemand": 19.63,
+        "meanRawSupportRatio": 0.1707
+      },
+      "expeditionCost": {
+        "expeditions": 795,
+        "completed": 795,
+        "aborted": 0,
+        "lost": 0,
+        "personDays": 11530,
+        "personDaysPerBandYear": 3.9759,
+        "shareOfWorkingAdultDays": 0.0009,
+        "provisionUnitsConsumed": 11.7104,
+        "meanInjuryLoad": 0,
+        "terminalPhasePersonDaysHeld": 0,
+        "expeditionsPerBandYear": 0.2741
+      },
+      "fission": {
+        "count": 2,
+        "firstFissionYear": 119,
+        "firstFissionParentPopulation": 47,
+        "firstFissionParentSplitPressure": 0.62,
+        "secondGenerationFissions": 0,
+        "meanDaughterFoundingPopulation": 18,
+        "rootLineages": [
+          {
+            "root": "band:varied-dry-corridor-mid",
+            "population": 0,
+            "bands": 1
+          },
+          {
+            "root": "band:varied-dry-corridor-upper",
+            "population": 0,
+            "bands": 1
+          },
+          {
+            "root": "band:varied-estuary",
+            "population": 79,
+            "bands": 3
+          },
+          {
+            "root": "band:varied-lake-east",
+            "population": 32,
+            "bands": 1
+          },
+          {
+            "root": "band:varied-lake-north",
+            "population": 9,
+            "bands": 1
+          },
+          {
+            "root": "band:varied-lake-west",
+            "population": 19,
+            "bands": 1
+          },
+          {
+            "root": "band:varied-pass-frontier",
+            "population": 9,
+            "bands": 1
+          },
+          {
+            "root": "band:varied-plains-creek",
+            "population": 24,
+            "bands": 1
+          },
+          {
+            "root": "band:varied-river-mid",
+            "population": 38,
+            "bands": 1
+          }
+        ],
+        "events": [
+          {
+            "year": 119,
+            "daughterId": "band:varied-estuary:daughter:1:t476",
+            "parentId": "band:varied-estuary",
+            "rootLineage": "band:varied-estuary",
+            "parentPopulationBefore": 47,
+            "parentSplitPressureBefore": 0.62,
+            "daughterFoundingPopulation": 18,
+            "destinationTileId": "tile:199:88",
+            "generation": 1
+          },
+          {
+            "year": 283,
+            "daughterId": "band:varied-estuary:daughter:2:t1132",
+            "parentId": "band:varied-estuary",
+            "rootLineage": "band:varied-estuary",
+            "parentPopulationBefore": 47,
+            "parentSplitPressureBefore": 0.59,
+            "daughterFoundingPopulation": 18,
+            "destinationTileId": "tile:199:87",
+            "generation": 1
+          }
+        ]
+      }
+    },
+    {
+      "map": "map2",
+      "seed": "c18:c",
+      "explorationEnabled": true,
+      "world": {
+        "population": 201,
+        "bands": 11,
+        "populationPerBand": 18.27
+      },
+      "exposure": {
+        "bandYears": 2992,
+        "workingAdultYears": 36047
+      },
+      "waterfall": {
+        "tripsCompleted": 63907,
+        "tripsPerBandYear": 21.3593,
+        "tripsPerWorkingAdultYear": 1.7729,
+        "grossHarvest": 183.45,
+        "transportLoss": 10.19,
+        "processingLoss": 18.89,
+        "usableSupport": 154.33,
+        "usableSupportPerBandYear": 0.0516,
+        "usableSupportPerWorkingAdultYear": 0.0043,
+        "receiptSeasons": 2990,
+        "meanAdultEquivalentDemand": 18.97,
+        "meanRawSupportRatio": 0.157
+      },
+      "expeditionCost": {
+        "expeditions": 2300,
+        "completed": 2299,
+        "aborted": 0,
+        "lost": 1,
+        "personDays": 33221,
+        "personDaysPerBandYear": 11.1033,
+        "shareOfWorkingAdultDays": 0.0026,
+        "provisionUnitsConsumed": 32.3948,
+        "meanInjuryLoad": 0,
+        "terminalPhasePersonDaysHeld": 0,
+        "expeditionsPerBandYear": 0.7687
+      },
+      "fission": {
+        "count": 2,
+        "firstFissionYear": 94,
+        "firstFissionParentPopulation": 46,
+        "firstFissionParentSplitPressure": 0.6,
+        "secondGenerationFissions": 0,
+        "meanDaughterFoundingPopulation": 18,
+        "rootLineages": [
+          {
+            "root": "band:varied-dry-corridor-mid",
+            "population": 0,
+            "bands": 1
+          },
+          {
+            "root": "band:varied-dry-corridor-upper",
+            "population": 0,
+            "bands": 1
+          },
+          {
+            "root": "band:varied-estuary",
+            "population": 85,
+            "bands": 3
+          },
+          {
+            "root": "band:varied-lake-east",
+            "population": 29,
+            "bands": 1
+          },
+          {
+            "root": "band:varied-lake-north",
+            "population": 13,
+            "bands": 1
+          },
+          {
+            "root": "band:varied-lake-west",
+            "population": 10,
+            "bands": 1
+          },
+          {
+            "root": "band:varied-pass-frontier",
+            "population": 10,
+            "bands": 1
+          },
+          {
+            "root": "band:varied-plains-creek",
+            "population": 16,
+            "bands": 1
+          },
+          {
+            "root": "band:varied-river-mid",
+            "population": 38,
+            "bands": 1
+          }
+        ],
+        "events": [
+          {
+            "year": 94,
+            "daughterId": "band:varied-estuary:daughter:1:t376",
+            "parentId": "band:varied-estuary",
+            "rootLineage": "band:varied-estuary",
+            "parentPopulationBefore": 46,
+            "parentSplitPressureBefore": 0.6,
+            "daughterFoundingPopulation": 18,
+            "destinationTileId": "tile:200:86",
+            "generation": 1
+          },
+          {
+            "year": 216,
+            "daughterId": "band:varied-estuary:daughter:2:t864",
+            "parentId": "band:varied-estuary",
+            "rootLineage": "band:varied-estuary",
+            "parentPopulationBefore": 50,
+            "parentSplitPressureBefore": 0.61,
+            "daughterFoundingPopulation": 18,
+            "destinationTileId": "tile:188:88",
+            "generation": 1
+          }
+        ]
+      }
+    },
+    {
+      "map": "map2",
+      "seed": "c18:c",
+      "explorationEnabled": false,
+      "world": {
+        "population": 220,
+        "bands": 11,
+        "populationPerBand": 20
+      },
+      "exposure": {
+        "bandYears": 2998,
+        "workingAdultYears": 37090
+      },
+      "waterfall": {
+        "tripsCompleted": 62562,
+        "tripsPerBandYear": 20.8679,
+        "tripsPerWorkingAdultYear": 1.6868,
+        "grossHarvest": 197.59,
+        "transportLoss": 11.09,
+        "processingLoss": 21.33,
+        "usableSupport": 165.17,
+        "usableSupportPerBandYear": 0.0551,
+        "usableSupportPerWorkingAdultYear": 0.0045,
+        "receiptSeasons": 2996,
+        "meanAdultEquivalentDemand": 19.58,
+        "meanRawSupportRatio": 0.183
+      },
+      "expeditionCost": {
+        "expeditions": 1215,
+        "completed": 1214,
+        "aborted": 0,
+        "lost": 1,
+        "personDays": 19542,
+        "personDaysPerBandYear": 6.5183,
+        "shareOfWorkingAdultDays": 0.0015,
+        "provisionUnitsConsumed": 19.2736,
+        "meanInjuryLoad": 0,
+        "terminalPhasePersonDaysHeld": 0,
+        "expeditionsPerBandYear": 0.4053
+      },
+      "fission": {
+        "count": 2,
+        "firstFissionYear": 99,
+        "firstFissionParentPopulation": 47,
+        "firstFissionParentSplitPressure": 0.59,
+        "secondGenerationFissions": 0,
+        "meanDaughterFoundingPopulation": 18,
+        "rootLineages": [
+          {
+            "root": "band:varied-dry-corridor-mid",
+            "population": 0,
+            "bands": 1
+          },
+          {
+            "root": "band:varied-dry-corridor-upper",
+            "population": 0,
+            "bands": 1
+          },
+          {
+            "root": "band:varied-estuary",
+            "population": 81,
+            "bands": 3
+          },
+          {
+            "root": "band:varied-lake-east",
+            "population": 29,
+            "bands": 1
+          },
+          {
+            "root": "band:varied-lake-north",
+            "population": 22,
+            "bands": 1
+          },
+          {
+            "root": "band:varied-lake-west",
+            "population": 18,
+            "bands": 1
+          },
+          {
+            "root": "band:varied-pass-frontier",
+            "population": 10,
+            "bands": 1
+          },
+          {
+            "root": "band:varied-plains-creek",
+            "population": 21,
+            "bands": 1
+          },
+          {
+            "root": "band:varied-river-mid",
+            "population": 39,
+            "bands": 1
+          }
+        ],
+        "events": [
+          {
+            "year": 99,
+            "daughterId": "band:varied-estuary:daughter:1:t396",
+            "parentId": "band:varied-estuary",
+            "rootLineage": "band:varied-estuary",
+            "parentPopulationBefore": 47,
+            "parentSplitPressureBefore": 0.59,
+            "daughterFoundingPopulation": 18,
+            "destinationTileId": "tile:188:88",
+            "generation": 1
+          },
+          {
+            "year": 205,
+            "daughterId": "band:varied-estuary:daughter:2:t820",
+            "parentId": "band:varied-estuary",
+            "rootLineage": "band:varied-estuary",
+            "parentPopulationBefore": 46,
+            "parentSplitPressureBefore": 0.61,
+            "daughterFoundingPopulation": 18,
+            "destinationTileId": "tile:194:87",
+            "generation": 1
+          }
+        ]
+      }
+    },
+    {
+      "map": "map2",
+      "seed": "c18:d",
+      "explorationEnabled": true,
+      "world": {
+        "population": 201,
+        "bands": 11,
+        "populationPerBand": 18.27
+      },
+      "exposure": {
+        "bandYears": 2857,
+        "workingAdultYears": 34993
+      },
+      "waterfall": {
+        "tripsCompleted": 61476,
+        "tripsPerBandYear": 21.5177,
+        "tripsPerWorkingAdultYear": 1.7568,
+        "grossHarvest": 193.07,
+        "transportLoss": 10.98,
+        "processingLoss": 19.48,
+        "usableSupport": 162.6,
+        "usableSupportPerBandYear": 0.0569,
+        "usableSupportPerWorkingAdultYear": 0.0046,
+        "receiptSeasons": 2855,
+        "meanAdultEquivalentDemand": 19.21,
+        "meanRawSupportRatio": 0.1585
+      },
+      "expeditionCost": {
+        "expeditions": 2177,
+        "completed": 2177,
+        "aborted": 0,
+        "lost": 0,
+        "personDays": 31657,
+        "personDaysPerBandYear": 11.0805,
+        "shareOfWorkingAdultDays": 0.0025,
+        "provisionUnitsConsumed": 31.0392,
+        "meanInjuryLoad": 0,
+        "terminalPhasePersonDaysHeld": 0,
+        "expeditionsPerBandYear": 0.762
+      },
+      "fission": {
+        "count": 2,
+        "firstFissionYear": 157,
+        "firstFissionParentPopulation": 48,
+        "firstFissionParentSplitPressure": 0.63,
+        "secondGenerationFissions": 0,
+        "meanDaughterFoundingPopulation": 18,
+        "rootLineages": [
+          {
+            "root": "band:varied-dry-corridor-mid",
+            "population": 0,
+            "bands": 1
+          },
+          {
+            "root": "band:varied-dry-corridor-upper",
+            "population": 0,
+            "bands": 1
+          },
+          {
+            "root": "band:varied-estuary",
+            "population": 70,
+            "bands": 3
+          },
+          {
+            "root": "band:varied-lake-east",
+            "population": 32,
+            "bands": 1
+          },
+          {
+            "root": "band:varied-lake-north",
+            "population": 11,
+            "bands": 1
+          },
+          {
+            "root": "band:varied-lake-west",
+            "population": 11,
+            "bands": 1
+          },
+          {
+            "root": "band:varied-pass-frontier",
+            "population": 9,
+            "bands": 1
+          },
+          {
+            "root": "band:varied-plains-creek",
+            "population": 28,
+            "bands": 1
+          },
+          {
+            "root": "band:varied-river-mid",
+            "population": 40,
+            "bands": 1
+          }
+        ],
+        "events": [
+          {
+            "year": 157,
+            "daughterId": "band:varied-estuary:daughter:1:t628",
+            "parentId": "band:varied-estuary",
+            "rootLineage": "band:varied-estuary",
+            "parentPopulationBefore": 48,
+            "parentSplitPressureBefore": 0.63,
+            "daughterFoundingPopulation": 18,
+            "destinationTileId": "tile:200:86",
+            "generation": 1
+          },
+          {
+            "year": 288,
+            "daughterId": "band:varied-estuary:daughter:2:t1152",
+            "parentId": "band:varied-estuary",
+            "rootLineage": "band:varied-estuary",
+            "parentPopulationBefore": 47,
+            "parentSplitPressureBefore": 0.63,
+            "daughterFoundingPopulation": 18,
+            "destinationTileId": "tile:199:88",
+            "generation": 1
+          }
+        ]
+      }
+    },
+    {
+      "map": "map2",
+      "seed": "c18:d",
+      "explorationEnabled": false,
+      "world": {
+        "population": 226,
+        "bands": 11,
+        "populationPerBand": 20.55
+      },
+      "exposure": {
+        "bandYears": 2996,
+        "workingAdultYears": 37314
+      },
+      "waterfall": {
+        "tripsCompleted": 62347,
+        "tripsPerBandYear": 20.8101,
+        "tripsPerWorkingAdultYear": 1.6709,
+        "grossHarvest": 193.82,
+        "transportLoss": 10.27,
+        "processingLoss": 20.37,
+        "usableSupport": 163.19,
+        "usableSupportPerBandYear": 0.0545,
+        "usableSupportPerWorkingAdultYear": 0.0044,
+        "receiptSeasons": 2994,
+        "meanAdultEquivalentDemand": 19.74,
+        "meanRawSupportRatio": 0.1571
+      },
+      "expeditionCost": {
+        "expeditions": 1184,
+        "completed": 1183,
+        "aborted": 0,
+        "lost": 1,
+        "personDays": 18800,
+        "personDaysPerBandYear": 6.275,
+        "shareOfWorkingAdultDays": 0.0014,
+        "provisionUnitsConsumed": 18.522,
+        "meanInjuryLoad": 0,
+        "terminalPhasePersonDaysHeld": 0,
+        "expeditionsPerBandYear": 0.3952
+      },
+      "fission": {
+        "count": 2,
+        "firstFissionYear": 105,
+        "firstFissionParentPopulation": 49,
+        "firstFissionParentSplitPressure": 0.62,
+        "secondGenerationFissions": 0,
+        "meanDaughterFoundingPopulation": 18,
+        "rootLineages": [
+          {
+            "root": "band:varied-dry-corridor-mid",
+            "population": 0,
+            "bands": 1
+          },
+          {
+            "root": "band:varied-dry-corridor-upper",
+            "population": 0,
+            "bands": 1
+          },
+          {
+            "root": "band:varied-estuary",
+            "population": 88,
+            "bands": 3
+          },
+          {
+            "root": "band:varied-lake-east",
+            "population": 30,
+            "bands": 1
+          },
+          {
+            "root": "band:varied-lake-north",
+            "population": 17,
+            "bands": 1
+          },
+          {
+            "root": "band:varied-lake-west",
+            "population": 20,
+            "bands": 1
+          },
+          {
+            "root": "band:varied-pass-frontier",
+            "population": 9,
+            "bands": 1
+          },
+          {
+            "root": "band:varied-plains-creek",
+            "population": 22,
+            "bands": 1
+          },
+          {
+            "root": "band:varied-river-mid",
+            "population": 40,
+            "bands": 1
+          }
+        ],
+        "events": [
+          {
+            "year": 105,
+            "daughterId": "band:varied-estuary:daughter:1:t420",
+            "parentId": "band:varied-estuary",
+            "rootLineage": "band:varied-estuary",
+            "parentPopulationBefore": 49,
+            "parentSplitPressureBefore": 0.62,
+            "daughterFoundingPopulation": 18,
+            "destinationTileId": "tile:185:88",
+            "generation": 1
+          },
+          {
+            "year": 201,
+            "daughterId": "band:varied-estuary:daughter:2:t804",
+            "parentId": "band:varied-estuary",
+            "rootLineage": "band:varied-estuary",
+            "parentPopulationBefore": 48,
+            "parentSplitPressureBefore": 0.63,
+            "daughterFoundingPopulation": 18,
+            "destinationTileId": "tile:186:88",
+            "generation": 1
+          }
+        ]
+      }
+    },
+    {
+      "map": "map2",
+      "seed": "c18:e",
+      "explorationEnabled": true,
+      "world": {
+        "population": 203,
+        "bands": 10,
+        "populationPerBand": 20.3
+      },
+      "exposure": {
+        "bandYears": 2785,
+        "workingAdultYears": 34958
+      },
+      "waterfall": {
+        "tripsCompleted": 60187,
+        "tripsPerBandYear": 21.6111,
+        "tripsPerWorkingAdultYear": 1.7217,
+        "grossHarvest": 188.14,
+        "transportLoss": 10.82,
+        "processingLoss": 18.29,
+        "usableSupport": 159.05,
+        "usableSupportPerBandYear": 0.0571,
+        "usableSupportPerWorkingAdultYear": 0.0045,
+        "receiptSeasons": 2784,
+        "meanAdultEquivalentDemand": 19.6,
+        "meanRawSupportRatio": 0.1538
+      },
+      "expeditionCost": {
+        "expeditions": 2501,
+        "completed": 2501,
+        "aborted": 0,
+        "lost": 0,
+        "personDays": 37805,
+        "personDaysPerBandYear": 13.5745,
+        "shareOfWorkingAdultDays": 0.003,
+        "provisionUnitsConsumed": 36.818,
+        "meanInjuryLoad": 0,
+        "terminalPhasePersonDaysHeld": 0,
+        "expeditionsPerBandYear": 0.898
+      },
+      "fission": {
+        "count": 1,
+        "firstFissionYear": 216,
+        "firstFissionParentPopulation": 49,
+        "firstFissionParentSplitPressure": 0.62,
+        "secondGenerationFissions": 0,
+        "meanDaughterFoundingPopulation": 18,
+        "rootLineages": [
+          {
+            "root": "band:varied-dry-corridor-mid",
+            "population": 0,
+            "bands": 1
+          },
+          {
+            "root": "band:varied-dry-corridor-upper",
+            "population": 0,
+            "bands": 1
+          },
+          {
+            "root": "band:varied-estuary",
+            "population": 66,
+            "bands": 2
+          },
+          {
+            "root": "band:varied-lake-east",
+            "population": 41,
+            "bands": 1
+          },
+          {
+            "root": "band:varied-lake-north",
+            "population": 16,
+            "bands": 1
+          },
+          {
+            "root": "band:varied-lake-west",
+            "population": 10,
+            "bands": 1
+          },
+          {
+            "root": "band:varied-pass-frontier",
+            "population": 10,
+            "bands": 1
+          },
+          {
+            "root": "band:varied-plains-creek",
+            "population": 20,
+            "bands": 1
+          },
+          {
+            "root": "band:varied-river-mid",
+            "population": 40,
+            "bands": 1
+          }
+        ],
+        "events": [
+          {
+            "year": 216,
+            "daughterId": "band:varied-estuary:daughter:1:t864",
+            "parentId": "band:varied-estuary",
+            "rootLineage": "band:varied-estuary",
+            "parentPopulationBefore": 49,
+            "parentSplitPressureBefore": 0.62,
+            "daughterFoundingPopulation": 18,
+            "destinationTileId": "tile:199:88",
+            "generation": 1
+          }
+        ]
+      }
+    },
+    {
+      "map": "map2",
+      "seed": "c18:e",
+      "explorationEnabled": false,
+      "world": {
+        "population": 236,
+        "bands": 11,
+        "populationPerBand": 21.45
+      },
+      "exposure": {
+        "bandYears": 2979,
+        "workingAdultYears": 38277
+      },
+      "waterfall": {
+        "tripsCompleted": 63096,
+        "tripsPerBandYear": 21.1803,
+        "tripsPerWorkingAdultYear": 1.6484,
+        "grossHarvest": 183.07,
+        "transportLoss": 9.6,
+        "processingLoss": 18.15,
+        "usableSupport": 155.31,
+        "usableSupportPerBandYear": 0.0521,
+        "usableSupportPerWorkingAdultYear": 0.0041,
+        "receiptSeasons": 2977,
+        "meanAdultEquivalentDemand": 20.18,
+        "meanRawSupportRatio": 0.136
+      },
+      "expeditionCost": {
+        "expeditions": 972,
+        "completed": 971,
+        "aborted": 0,
+        "lost": 1,
+        "personDays": 13436,
+        "personDaysPerBandYear": 4.5102,
+        "shareOfWorkingAdultDays": 0.001,
+        "provisionUnitsConsumed": 13.6284,
+        "meanInjuryLoad": 0,
+        "terminalPhasePersonDaysHeld": 0,
+        "expeditionsPerBandYear": 0.3263
+      },
+      "fission": {
+        "count": 2,
+        "firstFissionYear": 111,
+        "firstFissionParentPopulation": 49,
+        "firstFissionParentSplitPressure": 0.6,
+        "secondGenerationFissions": 0,
+        "meanDaughterFoundingPopulation": 18,
+        "rootLineages": [
+          {
+            "root": "band:varied-dry-corridor-mid",
+            "population": 0,
+            "bands": 1
+          },
+          {
+            "root": "band:varied-dry-corridor-upper",
+            "population": 0,
+            "bands": 1
+          },
+          {
+            "root": "band:varied-estuary",
+            "population": 97,
+            "bands": 3
+          },
+          {
+            "root": "band:varied-lake-east",
+            "population": 39,
+            "bands": 1
+          },
+          {
+            "root": "band:varied-lake-north",
+            "population": 19,
+            "bands": 1
+          },
+          {
+            "root": "band:varied-lake-west",
+            "population": 15,
+            "bands": 1
+          },
+          {
+            "root": "band:varied-pass-frontier",
+            "population": 10,
+            "bands": 1
+          },
+          {
+            "root": "band:varied-plains-creek",
+            "population": 22,
+            "bands": 1
+          },
+          {
+            "root": "band:varied-river-mid",
+            "population": 34,
+            "bands": 1
+          }
+        ],
+        "events": [
+          {
+            "year": 111,
+            "daughterId": "band:varied-estuary:daughter:1:t444",
+            "parentId": "band:varied-estuary",
+            "rootLineage": "band:varied-estuary",
+            "parentPopulationBefore": 49,
+            "parentSplitPressureBefore": 0.6,
+            "daughterFoundingPopulation": 18,
+            "destinationTileId": "tile:185:88",
+            "generation": 1
+          },
+          {
+            "year": 212,
+            "daughterId": "band:varied-estuary:daughter:2:t848",
+            "parentId": "band:varied-estuary",
+            "rootLineage": "band:varied-estuary",
+            "parentPopulationBefore": 49,
+            "parentSplitPressureBefore": 0.63,
+            "daughterFoundingPopulation": 18,
+            "destinationTileId": "tile:186:88",
+            "generation": 1
+          }
+        ]
+      }
+    }
+  ]
+}

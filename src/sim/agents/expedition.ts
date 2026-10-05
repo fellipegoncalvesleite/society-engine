@@ -19,15 +19,22 @@
 // or a deterministic hash of stable identity. Bands and expeditions are iterated in
 // sorted id order.
 import type { DayNumber, ReasonId, TileId } from "../core/types";
+import { isBandPassableDestination } from "../world/passability";
 import { hashSeedString } from "../core/seededVariation";
 import { getWorldTimeForDay } from "../tick/time";
 import type { WorldState } from "../world/types";
 import type { DailyAction } from "./dailyActions";
+import { isProvisionalSuccessor } from "./bandLifecycle";
 import { deriveCarriedWaterRelief, deriveCarryingRelief } from "./adaptationBoundary";
 import {
   KM_PER_TILE,
   deriveAvailableMobilityPools,
+  derivePhysicallyAwayPartyPeople,
+  derivePreparedCommitmentPartyPeople,
   deriveTravelPace,
+  getExpeditionPhysicalPeople,
+  getExpeditionProductiveWorkers,
+  isPhysicallyAwayPhase,
   recordExpeditionDistance,
   recordWalkingDay,
   selectPartyComposition,
@@ -50,13 +57,46 @@ import {
   type VerificationObservationKind,
 } from "./resourceKnowledge";
 import { depositFoodReceipts } from "./seasonalFoodReceipts";
+import {
+  buildFrontierCountryObservation,
+  buildFrontierPlan,
+  chooseNextFrontierStep,
+  deriveFrontierExplorationEligibility,
+  deriveFrontierHeading,
+  deriveOutwardTilesRemaining,
+  retainFrontierObservations,
+} from "./frontierExploration";
+import {
+  recordPlaceDisposition,
+  recordVerificationEvidence,
+  taskCampRefusedByEvidence,
+} from "./verificationEvidence";
+import {
+  VERIFICATION_ACTIVE_CAP,
+  VERIFICATION_ON_SITE_DAYS,
+  buildVerificationPlan,
+  deriveVerificationNeed,
+  makeVerificationReasonId,
+  recordVerificationAttempt,
+  type VerificationNeed,
+  selectVerificationCandidate as selectFrontierVerificationCandidate,
+} from "./frontierVerification";
 import { observeTileAndNearby } from "./tileObservation";
+// CORRECTION-23I — audit-only launch/consumption diagnostics; no-ops when unregistered.
+import {
+  isCountingTaskCampOutcomes,
+  isRecordingVerificationJourneys,
+  recordTaskCampOutcome,
+  recordVerificationDeparture,
+  recordVerificationReturn,
+} from "../diagnostics/verificationLaunchDiagnostics";
 import {
   SIGNAL_ATTEMPT_CAP,
   appendReceivedSignal,
   findUnderstoodSignal,
   resolveSmokeSignal,
 } from "./fireSignals";
+import type { KnowledgeAcquisitionKind } from "../knowledge/types";
 import type {
   Band,
   ExpeditionCargo,
@@ -74,8 +114,12 @@ import type {
 
 // ── Bounds. Every one of these is a hard cap on state or search, never a tuning dial. ──
 
-/** A party covers this many route tiles in one unburdened travel day. */
-export const EXPEDITION_BASE_TILES_PER_DAY = 4;
+// CORRECTION-23J §5 — the travel pace now lives in `pendingOperation.ts`, which must be
+// importable by `frontierVerification.ts` (this module imports THAT one, so it cannot be the
+// owner without closing a cycle). Re-exported under its original name so every existing reader
+// is unaffected.
+export { EXPEDITION_BASE_TILES_PER_DAY } from "./pendingOperation";
+import { EXPEDITION_BASE_TILES_PER_DAY } from "./pendingOperation";
 /**
  * Ceiling on how far out an expedition may plan; derived reach is normally far lower.
  * §17 — this is a TECHNICAL search bound, not a behavioral range: at 36 tiles (54 km)
@@ -130,14 +174,31 @@ export function deriveExpeditionId(
 }
 
 /**
- * Working adults currently committed to away parties. The residential band physically
- * does not have these people: they are subtracted exactly once, here, and become
- * available again only when the party reaches home (or is declared lost).
+ * PRODUCTIVE LABOUR currently committed to away parties — CORRECTION-34D.
+ *
+ * This is the LABOUR authority, not the body authority. It answers "how much of the band's
+ * working-adult capacity is already spoken for", which is why it counts `prepared` parties (people
+ * at camp whose hands are already promised) and why it counts only `partyWorkers`. A party member
+ * who has stopped supplying labour is still standing with the party and is NOT counted here.
+ *
+ * For bodies use `getCommittedExpeditionPeople` (below) or, for where those bodies actually are,
+ * `derivePhysicallyAwayPartyPeople` in bandMobility.
  */
 export function getCommittedExpeditionWorkers(band: Band): number {
   return (band.expeditions ?? [])
     .filter((expedition) => isExpeditionAway(expedition.phase))
-    .reduce((total, expedition) => total + expedition.partyWorkers, 0);
+    .reduce((total, expedition) => total + getExpeditionProductiveWorkers(expedition), 0);
+}
+
+/**
+ * PHYSICAL BODIES held by parties that are physically elsewhere — CORRECTION-34D.
+ *
+ * Prepared parties are excluded: their people are standing in the residence. This is the quantity
+ * population conservation is about, and it is the same one `getBandPhysicalPresence` places on the
+ * map, derived through the same leaf helpers so the two cannot disagree.
+ */
+export function getCommittedExpeditionPeople(band: Band): number {
+  return derivePhysicallyAwayPartyPeople(band);
 }
 
 /** Working adults still physically at the residential camp and available for local work. */
@@ -151,6 +212,339 @@ function isExpeditionAway(phase: ExpeditionPhase): boolean {
 
 function isTerminalPhase(phase: ExpeditionPhase): phase is "completed" | "aborted" | "lost" {
   return phase === "completed" || phase === "aborted" || phase === "lost";
+}
+
+/** Below this a journey is not a party; the verification and exploration families assert it too. */
+export const EXPEDITION_MIN_PARTY_WORKERS = 2;
+
+/**
+ * CORRECTION-34A §6 — an away party holds people the residential band may no longer have.
+ *
+ * The launch authority is sound AT THE LAUNCH INSTANT and only there: `deriveDepartableWorkers`
+ * subtracts already-committed workers through `getResidentialWorkingAdults`, caps the party at a
+ * third of the workforce and reserves two at camp, and `attachExpedition` caps concurrent parties
+ * at `EXPEDITION_ACTIVE_CAP`. What none of that can bound is the FUTURE. `demography.ts`,
+ * `viability.ts` and `demographicRenewal.ts` contain no reference to expeditions, and at the time
+ * `partyWorkers` was written once at creation and never reduced — so an annual demographic step or
+ * a fission transfer landing while a party is away could drop the workforce below what was already
+ * committed. That was the only way `sum(away workers) > population` was reachable.
+ *
+ * The physical reading is that the people who left are among those the band lost, so the PARTY
+ * shrinks. The loss is never absorbed silently by the residential remainder, and it is never
+ * repaired inside `getBandPhysicalPresence` by inventing or deleting people — §6 forbids both.
+ *
+ * The newest commitment is released first — a band recalls the party it has just sent before the
+ * one already deep in its journey. Array order IS launch order (`attachExpedition` appends), so
+ * the order is deterministic without a re-sort.
+ *
+ * ── CORRECTION-34B — WHY THIS IS ONE AUTHORITY AND NOT A `partyWorkers` EDIT ──────────────────
+ *
+ * The first version of this function reduced `partyWorkers` alone and left every quantity DERIVED
+ * from it stale, which supervising review reproduced as a split authority: with six workers cut to
+ * five, `getCommittedExpeditionWorkers` read 5 while `deriveCommittedMobilityPools` still read 6,
+ * the carry ceiling stayed at capacity-for-six, the pace factor kept the six-person composition,
+ * and the residential catchment subtracted SIX adults from a workforce of five — a **negative**
+ * local extraction effort. Every one of those is repaired here, in one place, because a party's
+ * size is not one number: it is `partyWorkers`, `partyComposition`, the carry ceiling the workers
+ * justify, and the cargo that ceiling can still hold.
+ *
+ * THE AGGREGATE-MODEL LIMIT, STATED RATHER THAN HIDDEN. The simulator has cohorts, not people. A
+ * workforce decline while a party is away CANNOT reveal whether the people lost were at camp, in
+ * the party, aged out, transferred by fission or died. Nothing here pretends otherwise. The
+ * convention below is a deterministic accounting rule, not a claim about individuals.
+ *
+ * THE RULE THAT DECIDES WHO LEAVES: **reconciliation may never IMPROVE a party's capability.**
+ * Members are removed high pool → typical → limited, because `derivePartyPaceFactor` is
+ * `1 + (high*0.15 - limited*0.20)/total` — dropping `limited` members would make a party that just
+ * lost people move FASTER, a capability granted by a loss. Removing from `high` first guarantees
+ * pace is monotonically non-increasing, and the carry ceiling falls with the worker count.
+ *
+ * CARGO. The ceiling is recomputed from the reduced party, and harvest above it is ABANDONED into
+ * `lostUnits` — fewer hands cannot carry what more hands could. Cargo is conserved exactly:
+ * `harvest + lost` is invariant across reconciliation, and neither cargo nor capacity may rise.
+ * No container, pack or basket is granted: the ceiling is still bare bodily carrying scaled by the
+ * band's own learned practice, exactly as `deriveCarryCapacityUnits` computes it.
+ *
+ * PHASE-APPROPRIATE TERMINATION. `prepared` means labour committed AT CAMP, not yet departed
+ * (types.ts). Those people never left, so calling them `lost` would be a false death. A prepared
+ * party that can no longer be staffed is `aborted` with `commitment_unsupported` — it holds no
+ * body either way, and the people are already inside the residential remainder.
+ *
+ * ── CORRECTION-34D — TWO BOUNDS, BECAUSE THERE ARE TWO QUANTITIES ─────────────────────────────
+ *
+ * CORRECTION-34C moved this function's bound from `workingAdults` to `population` and stopped
+ * cohort aging teleporting a body home. What it could not do with one field was stop the party
+ * being granted labour the band does not have: with five working adults and six committed, the
+ * party still supplied six workers' worth of composition, carry ceiling and pace. Documentation
+ * said headcount and labour were different; production had one number for both.
+ *
+ * They are now two, and each bound acts on its own quantity:
+ *
+ *   LABOUR (`reconcileExpeditionLabor`) — ordinary, expected, non-defensive. A party may never
+ *   perform more productive labour than the band's working-adult cohort holds. When the cohort
+ *   falls, the reduction is allocated RESIDENCE-FIRST (see the rule below); only once the
+ *   residential adults are exhausted does an away party convert workers into non-working members.
+ *   NOTHING MOVES. The bodies stay exactly where they were standing.
+ *
+ *   BODIES (`repairInvalidPhysicalCommitment`) — defensive only. A band cannot have more people
+ *   physically away than it has people. Ordinary demography can no longer reach this: aging moves
+ *   nobody, fission is bounded by residential availability, and deaths reduce a party only through
+ *   its own physical outcome. If it fires, the state was already invalid, and it is retired as a
+ *   labelled NON-HISTORICAL repair rather than dressed up as something that happened.
+ *
+ * THE RESIDENTIAL-FIRST ALLOCATION RULE, NAMED AS THE CONVENTION IT IS. When the working-adult
+ * cohort falls while a party is away, the model cannot see which person changed. It therefore
+ * allocates the change to the residential working adults first, for as long as enough of them
+ * exist, and only charges an away party once the residence can absorb no more. This is an
+ * AGGREGATE ACCOUNTING CONVENTION, deterministic and stated, and it is emphatically NOT the claim
+ * that "this person aged in the party" — with twenty adults and a party of six, one adult aging
+ * charges the residence and the party is untouched, because the model has no basis for saying
+ * otherwise. Locating a cohort transition inside a party needs the future individual/household
+ * layer and is not attempted here.
+ *
+ * Pure. Returns the same object when neither bound binds, so the common case allocates nothing and
+ * the daily call is two comparisons.
+ */
+function reduceCompositionNeverFaster(
+  composition: ExpeditionPartyComposition,
+  removeCount: number,
+): ExpeditionPartyComposition {
+  let { limited, typical, high } = composition;
+  let remaining = Math.max(0, removeCount);
+
+  const fromHigh = Math.min(high, remaining);
+  high -= fromHigh;
+  remaining -= fromHigh;
+
+  const fromTypical = Math.min(typical, remaining);
+  typical -= fromTypical;
+  remaining -= fromTypical;
+
+  const fromLimited = Math.min(limited, remaining);
+  limited -= fromLimited;
+
+  return { limited, typical, high };
+}
+
+/**
+ * Reduce a party's PRODUCTIVE LABOUR to `reducedWorkers` while keeping every body.
+ *
+ * The workers who stop working become `nonWorkingPartyPeople` at the same tile, so the physical
+ * headcount is invariant across this operation by construction. Composition, carry ceiling and
+ * cargo all move with the reduced worker count, because a party's capability is not one number.
+ */
+function applyReducedProductiveLabor(
+  band: Band,
+  expedition: ExpeditionRecord,
+  reducedWorkers: number,
+  currentTick: number,
+): ExpeditionRecord {
+  const workers = getExpeditionProductiveWorkers(expedition);
+  const removed = Math.max(0, workers - reducedWorkers);
+  // The ceiling the REDUCED party justifies. `Math.min` guarantees reconciliation can never raise
+  // a ceiling even if a learned carrying practice changed in the meantime. A non-working member
+  // contributes nothing here: §6's carrying comparison selected ZERO PRODUCTIVE CARRYING over a
+  // partial share or an explicit burden, because the alternatives need per-person physiology this
+  // architecture has no state for, and a bounded zero cannot grant capability through a loss.
+  const capacity = round4(Math.min(
+    expedition.cargo.carryCapacityUnits,
+    deriveCarryCapacityUnits(band, reducedWorkers, expedition.injuryLoad ?? 0, currentTick),
+  ));
+  const carried = expedition.cargo.harvestUnits;
+  const abandoned = round4(Math.max(0, carried - capacity));
+
+  return {
+    ...expedition,
+    partyWorkers: reducedWorkers,
+    nonWorkingPartyPeople: Math.max(0, expedition.nonWorkingPartyPeople ?? 0) + removed,
+    ...(expedition.partyComposition === undefined
+      ? {}
+      : { partyComposition: reduceCompositionNeverFaster(expedition.partyComposition, removed) }),
+    cargo: {
+      ...expedition.cargo,
+      carryCapacityUnits: capacity,
+      harvestUnits: round4(carried - abandoned),
+      lostUnits: round4((expedition.cargo.lostUnits ?? 0) + abandoned),
+    },
+  };
+}
+
+/**
+ * BOUND 1 — PRODUCTIVE LABOUR. Ordinary, expected, and it moves nobody.
+ *
+ * Residence-first: while the band still has residential working adults to absorb a cohort change,
+ * away parties are untouched. Only when the whole working-adult cohort falls below what is already
+ * committed does a party convert workers into non-working members — newest commitment first, and
+ * high -> typical -> limited inside a party so capability is never improved by a loss.
+ */
+function reconcileExpeditionLabor(band: Band, currentTick: number): Band {
+  const workingAdults = Math.max(0, band.demography?.workingAdults ?? 0);
+  let committedLabor = getCommittedExpeditionWorkers(band);
+
+  if (committedLabor <= workingAdults) {
+    return band;
+  }
+
+  const next = [...(band.expeditions ?? [])];
+
+  for (let index = next.length - 1; index >= 0 && committedLabor > workingAdults; index -= 1) {
+    const expedition = next[index];
+
+    if (!isExpeditionAway(expedition.phase)) {
+      continue;
+    }
+
+    const workers = getExpeditionProductiveWorkers(expedition);
+
+    if (workers <= 0) {
+      continue;
+    }
+
+    const reduced = Math.max(0, workers - (committedLabor - workingAdults));
+
+    if (reduced < EXPEDITION_MIN_PARTY_WORKERS && expedition.phase === "prepared") {
+      // Never departed. Its people are standing in camp and are already inside the residential
+      // remainder, so cancelling is a labour decision — not a movement and not a death.
+      next[index] = {
+        ...expedition,
+        phase: "aborted",
+        outcomeReason: "commitment_unsupported",
+        partyWorkers: 0,
+        nonWorkingPartyPeople: 0,
+        ...(expedition.partyComposition === undefined
+          ? {}
+          : { partyComposition: { limited: 0, typical: 0, high: 0 } }),
+      };
+      committedLabor -= workers;
+      continue;
+    }
+
+    const reconciled = applyReducedProductiveLabor(band, expedition, reduced, currentTick);
+
+    next[index] =
+      reduced < EXPEDITION_MIN_PARTY_WORKERS
+        // A physically away party below the minimum still EXISTS: its people are three days' walk
+        // out and did not stop existing because a cohort was reclassified at home. It can no longer
+        // do the work it left for, so it turns for home with every body it has. CORRECTION-34C
+        // declared this case `lost`, which invented a death out of an accounting change.
+        ? { ...reconciled, phase: "returning" as const, outcomeReason: "party_labor_unsupported" as const }
+        : reconciled;
+    committedLabor -= workers - reduced;
+  }
+
+  return { ...band, expeditions: next };
+}
+
+/**
+ * BOUND 2 — PHYSICAL BODIES. Defensive only, and explicitly not a history.
+ *
+ * A band cannot have more people standing away than it has people. No ordinary path reaches this
+ * once fission is bounded by residential availability and cohort transitions no longer move
+ * bodies, so when it fires the state handed in was already invalid. The record is retired whole,
+ * under an outcome reason that names it as a repair — never partially and silently shrunk, which
+ * would delete people and then describe the result as something that happened in the world.
+ */
+function repairInvalidPhysicalCommitment(band: Band): Band {
+  const population = Math.max(0, band.demography?.population ?? band.size ?? 0);
+  let awayPeople = derivePhysicallyAwayPartyPeople(band);
+
+  if (awayPeople <= population) {
+    return band;
+  }
+
+  const next = [...(band.expeditions ?? [])];
+
+  for (let index = next.length - 1; index >= 0 && awayPeople > population; index -= 1) {
+    const expedition = next[index];
+
+    if (!isPhysicallyAwayPhase(expedition.phase)) {
+      continue;
+    }
+
+    const people = getExpeditionPhysicalPeople(expedition);
+
+    if (people <= 0) {
+      continue;
+    }
+
+    next[index] = {
+      ...expedition,
+      phase: "aborted",
+      outcomeReason: "invalid_state_repaired",
+      partyWorkers: 0,
+      nonWorkingPartyPeople: 0,
+      ...(expedition.partyComposition === undefined
+        ? {}
+        : { partyComposition: { limited: 0, typical: 0, high: 0 } }),
+    };
+    awayPeople -= people;
+  }
+
+  return { ...band, expeditions: next };
+}
+
+export function reconcileExpeditionCommitment(band: Band, currentTick: number): Band {
+  if ((band.expeditions ?? []).length === 0) {
+    return band;
+  }
+
+  return repairInvalidPhysicalCommitment(reconcileExpeditionLabor(band, currentTick));
+}
+
+/**
+ * CORRECTION-34A §6 — the invariant itself, exported so audits assert the SAME predicate
+ * production maintains rather than a re-implementation of it. `workingAdults` is the bound
+ * because an away party is staffed from working adults; `population` is the bound the presence
+ * read model must satisfy. The four quantities §6 requires kept apart are returned separately:
+ * they are not interchangeable.
+ */
+export function getBandCommitmentAccounting(band: Band): {
+  readonly population: number;
+  readonly workingAdults: number;
+  readonly committedAwayWorkers: number;
+  readonly physicallyAwayPeople: number;
+  readonly preparedCommitmentPeople: number;
+  readonly awayNonWorkingPeople: number;
+  readonly dependents: number;
+  readonly conserved: boolean;
+  readonly laborBounded: boolean;
+  readonly awayHeadcountExceedsWorkingAdults: boolean;
+} {
+  const demography = band.demography;
+  const population = Math.max(0, demography?.population ?? band.size ?? 0);
+  const workingAdults = Math.max(0, demography?.workingAdults ?? 0);
+  const committedAwayWorkers = getCommittedExpeditionWorkers(band);
+  const physicallyAwayPeople = derivePhysicallyAwayPartyPeople(band);
+  const preparedCommitmentPeople = derivePreparedCommitmentPartyPeople(band);
+  let awayNonWorkingPeople = 0;
+
+  for (const expedition of band.expeditions ?? []) {
+    if (isExpeditionAway(expedition.phase)) {
+      awayNonWorkingPeople += Math.max(0, expedition.nonWorkingPartyPeople ?? 0);
+    }
+  }
+
+  return {
+    population,
+    workingAdults,
+    committedAwayWorkers,
+    physicallyAwayPeople,
+    preparedCommitmentPeople,
+    awayNonWorkingPeople,
+    dependents: Math.max(0, demography?.dependents ?? 0),
+    // CORRECTION-34D — CONSERVATION IS ABOUT BODIES, AND ONLY THE ONES THAT LEFT. A prepared
+    // party's people are standing in the residence, so they are already inside the residential
+    // remainder and cannot also be away. This is now the same quantity `getBandPhysicalPresence`
+    // places on the map, derived through the same leaf helper.
+    conserved: physicallyAwayPeople <= population,
+    // The separate labour question: a party may never perform more work than the band's
+    // working-adult cohort holds. Maintained by `reconcileExpeditionLabor`.
+    laborBounded: committedAwayWorkers <= workingAdults,
+    // CORRECTION-34C — reported separately because it is LEGITIMATE, not a conservation failure:
+    // a party can hold more bodies than the band has working adults once some of them have
+    // stopped supplying labour. That is the whole point of the split.
+    awayHeadcountExceedsWorkingAdults: physicallyAwayPeople > workingAdults,
+  };
 }
 
 /** A party's physical carry ceiling: workers, minus injury, plus any practiced carrying relief. */
@@ -187,7 +581,15 @@ function deriveTilesPerDay(band: Band, expedition: ExpeditionRecord, currentTick
       ? "delayed_or_injured_party"
       : loadRatio > 0
         ? "loaded_return_party"
-        : expedition.taskKind === "distant_patch_verification" || expedition.taskKind === "route_reconnaissance"
+        : expedition.taskKind === "distant_patch_verification" ||
+            expedition.taskKind === "route_reconnaissance" ||
+            // CORRECTION-17 §7 — a frontier party travels light and carries no cargo, so
+            // it uses the SAME reconnaissance pace every other information party uses. It
+            // is not faster because the band is hungry: `urgency` enters the shared pace
+            // authority identically for all five task families, and this checkpoint adds
+            // no frontier-specific speed, stamina, or duration term anywhere.
+            expedition.taskKind === "frontier_exploration" ||
+            expedition.taskKind === "frontier_verification"
           ? "selected_reconnaissance_party"
           : "resource_expedition";
   const pace = deriveTravelPace(band, context, {
@@ -195,6 +597,9 @@ function deriveTilesPerDay(band: Band, expedition: ExpeditionRecord, currentTick
     urgency,
     injuryLoad: expedition.injuryLoad,
     partyComposition: expedition.partyComposition,
+    // CORRECTION-34D — a non-working member walks with the party, so the party cannot be timed as
+    // though they were not there.
+    nonWorkingPartyPeople: expedition.nonWorkingPartyPeople,
   });
   // Practiced carrying/water handling (public adaptation boundary only) recovers part of
   // the load cost — learned technique, kept distinct from bodily conditioning.
@@ -215,6 +620,35 @@ function deriveTilesPerDay(band: Band, expedition: ExpeditionRecord, currentTick
  * caller, once); its benefit is equally physical — the party sleeps at its work
  * instead of shuttling to safe ground every evening.
  */
+/**
+ * CORRECTION-23I §7 — audit-only wrapper around the camp-outcome counter, so the four call
+ * sites above stay one line each. A no-op, and one boolean test, when no audit is counting.
+ */
+function recordCampOutcome(
+  expedition: ExpeditionRecord,
+  day: DayNumber,
+  reachedEvidenceReader: boolean,
+  refusedByEvidence: boolean,
+  blockedBefore?: "already_camped" | "same_day_reach" | "unusable_ground",
+): void {
+  if (!isCountingTaskCampOutcomes()) {
+    return;
+  }
+
+  recordTaskCampOutcome({
+    bandId: String(expedition.bandId),
+    tileId: String(expedition.positionTileId),
+    day: Number(day),
+    // CORRECTION-23J §8 — the operation that took this decision, so a camp refusal can be joined
+    // to the launch that named it instead of only counted in a total.
+    operationId: expedition.id,
+    activityKind: expedition.taskKind,
+    reachedEvidenceReader,
+    refusedByEvidence,
+    ...(blockedBefore === undefined ? {} : { blockedBefore }),
+  });
+}
+
 function deriveTaskCampForOperating(
   world: WorldState,
   expedition: ExpeditionRecord,
@@ -223,6 +657,16 @@ function deriveTaskCampForOperating(
   const homeLegDays = Math.ceil(expedition.routeTileIds.length / EXPEDITION_BASE_TILES_PER_DAY);
 
   if (homeLegDays < 1 || expedition.taskCamp !== undefined) {
+    // CORRECTION-23I §7 — audit-only. A party that already has a camp, or whose work is inside
+    // same-day reach, never reaches the evidence reader: those are not attempted camps and
+    // must not be counted as ones the evidence could have prevented.
+    recordCampOutcome(
+      expedition,
+      day,
+      false,
+      false,
+      expedition.taskCamp !== undefined ? "already_camped" : "same_day_reach",
+    );
     return expedition.taskCamp;
   }
 
@@ -230,6 +674,26 @@ function deriveTaskCampForOperating(
 
   // §16 — no dry, tolerable ground: no camp. The party pays the nightly shuttle instead.
   if (standTile === undefined || standTile.isAquatic === true || standTile.riskProfile.floodRisk > 0.75) {
+    recordCampOutcome(expedition, day, false, false, "unusable_ground");
+    return undefined;
+  }
+
+  // CORRECTION-23B §9 — THE TEMPORARY-USE READER. Bounded operation evidence gates bounded
+  // operation, and nothing wider: a party that already tried to stay here and could not
+  // does not camp here again. This authorises no residence, anchor, storage or claim — the
+  // task-camp record asserts all three non-claims below — and it reads only the band's own
+  // physically established answer to the temporary-use question at THIS tile.
+  const campingBand = world.bands[expedition.bandId];
+
+  const refusedByEvidence =
+    campingBand !== undefined && taskCampRefusedByEvidence(campingBand, expedition.positionTileId);
+
+  // CORRECTION-23I §7 — audit-only, and this is THE measurement the section turns on. Reaching
+  // this line means every physical precondition already passed, so the camp was genuinely
+  // attempted and only the band's own evidence decides it.
+  recordCampOutcome(expedition, day, true, refusedByEvidence);
+
+  if (refusedByEvidence) {
     return undefined;
   }
 
@@ -252,9 +716,17 @@ const CAMPLESS_BACKTRACK_TILES_PER_WORK_DAY = 4;
 /** §16 — the nightly shuttle also costs extra provisions (in worker-day equivalents). */
 const CAMPLESS_EXTRA_PROVISION_WORKER_DAYS = 0.5;
 
-/** Provisions the party eats today. Consumed from what it carries — never from a band store. */
+/**
+ * Provisions the party eats today. Consumed from what it carries — never from a band store.
+ *
+ * CORRECTION-34D — EVERY PHYSICAL PERSON EATS. This is the one place where the split makes a
+ * party's life harder rather than easier: a member who has stopped supplying labour has not
+ * stopped needing food, so the cost is charged on the headcount while the carry ceiling and the
+ * work are charged on the labour. Computing this from productive workers alone would have fed a
+ * body for free.
+ */
 function consumeProvisions(expedition: ExpeditionRecord): ExpeditionCargo {
-  const eaten = round4(expedition.partyWorkers * EXPEDITION_PROVISION_UNITS_PER_WORKER_DAY);
+  const eaten = round4(getExpeditionPhysicalPeople(expedition) * EXPEDITION_PROVISION_UNITS_PER_WORKER_DAY);
   return {
     ...expedition.cargo,
     provisionUnitsConsumed: round4(expedition.cargo.provisionUnitsConsumed + eaten),
@@ -267,8 +739,13 @@ function consumeProvisions(expedition: ExpeditionRecord): ExpeditionCargo {
  * that forces an early return rather than a free extension.
  */
 function provisionsExhausted(expedition: ExpeditionRecord): boolean {
+  // CORRECTION-34D — the budget is drawn for the people who are actually eating, so it scales
+  // with the physical headcount exactly as `consumeProvisions` does. A party that loses labour
+  // does not thereby gain a longer trip.
   const budget = round4(
-    expedition.partyWorkers * EXPEDITION_PROVISION_UNITS_PER_WORKER_DAY * EXPEDITION_MAX_DURATION_DAYS,
+    getExpeditionPhysicalPeople(expedition) *
+      EXPEDITION_PROVISION_UNITS_PER_WORKER_DAY *
+      EXPEDITION_MAX_DURATION_DAYS,
   );
   return expedition.cargo.provisionUnitsConsumed > budget;
 }
@@ -334,7 +811,10 @@ function summarizeOutcome(
     outcomeReason: reason,
     distanceTiles: Math.max(0, expedition.routeTileIds.length - 1),
     totalDays: expedition.travelDaysElapsed + expedition.workDaysElapsed,
-    partyWorkers: expedition.partyWorkers,
+    partyWorkers: getExpeditionProductiveWorkers(expedition),
+    // CORRECTION-34D — the bodies that walked out. Every human-facing sentence about a party
+    // ("N adults left and were never seen again") must count people, not labour.
+    partyPeople: getExpeditionPhysicalPeople(expedition),
     deliveredHarvestUnits: round4(deliveredUnits),
     provisionUnitsConsumed: expedition.cargo.provisionUnitsConsumed,
     lostUnits: expedition.cargo.lostUnits,
@@ -427,6 +907,329 @@ interface AdvanceResult {
   readonly receivedSignal?: ReceivedSmokeSignal;
 }
 
+/**
+ * CORRECTION-17 §9/§10/§13 — ONE outbound day of a frontier exploration.
+ *
+ * The party takes up to `tilesPerDay` SUCCESSIVE physical steps. Before each step it
+ * re-derives how much outward walking it may still afford while RESERVING enough
+ * capacity to retrace its own trail home (§10). The moment that reserve binds — or the
+ * ground ahead is impassable, or the bounded trail is full — it turns for home. There is
+ * no branch anywhere in this function that walks outward until the duration cap and then
+ * declares success: every termination below names a physical reason.
+ *
+ * `tilesPerDay` is the party's real physical pace, produced by the same canonical
+ * travel-pace authority every other party uses. Nothing here consults food stress.
+ */
+function advanceFrontierExplorationOutboundDay(
+  world: WorldState,
+  expedition: ExpeditionRecord,
+  tilesPerDay: number,
+  day: DayNumber,
+): AdvanceResult {
+  const plan = expedition.frontierPlan;
+
+  if (plan === undefined) {
+    // A frontier party with no plan is a construction error, not a physical state: it
+    // turns for home rather than inventing a destination.
+    return {
+      world,
+      expedition: { ...expedition, phase: "returning", outcomeReason: "frontier_barrier_blocked" },
+    };
+  }
+
+  const daysElapsed = Number(day) - Number(expedition.departedDay);
+  let trail = [...expedition.routeTileIds];
+  let observations: readonly ExpeditionObservation[] = expedition.carriedObservations;
+  let positionTileId = expedition.positionTileId;
+  let deepest = expedition.frontierDeepestReachTiles ?? 0;
+  let stepsTaken = 0;
+  let terminal: ExpeditionOutcomeReason | undefined;
+
+  for (let step = 0; step < tilesPerDay; step += 1) {
+    const outwardRemaining = deriveOutwardTilesRemaining({
+      trailLength: trail.length,
+      tilesPerDay,
+      daysElapsed,
+      maxDurationDays: EXPEDITION_MAX_DURATION_DAYS,
+      outboundBudgetTiles: plan.outboundBudgetTiles,
+    });
+    const outcome = chooseNextFrontierStep(
+      world,
+      { ...expedition, routeTileIds: trail, positionTileId },
+      outwardRemaining,
+    );
+
+    if (outcome.kind === "budget_reached") {
+      terminal = "frontier_return_budget_reached";
+      break;
+    }
+
+    if (outcome.kind === "blocked") {
+      // A physical barrier at the party's deepest point is real evidence about the
+      // country, and it is what distinguishes a blocked direction from a walkable one.
+      const barrier = buildFrontierCountryObservation(world, positionTileId, Number(day));
+
+      if (barrier !== undefined) {
+        observations = [...observations, { ...barrier, kind: "frontier_barrier", confidence: 0.75 }];
+      }
+
+      terminal = "frontier_barrier_blocked";
+      break;
+    }
+
+    // The party physically stepped onto a tile the residential band may never have seen.
+    positionTileId = outcome.tileId;
+    trail = [...trail, outcome.tileId];
+    stepsTaken += 1;
+
+    const originTile = world.tiles[expedition.originTileId];
+    const standTile = world.tiles[outcome.tileId];
+
+    if (originTile !== undefined && standTile !== undefined) {
+      deepest = Math.max(
+        deepest,
+        Math.abs(standTile.coord.x - originTile.coord.x) + Math.abs(standTile.coord.y - originTile.coord.y),
+      );
+    }
+
+    // §11/§12 — the party LOOKS from where it stands. The record is PARTY-LOCAL: it is
+    // appended to `carriedObservations` and reaches residential knowledge only if this
+    // party physically walks home (see the return handler in `applyExpeditionDay`).
+    const seen = buildFrontierCountryObservation(world, outcome.tileId, Number(day));
+
+    if (seen !== undefined) {
+      observations = retainFrontierObservations([...observations, seen]);
+    }
+  }
+
+  // §17/§11 control arm — the party that never came home. It walked and it observed;
+  // at the moment it would have turned for home it is declared lost instead, so its
+  // `carriedObservations` die with it and the residential band learns nothing. Undefined
+  // in every normal world => this branch is never taken.
+  const lostBeforeReturn =
+    terminal !== undefined && world.auditOptions?.frontierExplorationAlwaysLost === true;
+
+  const walkedKm = stepsTaken * KM_PER_TILE;
+  const moved: ExpeditionRecord = {
+    ...expedition,
+    routeTileIds: trail,
+    // The trail is also the way home: the party stands at its end.
+    routeIndex: trail.length - 1,
+    positionTileId,
+    travelDaysElapsed: expedition.travelDaysElapsed + 1,
+    frontierDeepestReachTiles: deepest,
+    carriedObservations: retainFrontierObservations(observations),
+    phase: lostBeforeReturn ? "lost" : terminal === undefined ? "outbound" : "returning",
+    ...(lostBeforeReturn
+      ? { outcomeReason: "party_lost" as ExpeditionOutcomeReason }
+      : terminal === undefined
+        ? {}
+        : { outcomeReason: terminal }),
+  };
+
+  return {
+    world,
+    expedition: moved,
+    ...(walkedKm <= 0
+      ? {}
+      : { walkedKm, walkedLoadedKm: 0, walkSource: "expedition_outbound" as const }),
+  };
+}
+
+
+/**
+ * CORRECTION-23 §12 — resolve ONE verification question at the destination.
+ *
+ * Every branch reads the PHYSICAL WORLD AT THE PARTY'S FEET. That is legitimate: the party
+ * is standing there. What it must not do — and does not do — is generalize. Reaching water
+ * proves water is reachable today, not that it is reliable year-round. Finding a resource in
+ * the bounded area searched is not proof of the catchment's total stock, and finding none is
+ * not proof of absence anywhere.
+ *
+ * CORRECTION-23B §7 — NO question produces food. `resource_test_possible` reports whether a
+ * real take is worth attempting; it does not make one. Every branch credits exactly zero.
+ */
+function resolveVerificationOnSite(
+  world: WorldState,
+  band: Band,
+  expedition: ExpeditionRecord,
+  day: DayNumber,
+): AdvanceResult {
+  const plan = expedition.verificationPlan;
+  const standTile = world.tiles[expedition.positionTileId];
+  const time = getWorldTimeForDay(day);
+
+
+  if (plan === undefined || standTile === undefined) {
+    return {
+      world,
+      expedition: { ...expedition, phase: "returning", outcomeReason: "verification_inconclusive" },
+    };
+  }
+
+  const workDays = expedition.workDaysElapsed + 1;
+  const reachedTarget = expedition.positionTileId === plan.targetTileId;
+
+  // The party never got to the place it was sent to. That answers nothing about the place.
+  if (!reachedTarget) {
+    return {
+      world,
+      expedition: {
+        ...expedition,
+        phase: "returning",
+        workDaysElapsed: workDays,
+        outcomeReason: "route_endpoint_mismatch",
+      },
+    };
+  }
+
+  const finish = (
+    rawOutcome: "confirmed" | "negative" | "inconclusive",
+    evidenceBasis: string,
+    harvestUnits = 0,
+    // CORRECTION-23C §7 — the PHYSICAL SCOPE of a negative answer. Only causes the model
+    // actually represents are encoded; a party that never reached the target does not
+    // arrive here at all, so it can never produce a claim about the destination.
+    accessFailureKind?: "absent_in_bounded_search" | "route_blocked",
+  ): AdvanceResult => {
+    // CORRECTION-23 CONTINUATION §9 E5 — audit-only. An affirmative answer is downgraded to
+    // "we could not tell", isolating the value of confirmation from the value of asking.
+    // Undefined in every normal world.
+    const outcome =
+      world.auditOptions?.frontierVerificationConfirmationDisabled === true && rawOutcome === "confirmed"
+        ? ("inconclusive" as const)
+        : rawOutcome;
+
+    return {
+    world,
+    expedition: {
+      ...expedition,
+      phase: "returning",
+      workDaysElapsed: workDays,
+      outcomeReason:
+        outcome === "confirmed"
+          ? "verification_confirmed"
+          : outcome === "negative"
+            ? "verification_negative"
+            : "verification_inconclusive",
+      verificationResult: {
+        question: plan.question,
+        targetTileId: plan.targetTileId,
+        outcome,
+        season: time.season,
+        harvested: harvestUnits > 0,
+        harvestUnits: round4(harvestUnits),
+        evidenceBasis,
+        ...(outcome === "negative" && accessFailureKind !== undefined ? { accessFailureKind } : {}),
+        reasonIds: [
+          makeVerificationReasonId(String(band.id), time.tick, plan.question, outcome),
+        ],
+      },
+      ...(harvestUnits > 0
+        ? {
+            cargo: {
+              ...expedition.cargo,
+              harvestUnits: round4(expedition.cargo.harvestUnits + harvestUnits),
+            },
+          }
+        : {}),
+    },
+    };
+  };
+
+  switch (plan.question) {
+    case "water_access": {
+      // A person standing here can walk to the water or cannot. Adjacency and the tile's own
+      // hydrography are what the party physically experiences.
+      const hasWaterHere = standTile.resourceProfile.waterAccess >= 0.3;
+      const adjacentWater = standTile.neighbors.some((id) => {
+        const n = world.tiles[id];
+        return n !== undefined && (n.isAquatic === true || n.isRiver === true || n.terrainKind === "wetlands");
+      });
+
+      return hasWaterHere || adjacentWater
+        ? finish("confirmed", "the party reached water and drew from it")
+        : finish(
+            "negative",
+            "no reachable water was found in the area the party searched",
+            0,
+            // §7 — scoped to the bounded area actually searched. It is NOT a claim that the
+            // destination is dry, and NOT a route failure: the party got here.
+            "absent_in_bounded_search",
+          );
+    }
+
+    case "resource_presence": {
+      // Bounded search of the stand tile only. Absence here is absence HERE.
+      const present = standTile.resourceProfile.baseRichness >= 0.22;
+
+      return present
+        ? finish("confirmed", "food resources were physically found in the area searched")
+        : finish("negative", "nothing usable was found in the area actually searched");
+    }
+
+    case "resource_test_possible": {
+      // CORRECTION-23B §7 — this question was called `resource_usability`, which claimed
+      // more than it establishes. What the party can honestly report is whether a real,
+      // stock-backed take is worth attempting here: it reads the ground it is standing on,
+      // draws against no patch, applies no depletion and produces no receipt.
+      const richness = standTile.resourceProfile.baseRichness;
+
+      if (richness < 0.22) {
+        return finish("negative", "nothing was found worth attempting");
+      }
+
+      // Whether the attempt succeeds depends on the ground and the season, so a resource
+      // that exists can still defeat a first attempt — which is the point of testing.
+      const seasonLean = standTile.seasonalProfile.leanSeasons.includes(time.season);
+      const attemptSucceeds = richness * (seasonLean ? 0.25 : 0.6) > 0.12;
+
+      // CORRECTION-23B §7 Option A — NO CALORIES ARE CREDITED, DELIBERATELY.
+      //
+      // `plantStock.resolvePlantFoodHarvest` can resolve a real patch at an arbitrary TILE
+      // and would be the legal seam for a stock-backed take, so the architecture exists.
+      // But the only activity that legally reaches it — the same-day intra-season trip —
+      // selects its target from patch memories, so giving verification its own call would
+      // duplicate that path rather than reuse it. §7 says prefer eligibility-only unless an
+      // authoritative task can consume the evidence without architectural duplication.
+      //
+      // So this returns EVIDENCE ONLY, under a name that says exactly that. The take itself
+      // is recorded as unbuilt debt rather than faked or shortcut.
+      return attemptSucceeds
+        ? finish("confirmed", "the ground here is worth a real attempt")
+        : finish("negative", "there is nothing here worth attempting");
+    }
+
+    case "temporary_use": {
+      // Can a bounded party actually stay and work? Water, tolerable ground, tolerable risk.
+      const flood = standTile.riskProfile.floodRisk;
+      const liveable =
+        standTile.isAquatic !== true && flood < 0.7 && standTile.resourceProfile.waterAccess >= 0.2;
+
+      if (workDays < VERIFICATION_ON_SITE_DAYS) {
+        // Staying is the test; it takes more than a day.
+        return { world, expedition: { ...expedition, workDaysElapsed: workDays } };
+      }
+
+      return liveable
+        ? finish("confirmed", "a small party stayed and worked here without failing")
+        : finish("negative", "the party could not sustain itself here");
+    }
+
+    case "seasonal_persistence": {
+      // One visit adds ONE season of coverage and cannot answer the question outright.
+      const stillProductive = standTile.resourceProfile.baseRichness >= 0.22;
+
+      return finish(
+        "inconclusive",
+        stillProductive
+          ? `still productive in ${time.season}; other seasons remain unknown`
+          : `poor in ${time.season}; other seasons remain unknown`,
+      );
+    }
+  }
+}
+
 /** Advance ONE expedition by ONE physical day. Pure; the caller threads the world. */
 function advanceExpeditionOneDay(
   world: WorldState,
@@ -491,6 +1294,15 @@ function advanceExpeditionOneDay(
     };
   }
 
+  // CORRECTION-17 §9 — FRONTIER EXPLORATION walks a route it does not have. Every other
+  // task family follows a `routeTileIds` path computed at launch; this one DISCOVERS its
+  // route, choosing one 4-adjacent step at a time from where its feet actually are, and
+  // appends each step to the trail it will later retrace home. It therefore takes its own
+  // outbound branch here rather than indexing into a precomputed path.
+  if (withProvisions.phase === "outbound" && withProvisions.taskKind === "frontier_exploration") {
+    return advanceFrontierExplorationOutboundDay(world, withProvisions, tilesPerDay, day);
+  }
+
   if (withProvisions.phase === "outbound") {
     const nextIndex = Math.min(lastIndex, withProvisions.routeIndex + tilesPerDay);
     const arrived = nextIndex >= lastIndex;
@@ -511,7 +1323,8 @@ function advanceExpeditionOneDay(
     const establishedCamp = arrived ? deriveTaskCampForOperating(world, moved, day) : undefined;
     const setupCost =
       arrived && establishedCamp !== undefined && moved.taskCamp === undefined
-        ? round4(moved.partyWorkers * EXPEDITION_PROVISION_UNITS_PER_WORKER_DAY * TASK_CAMP_SETUP_PROVISION_WORKER_DAYS)
+        // CORRECTION-34D — a camp is set up for, and eaten by, everyone standing at it.
+        ? round4(getExpeditionPhysicalPeople(moved) * EXPEDITION_PROVISION_UNITS_PER_WORKER_DAY * TASK_CAMP_SETUP_PROVISION_WORKER_DAYS)
         : 0;
     return {
       world,
@@ -541,6 +1354,13 @@ function advanceExpeditionOneDay(
       walkedLoadedKm: 0,
       walkSource: "expedition_outbound",
     };
+  }
+
+  // CORRECTION-23 §12 — the ON-SITE VERIFICATION TASK. The party is standing at the place
+  // it walked to and answers ONE question by doing something physical there. Each question
+  // has its own task, its own evidence, and its own way of coming back negative.
+  if (withProvisions.phase === "operating" && withProvisions.taskKind === "frontier_verification") {
+    return resolveVerificationOnSite(world, band, withProvisions, day);
   }
 
   if (withProvisions.phase === "operating") {
@@ -590,7 +1410,11 @@ function advanceExpeditionOneDay(
         withProvisions.routeTileIds,
         day,
         "food_resource_check",
-        { verifyOnly: true },
+        // CORRECTION-34E §7 — a verification party looks without taking, but WHO looks is still
+        // its own people. Effort enters the physical lookup identically for verification and
+        // exploitation; only the take is suppressed. Residential labour must not alter a distant
+        // verification result any more than it may alter a distant harvest.
+        { verifyOnly: true, partyWorkers: getExpeditionProductiveWorkers(withProvisions) },
       );
       const harvest = verification.record.physicalFoodHarvest;
       const observation: ExpeditionObservation = {
@@ -645,6 +1469,10 @@ function advanceExpeditionOneDay(
     // Physical work: draw the distant stock through the SAME harvest resolution a near
     // trip uses. The stock is depleted here, standing at the target. The receipt is not
     // food yet — it becomes cargo.
+    //
+    // CORRECTION-34E — the RESOLVER is shared with the near trip; the LABOUR is not. A near trip's
+    // group is sized from the residence because that is where it is drawn from; this party is
+    // sized from itself because that is where it is standing.
     const memory = findTargetMemory(band, withProvisions.targetPatchId);
 
     if (memory === undefined) {
@@ -666,6 +1494,8 @@ function advanceExpeditionOneDay(
       withProvisions.routeTileIds,
       day,
       "food_resource_check",
+      // CORRECTION-34E — the work at the target is done by the party standing at the target.
+      { partyWorkers: getExpeditionProductiveWorkers(withProvisions) },
     );
     const taken = work.record.physicalFoodHarvest?.usableSupport ?? 0;
     const capacity = withProvisions.cargo.carryCapacityUnits;
@@ -681,7 +1511,8 @@ function advanceExpeditionOneDay(
     const campless = camp === undefined;
     const backtrackKm = campless ? CAMPLESS_BACKTRACK_TILES_PER_WORK_DAY * KM_PER_TILE : 0;
     const backtrackProvisions = campless
-      ? round4(withProvisions.partyWorkers * EXPEDITION_PROVISION_UNITS_PER_WORKER_DAY * CAMPLESS_EXTRA_PROVISION_WORKER_DAYS)
+      // CORRECTION-34D — the nightly shuttle is walked and eaten by every body in the party.
+      ? round4(getExpeditionPhysicalPeople(withProvisions) * EXPEDITION_PROVISION_UNITS_PER_WORKER_DAY * CAMPLESS_EXTRA_PROVISION_WORKER_DAYS)
       : 0;
     return {
       world: work.world,
@@ -869,6 +1700,19 @@ function deriveDepartableWorkers(band: Band): number {
 const INFORMATION_TASK_SUPPRESSION_TICKS = 8;
 /** Remembered value below which verification walking is not worth the labor (§10 EV gate). */
 const VERIFICATION_MIN_REMEMBERED_VALUE = 0.3;
+
+// ── CORRECTION-23G §7 — replay target-rule bounds. AUDIT-ONLY: every one of these is read
+// exclusively by the G4/G5 target rules, which are reachable only while a schedule replay is
+// registered. They deliberately reuse the same physical distance band the production
+// verification family uses, so the arms differ in TARGET RULE and in nothing else.
+/** Below this the place is inside the working range; a party is not raised for it. */
+const REPLAY_MIN_TARGET_DISTANCE = 3;
+/** Above this it is an exploration problem, not a destination a party is sent to. */
+const REPLAY_MAX_TARGET_DISTANCE = 24;
+/** Band-known confidence at or above which G4 does not call a place uncertain. */
+const REPLAY_UNCERTAIN_CONFIDENCE = 0.7;
+/** Fallbacks a single launch may try before recording a failure. Bounds the search, not the arm. */
+const REPLAY_TARGET_CANDIDATE_CAP = 8;
 
 // ── CORRECTION-5 — expedition value control ────────────────────────────────────────
 //
@@ -1157,6 +2001,219 @@ function selectReconnaissanceCandidate(
   return best === undefined ? undefined : { targetTileId: best.targetTileId, targetPatchId: best.patchId };
 }
 
+
+/**
+ * CORRECTION-23 §7/§9/§10 — raise a verification party, or do not.
+ *
+ * This is the bridge CORRECTION-22 proved was missing. Unlike every other investigation
+ * family, the candidate comes from `knowledge.observedTiles` — the shallow terrain records
+ * frontier exploration produces — rather than from `resourceKnowledgeState.patchMemories`.
+ *
+ * Eligibility is applied INSIDE the selector, before ranking, so an ineligible high-scoring
+ * target can never suppress an eligible lower-scoring one.
+ */
+function maybeLaunchFrontierVerification(
+  world: WorldState,
+  band: Band,
+  day: DayNumber,
+  partyWorkers: number,
+  need: VerificationNeed,
+): Band | undefined {
+  // CORRECTION-23 CONTINUATION §9 E3 / §12 M5 — audit-only. Undefined in every normal world.
+  if (world.auditOptions?.frontierVerificationDisabled === true) {
+    return undefined;
+  }
+
+  const active = (band.expeditions ?? []).filter(
+    (expedition) => isExpeditionAway(expedition.phase) && expedition.taskKind === "frontier_verification",
+  );
+
+  if (active.length >= VERIFICATION_ACTIVE_CAP || partyWorkers < 2) {
+    return undefined;
+  }
+
+  const candidate = selectFrontierVerificationCandidate(world, band, need);
+
+  if (candidate === undefined) {
+    return undefined;
+  }
+
+  const record = band.knowledge.observedTiles[candidate.tileId];
+
+  if (record === undefined) {
+    return undefined;
+  }
+
+  // Information wants speed, not hands: the same small fast party the other information
+  // families use.
+  const availablePools = deriveAvailableMobilityPools(band);
+  const partyComposition = selectPartyComposition(availablePools, 2, "fast");
+
+  if (partyComposition === undefined) {
+    return undefined;
+  }
+
+  // A real physical route. No route, no verification — the band does not teleport to ask.
+  const searchBound = Math.min(EXPEDITION_MAX_ROUTE_TILES, candidate.distanceTiles + 8);
+  const route = buildExpeditionRouteTiles(world, band.position, candidate.tileId, searchBound);
+
+  if (route === undefined || route.length - 1 > EXPEDITION_MAX_ROUTE_TILES) {
+    return undefined;
+  }
+
+  const legDays = Math.ceil((route.length - 1) / EXPEDITION_BASE_TILES_PER_DAY);
+
+  // Return budget must physically fit, including the on-site work.
+  if (legDays * 2 + VERIFICATION_ON_SITE_DAYS > EXPEDITION_MAX_DURATION_DAYS) {
+    return undefined;
+  }
+
+  const plan = buildVerificationPlan(candidate, record, need, band.frontierVerificationAttempts ?? []);
+  const prepared = createPreparedExpedition({
+    band,
+    taskKind: "frontier_verification",
+    targetTileId: candidate.tileId,
+    targetPatchId: `verify:${candidate.question}:${candidate.tileId}`,
+    routeTileIds: route,
+    partyWorkers: 2,
+    partyComposition,
+    day,
+  });
+
+
+
+  // CORRECTION-23J §8 — audit-only. The launch half of the paired trace, recorded where the
+  // party is actually raised rather than where the candidate was picked, so a candidate that
+  // wins selection and then fails to find a route is not counted as a journey.
+  if (isRecordingVerificationJourneys()) {
+    recordVerificationDeparture({
+      verificationExpeditionId: prepared.id,
+      bandId: String(band.id),
+      question: plan.question,
+      targetTileId: String(plan.targetTileId),
+      departureDay: Number(day),
+      routeTiles: route.length,
+    });
+  }
+
+  return attachExpedition(band, { ...prepared, verificationPlan: plan });
+}
+
+/**
+ * CORRECTION-17 §20 — ticks within which a band that already sent an exploratory party
+ * does not send another. This is what keeps exploration from becoming expedition spam:
+ * a band gets one honest look per window, and a null result costs it that window.
+ */
+const FRONTIER_EXPLORATION_SUPPRESSION_TICKS = 12;
+/**
+ * §10 — outward tiles a frontier party may plan for. This is NOT a raised cap: it is
+ * strictly below the existing `EXPEDITION_MAX_ROUTE_TILES` (36) physical envelope, and
+ * the return reserve in `deriveOutwardTilesRemaining` normally binds long before it. It
+ * exists so a party does not set out intending to walk to the very edge of what the
+ * duration window could theoretically permit.
+ */
+const FRONTIER_OUTBOUND_BUDGET_TILES = 18;
+
+/**
+ * CORRECTION-17 §6/§7/§8 — raise an exploratory party, or do not.
+ *
+ * Returns `undefined` (no launch) whenever the band has no band-known REASON to look
+ * beyond its country, no band-known DIRECTION to look in, no spare people, or has
+ * already had its look this window. Nothing in this function reads unseen country: the
+ * eligibility comes from the band's own pressure/return/opportunity state, and the
+ * heading comes from its own corridor memory, viewshed, known edge or inherited
+ * direction. No destination tile is selected, here or anywhere downstream.
+ */
+function maybeLaunchFrontierExploration(
+  world: WorldState,
+  band: Band,
+  day: DayNumber,
+  currentTick: number,
+  partyWorkers: number,
+): Band | undefined {
+  // §20 — one honest look per window, whatever it found. The window is measured from
+  // the band's own `lastFrontierExplorationTick` scalar rather than from
+  // `recentExpeditionOutcomes`, because that list is an LRU capped at six entries: six
+  // ordinary expeditions concluding inside the window would evict the frontier record
+  // and let the band explore again early.
+  const lastExplorationTick = band.lastFrontierExplorationTick;
+  const recentlyExplored =
+    lastExplorationTick !== undefined &&
+    currentTick - Number(lastExplorationTick) <= FRONTIER_EXPLORATION_SUPPRESSION_TICKS;
+
+  if (recentlyExplored || partyWorkers < 2) {
+    return undefined;
+  }
+
+  // §17 control arm. Undefined in every normal world => this branch is never taken and
+  // the production path is unchanged.
+  if (world.auditOptions?.frontierExplorationEnabled === false) {
+    return undefined;
+  }
+
+  const eligibility = deriveFrontierExplorationEligibility(world, band);
+
+  if (!eligibility.eligible) {
+    return undefined;
+  }
+
+  const heading = deriveFrontierHeading(world, band);
+
+  // No band-known direction to go in => the band does not go. It never picks a heading
+  // by scanning the world for the best unseen country.
+  if (heading === undefined) {
+    return undefined;
+  }
+
+  // Information wants speed, not hands: the same small fast party the other two
+  // information families use.
+  const availablePools = deriveAvailableMobilityPools(band);
+  const partyComposition = selectPartyComposition(availablePools, 2, "fast");
+
+  if (partyComposition === undefined) {
+    return undefined;
+  }
+
+  const plan = buildFrontierPlan({
+    heading: { x: heading.heading.x, y: heading.heading.y },
+    basis: heading.basis,
+    anchorTileId: heading.anchorTileId,
+    headingConfidence: heading.headingConfidence,
+    outboundBudgetTiles: FRONTIER_OUTBOUND_BUDGET_TILES,
+    // The reserve is re-derived physically every step; this records the intent.
+    returnReserveTiles: FRONTIER_OUTBOUND_BUDGET_TILES,
+  });
+
+  const prepared = createPreparedExpedition({
+    band,
+    taskKind: "frontier_exploration",
+    // §8 — for this family `targetTileId` is the plan's band-KNOWN anchor and is
+    // explicitly NOT a destination. The party normally walks straight past it into
+    // country nobody in the band has seen. It is carried only so the shared record shape,
+    // the id derivation and the outcome summary keep working unchanged.
+    targetTileId: plan.anchorTileId,
+    targetPatchId: `frontier:${plan.sector}:${plan.basis}`,
+    // §9 — the trail starts as the origin tile ALONE. There is no precomputed route:
+    // every later entry is a tile the party has physically walked to.
+    routeTileIds: [band.position],
+    partyWorkers: 2,
+    partyComposition,
+    day,
+  });
+
+  return attachExpedition(
+    // §20 — stamp the window the moment the party is raised, so a party that is still
+    // walking already suppresses the next launch.
+    { ...band, lastFrontierExplorationTick: getWorldTimeForDay(day).tick },
+    {
+      ...prepared,
+      frontierPlan: plan,
+      frontierDeepestReachTiles: 0,
+      reasonIds: [...prepared.reasonIds, ...eligibility.reasonIds],
+    },
+  );
+}
+
 /**
  * EXPEDITIONARY-2 §1/Slice C — consider sending a party to band-known country that the
  * same-day path can no longer reach. The target comes from the trip authority's own
@@ -1234,11 +2291,67 @@ function maybeLaunchExpedition(world: WorldState, band: Band, day: DayNumber): B
   // A retrieval target rejected on VALUE leaves the band free to do something useful
   // instead, exactly as if it had no retrieval candidate at all.
   const noUsefulRetrieval = retrieval === undefined || !retrievalWorthwhile;
+
+  // CORRECTION-23 §9 — WHERE VERIFICATION COMPETES.
+  //
+  // Directly after retrieval, and BEFORE patch verification and route reconnaissance.
+  // The ordering is a claim about what a band under real pressure should do, and it is
+  // deliberate:
+  //
+  //   retrieval                 feeds people NOW from a known productive patch — first;
+  //   frontier verification     answers "is there anywhere better than this failing range?";
+  //   patch verification        re-checks a stale patch INSIDE the failing range;
+  //   route reconnaissance      refines access to that same range.
+  //
+  // A band in chronic decline gains more from finding out whether the promising country it
+  // walked past is usable than from re-reading a patch in the range that is already failing.
+  // Placing it last was measured to make it unreachable: the patch-memory families fire in
+  // almost every band-year on the default maps, so a verification candidate existed in
+  // 1105 of 1352 sampled band-years and was never once launched.
+  // Gated on `noUsefulRetrieval` OR real sustained hardship. The second clause matters:
+  // a band whose range is failing usually STILL has a worthwhile retrieval target — that is
+  // what it is living on — so gating verification purely on "nothing better to do" made it
+  // unreachable in exactly the situation it exists for. A two-person party asking whether
+  // there is anywhere better does not stop the rest of the band foraging, and
+  // EXPEDITION_ACTIVE_CAP still bounds total parties.
+  const verificationNeed = deriveVerificationNeed(band);
+  // CORRECTION-23 CONTINUATION §8 — audit-only launch-arm isolation. Undefined in every
+  // normal world, in which case both disjuncts stand exactly as written above.
+  const launchArm = world.auditOptions?.frontierVerificationLaunchArm;
+  const verificationGateOpen =
+    launchArm === "no_useful_retrieval_only"
+      ? noUsefulRetrieval
+      : launchArm === "need_only"
+        ? verificationNeed.need >= 0.45
+        : noUsefulRetrieval || verificationNeed.need >= 0.45;
+
+
+  if (verificationGateOpen) {
+    const verified = maybeLaunchFrontierVerification(world, band, day, partyWorkers, verificationNeed);
+
+    if (verified !== undefined) {
+      return verified;
+    }
+  }
   const verification = noUsefulRetrieval ? selectVerificationCandidate(world, band, currentTick) : undefined;
   const reconnaissance =
     noUsefulRetrieval && verification === undefined
       ? selectReconnaissanceCandidate(world, band, currentTick)
       : undefined;
+
+  // CORRECTION-17 §6/§7 — the FIFTH candidate family, and the only one that may enter
+  // country the band does not know. It competes LAST, on purpose: a band that still has
+  // a worthwhile remembered target to retrieve, a stale memory worth verifying, or a
+  // route worth reading does that instead. Exploration is what a band does when its own
+  // known country has stopped answering — which is exactly the band-known state
+  // `deriveFrontierExplorationEligibility` measures.
+  if (noUsefulRetrieval && verification === undefined && reconnaissance === undefined) {
+    const explored = maybeLaunchFrontierExploration(world, band, day, currentTick, partyWorkers);
+
+    if (explored !== undefined) {
+      return explored;
+    }
+  }
 
   const chosen =
     retrieval !== undefined && retrievalWorthwhile && !verifyBeforeRetrieving && !(retrievalEvidenceDegraded && foodStress < 0.35)
@@ -1369,9 +2482,28 @@ function applyExpeditionDay(world: WorldState, day: DayNumber): WorldState {
       continue;
     }
 
-    const launched = maybeLaunchExpedition(currentWorld, bandsById[band.id] ?? band, day);
+    // ROADMAP ITEM 4 — a group days from anywhere cannot also dispatch a party from a camp it does
+    // not have. Departure clears `expeditions`, so there is no inherited work to reconcile either;
+    // this gate stops a LAUNCH. Inert today.
+    if (isProvisionalSuccessor(band)) {
+      continue;
+    }
 
-    if (launched !== (bandsById[band.id] ?? band)) {
+    // CORRECTION-34A §6 — reconcile BEFORE anything reads or extends the commitment, so every
+    // band-day this action touches starts conserved. Demography, fission and viability run at the
+    // season boundary with no knowledge of away parties; this daily action is the first production
+    // code to see the result, and `expeditionDailyAction` fires on every day of the season.
+    const beforeReconcile = bandsById[band.id] ?? band;
+    const reconciled = reconcileExpeditionCommitment(beforeReconcile, Number(getWorldTimeForDay(day).tick));
+
+    if (reconciled !== beforeReconcile) {
+      bandsById[band.id] = reconciled;
+      changed = true;
+    }
+
+    const launched = maybeLaunchExpedition(currentWorld, reconciled, day);
+
+    if (launched !== reconciled) {
       bandsById[band.id] = launched;
       changed = true;
     }
@@ -1393,6 +2525,22 @@ function applyExpeditionDay(world: WorldState, day: DayNumber): WorldState {
       readonly verificationObservation?: ExpeditionObservation & { readonly kind: VerificationObservationKind };
     }[] = [];
     const returnedReconRouteTiles: TileId[] = [];
+    // CORRECTION-23F §7 — the verification family's own route tiles, tracked separately so an
+    // audit policy can reach verification travel without touching route reconnaissance.
+    const returnedVerificationRouteTiles: TileId[] = [];
+    // CORRECTION-23 §13 — verification results carried home by parties that PHYSICALLY
+    // returned today. A lost party contributes nothing here, which is the §15 control.
+    const returnedVerifications: {
+      readonly routeTiles: number;
+      readonly acquisition?: KnowledgeAcquisitionKind;
+      readonly result: NonNullable<ExpeditionRecord["verificationResult"]>;
+      readonly harvestUnits: number;
+      /** CORRECTION-23J §8 — which party came home, so the return can be paired to its launch. */
+      readonly expeditionId: string;
+    }[] = [];
+    // CORRECTION-18 §8 — kept SEPARATE from the reconnaissance list so the two returning
+    // families can be stamped with their own acquisition provenance.
+    const returnedFrontierRouteTiles: TileId[] = [];
     // §13 — smoke the residential camp physically received today (bounded meaning only).
     const receivedSignalsToday: ReceivedSmokeSignal[] = [];
     let outcomes = [...(currentBand.recentExpeditionOutcomes ?? [])];
@@ -1480,6 +2628,41 @@ function applyExpeditionDay(world: WorldState, day: DayNumber): WorldState {
 
         // §11 — ONLY a party that physically completed its return transfers knowledge.
         if (result.expedition.phase === "completed") {
+          // CORRECTION-23 §13 — a verification party that PHYSICALLY WALKED HOME hands over
+          // the answer to the one question it went to ask. A lost party never reaches this
+          // branch and therefore transfers nothing, which is the §15 control. The walked
+          // route also becomes known country through the same canonical tile-observation
+          // writer every other returning party uses.
+          if (result.expedition.taskKind === "frontier_verification") {
+            returnedReconRouteTiles.push(...result.expedition.routeTileIds);
+            returnedVerificationRouteTiles.push(...result.expedition.routeTileIds);
+
+            const verificationResult = result.expedition.verificationResult;
+
+            // CORRECTION-23 CONTINUATION §9 E4 — audit-only. The party walked, worked and
+            // came home; only the answer is withheld at the hand-off. Undefined in every
+            // normal world.
+            // CORRECTION-23F §10 F13 — THE ARCHITECTURAL COUNTERFACTUAL. The party is raised
+            // on the same schedule, walks to the same target along the same physical route,
+            // and its walked route becomes ordinary known country exactly as before — but it
+            // carries no question, records no result and writes no disposition. If this
+            // reproduces F1, the useful behaviour belongs to exploration and re-observation,
+            // not to verification, and the production seam is not in this module's question
+            // machinery at all. Audit-only; undefined in every normal world.
+            if (
+              verificationResult !== undefined &&
+              currentWorld.auditOptions?.frontierVerificationKnowledgeDisabled !== true
+            ) {
+              returnedVerifications.push({
+                routeTiles: result.expedition.routeTileIds.length,
+                acquisition: result.expedition.verificationPlan?.originatingAcquisition,
+                result: verificationResult,
+                harvestUnits: verificationResult.harvestUnits,
+                expeditionId: result.expedition.id,
+              });
+            }
+          }
+
           const knowledgeRecord = result.expedition.pendingReturnRecord ?? result.expedition.pendingKnowledgeRecord;
 
           if (knowledgeRecord !== undefined) {
@@ -1509,6 +2692,22 @@ function applyExpeditionDay(world: WorldState, day: DayNumber): WorldState {
 
           if (result.expedition.taskKind === "route_reconnaissance") {
             returnedReconRouteTiles.push(...result.expedition.routeTileIds);
+          }
+
+          // CORRECTION-17 §11/§12 — a frontier party that PHYSICALLY WALKED HOME hands
+          // over the corridor it walked. Until this line executed, none of it existed
+          // for the residential band: no KnownTileRecord, no resource memory, no
+          // daughter target. A `lost` party never reaches this branch and therefore
+          // transfers nothing, which is the §11 control.
+          //
+          // The tiles go through the SAME canonical `observeTileAndNearby` writer the
+          // residential decision path uses (applied once, below). That writer records
+          // existence, broad terrain, water access, relief/movement cost, observed risk
+          // and the season physically experienced — and creates NO resource memory and
+          // NO food receipt. Learning that a place exists is not learning what can be
+          // eaten there: that still requires the existing observe/test/use paths.
+          if (result.expedition.taskKind === "frontier_exploration") {
+            returnedFrontierRouteTiles.push(...result.expedition.routeTileIds);
           }
         }
         // Terminal parties are compacted into bounded history and dropped from the
@@ -1575,17 +2774,130 @@ function applyExpeditionDay(world: WorldState, day: DayNumber): WorldState {
       resourceKnowledgeState = application.resourceKnowledgeState;
     }
 
-    const knowledge =
-      returnedReconRouteTiles.length === 0
-        ? currentBand.knowledge
-        : observeTileAndNearby(
-            currentWorld,
-            currentBand.knowledge,
-            [...new Set(returnedReconRouteTiles)]
-              .map((tileId) => currentWorld.tiles[tileId])
-              .filter((tile): tile is NonNullable<typeof tile> => tile !== undefined)
-              .map((tile) => ({ tile, distance: 0 })),
-          );
+    // REPEATED-BAND-EXPANSION-FISSION-14 — step-mode invariance. `observeTileAndNearby`
+    // stamps `firstObservedAt`/`lastObservedAt`/`observedAt` from the world it is given.
+    // `currentWorld.time` is the time at the START of the daily-action batch, so under
+    // seasonal stepping (one 90-day batch) a return recorded the season-boundary day while
+    // under daily stepping (90 one-day batches) the same return recorded its own day —
+    // identical tick and season, divergent `day`/`dayOfSeason`. A party physically returned
+    // on THIS day, so the day's own time is the correct stamp and it is identical under both
+    // step modes. (Latent before this checkpoint: route-reconnaissance returns were rare
+    // enough that no audited run exercised the path.)
+    const observationWorld = { ...currentWorld, time: getWorldTimeForDay(day) };
+    const toTargets = (tileIds: readonly TileId[]) =>
+      [...new Set(tileIds)]
+        .map((tileId) => currentWorld.tiles[tileId])
+        .filter((tile): tile is NonNullable<typeof tile> => tile !== undefined)
+        .map((tile) => ({ tile, distance: 0 }));
+    // CORRECTION-18 §7 ARM A — physical exploration WITHOUT residential transfer. The
+    // party still departs, still commits its workers, still eats its provisions and still
+    // walks every step; only the knowledge hand-off is suppressed. That isolates the
+    // DIRECT EXPEDITION COST from everything the returned knowledge later causes.
+    // Undefined in every normal world, so production is unchanged.
+    const transferSuppressed = currentWorld.auditOptions?.frontierKnowledgeTransferDisabled === true;
+    // §8 — the two returning information families are stamped with DIFFERENT provenance:
+    // a reconnaissance party re-reads country the band already knows, a frontier party
+    // brings back shallow single-traversal knowledge of country it did not.
+    let knowledge = currentBand.knowledge;
+
+    if (returnedReconRouteTiles.length > 0) {
+      knowledge = observeTileAndNearby(
+        observationWorld,
+        knowledge,
+        toTargets(returnedReconRouteTiles),
+        "returned_route_reconnaissance",
+      );
+    }
+
+    if (returnedFrontierRouteTiles.length > 0 && !transferSuppressed) {
+      knowledge = observeTileAndNearby(
+        observationWorld,
+        knowledge,
+        toTargets(returnedFrontierRouteTiles),
+        "returned_frontier_exploration",
+      );
+    }
+
+    // CORRECTION-23 §13/§14 — apply what verification parties physically brought home.
+    //
+    // The attempt history is recorded for EVERY returned verification, including negatives,
+    // because "we went and there was nothing" is exactly the evidence that stops the band
+    // walking back there forever. Only the tested domain is upgraded: a water answer never
+    // becomes a resource claim, and a single visit never becomes a seasonal calendar.
+    let verificationAttempts = currentBand.frontierVerificationAttempts ?? [];
+    // CORRECTION-23B §4/§11 — the AUTHORITATIVE record the domain readers consume, kept
+    // separate from the bounded display ring above. Keyed by (place, question) and upserted,
+    // so repeated attempts update a row instead of appending one.
+    let verificationEvidence = currentBand.verificationEvidence;
+    const verificationHardship = deriveVerificationNeed(currentBand).need;
+
+    for (const returned of returnedVerifications) {
+      // CORRECTION-23J §8 — audit-only. The return half. Reaching this loop IS the physical
+      // return: a lost party never appears, which is the §9 J9 control.
+      if (isRecordingVerificationJourneys()) {
+        recordVerificationReturn({
+          verificationExpeditionId: returned.expeditionId,
+          bandId: String(currentBand.id),
+          question: returned.result.question,
+          targetTileId: String(returned.result.targetTileId),
+          returnDay: Number(day),
+          outcome: returned.result.outcome,
+        });
+      }
+
+      verificationAttempts = recordVerificationAttempt(verificationAttempts, {
+        tileId: returned.result.targetTileId,
+        question: returned.result.question,
+        tick: getWorldTimeForDay(day).tick,
+        season: returned.result.season,
+        outcome: returned.result.outcome,
+      });
+      // CORRECTION-23D §6/§9 — the DURABLE conclusion goes on the place record, which is
+      // written AFTER `observeTileAndNearby` above so the walked-route observation cannot
+      // overwrite it. It survives every cap in this subsystem and is forgotten only when the
+      // band forgets the place itself.
+      const targetRecord = knowledge.observedTiles[returned.result.targetTileId];
+
+      if (targetRecord !== undefined) {
+        knowledge = {
+          ...knowledge,
+          observedTiles: {
+            ...knowledge.observedTiles,
+            [returned.result.targetTileId]: {
+              ...targetRecord,
+              verificationDisposition: recordPlaceDisposition(targetRecord.verificationDisposition, {
+                question: returned.result.question,
+                outcome: returned.result.outcome,
+                season: returned.result.season,
+                tick: getWorldTimeForDay(day).tick,
+                routeTiles: returned.routeTiles,
+                ...(returned.result.accessFailureKind === undefined
+                  ? {}
+                  : { accessFailureKind: returned.result.accessFailureKind }),
+              }),
+            },
+          },
+        };
+      }
+
+      verificationEvidence = recordVerificationEvidence(verificationEvidence, {
+        tileId: returned.result.targetTileId,
+        question: returned.result.question,
+        outcome: returned.result.outcome,
+        season: returned.result.season,
+        tick: getWorldTimeForDay(day).tick,
+        hardship: verificationHardship,
+        routeTiles: returned.routeTiles,
+        // CORRECTION-23B §8 — route repeatability, recorded as a BY-PRODUCT of the journey
+        // rather than as a question that consumes a party. This party walked out and walked
+        // home, which is the whole test the removed question used to claim to perform.
+        routeEvidence: "walked_out_and_back",
+        ...(returned.acquisition === undefined ? {} : { acquisition: returned.acquisition }),
+        ...(returned.result.accessFailureKind === undefined
+          ? {}
+          : { accessFailureKind: returned.result.accessFailureKind }),
+      });
+    }
 
     // §13 — smoke the camp saw today enters the band's bounded, expiring record.
     let receivedSmokeSignals = currentBand.receivedSmokeSignals;
@@ -1607,6 +2919,8 @@ function applyExpeditionDay(world: WorldState, day: DayNumber): WorldState {
         resourceKnowledgeState,
         knowledge,
         receivedSmokeSignals,
+        frontierVerificationAttempts: verificationAttempts,
+        ...(verificationEvidence === undefined ? {} : { verificationEvidence }),
       };
       changed = true;
       continue;
@@ -1620,6 +2934,8 @@ function applyExpeditionDay(world: WorldState, day: DayNumber): WorldState {
       resourceKnowledgeState,
       knowledge,
       receivedSmokeSignals,
+      frontierVerificationAttempts: verificationAttempts,
+      ...(verificationEvidence === undefined ? {} : { verificationEvidence }),
       ...(deposits.length === 0
         ? {}
         : {

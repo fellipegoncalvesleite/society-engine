@@ -1,0 +1,105 @@
+{
+  "left": "R0",
+  "right": "R1",
+  "seed": "s10",
+  "firstDivergence": {
+    "verificationLaunches": {
+      "day": 648,
+      "year": 2,
+      "tick": 7,
+      "left": "",
+      "right": "stom:0"
+    },
+    "verificationTargets": {
+      "day": 522,
+      "year": 2,
+      "tick": 5,
+      "left": "stom:0:tile:203:71:resource_test_possible",
+      "right": "stom:0:tile:203:73:resource_presence"
+    },
+    "physicalRoutes": {
+      "day": 522,
+      "year": 2,
+      "tick": 5,
+      "left": "stom:0:frontier_verification:5",
+      "right": "stom:0:frontier_verification:7"
+    },
+    "tilesObserved": {
+      "day": 555,
+      "year": 2,
+      "tick": 6,
+      "left": "stom:0:48",
+      "right": "stom:0:47"
+    },
+    "placeRefreshed": {
+      "day": 525,
+      "year": 2,
+      "tick": 5,
+      "left": "5",
+      "right": "0"
+    },
+    "placeEvicted": {
+      "day": 3600,
+      "year": 10,
+      "tick": 40,
+      "left": "stom:0:tile:207:67,stom:0:tile:208:68,stom:0:tile:208:69,stom:0:tile:209:70",
+      "right": "stom:0:tile:206:67,stom:0:tile:208:69,stom:0:tile:209:70"
+    },
+    "explorationLaunches": {
+      "day": 1284,
+      "year": 4,
+      "tick": 14,
+      "left": "",
+      "right": "stom:0"
+    },
+    "decision": {
+      "day": 35280,
+      "year": 98,
+      "tick": 392,
+      "left": "stom:0:-",
+      "right": ""
+    },
+    "position": {
+      "day": 3420,
+      "year": 10,
+      "tick": 38,
+      "left": "stom:0:tile:206:69",
+      "right": "stom:0:tile:207:70"
+    },
+    "receipts": {
+      "day": 2193,
+      "year": 7,
+      "tick": 24,
+      "left": "stom:0:0.046",
+      "right": "stom:0:0.045"
+    },
+    "support": {
+      "day": 2610,
+      "year": 8,
+      "tick": 29,
+      "left": "stom:0:0.01",
+      "right": "stom:0:0"
+    },
+    "population": {
+      "day": 14760,
+      "year": 41,
+      "tick": 164,
+      "left": "20",
+      "right": "19"
+    }
+  },
+  "chainOrder": [
+    "verificationTargets",
+    "physicalRoutes",
+    "placeRefreshed",
+    "tilesObserved",
+    "verificationLaunches",
+    "explorationLaunches",
+    "receipts",
+    "support",
+    "position",
+    "placeEvicted",
+    "population",
+    "decision"
+  ]
+}

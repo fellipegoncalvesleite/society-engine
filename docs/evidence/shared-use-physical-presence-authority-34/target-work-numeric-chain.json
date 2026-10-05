@@ -1,0 +1,87 @@
+{
+  "audit": "CORRECTION-34E-TARGET-WORK-NUMERIC-CHAIN",
+  "units": {
+    "estimatedReturnValue": "trip-record return units (per-trip draw, capped at 0.5)",
+    "harvestedAmount": "physical stock units removed at the target",
+    "usableSupport": "human food support units after transport and processing losses",
+    "cargoHarvestUnits": "expedition cargo units (a DIFFERENT quantity from usableSupport; not equated here)",
+    "provisionUnits": "trip-local provision units, a bounded accounting abstraction — no residential store is decremented"
+  },
+  "site": {
+    "tile": "tile:100:42",
+    "sourceKind": "fauna_stock",
+    "availabilityCappedTheTake": false
+  },
+  "steps": [
+    {
+      "step": "productive party labour",
+      "value": 5
+    },
+    {
+      "step": "record estimatedPeopleCount",
+      "value": 5
+    },
+    {
+      "step": "return value after harvest (resourceReturn.estimatedReturnValue, OVERWRITTEN by the resolver — this is the return, not the request)",
+      "value": 0.0346
+    },
+    {
+      "step": "request was capped by availability",
+      "value": false
+    },
+    {
+      "step": "requested target amount (DIRECTLY OBSERVABLE: availability did not cap the take, so the request IS the removal)",
+      "value": 0.0455,
+      "lowerBound": 0.0455
+    },
+    {
+      "step": "physical availability at target",
+      "value": 0.7983
+    },
+    {
+      "step": "actual target removal (harvestedAmount = depletionApplied)",
+      "value": 0.0455,
+      "alsoDepletion": 0.0455
+    },
+    {
+      "step": "transport loss",
+      "value": 0.0044
+    },
+    {
+      "step": "processing loss",
+      "value": 0.0066
+    },
+    {
+      "step": "usable support after losses",
+      "value": 0.0346
+    },
+    {
+      "step": "carry ceiling justified by productive workers",
+      "value": 0.6
+    },
+    {
+      "step": "carried within ceiling",
+      "value": 0.0346
+    },
+    {
+      "step": "abandoned above ceiling",
+      "value": 0
+    },
+    {
+      "step": "physical people consuming provisions per day",
+      "value": 7,
+      "perDay": 0.0056
+    }
+  ],
+  "consistency": {
+    "removalEqualsDepletion": true,
+    "supportNeverExceedsRemoval": true,
+    "peopleEqualsPartyWorkers": true,
+    "provisionsCountBodiesNotWorkers": true
+  },
+  "statedNonClaims": [
+    "abandonment above the carry ceiling reads 0 here and is NOT demonstrated by this fixture: one work-day's take is two orders of magnitude below the ceiling, and abandonment arises from cargo ACCUMULATED across work-days, which CORRECTION-34B already measured (0.648 -> 0.6 carried + 0.048 lost). Nothing was fabricated to make it non-zero.",
+    "usableSupport and cargo.harvestUnits are DIFFERENT quantities in different units and are not equated",
+    "full material conservation is NOT claimed for trip-local provisions: no residential store is decremented and consumeProvisions only increments a counter"
+  ]
+}

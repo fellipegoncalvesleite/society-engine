@@ -1,0 +1,390 @@
+{
+  "label": "dc08b2d",
+  "years": 40,
+  "seeds": [
+    "s1",
+    "s2",
+    "s3",
+    "s4",
+    "s5"
+  ],
+  "scenarios": [
+    "map1",
+    "map2",
+    "site_A_coast",
+    "site_B_dry_plains",
+    "site_C_dry_plains",
+    "site_D_aquatic",
+    "site_E_hills",
+    "site_F_hills",
+    "ordinary",
+    "isolated_marginal",
+    "hostile"
+  ],
+  "diagnosticOnlyColumns": {
+    "eligibleExplorationIntent": null,
+    "physicallyValidExplorationProposal": null,
+    "explorationOffered": null,
+    "schedulerFallthrough": null,
+    "note": "measured only by the CORRECTION-24A chain audit on d865beec and later"
+  },
+  "totals": {
+    "launchesByKind": {
+      "frontier_exploration": 1347,
+      "frontier_verification": 57728,
+      "distant_plant_gathering": 1673,
+      "route_reconnaissance": 534,
+      "distant_patch_verification": 1549
+    },
+    "explorationLaunches": 1347,
+    "verificationLaunches": 59277,
+    "routeStepsWalked": 19557,
+    "lostParties": 0,
+    "explorationDerivedRecords": 1074,
+    "recordsByAcquisition": {
+      "residential_observation": 9427,
+      "returned_route_reconnaissance": 1244,
+      "returned_frontier_exploration": 1074
+    },
+    "residentialMoves": 11909,
+    "fissions": 0,
+    "finalPopulation": 2960,
+    "survived": 55,
+    "runs": 55
+  },
+  "byScenario": {
+    "map1": {
+      "launchesByKind": {
+        "frontier_exploration": 304,
+        "frontier_verification": 10163,
+        "distant_plant_gathering": 418,
+        "route_reconnaissance": 24,
+        "distant_patch_verification": 299
+      },
+      "explorationLaunches": 304,
+      "verificationLaunches": 10462,
+      "routeStepsWalked": 4127,
+      "lostParties": 0,
+      "explorationDerivedRecords": 425,
+      "recordsByAcquisition": {
+        "residential_observation": 1728,
+        "returned_route_reconnaissance": 327,
+        "returned_frontier_exploration": 425
+      },
+      "knownTiles": 2480,
+      "maxKnownDistance": 0,
+      "residentialMoves": 2712,
+      "fissions": 0,
+      "finalPopulation": 797,
+      "survived": 5,
+      "supportRatio": 17.27,
+      "receipts": 1.1493,
+      "meanFinalPopulation": 159.4,
+      "survivalRate": 1,
+      "meanKnownTiles": 496,
+      "meanSupportRatio": 3.454
+    },
+    "map2": {
+      "launchesByKind": {
+        "frontier_exploration": 549,
+        "frontier_verification": 22841,
+        "route_reconnaissance": 11,
+        "distant_plant_gathering": 607,
+        "distant_patch_verification": 576
+      },
+      "explorationLaunches": 549,
+      "verificationLaunches": 23417,
+      "routeStepsWalked": 8117,
+      "lostParties": 0,
+      "explorationDerivedRecords": 583,
+      "recordsByAcquisition": {
+        "residential_observation": 2684,
+        "returned_frontier_exploration": 583,
+        "returned_route_reconnaissance": 568
+      },
+      "knownTiles": 3835,
+      "maxKnownDistance": 0,
+      "residentialMoves": 4589,
+      "fissions": 0,
+      "finalPopulation": 1090,
+      "survived": 5,
+      "supportRatio": 25.609999999999992,
+      "receipts": 1.6369,
+      "meanFinalPopulation": 218,
+      "survivalRate": 1,
+      "meanKnownTiles": 767,
+      "meanSupportRatio": 5.122
+    },
+    "site_A_coast": {
+      "launchesByKind": {
+        "frontier_exploration": 65,
+        "frontier_verification": 7394,
+        "distant_patch_verification": 73,
+        "distant_plant_gathering": 68,
+        "route_reconnaissance": 2
+      },
+      "explorationLaunches": 65,
+      "verificationLaunches": 7467,
+      "routeStepsWalked": 757,
+      "lostParties": 0,
+      "explorationDerivedRecords": 34,
+      "recordsByAcquisition": {
+        "residential_observation": 367,
+        "returned_route_reconnaissance": 145,
+        "returned_frontier_exploration": 34
+      },
+      "knownTiles": 546,
+      "maxKnownDistance": 0,
+      "residentialMoves": 782,
+      "fissions": 0,
+      "finalPopulation": 102,
+      "survived": 5,
+      "supportRatio": 1.27,
+      "receipts": 0.1321,
+      "meanFinalPopulation": 20.4,
+      "survivalRate": 1,
+      "meanKnownTiles": 109.2,
+      "meanSupportRatio": 0.254
+    },
+    "site_B_dry_plains": {
+      "launchesByKind": {
+        "frontier_exploration": 23,
+        "frontier_verification": 667,
+        "distant_plant_gathering": 4,
+        "distant_patch_verification": 10
+      },
+      "explorationLaunches": 23,
+      "verificationLaunches": 677,
+      "routeStepsWalked": 357,
+      "lostParties": 0,
+      "explorationDerivedRecords": 6,
+      "recordsByAcquisition": {
+        "residential_observation": 398,
+        "returned_frontier_exploration": 6,
+        "returned_route_reconnaissance": 2
+      },
+      "knownTiles": 406,
+      "maxKnownDistance": 0,
+      "residentialMoves": 277,
+      "fissions": 0,
+      "finalPopulation": 111,
+      "survived": 5,
+      "supportRatio": 1.93,
+      "receipts": 0.2567,
+      "meanFinalPopulation": 22.2,
+      "survivalRate": 1,
+      "meanKnownTiles": 81.2,
+      "meanSupportRatio": 0.386
+    },
+    "site_C_dry_plains": {
+      "launchesByKind": {
+        "frontier_verification": 2772,
+        "frontier_exploration": 63,
+        "distant_plant_gathering": 128,
+        "distant_patch_verification": 106
+      },
+      "explorationLaunches": 63,
+      "verificationLaunches": 2878,
+      "routeStepsWalked": 1099,
+      "lostParties": 0,
+      "explorationDerivedRecords": 6,
+      "recordsByAcquisition": {
+        "residential_observation": 386,
+        "returned_route_reconnaissance": 9,
+        "returned_frontier_exploration": 6
+      },
+      "knownTiles": 401,
+      "maxKnownDistance": 0,
+      "residentialMoves": 589,
+      "fissions": 0,
+      "finalPopulation": 146,
+      "survived": 5,
+      "supportRatio": 3.19,
+      "receipts": 0.0428,
+      "meanFinalPopulation": 29.2,
+      "survivalRate": 1,
+      "meanKnownTiles": 80.2,
+      "meanSupportRatio": 0.638
+    },
+    "site_D_aquatic": {
+      "launchesByKind": {
+        "frontier_exploration": 34,
+        "frontier_verification": 163,
+        "distant_plant_gathering": 58,
+        "distant_patch_verification": 52
+      },
+      "explorationLaunches": 34,
+      "verificationLaunches": 215,
+      "routeStepsWalked": 148,
+      "lostParties": 0,
+      "explorationDerivedRecords": 0,
+      "recordsByAcquisition": {
+        "residential_observation": 344,
+        "returned_route_reconnaissance": 14
+      },
+      "knownTiles": 358,
+      "maxKnownDistance": 0,
+      "residentialMoves": 464,
+      "fissions": 0,
+      "finalPopulation": 117,
+      "survived": 5,
+      "supportRatio": 1.83,
+      "receipts": 0.09209999999999999,
+      "meanFinalPopulation": 23.4,
+      "survivalRate": 1,
+      "meanKnownTiles": 71.6,
+      "meanSupportRatio": 0.366
+    },
+    "site_E_hills": {
+      "launchesByKind": {
+        "frontier_exploration": 65,
+        "frontier_verification": 4203,
+        "distant_plant_gathering": 121,
+        "distant_patch_verification": 104
+      },
+      "explorationLaunches": 65,
+      "verificationLaunches": 4307,
+      "routeStepsWalked": 1082,
+      "lostParties": 0,
+      "explorationDerivedRecords": 0,
+      "recordsByAcquisition": {
+        "residential_observation": 440,
+        "returned_route_reconnaissance": 47
+      },
+      "knownTiles": 487,
+      "maxKnownDistance": 0,
+      "residentialMoves": 461,
+      "fissions": 0,
+      "finalPopulation": 128,
+      "survived": 5,
+      "supportRatio": 2.31,
+      "receipts": 0.8734999999999999,
+      "meanFinalPopulation": 25.6,
+      "survivalRate": 1,
+      "meanKnownTiles": 97.4,
+      "meanSupportRatio": 0.462
+    },
+    "site_F_hills": {
+      "launchesByKind": {
+        "frontier_verification": 2006,
+        "distant_plant_gathering": 43,
+        "route_reconnaissance": 72,
+        "frontier_exploration": 58,
+        "distant_patch_verification": 44
+      },
+      "explorationLaunches": 58,
+      "verificationLaunches": 2050,
+      "routeStepsWalked": 1015,
+      "lostParties": 0,
+      "explorationDerivedRecords": 13,
+      "recordsByAcquisition": {
+        "residential_observation": 336,
+        "returned_route_reconnaissance": 39,
+        "returned_frontier_exploration": 13
+      },
+      "knownTiles": 388,
+      "maxKnownDistance": 0,
+      "residentialMoves": 283,
+      "fissions": 0,
+      "finalPopulation": 143,
+      "survived": 5,
+      "supportRatio": 3.3099999999999996,
+      "receipts": 0.1341,
+      "meanFinalPopulation": 28.6,
+      "survivalRate": 1,
+      "meanKnownTiles": 77.6,
+      "meanSupportRatio": 0.662
+    },
+    "ordinary": {
+      "launchesByKind": {
+        "frontier_exploration": 61,
+        "frontier_verification": 805,
+        "distant_plant_gathering": 100,
+        "route_reconnaissance": 228,
+        "distant_patch_verification": 32
+      },
+      "explorationLaunches": 61,
+      "verificationLaunches": 837,
+      "routeStepsWalked": 956,
+      "lostParties": 0,
+      "explorationDerivedRecords": 0,
+      "recordsByAcquisition": {
+        "residential_observation": 347,
+        "returned_route_reconnaissance": 73
+      },
+      "knownTiles": 420,
+      "maxKnownDistance": 0,
+      "residentialMoves": 641,
+      "fissions": 0,
+      "finalPopulation": 108,
+      "survived": 5,
+      "supportRatio": 1.39,
+      "receipts": 0.0696,
+      "meanFinalPopulation": 21.6,
+      "survivalRate": 1,
+      "meanKnownTiles": 84,
+      "meanSupportRatio": 0.278
+    },
+    "isolated_marginal": {
+      "launchesByKind": {
+        "frontier_verification": 3125,
+        "frontier_exploration": 60,
+        "distant_plant_gathering": 77,
+        "distant_patch_verification": 142,
+        "route_reconnaissance": 3
+      },
+      "explorationLaunches": 60,
+      "verificationLaunches": 3267,
+      "routeStepsWalked": 1140,
+      "lostParties": 0,
+      "explorationDerivedRecords": 7,
+      "recordsByAcquisition": {
+        "residential_observation": 1186,
+        "returned_frontier_exploration": 7,
+        "returned_route_reconnaissance": 14
+      },
+      "knownTiles": 1207,
+      "maxKnownDistance": 0,
+      "residentialMoves": 495,
+      "fissions": 0,
+      "finalPopulation": 103,
+      "survived": 5,
+      "supportRatio": 1.18,
+      "receipts": 0.0832,
+      "meanFinalPopulation": 20.6,
+      "survivalRate": 1,
+      "meanKnownTiles": 241.4,
+      "meanSupportRatio": 0.236
+    },
+    "hostile": {
+      "launchesByKind": {
+        "frontier_verification": 3589,
+        "frontier_exploration": 65,
+        "route_reconnaissance": 194,
+        "distant_plant_gathering": 49,
+        "distant_patch_verification": 111
+      },
+      "explorationLaunches": 65,
+      "verificationLaunches": 3700,
+      "routeStepsWalked": 759,
+      "lostParties": 0,
+      "explorationDerivedRecords": 0,
+      "recordsByAcquisition": {
+        "residential_observation": 1211,
+        "returned_route_reconnaissance": 6
+      },
+      "knownTiles": 1217,
+      "maxKnownDistance": 0,
+      "residentialMoves": 616,
+      "fissions": 0,
+      "finalPopulation": 115,
+      "survived": 5,
+      "supportRatio": 2.45,
+      "receipts": 0.097,
+      "meanFinalPopulation": 23,
+      "survivalRate": 1,
+      "meanKnownTiles": 243.4,
+      "meanSupportRatio": 0.49
+    }
+  }
+}

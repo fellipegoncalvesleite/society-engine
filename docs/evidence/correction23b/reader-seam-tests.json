@@ -1,0 +1,179 @@
+{
+  "passed": 13,
+  "failed": 0,
+  "cases": [
+    {
+      "id": "R1",
+      "title": "confirmed access changes the feasibility verdict",
+      "expectation": "an observation below the 0.32 threshold fails the gate; a physical answer passes it",
+      "observed": {
+        "passesGateWithout": false,
+        "passesGateWith": true
+      },
+      "pass": true,
+      "target": "tile:100:0"
+    },
+    {
+      "id": "R12",
+      "title": "destroying the result reproduces the pre-reader decision",
+      "expectation": "with no row the gate falls back to exactly the band's observation",
+      "observed": {
+        "feasibleWithoutEvidence": false,
+        "fallsBackToObservation": true
+      },
+      "pass": true
+    },
+    {
+      "id": "R2",
+      "title": "a negative suppresses this target only",
+      "expectation": "the refutation blocks this place; another place with good observation still passes",
+      "observed": {
+        "withNegative": false,
+        "otherPlaceStillFeasible": true,
+        "inconclusiveIsNeutral": true
+      },
+      "pass": true
+    },
+    {
+      "id": "R5",
+      "title": "a non-water answer changes nothing in the water reader",
+      "expectation": "only the water_access question may move the access verdict",
+      "observed": {
+        "withTemporaryUseConfirmed": false,
+        "unchanged": true
+      },
+      "pass": true,
+      "note": "route_repeatability was REMOVED as a question (§8); route evidence is a by-product of any completed party."
+    },
+    {
+      "id": "R1b",
+      "title": "same-snapshot production counterfactual through the real tick",
+      "expectation": "one evidence row changes the band's own recorded destination verdict",
+      "observed": {
+        "withoutEvidence": {
+          "candidateTileId": "tile:100:0",
+          "consideredAsTarget": false,
+          "rejectionReason": "insufficient_water_reliability",
+          "waterReliability": 0.25
+        },
+        "withConfirmedWaterAccess": {
+          "candidateTileId": "tile:100:0",
+          "consideredAsTarget": false,
+          "rejectionReason": "not_better_than_current",
+          "waterReliability": 0.25
+        },
+        "diverged": true
+      },
+      "pass": true,
+      "target": "tile:100:0"
+    },
+    {
+      "id": "R3",
+      "title": "resource presence enables a later test candidate",
+      "expectation": "eligibility flips; NO support or food is created",
+      "observed": {
+        "eligibleWithConfirmedPresence": true,
+        "eligibleWithout": false,
+        "receiptsWith": 0,
+        "receiptsWithout": 0,
+        "receiptsUnchanged": true
+      },
+      "pass": true,
+      "target": "tile:100:0"
+    },
+    {
+      "id": "R4",
+      "title": "destroying the resource result removes eligibility",
+      "expectation": "the exact reader counterfactual, and a negative does not enable either",
+      "observed": {
+        "eligibleWithout": false,
+        "eligibleNegative": false
+      },
+      "pass": true
+    },
+    {
+      "id": "R11",
+      "title": "a negative bounded search is not global absence",
+      "expectation": "the negative blocks this place and this question only; other places stay eligible",
+      "observed": {
+        "thisPlaceEligible": false,
+        "otherPlaceStillPromising": "promising_unverified"
+      },
+      "pass": true
+    },
+    {
+      "id": "R6",
+      "title": "an unwalked route remains unconfirmed",
+      "expectation": "route repeatability is no longer a question a party can 'pass' by definition",
+      "observed": {
+        "productionQuestions": [
+          "water_access",
+          "resource_presence",
+          "resource_test_possible",
+          "temporary_use",
+          "seasonal_persistence"
+        ],
+        "routeRepeatabilityStillAQuestion": false,
+        "waterFeasibilityFallsBackToObservation": true
+      },
+      "pass": true,
+      "note": "§8 removal: any completed party is a successful round trip, so the question was a tautology."
+    },
+    {
+      "id": "R7",
+      "title": "temporary-use result changes only bounded-use eligibility",
+      "expectation": "a failure blocks a task camp there; it moves no water and no resource state",
+      "observed": {
+        "campRefusedAfterNegative": true,
+        "campRefusedAfterConfirmed": false,
+        "campRefusedWithNoEvidence": false,
+        "waterAccessUntouched": true,
+        "resourceUntouched": true
+      },
+      "pass": true
+    },
+    {
+      "id": "R8",
+      "title": "same-season attempts do not create seasonal persistence",
+      "expectation": "four spring visits give ONE season of coverage; a real new season gives two",
+      "observed": {
+        "rowsAfterFourAttempts": 1,
+        "attemptsRecorded": 4,
+        "seasonsAfterFourSpringVisits": [
+          "spring"
+        ],
+        "seasonsAfterAnAutumnVisit": [
+          "spring",
+          "autumn"
+        ]
+      },
+      "pass": true,
+      "note": "state does not grow with repeats — the row is upserted, which is the §11 bound."
+    },
+    {
+      "id": "R9",
+      "title": "repeated identical confirmed verification is suppressed",
+      "expectation": "500 ticks later, unchanged conditions, the same question is NOT re-asked",
+      "observed": {
+        "sameConditionsAllowed": false,
+        "sameConditionsReason": "already established here, and nothing about the question has changed",
+        "settledNegativeAlsoSuppressed": false,
+        "differentQuestionStillAllowed": true
+      },
+      "pass": true,
+      "note": "the 12-entry display ring is NOT consulted — this is the separate retry memory."
+    },
+    {
+      "id": "R10",
+      "title": "a changed season permits a relevant retry",
+      "expectation": "an unanswered season or a materially different route reopens it; hardship does NOT",
+      "observed": {
+        "newSeason": "true (a season this place has not been answered in)",
+        "movedRoute": "true (the way there has materially changed)",
+        "movedHardship": "false (already established here, and nothing about the question has changed)"
+      },
+      "pass": true,
+      "note": "hardship survives in RetryConditions only because the launch policy reads it as motivation."
+    }
+  ]
+}

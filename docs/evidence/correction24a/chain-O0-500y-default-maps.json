@@ -1,0 +1,227 @@
+{
+  "arm": "O0",
+  "years": 500,
+  "seeds": [
+    "s1",
+    "s2",
+    "s3",
+    "s4",
+    "s5"
+  ],
+  "scenarios": [
+    "map1",
+    "map2"
+  ],
+  "launchAuthorities": {
+    "firstStep": true,
+    "returnReserve": true,
+    "durationBudget": true,
+    "provisions": false,
+    "risk": false,
+    "labor": true,
+    "activeCap": true
+  },
+  "totals": {
+    "opportunities": 2405835,
+    "blockers": {
+      "NO_MOTIVE": 24486,
+      "SELECTED": 11406,
+      "SUPPRESSION_WINDOW_ACTIVE": 2283557,
+      "VALID_BUT_IDLE_SLOT_UNUSED": 39894,
+      "NO_PASSABLE_FIRST_STEP": 1336,
+      "DISPLACED_BY_URGENT_TASK": 1262,
+      "DISPLACED_BY_NONURGENT_TASK": 804,
+      "ACTIVE_CAP_FULL": 217,
+      "ADEQUATE_KNOWN_ALTERNATIVE": 19,
+      "POPULATION_TOO_SMALL": 42854
+    },
+    "eligibleIntents": 54702,
+    "physicallyValidProposals": 53366,
+    "launches": 11406,
+    "fallthroughOpportunities": 39894,
+    "claimFailures": {
+      "TARGET_STALE": 2208604,
+      "ROUTE_BUILD_FAILED": 83585,
+      "SAME_TARGET_CONFLICT": 28124
+    },
+    "claimedBy": {
+      "route_reconnaissance": 36083,
+      "distant_retrieval": 23581,
+      "distant_patch_verification": 81998
+    },
+    "journeys": 11794,
+    "lostJourneys": 0,
+    "lostTransferredObservations": 0,
+    "records": 181028,
+    "newRecords": 57425,
+    "evictedAtFirstCompression": 49375,
+    "e6Probes": 1539,
+    "e6ChangedAction": 3,
+    "e6ScoreOnly": 44,
+    "e6ControlChanged": 1539,
+    "pairingViolations": 0
+  },
+  "byScenario": {
+    "map1": {
+      "opportunities": 1038237,
+      "blockers": {
+        "NO_MOTIVE": 12134,
+        "SELECTED": 5099,
+        "SUPPRESSION_WINDOW_ACTIVE": 1016329,
+        "VALID_BUT_IDLE_SLOT_UNUSED": 2634,
+        "NO_PASSABLE_FIRST_STEP": 221,
+        "DISPLACED_BY_URGENT_TASK": 700,
+        "DISPLACED_BY_NONURGENT_TASK": 552,
+        "ACTIVE_CAP_FULL": 141,
+        "ADEQUATE_KNOWN_ALTERNATIVE": 3,
+        "POPULATION_TOO_SMALL": 424
+      },
+      "firstStep": {
+        "step": 1016953,
+        "blocked": 21284
+      },
+      "eligibleIntents": 9206,
+      "physicallyValidProposals": 8985,
+      "launches": 5099,
+      "suppressionActive": 1016736,
+      "activeFrontierParty": 4071,
+      "offered": 995399,
+      "claimedBy": {
+        "route_reconnaissance": 2884,
+        "distant_retrieval": 8129,
+        "distant_patch_verification": 31175
+      },
+      "claimFailures": {
+        "TARGET_STALE": 990181,
+        "ROUTE_BUILD_FAILED": 2778,
+        "SAME_TARGET_CONFLICT": 19193
+      },
+      "fallthroughOpportunities": 2634,
+      "motiveEligible": 934044,
+      "headingAvailable": 1038237,
+      "returnReserveZero": 0,
+      "journeys": 5199,
+      "lostJourneys": 0,
+      "lostTransferredObservations": 0,
+      "forcedReturns": 1526,
+      "meanRouteSteps": 14.6807,
+      "meanDeepestReach": 14.6807,
+      "meanNewTilesEntered": 5.3791,
+      "meanDurationDays": 6.2391,
+      "records": 81524,
+      "newRecords": 27966,
+      "refreshedRecords": 53558,
+      "evictedAtFirstCompression": 24216,
+      "survivedFirstCompression": 18736,
+      "meanLifetimeDays": 222.601,
+      "lifetimeSamples": 24216,
+      "e6Probes": 675,
+      "e6ChangedAction": 2,
+      "e6ScoreOnly": 22,
+      "e6ControlChanged": 675,
+      "e6ByAction": {
+        "move_to_tile->move_to_tile": 1,
+        "stay->move_to_tile": 1
+      },
+      "finalPopulation": 1192,
+      "survived": 5,
+      "pairing": {
+        "written": 1037587,
+        "consumed": 1037587,
+        "keyMismatch": 0,
+        "overwritten": 0,
+        "leftover": 0
+      },
+      "motiveRate": 0.8996,
+      "headingRate": 1,
+      "eligibleIntentRate": 0.0089,
+      "physicallyValidRate": 0.0087,
+      "launchRate": 0.0049,
+      "fallthroughRate": 0.0025,
+      "evictionRate": 0.297,
+      "e6ChangedActionRate": 0.003,
+      "survivalRate": 1,
+      "meanFinalPopulation": 238.4
+    },
+    "map2": {
+      "opportunities": 1367598,
+      "blockers": {
+        "NO_MOTIVE": 12352,
+        "SELECTED": 6307,
+        "SUPPRESSION_WINDOW_ACTIVE": 1267228,
+        "VALID_BUT_IDLE_SLOT_UNUSED": 37260,
+        "NO_PASSABLE_FIRST_STEP": 1115,
+        "DISPLACED_BY_NONURGENT_TASK": 252,
+        "DISPLACED_BY_URGENT_TASK": 562,
+        "ACTIVE_CAP_FULL": 76,
+        "POPULATION_TOO_SMALL": 42430,
+        "ADEQUATE_KNOWN_ALTERNATIVE": 16
+      },
+      "firstStep": {
+        "step": 1307628,
+        "blocked": 59970
+      },
+      "eligibleIntents": 45496,
+      "physicallyValidProposals": 44381,
+      "launches": 6307,
+      "suppressionActive": 1281280,
+      "activeFrontierParty": 4897,
+      "offered": 1225518,
+      "claimedBy": {
+        "route_reconnaissance": 33199,
+        "distant_retrieval": 15452,
+        "distant_patch_verification": 50823
+      },
+      "claimFailures": {
+        "TARGET_STALE": 1218423,
+        "ROUTE_BUILD_FAILED": 80807,
+        "SAME_TARGET_CONFLICT": 8931
+      },
+      "fallthroughOpportunities": 37260,
+      "motiveEligible": 1262942,
+      "headingAvailable": 1367598,
+      "returnReserveZero": 0,
+      "journeys": 6595,
+      "lostJourneys": 0,
+      "lostTransferredObservations": 0,
+      "forcedReturns": 2106,
+      "meanRouteSteps": 14.0878,
+      "meanDeepestReach": 14.0878,
+      "meanNewTilesEntered": 4.4669,
+      "meanDurationDays": 6.2895,
+      "records": 99504,
+      "newRecords": 29459,
+      "refreshedRecords": 70045,
+      "evictedAtFirstCompression": 25159,
+      "survivedFirstCompression": 23647,
+      "meanLifetimeDays": 238.9374,
+      "lifetimeSamples": 25159,
+      "e6Probes": 864,
+      "e6ChangedAction": 1,
+      "e6ScoreOnly": 22,
+      "e6ControlChanged": 864,
+      "e6ByAction": {
+        "stay->move_to_tile": 1
+      },
+      "finalPopulation": 1222,
+      "survived": 5,
+      "pairing": {
+        "written": 1324992,
+        "consumed": 1324992,
+        "keyMismatch": 0,
+        "overwritten": 0,
+        "leftover": 0
+      },
+      "motiveRate": 0.9235,
+      "headingRate": 1,
+      "eligibleIntentRate": 0.0333,
+      "physicallyValidRate": 0.0325,
+      "launchRate": 0.0046,
+      "fallthroughRate": 0.0272,
+      "evictionRate": 0.2528,
+      "e6ChangedActionRate": 0.0012,
+      "survivalRate": 1,
+      "meanFinalPopulation": 244.4
+    }
+  }
+}
