@@ -1,5 +1,9 @@
 # Society Engine
 
+**[▶ Try the live demo](https://society-engine.vercel.app)** — runs entirely in the browser, no install.
+
+![Society Engine: five bands moving through a seasonal river valley, with the band roster on the right](docs/images/simulation.png)
+
 Society Engine is a deterministic human-society simulation built to explore how larger social patterns can emerge from physical conditions and accumulated experience rather than scripted civilization stages.
 
 The **current implementation** starts with small mobile human bands. They move through a seasonal world, search for food and water, learn and remember useful or dangerous places, respond to risk and demographic pressure, split into new groups, and accumulate histories from the simulation itself. The browser interface makes those systems inspectable through the map, band views, Chronicle, and architecture tools.
