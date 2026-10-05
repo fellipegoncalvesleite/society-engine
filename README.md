@@ -1,35 +1,66 @@
 # Society Engine
 
-**[▶ Try the live demo](https://society-engine.vercel.app)** — runs entirely in the browser, no install.
+A deterministic simulation of early human societies, written in TypeScript. Bands of people move through a seasonal world, find food and water, learn and forget places, send out foraging expeditions, grow, split, and build up histories. **None of it is scripted.** Every behaviour has to follow from what a band can physically see, remember, carry and survive.
 
-![Society Engine: five bands moving through a seasonal river valley, with the band roster on the right](docs/images/simulation.png)
+The long-term goal is to let settlement, culture and social complexity *emerge* from those foundations instead of appearing as unlocks. The current build is the foundation: mobile bands, ecology, knowledge, movement and demography.
 
-Society Engine is a deterministic human-society simulation built to explore how larger social patterns can emerge from physical conditions and accumulated experience rather than scripted civilization stages.
+[▶ Live demo](https://society-engine.vercel.app) (the interface is an inspection tool, not the product: the work is in `src/sim`)
 
-The **current implementation** starts with small mobile human bands. They move through a seasonal world, search for food and water, learn and remember useful or dangerous places, respond to risk and demographic pressure, split into new groups, and accumulate histories from the simulation itself. The browser interface makes those systems inspectable through the map, band views, Chronicle, and architecture tools.
+## Engineering at a glance
 
-That starting point is deliberately narrower than the project's intended scope. The longer-term direction is to let human groups develop through interacting systems for movement, resources, memory, relationships, population dynamics, settlement, social organization, culture, technology, institutions, and history. Those systems are planned to emerge from earlier causal conditions rather than appear as fixed unlocks or labels.
+- **~140,000 lines of TypeScript** in the simulation core: 165 modules, 128 of them band-level subsystems (mobility, expeditions, crowding, demography, fission, risk, knowledge, chronicles…).
+- **Pure core.** `src/sim` has no React or DOM dependency. It runs in a Web Worker in the browser and headless in Node for benchmarks and audits.
+- **Deterministic.** All variation comes from a seeded generator, so the same seed and setup always replay the same history. That makes every behaviour reproducible and every bug replayable.
+- **Verified by measurement.** 224 audit and diagnostic scripts plus 41 evidence packages, including counterfactual runs (*with* a mechanism minus *without* it) to prove a mechanism actually changes outcomes rather than just existing in the code.
 
-## Implemented now
+## The hard rule: no omniscience
 
-- Deterministic TypeScript simulation core with seeded, reproducible runs.
-- Mobile bands interacting with terrain, seasonal ecology, resource knowledge, risk, labor, movement, and demography.
-- Band-local knowledge and memory rather than omniscient access to world state.
-- Expeditionary/logistical movement, task camps, observations, and physical resource returns.
-- Generated band histories and a Chronicle view derived from simulated events.
-- Editable maps plus architecture/debug views for inspecting how the simulation works.
+The central design constraint is that a band may only act on what it could actually know. Decisions read band-local knowledge (what the band observed, remembers or was told), never the true state of the world.
 
-## Planned scope
+Enforcing that is most of the work. The project has gone through a long series of numbered corrections, each one finding and removing a place where a band could know or affect something it physically couldn't. Some examples:
 
-Society Engine is intended to grow beyond mobile bands into a broader human and societal simulation. Planned systems include richer inter-group relationships and exchange, culture and identity, persistent routes and settlements, deeper social organization, technology and institutions, and longer-run historical change.
+- Remembered places were counting as *physical crowding*. Memory and presence are now separate.
+- A risk calculation read the global number of bands. The function no longer receives the world at all, so the leak is impossible by construction rather than by convention.
+- Workers away on expeditions were still counted as present at home. People are now bodies in exactly one place, and headcount is derived (`workers + non-working`), so it cannot drift.
 
-These are roadmap goals, **not claims about the current build**. The project treats settlement, culture, and later social complexity as outcomes that should become viable because of preceding ecological, demographic, behavioral, and social conditions.
+Wherever possible, invariants are made **structural** (the wrong value is unreachable) instead of checked after the fact.
 
-## How it works
+## How a day works
 
-The simulation core lives in `src/sim` and is written in TypeScript. It does not depend on React or the DOM. A seeded generator controls variation, so the same seed produces the same history.
+```mermaid
+flowchart LR
+  W[World<br/>terrain · rivers · seasonal ecology] --> P[Perception<br/>what each band can see]
+  P --> K[Band knowledge<br/>observations · memory · warnings]
+  K --> D[Daily decisions<br/>forage · move · scout · rest]
+  D --> X[Physical execution<br/>walking · expeditions · task camps · carrying food home]
+  X --> M[Demography<br/>births · deaths · fission into new bands]
+  M --> E[Events & Chronicle<br/>histories written from what happened]
+  X --> W
+```
 
-The interface uses React, Vite, and Zustand. The world is drawn on canvas, and a worker keeps the simulation moving without blocking the main screen.
+Each simulated day advances ecology, lets bands perceive and update their knowledge, chooses actions from that knowledge only, executes them physically (people walk, carry and return), then applies demography and records events. The Chronicle is generated from those events, not written by hand.
+
+## Code map
+
+```text
+src/sim/
+  world/        terrain, hydrology, seasonal ecology
+  knowledge/    band-local observations and memory
+  agents/       band subsystems: mobility, expeditions, crowding, demography, fission…
+  tick/         the daily/seasonal advance pipeline
+  diagnostics/  read-only probes used by audits
+  chronicles/   history generation from simulated events
+src/worker/     runs the simulation off the main thread
+src/ui/         React + canvas inspection interface
+scripts/        headless benchmarks, audits and evidence generators
+```
+
+<details>
+<summary>Screenshot of the inspection interface</summary>
+
+![Society Engine inspection interface: five bands in a seasonal river valley](docs/images/simulation.png)
+
+</details>
 
 ## Running it
 
